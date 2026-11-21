@@ -8,7 +8,7 @@ These variables decide where Claude Code keeps its files and how it handles save
 
 `CLAUDE_CONFIG_DIR` is the most used one. It moves the whole `.claude` folder, so you can keep separate setups. To change a variable, set it in your shell before you start `claude`. Project and local settings cannot set `CLAUDE_CONFIG_DIR`.
 
-This page lists 89 variables. Use absolute paths. Set `DISABLE_AUTOUPDATER` to stop updates.
+This page lists 90 variables. Use absolute paths. Set `DISABLE_AUTOUPDATER` to stop updates.
 
 ## Example
 
@@ -26,7 +26,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | Variable | Status | What it does | Values and default | Notes |
 | --- | --- | --- | --- | --- |
 | `BUN_INSTALL` | <Undocumented /> | Names the Bun install folder. Claude Code uses it to detect a Bun global install and pick `bun` or `npm` as the package manager for update and install-prefix commands. | Text. Checked against `<value>/install/global/` in the executable path | Auto-update and install detection |
-| `CLAUDE_AFTER_LAST_COMPACT` | <Undocumented /> | Asks the session logs API for only the lines after the last compaction. | On or off. A truthy value adds the query parameter `after_last_compact=true` to the session logs fetch | Remote session log fetch. Not set from project `env` before trust |
+| `CLAUDE_AFTER_LAST_COMPACT` | <Undocumented /> | Asks the session logs API for only the lines after the last compaction. | On or off. A true value adds the query parameter `after_last_compact=true` to the session logs fetch. `0` and an empty value leave it off.[^after-compact] | Remote session log fetch. Not set from project `env` before trust |
 | `CLAUDE_BG_TCC_DISCLAIMED` | <Undocumented /> | Marks that a macOS process already re-executed with disclaimed responsibility. This avoids a second re-exec. | Text. Claude Code sets it to `1` before `execve`. The new process reads it, then deletes it | MacOS background sessions. Not set from project `env` before trust |
 | `CLAUDE_BG_WORKSPACE_TRUSTED` | <Undocumented /> | Tells a background session that the workspace was already trusted. Project settings env and hooks then stay on. | On or off. The dispatcher sets `1`. The session also checks the stored trust record | Background sessions. Not set from project `env` before trust |
 | `CLAUDE_CODE_AUTOMOUNT_ROOTS` | <Undocumented /> | Names folders that are autofs map roots on Linux. Claude Code then does not look up files in them. | Absolute paths split with the path delimiter. A relative path is skipped. On Linux and WSL, Claude Code also checks a folder directly below `/` with `statfs`. This variable is for a map root deeper than one folder below `/`.[^automount] | Linux and WSL. Not set from project `env` before trust |
@@ -95,6 +95,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_SESSION_START_ANNOUNCEMENTS_BEFORE_PROMPT` | <Undocumented /> | Changes the order of session start announcements relative to the first prompt. When set, they come before it. | On or off. The exact order effect was not read further | All sessions |
 | `CLAUDE_CODE_SKIP_PROMPT_HISTORY` | <Documented /> | Skips writing prompt history and session transcripts to disk. Such sessions do not show in resume or up-arrow history. | On or off. Persistence reports the reason `skip_prompt_history`. It also marks a nested ambient session | All sessions |
 | `CLAUDE_CODE_STALL_TIMEOUT_MS_FOR_TESTING` | <Undocumented /> | Overrides the no-data stall timeout of the update download. Meant for tests. | A number. A zero or invalid value falls back to `120000` ms | Installer and updater downloads |
+| `CLAUDE_CODE_STARTER_MAY_HOLD_CONNECTOR_FILE` | <Undocumented /> | Claude Code sets it to `1` for child sessions when lasting connector downloads exist. A session with it set stages the connector files that a tool input names.[^connector-file] | Text. Claude Code sets it. Do not set it by hand | Child processes of a session |
 | `CLAUDE_CODE_STARTUP_FAILURE_RESULTS` | <Documented /> | Makes a `stream-json` run write a result message with a `startup_failure_reason` for startup failures that end with stderr alone. | On or off | Print mode with `--output-format stream-json` |
 | `CLAUDE_CODE_TMPDIR` | <Documented /> | Overrides the temp directory for internal temp files. Claude Code also passes it to child shells and uses it as `TMPDIR` in the sandbox. | Text. Falls back to `/tmp`. The sandbox also reads undocumented `CLAUDE_TMPDIR` and uses `/tmp/claude` last | All sessions |
 | `CLAUDE_CODE_TRANSCRIPT_LOCAL_GC` | <Documented /> <Differs note="The official docs and the program disagree. The row says how." /> | Trims the transcript before each compaction once the file passes 5 MB. The docs match this. The docs omit that `0` also blocks a flag-driven path. | On, off, or unset. For the remote path it overrides a feature flag. The local path needs non-interactive and not `CLAUDE_CODE_REMOTE` | `-p` and SDK sessions |
@@ -134,22 +135,24 @@ Settings files copy `env` values as written. No shell expands them, so `~` and `
 
 The program and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^automount]: The program, `chunk-xvkkhyna.js:26`.
-[^child-notes-set]: The program, `chunk-h2m5hsce.js:73`.
-[^child-notes-read]: The program, `chunk-h2m5hsce.js:73`.
-[^resume-return]: The program, `chunk-zs9k1w9q.js:26010`. The only server flag is `tengu_gleaming_fair_reuse`. The prompt is skipped when `resumeReturnDismissed` is set.
-[^config-lock]: The program, `chunk-aq3ms068.js:4950` and `chunk-hg1yqkjk.js:200930`. Probe cases `env319a.config-lock-wait.*`.
-[^nested-id]: The program, `chunk-ex77tta5.js:36` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
-[^drop-deferred]: The program, `chunk-614w915w.js:10310` (the message, `CLAUDE_CODE_DROP_UNAVAILABLE_DEFERRED_TOOL`) and `chunk-614w915w.js:38911` (strict `true` check, `=== !0`). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
-[^host-owned]: The program reads it at `chunk-aq3ms068.js:5624` (`CLAUDE_CODE_HOST_OWNED_CONFIG_DIR`), shows the message at `chunk-aq3ms068.js:5629`, and passes it on in an environment that it builds at `chunk-3kp5jwr6.js:11744` (`CLAUDE_CONFIG_DIR`). It did not show the path check.
-[^hover-rest]: The program, `chunk-aq3ms068.js:5549` (the message) and `chunk-6g525c94.js:1055` (the gate).
-[^launched-trim]: The program, `chunk-8e89z79d.js:43`.
-[^launched-write]: The program, `chunk-8e89z79d.js:63`.
-[^personal-hooks]: The program, `chunk-vshss2nx.js:38` (`CLAUDE_CODE_PERSONAL_HOOKS_OFF`; `off`, `none`, `0`, `false`, and `no` return no notice; the values `retry`, `fix`, `launch`, and the default `host`). Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
-[^resume-hint]: The program, `chunk-hg1yqkjk.js:22944` (the launcher program, `CLAUDE_CODE_RESUME_HINT_COMMAND`) and `chunk-hg1yqkjk.js:22912` (`Resume this session with:`).
-[^began-as-copy]: The program, `chunk-614w915w.js:52425` and `chunk-txash88y.js:4156` (the flag).
-[^tail-load]: The program, `chunk-gvhwnc7g.js:3259` (the values) and `chunk-mjwpm8mh.js:1345` (the read, `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD`). Probe case `resume-head-vouch` in `tools/schemas/observe/print/cases-resume.ts`.
-[^disable-deferred]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-614w915w.js:37827` (the print-mode error) and `chunk-hg1yqkjk.js:129272` (the resume).
-[^checked-folder]: The program, `chunk-wxt5k3a2.js:96` and `chunk-aq3ms068.js:31722`, two lists of variable names.
-[^sandbox-hold]: The program, `chunk-f7fdz8jz.js:52820-52832` (the read and the delete), `chunk-f7fdz8jz.js:55617` (the value, `isStrict`), `chunk-b711yf0h.js:654` and `chunk-fnffp7f4.js:308` (the relaunch sets it, `rootMoveHoldEnv`). Probe case `print.sweep`.
-[^autoupd-host]: The program, `chunk-hg1yqkjk.js:226531` (the `managed` value) and `chunk-hg1yqkjk.js:226536` (the `autoUpdate` test).
+[^automount]: The program, `chunk-aka192fb.js:26`.
+[^child-notes-set]: The program, `chunk-p2s0km69.js:73`.
+[^child-notes-read]: The program, `chunk-p2s0km69.js:73`.
+[^resume-return]: The program, `chunk-3pqaw3hv.js:26797`. The only server flag is `tengu_gleaming_fair_reuse`. The prompt is skipped when `resumeReturnDismissed` is set.
+[^config-lock]: The program, `chunk-865at33z.js:4989` and `chunk-bzyb60p0.js:203512`. Probe cases `env319a.config-lock-wait.*`.
+[^nested-id]: The program, `chunk-kr68f0mb.js:36` (`MKn` returns no ID when the variable is unset, and the derived ID when it is set). Probe cases `env319a.nested-session-id.unset` and `.v1`.
+[^drop-deferred]: The program, `chunk-a0tz781a.js:10515` (the message, `CLAUDE_CODE_DROP_UNAVAILABLE_DEFERRED_TOOL`) and `chunk-a0tz781a.js:40714` (strict `true` check, `=== !0`). Probe cases `env319a.drop-unavailable-deferred-tool.unset` and `.v1`.
+[^host-owned]: The program reads it at `chunk-865at33z.js:5663` (`CLAUDE_CODE_HOST_OWNED_CONFIG_DIR`), shows the message at `chunk-865at33z.js:5668`, and passes it on in an environment that it builds at `chunk-q0y1fm2x.js:12063` (`CLAUDE_CONFIG_DIR`). It did not show the path check.
+[^hover-rest]: The program, `chunk-865at33z.js:5588` (the message) and `chunk-bbcqrxq1.js:1055` (the gate).
+[^launched-trim]: The program, `chunk-v6ez7m15.js:43`.
+[^launched-write]: The program, `chunk-v6ez7m15.js:63`.
+[^personal-hooks]: The program, `chunk-wx2mpa0f.js:38` (`CLAUDE_CODE_PERSONAL_HOOKS_OFF`; `off`, `none`, `0`, `false`, and `no` return no notice; the values `retry`, `fix`, `launch`, and the default `host`). Probe cases `env319b.personal-hooks-off.launch-restricted`, `retry-restricted`, `fix-restricted`, `host-restricted`, `other-restricted`, `off-restricted`, and `host-plain`.
+[^resume-hint]: The program, `chunk-bzyb60p0.js:23658` (the launcher program, `CLAUDE_CODE_RESUME_HINT_COMMAND`) and `chunk-bzyb60p0.js:23626` (`Resume this session with:`).
+[^began-as-copy]: The program, `chunk-a0tz781a.js:54574` and `chunk-rckksdmd.js:4174` (the flag).
+[^tail-load]: The program, `chunk-c203g5kd.js:3281` (the values) and `chunk-0rtj0bmp.js:1384` (the read, `CLAUDE_CODE_TRANSCRIPT_TAIL_LOAD`). Probe case `resume-head-vouch` in `tools/schemas/observe/print/cases-resume.ts`.
+[^disable-deferred]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-a0tz781a.js:39602` (the print-mode error) and `chunk-bzyb60p0.js:131287` (the resume).
+[^checked-folder]: The program, `chunk-mf29k4y3.js:97` and `chunk-865at33z.js:32006`, two lists of variable names.
+[^sandbox-hold]: The program, `chunk-ha393e1n.js:36733-36745` (the read and the delete), `chunk-ha393e1n.js:39533` (the value, `isStrict`), `chunk-qbmek7xb.js:92` and `chunk-4wtfvxk7.js:296` (the relaunch sets it, `rootMoveHoldEnv`). Probe case `print.sweep`.
+[^autoupd-host]: The program, `chunk-bzyb60p0.js:229528` (the `managed` value) and `chunk-bzyb60p0.js:229533` (the `autoUpdate` test).
+[^connector-file]: The program, `chunk-q5veqmrm.js:22-23` (`CLAUDE_CODE_STARTER_MAY_HOLD_CONNECTOR_FILE`) and `chunk-r3e8vdzv.js:145-147` (the value `held`).
+[^after-compact]: The program, `chunk-bzyb60p0.js:20103` (`CLAUDE_AFTER_LAST_COMPACT` and `after_last_compact`) and `chunk-c203g5kd.js:2982` (`bool`). The type was text in `2.1.329`, so `0` counted as set.

@@ -257,7 +257,7 @@ The dim hint line under the prompt (`? for shortcuts`, `esc to interrupt`, and t
 
 ### `AbovePrompt`
 
-The band directly above the prompt input, where surveys draw. The engine draws a `[-]` beside the tree and an `n more` row under it. The engine asks once for each plugin that hooks it, `e.plugin` naming the plugin. A hook draws that plugin's row or passes, and [`AbovePromptList`](#abovepromptlist) stacks the rows. The person collapses the band (ctrl+x ctrl+a) or focuses it (a click, ctrl+x tab). The mobile surface raises it too.[^above-prompt]
+The band directly above the prompt input, where surveys draw. The engine draws a `[-]` beside the tree and an `n more` row under it. The engine asks once for each plugin that hooks it, `e.plugin` naming the plugin. A hook draws that plugin's row or passes, and [`AbovePromptList`](#abovepromptlist) stacks the rows. The person collapses the band (ctrl+x ctrl+a) or focuses it (a click, ctrl+x tab). Every surface raises it: the terminal, desktop, mobile, and VS Code.[^above-prompt]
 
 | Item | Status | What it is for | Shape and limits |
 | --- | --- | --- | --- |
@@ -427,16 +427,16 @@ export default shader({ fps: 30, passes: [sky] });
 
 ## Sources
 
-[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
-[^types-323]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`.
-[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-x69e1gmt.js:15116`.
-[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:8702`.
-[^collapsed]: The program, `chunk-zs9k1w9q.js:34200`.
-[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:7510` ("a row the hook was not handed (a rewrite of rows drops or reorders them; answer around next(e)") and `chunk-qsd8sbe8.js:8702` (`AbovePromptList: ["terminal", "desktop", "mobile"]`).
-[^covered]: The program, `chunk-zs9k1w9q.js:35033` (`isPromptCovered`, left out while false).
-[^jsx-files]: The program, `chunk-q02wqt75.js:101` (`Utt`). It loads a `.js`, `.mjs`, or `.cjs` file as it is, and compiles a `.ts`, `.mts`, or `.cts` file without the JSX pragma. Only `.tsx` and `.jsx` files are compiled with `h` and `Fragment`.
-[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:7412`.
-[^agent-row]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
-[^context-menu]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `Elements` (the element tables of the surfaces) and `RenderPropsOf`.
+[^types-323]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, the `AskUserQuestion` and `Pane` members of `RenderPropsOf`.
+[^waiting]: The Mod API type file, `schemas/claude-code.d.ts`, `WaitingFor` and `WaitingAgent`. The program, `chunk-zprqxvft.js:15143`.
+[^above-prompt]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-0w2wb7gk.js:8802` (`PromptHint`: terminal, desktop, mobile), `chunk-0w2wb7gk.js:8804` (`AbovePrompt: $c9a355`, the list of all surface names, at `chunk-0w2wb7gk.js:1877`).
+[^collapsed]: The program, `chunk-3pqaw3hv.js:34997`.
+[^list]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-0w2wb7gk.js:7613` ("a row the hook was not handed (a rewrite of rows drops or reorders them; answer around next(e)") and `chunk-0w2wb7gk.js:8805` (`AbovePromptList: $c9a355`, all four surface names).
+[^covered]: The program, `chunk-3pqaw3hv.js:35830` (`isPromptCovered`, left out while false).
+[^jsx-files]: The program, `chunk-p9da7c9y.js:101` (`Utt`). It loads a `.js`, `.mjs`, or `.cjs` file as it is, and compiles a `.ts`, `.mts`, or `.cts` file without the JSX pragma. Only `.tsx` and `.jsx` files are compiled with `h` and `Fragment`.
+[^anchored]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-0w2wb7gk.js:7515`.
+[^agent-row]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, the `AgentRow` member of `RenderPropsOf`.
+[^context-menu]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, the `ContextMenu` member of `RenderPropsOf`.
 [^placed]: The Mod API type file, `schemas/claude-code.d.ts`, the `Placed` member of `RenderPropsOf`. [Mods Reference](https://code.claude.com/docs/en/plugins/mods/reference.md).
-[^shader]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.
+[^shader]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `ShaderProps` and the module `claude-code/shader`.

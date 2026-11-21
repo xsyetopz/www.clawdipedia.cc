@@ -8,7 +8,7 @@ These variables change how tools run.
 They set Bash time limits and output size, shell choice, search behavior, permission helpers, and the sandbox.
 Use them when long commands reach their time limit or when you need to limit what a tool can see.
 
-This page lists 110 variables.[^variable-names] `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_OUTPUT_LENGTH` are common. Switch rows take `1` or `0`.
+This page lists 113 variables.[^variable-names] `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_OUTPUT_LENGTH` are common. Switch rows take `1` or `0`.
 
 ## Example
 
@@ -37,7 +37,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` | <Documented /> | Returns to the project working directory after each Bash or PowerShell command in the main session. | On or off | Main session. Project `env` can set it before trust |
 | `CLAUDE_BG_SESSION_PERMISSION_RULES` | <Undocumented /> | Gives allow and deny permission rules and extra dirs to a background session as JSON. | JSON text. Used only when `CLAUDE_CODE_SESSION_KIND` is `bg`. The scrub removes it from the child env | Background sessions. Not set from project `env` before trust |
 | `CLAUDE_CHROME_CLASSIFIER_FLOOR` | <Undocumented /> | Forces the Chrome auto mode classifier floor on or off. It overrides a feature flag. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On, off, or unset, `false` by default. Without it the flag decides, default `false`. Remote sessions read the flag in safe mode | Claude in Chrome with auto mode. Not set from project `env` before trust |
-| `CLAUDE_CHROME_PERMISSION_MODE` | <Undocumented /> | Sets the permission mode of Claude in Chrome. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | Text. An unknown value logs a warning. Claude Code sets `skip_all_permission_checks` for the native host when permission checks are skipped | Claude in Chrome. Not set from project `env` before trust |
+| `CLAUDE_CHROME_PERMISSION_MODE` | <Undocumented /> | Sets the permission mode of Claude in Chrome. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | Text, kept as given, so spaces around it are not removed. An unknown value logs a warning.[^chrome-mode] Claude Code sets `skip_all_permission_checks` for the native host when permission checks are skipped | Claude in Chrome. Not set from project `env` before trust |
 | `CLAUDE_CODE_AUTO_BACKGROUND_TIMEOUT_MS` | <Undocumented /> | Caps the timeout of a Bash call that can auto-background in the main agent. | A number of milliseconds. The cap is at least `2000`. Claude Code ignores a missing or non-positive value | Main agent, Bash |
 | `CLAUDE_CODE_AUTO_MODE_ARTIFACT_CONSENT_RULE` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns the artifact consent rule of the auto mode classifier on or off. | On by default. Env value wins. Else a feature flag set to true turns it off | Auto mode, gated by a feature flag |
 | `CLAUDE_CODE_AUTO_MODE_CLASSIFY_ASK_USER_QUESTION` | <Undocumented /> | Overrides whether the auto mode classifier looks at `AskUserQuestion` calls. | On by default. Env value, else the `classifyAskUserQuestion` server setting | Auto mode |
@@ -66,6 +66,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_DISABLE_MOUNTED_DRIVE_RM_PROMPT` | <Undocumented /> | Turns off the prompt for `rm -r` on a mounted drive, the folder that holds mounted drives, or a top-level file or folder of a drive. These paths (such as `/Volumes`, `/media`, and WSL `/mnt/c`) get a prompt that permission rules cannot auto-allow. | On or off. Claude Code skips the check when it is set.[^mounted-rm] | Bash tool |
 | `CLAUDE_CODE_DISABLE_POWERSHELL_ALIAS_SHADOW_CHECK` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Turns off the PowerShell check that refuses functions named like built-in commands.[^ps-alias] | On or off. A protected server gate turns the check on.[^ps-alias-gate] | PowerShell tool |
 | `CLAUDE_CODE_DISABLE_POWERSHELL_CMD_RM_DENY` | <Documented /> | Turns off the PowerShell check that denies `rd`, `rmdir`, `del` and `erase` on system paths. | On or off. Without it a feature flag decides | PowerShell tool |
+| `CLAUDE_CODE_DISABLE_REDIRECT_DENY_RECHECK` | <Undocumented /> <Gated note="A server gate must be on for this variable to have an effect" /> | Turns off the second check of Bash deny rules for a command that has `<` or `>`. The check blanks the file-redirect operators and tests the command against the Bash deny rules again.[^redirect-recheck] | On or off, off by default. With the variable on, the check runs only when an `alwaysDenyRules` entry names the Bash tool | Bash |
 | `CLAUDE_CODE_DISABLE_SHELL_HEAD_START` | <Undocumented /> | Stops Claude Code from starting the shell before it approves the first shell command. By default, the shell start-up files can run before approval, even if Claude Code then refuses the command. Set it to turn this off. | On or off, off by default. Any set value turns it off. The head start is also off when the sandbox is on, when `PreToolUse` hooks exist, or in a subagent. On Windows it stops the head start of PowerShell too | Bash and PowerShell tools[^head-start] |
 | `CLAUDE_CODE_DISABLE_SUBSTITUTION_RM_PROMPT` | <Documented /> | Turns off the critical-path check for a recursive `rm` whose target is only command substitution output. | On or off. Checked together with a feature flag | Bash tool |
 | `CLAUDE_CODE_DISABLE_WEB_FETCH` | <Documented /> | Turns off the `WebFetch` tool. `WebSearch` stays on. | On or off. Also disables the web fetch agent | All sessions |
@@ -95,6 +96,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `CLAUDE_CODE_QUESTION_EXTENDED` | <Undocumented /> | Turns on extended questions in `AskUserQuestion`. A host sets it from the `askUserQuestion.extendedQuestions` option. | On or off. Read only for some entrypoints and remote sessions | SDK, remote, and selected entrypoints |
 | `CLAUDE_CODE_QUESTION_OPTIONAL_DESCRIPTIONS` | <Undocumented /> | Makes option descriptions optional in `AskUserQuestion`. A host sets it from the `askUserQuestion.optionalDescriptions` option. | On or off. Read only for some entrypoints and remote sessions | SDK, remote, and selected entrypoints |
 | `CLAUDE_CODE_QUESTION_PREVIEW_FORMAT` | <Undocumented /> | Sets the preview format of `AskUserQuestion`. A host sets it from the `askUserQuestion.previewFormat` option. | Text. Without it `markdown` is the default for most entrypoints. It is not the default for sdk, desktop, local-agent, or remote | All sessions |
+| `CLAUDE_CODE_RELAUNCH_BYPASS_SWITCH` | <Undocumented /> | Claude Code sets it for the relaunched child, which reads it and removes it. The child learns from it whether the first process held the switch to auto mode.[^relaunch-bypass] | Text, `seen` or `held:<pid>:<token>`. Claude Code sets it. Do not set it by hand | Relaunch of a session |
 | `CLAUDE_CODE_REPORT_FINDINGS` | <Undocumented /> | Gates a findings report mode for review runs. It needs a matching tool in the options and no text or json output. No visible effect in a print-mode probe ([Probes](../../reference/probes.md)). | On or off | Review runs |
 | `CLAUDE_CODE_RESTRICTED` | <Documented /> | Starts the session in restricted mode like `--restricted`. | On or off. Other paths such as `--desktop` refuse to run under it | All sessions |
 | `CLAUDE_CODE_SANDBOX_LEAVE_DENIES_TO_SRT_WIN` | <Undocumented /> | On Windows, stops Claude Code from adding its own deny rules and leaves them to `srt-win`. The error text warns the sandbox may then fail on a large profile. | On or off. Set it in the environment at start. A settings file cannot set it | Windows sandbox |
@@ -136,6 +138,7 @@ The rows are in name order. See [Environment Variables](index.md#how-to-read-the
 | `NoDefaultCurrentDirectoryInExePath` | <Undocumented /> | Claude Code sets it to `1` at startup so executable search skips the current directory. | - | - |
 | `SANDBOX_OFFICE_PDF_DIR` | <Undocumented /> | Names the folder for the PDF copies of `.docx` and `.pptx` attachments [^office-pdf-dir] | An absolute path. Not used on Windows | Sandbox attachments |
 | `SANDBOX_OFFICE_PDF_SEND` | <Undocumented /> | Chooses which converted attachment types Claude Code sends as PDF.[^office-pdf-send] | A comma-separated list of `docx` and `pptx` | Sandbox attachments |
+| `SANDBOX_RUNTIME` | <Undocumented /> | Makes the switch from bypass permissions mode to auto mode at start skip with the reason `sandbox_runtime`. The sandbox runtime sets `SANDBOX_RUNTIME=1` for the commands that it runs.[^sandbox-runtime] | Any set value. `IS_SANDBOX=1`, `CLAUDE_CODE_BUBBLEWRAP`, and a CI or Kubernetes host skip it in the same way | Sandbox |
 | `SHELL` | <Documented /> | Names the user shell. Claude Code uses it to find tools, to describe the shell in the prompt, and to run login-shell probes. | Text. Non-empty string. Falls back to `/bin/zsh` for one probe and to `unknown` in the prompt text | All sessions, Windows sets it itself |
 | `SSH_ASKPASS` | <Undocumented /> | Claude Code passes the user value to git child processes. It falls back to a default and then to an empty string. | Text. `GIT_ASKPASS` falls back to it in one path | Git child processes |
 | `SUDO_GID` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Holds the group id of the user who ran `sudo`. Claude Code uses it with `SUDO_UID` and `SUDO_USER` to find the real user when it runs as root. | A number. Integer, digits only, min `0`. Used only when the process uid is `0` | Linux and macOS as root |
@@ -170,24 +173,28 @@ While the scrub is on (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` true, or `GITHUB_ACTIO
 
 ## Sources
 
-[^max-output]: The program, `chunk-1zfpw8h2.js:142`.
-[^auto-full-context]: The program, `chunk-wm04tzdx.js:10807` (`CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` read). The gate is `tengu_velvet_marble`, named at `chunk-wm04tzdx.js:10419` and read as `$85a0c6` at `chunk-wm04tzdx.js:10523`.
-[^edit-diff]: The program, `chunk-hg1yqkjk.js:289078` (`CLAUDE_CODE_BASH_EDIT_DIFF` and `bashEditDiffEnabled`, then the `bash_edit_diff` configuration at `chunk-hg1yqkjk.js:289088`).
-[^exported-var]: The program, `chunk-hg1yqkjk.js:64432`.
+[^max-output]: The program, `chunk-c1hnv4fm.js:147`.
+[^auto-full-context]: The program, `chunk-k5r71ad2.js:11133` (`CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` read). The gate is `tengu_velvet_marble`, named at `chunk-k5r71ad2.js:10733` and read as `$85a0c6` at `chunk-k5r71ad2.js:10845`.
+[^edit-diff]: The program, `chunk-bzyb60p0.js:292312` (`CLAUDE_CODE_BASH_EDIT_DIFF` and `bashEditDiffEnabled`, then the `bash_edit_diff` configuration at `chunk-bzyb60p0.js:292322`).
+[^exported-var]: The program, `chunk-bzyb60p0.js:65424`.
 [^exported-var-gate]: The gate is `bot_protected_tengu_zazzy_parasol`.
-[^mounted-rm]: The program, `chunk-hg1yqkjk.js:53975`.
-[^ps-alias]: The program, `chunk-hg1yqkjk.js:69529`.
+[^mounted-rm]: The program, `chunk-bzyb60p0.js:54839`.
+[^ps-alias]: The program, `chunk-bzyb60p0.js:70538`.
 [^ps-alias-gate]: The gate is `bot_protected_tengu_dynamic_pike`.
-[^git-check]: The program, `chunk-g4jweshk.js:12185` (the read of the variable) and `chunk-g4jweshk.js:12231` (the hook check).
-[^perforce]: The program, `chunk-zs9k1w9q.js:120453`.
-[^thrifty]: The program, `chunk-y3bkspwa.js:239`. The gate is `tengu_thrifty_sonic`.
-[^native-search]: The program, `chunk-gvhwnc7g.js:518`, lists the name in its environment table as a boolean.
-[^office-pdf-dir]: The program, `chunk-a8tz5msg.js:362`.
-[^office-pdf-send]: The program, `chunk-a8tz5msg.js:410`.
-[^scrub-lists]: The program lists, `chunk-rjw4t165.js:542` (credential names, from `ANTHROPIC_API_KEY`) and `chunk-rjw4t165.js:645` (path and config names, including `KUBECONFIG`), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
+[^git-check]: The program, `chunk-sjqze7qg.js:12209` (the read of the variable) and `chunk-sjqze7qg.js:12255` (the hook check).
+[^perforce]: The program, `chunk-3pqaw3hv.js:122685`.
+[^thrifty]: The program, `chunk-ge3qft6b.js:239`. The gate is `tengu_thrifty_sonic`.
+[^native-search]: The program, `chunk-c203g5kd.js:525`, lists the name in its environment table as a boolean.
+[^office-pdf-dir]: The program, `chunk-577me9yq.js:363`.
+[^office-pdf-send]: The program, `chunk-577me9yq.js:411`.
+[^scrub-lists]: The program lists, `chunk-9zdrdv25.js:541` (credential names, from `ANTHROPIC_API_KEY`) and `chunk-9zdrdv25.js:644` (path and config names, including `KUBECONFIG`), and a Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
 [^scrub-run]: A Bash call with the scrub on (see [Probes](../../reference/probes.md#static-and-print-probes)).
-[^variable-names]: The program, `chunk-gvhwnc7g.js:791` (the environment table). The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^head-start]: The program, `chunk-wm04tzdx.js:4812` (shell) and `chunk-hg1yqkjk.js:247807` (PowerShell).
-[^shell-mcp]: The program, `chunk-59xdgreq.js:264-288` (the checks and the value) and `chunk-59xdgreq.js:705` (`settingsEnvForChildren`, the child env).
-[^watched-sleep]: The program, `chunk-g4jweshk.js:26155-26156` (the name), `chunk-g4jweshk.js:26244` (`$13a39d` check) and `chunk-g4jweshk.js:26271` (the rewrite), `chunk-g4jweshk.js:26268` (the `CLAUDE_CODE_SHELL_PREFIX` check), and `chunk-4e1pfwf0.js:291` (the watch).
-[^websearch-citations]: The program, `chunk-g4jweshk.js:20135` (the section) and `chunk-7b3h6etb.js:135` (its text). Probe case `print.sweep`.
+[^variable-names]: The program, `chunk-c203g5kd.js:798` (the environment table). The [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^head-start]: The program, `chunk-k5r71ad2.js:5101` (shell) and `chunk-bzyb60p0.js:251167` (PowerShell).
+[^shell-mcp]: The program, `chunk-r6r2wdsw.js:264-288` (the checks and the value) and `chunk-r6r2wdsw.js:708` (`settingsEnvForChildren`, the child env).
+[^watched-sleep]: The program, `chunk-sjqze7qg.js:26345-26346` (the name), `chunk-sjqze7qg.js:26434` (`$13a39d` check) and `chunk-sjqze7qg.js:26461` (the rewrite), `chunk-sjqze7qg.js:26458` (the `CLAUDE_CODE_SHELL_PREFIX` check), and `chunk-480kk0gh.js:292` (the watch).
+[^websearch-citations]: The program, `chunk-sjqze7qg.js:20266` (the section) and `chunk-ht27b0vz.js:122` (its text). Probe case `print.sweep`.
+[^redirect-recheck]: The program, `chunk-bzyb60p0.js:64715` (`tengu_sharded_acorn`) and `chunk-bzyb60p0.js:64723-64727` (`CLAUDE_CODE_DISABLE_REDIRECT_DENY_RECHECK` and `alwaysDenyRules`).
+[^relaunch-bypass]: The program, `chunk-7kv2gx33.js:13` (`held:`), `chunk-7kv2gx33.js:18-19` (`CLAUDE_CODE_RELAUNCH_BYPASS_SWITCH`, read and removed), and `chunk-7kv2gx33.js:23` (`seen`).
+[^sandbox-runtime]: The program, `chunk-0rtj0bmp.js:4656` (`sandbox_runtime`) and `chunk-1ag56sne.js:491` (`SANDBOX_RUNTIME=1`).
+[^chrome-mode]: The program, `chunk-72zr3jp8.js:742` (`Invalid CLAUDE_CHROME_PERMISSION_MODE`) and `chunk-c203g5kd.js:3019` (`rawStr`).

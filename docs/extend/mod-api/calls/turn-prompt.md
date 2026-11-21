@@ -74,6 +74,6 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `PromptBox`, `PromptMediaArgs`, `PromptMedia`, `PromptFillArgs`, `PromptFilled`, `PromptFillResult`, `PromptPaintArgs`, `PromptPainted`, `PromptSubmitArgs`, `PromptSubmitResult`, `PromptSuggestArgs`, `PromptSuggestResult`, `PromptComposeArgs`, `PromptComposeResult`, `PromptMentionResult`, `TurnStepResult`, and `TurnCompleteResult`, and the event text of `EngineEventOf` (`prompt.*`, `skill.prompt`, `attribution.text`, `turn.*`).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `PromptBox`, `PromptMediaArgs`, `PromptMedia`, `PromptFillArgs`, `PromptFilled`, `PromptFillResult`, `PromptPaintArgs`, `PromptPainted`, `PromptSubmitArgs`, `PromptSubmitResult`, `PromptSuggestArgs`, `PromptSuggestResult`, `PromptComposeArgs`, `PromptComposeResult`, `PromptMentionResult`, `TurnStepResult`, and `TurnCompleteResult`, and the event text of `EngineEventOf` (`prompt.*`, `skill.prompt`, `attribution.text`, `turn.*`).
 [^v328-tier-submit]: The type file `schemas/claude-code.d.ts`, `$.prompt.submit`.
-[^fill-unanswered]: The program, `chunk-hg1yqkjk.js:212910` (`refusal: "unanswered"` when no app answered).
+[^fill-unanswered]: The program, `chunk-bzyb60p0.js:215731` (`refusal: "unanswered"` when no app answered).

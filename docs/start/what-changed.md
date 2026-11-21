@@ -1,10 +1,10 @@
 ---
 title: What Changed
-description: What Claude Code 2.1.329, the release this site covers, changes against 2.1.328, the release before it.
+description: What Claude Code 2.1.330, the release this site covers, changes against 2.1.329, the release before it.
 sidebar_position: 4
 ---
 
-This page lists the changes in `2.1.329`, the release this site covers, against `2.1.328`, the release before it.
+This page lists the changes in `2.1.330`, the release this site covers, against `2.1.329`, the release before it.
 It lists nothing older. It is short on purpose. Each row rests on the program code and cites it in a footnote.
 For every fix and small change, read the official [Changelog](https://code.claude.com/docs/en/changelog).
 
@@ -12,96 +12,76 @@ For every fix and small change, read the official [Changelog](https://code.claud
 
 Run `claude --version`.
 The `/release-notes` command shows a cached copy of the [changelog](https://code.claude.com/docs/en/changelog).
-This site covers `2.1.329`, the version shown in the navbar.
+This site covers `2.1.330`, the version shown in the navbar.
 
-## Version 2.1.329
+## Version 2.1.330
 
-Sources: the program, and the entry for `2.1.329` in the official [Changelog](https://code.claude.com/docs/en/changelog) as a second source. Each row states what the program code shows. A row is marked <Documented /> when that changelog entry states the same change. Items about other products (such as VS Code, Claude Desktop, and Remote Control), and fixes with no setting, key, or text that a page states, are not on this page.
+Sources: the program, and the entry for `2.1.330` in the official [Changelog](https://code.claude.com/docs/en/changelog) as a second source. Each row states what the program code shows. A row is marked <Documented /> when that changelog entry states the same change. Items about other products (such as VS Code, Claude Desktop, and Remote Control), and fixes with no setting, key, or text that a page states, are not on this page.
 
 ### Permissions, Hooks, and Settings
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| Trust dialog hooks warning | <Documented /> | The trust dialog now warns "This folder configures hooks that can run commands without asking, declared in" and lists the files.[^trust-hooks] | [Hook Configuration](../extend/hooks/configuration.md#settings-keys-and-trust) |
-| Managed hooks that fail to load | <Documented /> | A warning in the conversation says "Some checks your organization set up (hooks) did not load, so they are not running in this session". It does not show when managed settings set `disableAllHooks`.[^managed-hooks] | [Hook Configuration](../extend/hooks/configuration.md#settings-keys-and-trust) |
-| `PreToolUse` hooks in Code Mode | <Documented /> | A hook that errors no longer refuses a tool call from a script. Set `"onFailure": "block"` on a hook that must refuse.[^code-mode-hooks] | [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#code-mode) |
-| `background_tasks` in `Stop` hooks | <Documented /> | A Monitor script has the `type` `monitor`, not `shell`.[^bg-type] | [Session Events](../extend/hooks/session-events.md#stop) |
-| `rm` of a symbolic link | <Documented /> | The safety check says "rm removes the link, not what it points to". The auto mode classifier can approve it, so auto mode does not ask you first.[^rm-symlink] | [Permission Flow](../how-it-works/permission-flow.md#symlink-removal) |
-| `/auto-mode-setup` | <Documented /> | The scan now counts denial reasons that hold brackets, parentheses, slashes, or `&`. It can offer `allow` rules from recent denials.[^setup-denials] | [Auto Mode](../configure/permissions/auto-mode.md#auto-mode-setup-without-the-dialog) |
-| `/sandbox` on Linux | <Documented /> | The panel warns "allowUnixSockets has no effect in the Linux sandbox" and no longer lists those entries as allowed.[^sandbox-unix] | [Sandbox](../configure/permissions/sandbox.md#core-keys) |
-| `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` removal | <Documented /> | When you remove the variable from settings `env` in a running session, Claude Code puts it back to its startup value, or removes it.[^pct-put-back] | [Context and Compaction Variables](../configure/env-vars/context-and-compaction.md#variables) |
-| `cleanupPeriodDays` with managed settings | <Undocumented /> | When the program did not read managed settings in full, it skips the cleanup of old sessions. The debug log says "Skipping retention cleanup".[^cleanup-managed] | [Core Settings](../configure/settings/core.md#keys) |
-| `/status` "Marketplace auto-update" row | <Documented /> | `/status` names each managed marketplace that gets no automatic updates, with the reason.[^status-marketplace] | [Marketplace](../extend/plugins/marketplace.md#settings-keys) |
-| `additionalDirectoryConfigRoots` | <Undocumented /> | A host-only setting. It maps an added folder to the checkout whose `.claude` files that folder reads.[^dir-config-roots] | [Agents and Remote Settings](../configure/settings/agents-and-remote.md#keys) |
-| `desktopMcpServersListScope` | <Undocumented /> | A managed-only key. It sets which tabs of the desktop app the MCP allow list and deny list govern. The CLI reads no value from it.[^desktop-mcp-scope] | [MCP and Channels Settings](../configure/settings/mcp-and-channels.md#keys) |
-| `permissions.workingDirectoriesExclude` | <Undocumented /> | A host-only list of absolute paths. The three `block...OutsideWorkingDirectories` settings treat each path as outside every working directory. Claude Code ignores a relative path.[^wd-exclude] | [Permission Rules](../configure/permissions/rules.md#the-permissions-keys) |
+| `requiredMinimumVersion` and three commands | <Undocumented /> | The version check of managed settings no longer blocks `update`, `install`, and `doctor`. These commands run on a version that is out of range.[^ver-skip] | [Enterprise Settings](../configure/settings/enterprise.md#require-a-version-range) |
+| Second Bash deny check | <Undocumented /> | `CLAUDE_CODE_DISABLE_REDIRECT_DENY_RECHECK` turns off the second check of Bash deny rules for a command that has `<` or `>`. A server gate must be on for the variable to have an effect.[^redirect] | [Tools and Bash Variables](../configure/env-vars/tools-and-bash.md#variables) |
+| Host approval and the auto mode block count | <Undocumented /> | `CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK` lets an approval of a host app reset the count of auto mode blocks in a row.[^streak] | [SDK and Automation Variables](../configure/env-vars/sdk-and-automation.md#variables) |
+| Plugin display fields | <Undocumented /> | A plugin with a bad display field in `plugin.json` always loads without that field. No server flag can refuse the plugin now.[^pl-gate] | [Plugin CLI](../extend/plugins/cli.md#how-it-works) |
 
-### Skills and Slash Commands
+### CLI, Commands, and Sign-In
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `/tasks` panel | <Documented /> | The panel adds sections for scheduled tasks, `/loop` wakeups, the goal, and forks. Press `x` to stop an item. Claude Code asks first, for example "Stop the goal?".[^tasks-panel] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
-| "Exit and stop tasks" | <Documented /> | The exit dialog "Background work is running" offers "Exit and stop tasks". It also stops scheduled tasks.[^tasks-exit] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
-| `/teleport` | <Documented /> | The description reads "Resume a cloud session here". Picking a session starts a new session, as `/clear` does. The old session stays in `/resume`.[^teleport] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands) |
-| `/clear` | <Undocumented /> | The description says "loops carry over" to the new session.[^clear-loops] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#session-and-conversation-commands) |
-| `/config` notice | <Documented /> | After you close the panel, a notice lists each setting that you changed, such as `Set theme to <name>`.[^config-notice] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/status` model line | <Documented /> | With `opusplan` or `haiku`, the line also names the model that plan mode uses, "in plan mode".[^status-plan] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/terminal-setup` on macOS 27 | <Documented /> | On macOS 27 and later, it does not turn on "Use Option as Meta key" in Terminal.app. It says "Shift+Return will now enter a newline."[^terminal-27] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#setup-interface-and-config-commands) |
-| `/mcp` "Server message" row | <Documented /> | When a server needs authentication and its refusal has a message, `/mcp` shows that message in a "Server message" row.[^server-message] | [MCP CLI](../extend/mcp/cli.md#the-mcp-command) |
-| `/code-review` targets | <Documented /> | A pull request number or URL is read with `gh pr diff`. If that fails, `--fix` and URL reviews stop. With no target on most models, it reviews the whole branch with `git diff origin/HEAD...HEAD`.[^review-target] | [Bundled Skills](../extend/skills-and-commands/bundled-skills.md#skills) |
-| `/loops` command | <Undocumented /> | The disabled `/loops` command is gone. Use `/loop`.[^loops] | [Use With Agents](use-with-agents.md) |
+| Enterprise Admin Console sign-in | <Documented /> | `claude auth login` can sign in to an organization that the Enterprise Admin Console manages. A sign-in that cannot read the settings of the organization says "This sign-in didn't let Claude Code read your organization's settings".[^org] | [Subcommands](../configure/cli/subcommands.md#commands) |
+| `CLAUDE_CODE_FULL_SIGN_IN_LINK` | <Documented /> | Set it to `1` to show the full sign-in URL. Without it, Claude Code shows a short link.[^full-link] | [Auth and Account Variables](../configure/env-vars/auth-and-accounts.md#variables) |
+| `/access` | <Gated note="Availability claude-ai, the server flag tengu_gentle_sky, and not a remote session." /> | A new command. It opens a panel with the title "Your programs". It says "No programs to show" or "Couldn't check your programs".[^access] | [Slash Commands](../extend/skills-and-commands/slash-commands.md#account-cloud-and-other-commands) |
+| `/design-sync` description | <Undocumented /> | The description now reads "Sync a React design system to Claude Design". It bundles the real component code, from Storybook or a bare package, and uploads it.[^design-sync] | [Bundled Skills](../extend/skills-and-commands/bundled-skills.md#skills) |
+| `claude plugin install --json` | <Documented /> | The result has `commandPrinted` when the source command of the plugin wrote to stderr. A failed result has `commandFailed` when that command exited with an error, was killed, or did not finish in time.[^install-json] | [Plugin CLI](../extend/plugins/cli.md#subcommands) |
 
-### Tools and Code Mode
+### Self-Hosted Runner and Remote
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| Code Mode and OpenTelemetry | <Documented /> | Telemetry alone no longer refuses Code Mode. It refuses only when OpenTelemetry tracing is on through `CLAUDE_CODE_ENHANCED_TELEMETRY_BETA`, `ENABLE_ENHANCED_TELEMETRY_BETA`, or `ENABLE_BETA_TRACING_DETAILED`.[^code-mode-otel] | [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#code-mode) |
-| Code Mode server flag | <Documented /> | A missing server flag no longer refuses Code Mode. Only an explicit off does, with the text "Anthropic has turned it off for now".[^code-mode-flag] | [Gated and Surface-Specific Tools](../reference/tools/gated-and-other.md#code-mode) |
-| `CronCreate` and sign-in | <Documented /> | A saved task runs only in a session signed in to the organization that made it. Otherwise Claude Code skips it and tells you.[^cron-signin] | [Agents and Tasks Tools](../reference/tools/agents-and-tasks.md#tools) |
-| `effort` for teammates | <Documented /> | The `effort` of an `Agent` call now applies to a teammate in agent teams. Claude Code passes it as `--effort`.[^teammate-effort] | [Agents and Tasks Tools](../reference/tools/agents-and-tasks.md#agent-parameters) |
-| `CLAUDE_CODE_NEW_RENDERER` gate | <Gated /> | The server gate that picks the new renderer by terminal is now `tengu_robust_pine`. The variable still wins over it.[^new-renderer] | [UI and Terminal Variables](../configure/env-vars/ui-and-terminal.md#variables) |
+| `--start-dir` | <Documented /> | `claude self-hosted-runner --start-dir <owner>/<repo>=<folder>`, or `SELF_HOSTED_RUNNER_START_DIR`, starts Claude in a folder of that repository.[^start-dir] | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runtime-options) |
+| Start folder notice | <Undocumented /> | When the runner cannot use the start folder, the session starts where it would without one. The runner adds a notice that starts "The start folder that this runner's operator set".[^start-dir-notice] | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#start-folder-notice) |
+| Runner start-up gauges | <Documented /> | `/metrics` gives `claude_code_self_hosted_runner_order_to_registered_seconds` and `claude_code_self_hosted_runner_order_to_first_session_seconds`.[^runner-metrics] | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runner-metrics) |
+| Unsafe repository URL | <Undocumented /> | The runner logs "refusing to pass unsafe repo URL to checkout hook" and does not give that URL to the hook.[^unsafe-url] | [Sessions and Storage](../how-it-works/sessions-and-storage.md#errors) |
+| Runner and host variables | <Undocumented /> | The runner or Claude Code sets `CLAUDE_RUNNER_START_FOLDER`, `CLAUDE_CODE_RUNNER_START_NOTES`, `CLAUDE_CODE_MODEL_NOBODY_CHOSE`, `CLAUDE_CODE_PROJECTS_FEATURE_FLAGS`, and `CLAUDE_CODE_STARTER_MAY_HOLD_CONNECTOR_FILE` for a child session. `CLAUDE_CODE_COWORK_SHELL_CHECK` and `CLAUDE_CODE_HOST_READS_NO_BASH_EDIT_DIFF` are for host apps, behind a server gate.[^runner-vars] | [Remote and Cloud Session Variables](../configure/env-vars/remote-and-cloud-sessions.md#variables) |
 
-### Flags and Self-Hosted Runner
+### Mods and MCP
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `claude auth login --organization-gateway` | <Undocumented /> | A hidden flag. It signs you in to your organization's gateway through its identity provider. You cannot combine it with another sign-in option.[^org-gateway] | [Subcommands](../configure/cli/subcommands.md#commands) |
-| `claude gateway` start-up notice | <Documented /> | The gateway always prints a notice at start: it can push settings that run commands on developer machines, so never expose it to the public internet.[^gw-notice] | [Subcommands](../configure/cli/subcommands.md#commands) |
-| `--agents-view-if-allowed` | <Undocumented /> | A hidden flag that the program now reads. It opens the agent view as `claude agents` does, unless `CLAUDE_CODE_DISABLE_AGENT_VIEW` or `disableAgentView` turns the agent view off. Then you get a normal session.[^agents-view-flag] | [Flags](../configure/cli/flags.md#agents-plugins-mcp-and-context) |
-| `-n, --name` | <Undocumented /> | The name also names a new cloud session.[^name-cloud] | [Flags](../configure/cli/flags.md#sessions-and-worktrees) |
-| `--repository-folder` | <Documented /> | At `--capacity 1`, a folder may lie in the base folder, with exceptions. Above 1, a folder there stops start-up.[^repo-folder] | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#runtime-options) |
-| `--agent-proxy-url` check | <Undocumented /> | The runner tries for 5 seconds to connect to the proxy and complete a TLS handshake. `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK=1` skips the check.[^skip-proxy] | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md#connection-options) |
+| `$.vcs` calls | <Undocumented /> | A mod can call `$.vcs.detect`, `diff`, `isolate`, `list`, `release`, and `status`. Each call asks the `vcs.*` hooks first, so a mod can serve a system other than Git.[^vcs-calls] | [Version Control](../extend/mod-api/calls/vcs.md#members) |
+| `vcs.*` hooks | <Undocumented /> | A hook on `vcs.isolate` makes the copy for a subagent with `isolation: "worktree"`, for EnterWorktree, and for `--worktree`. `vcs.list`, `vcs.status`, and `vcs.release` serve ExitWorktree and the exit dialog.[^vcs-events] | [Version Control](../extend/mod-api/calls/vcs.md#engine-events) |
+| `worktreePath` of `WorktreeCreate` | <Undocumented /> | A module should answer `vcs.isolate` instead. The old answer still works.[^worktree-path] | [Version Control](../extend/mod-api/calls/vcs.md#how-a-hook-makes-a-copy) |
+| Version control errors | <Undocumented /> | Claude Code can say "A vcs.isolate hook refused to make a copy:" or "no WorktreeCreate hook is enabled".[^vcs-errors] | [Version Control](../extend/mod-api/calls/vcs.md#errors) |
+| `AbovePrompt` in VS Code | <Documented /> | `AbovePrompt` and `AbovePromptList` draw on the terminal, the desktop app, the mobile app, and VS Code. `claude plugin validate` no longer warns that the hook never runs in VS Code.[^above-prompt] | [Surfaces, Elements, and Render Sites](../extend/mod-api/ui/ui-elements.md#render-sites-and-props) |
+
+### Tools and Sessions
+
+| Change | Status | What it means for you | Where to read more |
+| --- | --- | --- | --- |
+| `ExitWorktree` and the exit dialog | <Documented /> | `ExitWorktree` with `remove` is refused, also with `discard_changes`, while another Claude Code session runs in the worktree. The exit dialog says "Worktree kept at …: another Claude Code session (…) is running in it, though it may be idle". A server flag controls the check.[^exit-worktree] | [Agents and Tasks Tools](../reference/tools/agents-and-tasks.md#tools) |
+| `PushNotification` default | <Undocumented /> | The tool is on by default only when `CLAUDE_CODE_REMOTE` is set, the entry point is `remote_trigger` or `remote_cowork_trigger`, and a host check passes. A server value can change it.[^push] | [Gated and Other Tools](../reference/tools/gated-and-other.md#gated-tools) |
+| `withdrawn_tools_v1` | <Undocumented /> | The `init` line of a headless session lists this new capability.[^withdrawn] | [Stream JSON Messages](../extend/headless/stream-json.md#capabilities-of-the-init-line) |
 
 ### Environment Variables
 
 | Change | Status | What it means for you | Where to read more |
 | --- | --- | --- | --- |
-| `CLAUDE_CODE_LINKED_SPINDLE` | <Undocumented /> | Set it to a false value so a subagent's effort step cannot reach the maximum level.[^spindle] | [Models and Effort Variables](../configure/env-vars/models-and-effort.md#variables) |
-| `CLAUDE_CODE_AUTOUPDATER_DISABLED_BY_HOST` | <Undocumented /> | The new value `managed` makes plugin auto-update follow only the `autoUpdate` value in managed settings.[^autoupd-host] | [Sessions and Storage Variables](../configure/env-vars/sessions-and-storage.md#variables) |
-| `CLAUDE_RUNNER_DISABLE_START_HEARTBEATS` | <Undocumented /> | A true value stops the runner from sending start-up heartbeats while it prepares a session.[^runner-hb] | [Remote and Cloud Session Variables](../configure/env-vars/remote-and-cloud-sessions.md#variables) |
-
-### API, Account, and Request Behavior
-
-| Change | Status | What it means for you | Where to read more |
-| --- | --- | --- | --- |
-| Output limit retry | <Differs /> | Claude Code no longer reads a limit from a `max_tokens` error. A refused request on an unrecognized model is resent once with 32,000 output tokens. Behind a gateway whose model takes fewer, set `CLAUDE_CODE_MAX_OUTPUT_TOKENS`.[^max-tokens] | [Request and Cache](../how-it-works/request-and-cache.md#output-limit-retry) |
-| Keychain write test | <Documented /> | Before it renews the login on macOS, Claude Code tests that the Keychain takes a write, with an item named `Claude Code-write-check`. A refusal shows "Could not refresh your login: can't save to the Keychain".[^keychain-write] | [Account and Access](../how-it-works/account-and-access.md#where-claude-code-keeps-it) |
-| Managed settings from an organization sign-in | <Undocumented /> | With an organization sign-in, Claude Code reads remote managed settings from `/v1/desktop/orgs/${…}/claude_code/bootstrap`. With any other credential it sends no request.[^hybrid-settings] | [Endpoints](../reference/api/endpoints.md#account-and-service-endpoints) |
-
-### Mod API Calls
-
-| Change | Status | What it means for you | Where to read more |
-| --- | --- | --- | --- |
-| `agent.report` | <Undocumented /> | A new event on `$.agent`. A hook can rewrite a subagent's report, or hold it back with `consumed`, before the parent gets it.[^agent-report] | [Agent](../extend/mod-api/calls/agent.md#engine-events) |
+| `CLAUDE_AFTER_LAST_COMPACT` | <Undocumented /> | It is now on or off, so `0` turns it off.[^after-compact] | [Sessions and Storage Variables](../configure/env-vars/sessions-and-storage.md#variables) |
+| `API_FORCE_IDLE_TIMEOUT` | <Undocumented /> | It is now on, off, or unset. A number of seconds counts as unset.[^idle-timeout] | [Network and Proxy Variables](../configure/env-vars/network-and-proxy.md#variables) |
+| `CLAUDE_COWORK_MEMORY_INDEX_CONTENT` | <Undocumented /> | An empty value stays empty, so it turns the index off.[^memory-index] | [Context and Compaction Variables](../configure/env-vars/context-and-compaction.md#variables) |
+| `SANDBOX_RUNTIME` | <Undocumented /> | When it is set, the switch from bypass permissions mode to auto mode at start skips with the reason `sandbox_runtime`.[^sandbox-runtime] | [Tools and Bash Variables](../configure/env-vars/tools-and-bash.md#variables) |
+| `BUF_BIGINT_DISABLE` | <Undocumented /> | Removed. The program no longer names it.[^buf-bigint] | [Bundled Library Variables](../configure/env-vars/bundled-libraries.md) |
 
 ## Example
 
-In `2.1.329`, Claude Code no longer reads a limit from a `max_tokens` error.
-Behind a gateway whose model takes fewer output tokens, check the version, then set the limit for one run:
+In `2.1.330`, a script can read the full sign-in link again. Check the version, then sign in with the full link:
 
 ```bash
 claude --version
-CLAUDE_CODE_MAX_OUTPUT_TOKENS=<limit> claude
+CLAUDE_CODE_FULL_SIGN_IN_LINK=1 claude auth login
 ```
 
 ## Related Pages
@@ -112,44 +92,30 @@ CLAUDE_CODE_MAX_OUTPUT_TOKENS=<limit> claude
 
 ## Sources
 
-[^trust-hooks]: The program, `chunk-5tx611sw.js:1140` (the warning text).
-[^managed-hooks]: The program, `chunk-6dccy31z.js:3683` (the warning text) and `chunk-6dccy31z.js:3664` (the `disableAllHooks` check).
-[^code-mode-hooks]: The program, `chunk-hg1yqkjk.js:267214` (the `failuresToo` check) and `chunk-hg1yqkjk.js:73677` (the `onFailure` test).
-[^bg-type]: The program, `chunk-496v3ed2.js:112` (the "monitor" label) and `chunk-496v3ed2.js:97` (`local_bash: "shell"`).
-[^rm-symlink]: The program, `chunk-me64k7yy.js:684` (the reason text) and `chunk-me64k7yy.js:685` (`classifierApprovable`).
-[^setup-denials]: The program, `chunk-vxsgd0n6.js:2054` (the list "Recent auto-mode denial reasons") and `chunk-vxsgd0n6.js:1887` (the pattern that reads the reasons).
-[^sandbox-unix]: The program, `chunk-3yadgh2z.js:817` (the warning text).
-[^pct-put-back]: The program, `chunk-tsby2qjm.js:1934` (the debug text "put back to its startup value, or removed").
-[^cleanup-managed]: The program, `chunk-2xccqdyk.js:429` (the skip text).
-[^status-marketplace]: The program, `chunk-tfqdysxa.js:170` (the "Marketplace auto-update" row label) and `chunk-tfqdysxa.js:132` (the four reasons).
-[^dir-config-roots]: The program, `chunk-c9fmfd5h.js:379` (the check of `additionalDirectoryConfigRoots`).
-[^desktop-mcp-scope]: The program, `chunk-t39fw2cy.js:8719` (the `desktopMcpServersListScope` schema text).
-[^wd-exclude]: The program, `chunk-mtcj8wbs.js:1347` (the ignored-entry text for `permissions.workingDirectoriesExclude`).
-[^tasks-panel]: The program, `chunk-zs9k1w9q.js:52281` ("Stop this scheduled task?", "Stop the goal?", "Stop this fork?") and `chunk-jhjdqtx5.js:80` (the "scheduled task" count text).
-[^tasks-exit]: The program, `chunk-zs9k1w9q.js:117129` ("Exit and stop tasks") and `chunk-zs9k1w9q.js:117057` ("Background work is running").
-[^teleport]: The program, `chunk-hg1yqkjk.js:178033` (the description "Resume a cloud session here") and `chunk-bjya12sm.js:94` (`clearConversation` before the pull) and `chunk-bjya12sm.js:326` (the picker text about `/resume`).
-[^clear-loops]: The program, `chunk-hg1yqkjk.js:175946` (the description "loops carry over, and the old one stays in /resume").
-[^config-notice]: The program, `chunk-vxkg9ahh.js:1326` (the `Set model to` text of a changed row) and `chunk-vxkg9ahh.js:2378` (`Set` and `to`).
-[^status-plan]: The program, `chunk-fn9dv1zs.js:843` ("in plan mode") and `chunk-aq3ms068.js:22416` (`opusplan` and `haiku`).
-[^terminal-27]: The program, `chunk-qqbf4af6.js:808` (the version test), `chunk-qqbf4af6.js:859` ("Use Option as Meta key"), and `chunk-qqbf4af6.js:870` ("Shift+Return will now enter a newline.").
-[^server-message]: The program, `chunk-4g68nm9m.js:1680` (the "Server message" row) and `chunk-w3gpg1a5.js:6626` (`serverMessage` from the error body).
-[^review-target]: The program, `chunk-z758pdbe.js:2599` (`gh pr diff`), `chunk-z758pdbe.js:2619` (the "was refused or failed" rule), and `chunk-z758pdbe.js:1554` (`git diff origin/HEAD...HEAD`).
-[^loops]: The program, `chunk-hg1yqkjk.js:42858` (the `/loop` command name that remains). In `2.1.328`, `/loops` was a command with `isEnabled` always false. A search of `2.1.329` finds no command of that name.
-[^code-mode-otel]: The program, `chunk-3y52b1p1.js:215` (the `otel` refusal) and `chunk-mjpt6p5c.js:73` (its text "OpenTelemetry tracing is on").
-[^code-mode-flag]: The program, `chunk-3y52b1p1.js:200` (`$dd7fc8`, true only when the flag `tengu_rustling_blossom` is not true, default true) and `chunk-mjpt6p5c.js:95` ("Anthropic has turned it off for now").
-[^cron-signin]: The program, `chunk-8mhvfm0f.js:804` (the "Skipped" notice for scheduled tasks) and `chunk-44sty588.js:363` (`createdUnderSignIn`).
-[^teammate-effort]: The program, `chunk-2ry3tbza.js:1858` (the `effort` value goes to `spawnTeammate`) and `chunk-a4sw59pz.js:871` (the `--effort` argument of a pane teammate).
-[^new-renderer]: The program, `chunk-0b3aev3g.js:26370` (the gate `tengu_robust_pine`, which was `tengu_functional_pebble` in `2.1.328`).
-[^org-gateway]: The program, `chunk-rwevfvv3.js:2116` (the hidden `--organization-gateway` option and help text) and `chunk-f5q1yhhc.js:836` (the text "can't be used with another sign-in option").
-[^gw-notice]: The program, `chunk-v9ek375d.js:47` (the notice text).
-[^agents-view-flag]: The program, `chunk-txash88y.js:3972` (`agentsViewIfAllowed` and `agentsCommandHandler`) and `chunk-wtmc4k02.js:13` (the `CLAUDE_CODE_DISABLE_AGENT_VIEW` and `disableAgentView` checks). `2.1.328` has no reader of the flag.
-[^name-cloud]: The program, `chunk-txash88y.js:3882` (the help text "Also names a new cloud session.").
-[^repo-folder]: The program, `chunk-3kp5jwr6.js:3868` (the `--repository-folder` error text) and `chunk-3kp5jwr6.js:4000` (the error above `--capacity` 1).
-[^skip-proxy]: The program, `chunk-3kp5jwr6.js:16609` (the help text of `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK`) and `chunk-3kp5jwr6.js:4939` (the variable).
-[^spindle]: The program, `chunk-2ry3tbza.js:2187` (`CLAUDE_CODE_LINKED_SPINDLE` sets `mayReachMax`).
-[^autoupd-host]: The program, `chunk-aq3ms068.js:6325` (the `managed` value of `CLAUDE_CODE_AUTOUPDATER_DISABLED_BY_HOST`) and `chunk-hg1yqkjk.js:226529` (plugin auto-update).
-[^runner-hb]: The program, `chunk-3kp5jwr6.js:10706` (the `CLAUDE_RUNNER_DISABLE_START_HEARTBEATS` check).
-[^max-tokens]: The program, `chunk-hg1yqkjk.js:154443` (`lowerAfter` resends once with the cap), `chunk-hg1yqkjk.js:167204` (the call site), `chunk-aq3ms068.js:24313` (the unrecognized-model check with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`).
-[^keychain-write]: The program, `chunk-f7vjj23d.js:277` (the item name `Claude Code-write-check`) and `chunk-hg1yqkjk.js:118548` ("Could not refresh your login: can't save to the Keychain").
-[^hybrid-settings]: The program, `chunk-76049qf7.js:78` (the `claude_code/bootstrap` path) and `chunk-7vfh1k4y.js:1281` ("Remote settings: request not sent").
-[^agent-report]: The program, `chunk-nxwpaxwj.js:6265` (the hook raise and "not delivered") and `chunk-qsd8sbe8.js:9211` (the checked `consumed` field).
+[^ver-skip]: The program, `chunk-amkshz08.js:13` (`update`, `install`, and `doctor`, which the version check skips) and `chunk-amkshz08.js:16` (`requiredMinimumVersion`).
+[^redirect]: The program, `chunk-bzyb60p0.js:64715` (`tengu_sharded_acorn`) and `chunk-bzyb60p0.js:64723-64727` (`CLAUDE_CODE_DISABLE_REDIRECT_DENY_RECHECK` and `alwaysDenyRules`).
+[^streak]: The program, `chunk-bzyb60p0.js:51100` (`CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK`) and `chunk-52tptcsk.js:1556` (`denial_limit_host_reset`).
+[^pl-gate]: The program, `chunk-bzyb60p0.js:49976` (the `plugin-json` check, which drops the bad display fields with no flag test). In `2.1.329`, the same check also tested the server flag `refusesDisplayFaults`.
+[^org]: The program, `chunk-jcwhbkjz.js:365` (the text `This sign-in didn't let Claude Code read your organization's settings`) and `chunk-jcwhbkjz.js:410` (the text `It has not turned on Claude Code sign-in for you`).
+[^full-link]: The program, `chunk-16b09bna.js:26-27` (`CLAUDE_CODE_FULL_SIGN_IN_LINK` and `-local-oauth`, which return the full URL).
+[^access]: The program, `chunk-bzyb60p0.js:191568` (the command and its gate `tengu_gentle_sky`) and `chunk-4c3sbrwa.js:788` (the title "Your programs").
+[^design-sync]: The program, `chunk-424x9gf0.js:3779` (the description "Sync a React design system to Claude Design").
+[^install-json]: The program, `chunk-nppzf6gc.js:883` (`commandPrinted` in the `ok` result) and `chunk-nppzf6gc.js:424` (`commandFailed` in the `failed` result).
+[^start-dir]: The program, `chunk-q0y1fm2x.js:16132` (the `--start-dir` case) and `chunk-q0y1fm2x.js:16414-16418` (the `SELF_HOSTED_RUNNER_START_DIR` fallback).
+[^start-dir-notice]: The program, `chunk-q0y1fm2x.js:5839` (the text `The start folder that this runner's operator set`).
+[^runner-metrics]: The program, `chunk-8yfas77b.js:956` (the text `order_to_registered_seconds`) and `chunk-8yfas77b.js:965` (the text `order_to_first_session_seconds`).
+[^unsafe-url]: The program, `chunk-q0y1fm2x.js:9082` (the text "refusing to pass unsafe repo URL to checkout hook").
+[^runner-vars]: The program, `chunk-q0y1fm2x.js:12068-12141` (the variables that the runner sets for a session), `chunk-bzyb60p0.js:275870` (`CLAUDE_CODE_COWORK_SHELL_CHECK`), and `chunk-3t7ve0wy.js:744-747` (`CLAUDE_CODE_HOST_READS_NO_BASH_EDIT_DIFF`).
+[^vcs-calls]: The program, `chunk-bzyb60p0.js:217284` (`is not available in this mode`, the gate of the calls) and `chunk-bzyb60p0.js:217309` (the input check of `vcs.isolate`).
+[^vcs-events]: The program, `chunk-bzyb60p0.js:8689` (the event `vcs.isolate`) and `chunk-bzyb60p0.js:93163` (the hook is asked first).
+[^worktree-path]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `worktreePath` (`@deprecated from a module, answer vcs.isolate instead`).
+[^vcs-errors]: The program, `chunk-2p0e1k2g.js:477` ("A vcs.isolate hook refused to make a copy:") and `chunk-4m3xfy89.js:692` ("no WorktreeCreate hook is enabled").
+[^above-prompt]: The program, `chunk-0w2wb7gk.js:8804` (`AbovePrompt`).
+[^exit-worktree]: The program, `chunk-aw5nczax.js:7925` (`validateInput`, error code 8), `chunk-aw5nczax.js:8098` (the refusal at removal, reason `other_live_session`), and `chunk-bzyb60p0.js:93748` (the check, behind the server flag `tengu_tingly_wall`).
+[^push]: The program, `chunk-gys72mpb.js:266` (`isEnabled` reads `tengu_kairos_push_notifications` with the default `CLAUDE_CODE_REMOTE`) and `chunk-3t7ve0wy.js:63` (`remote_trigger` and `remote_cowork_trigger`).
+[^withdrawn]: The program, `chunk-zd24r3fj.js:169` (`withdrawn_tools_v1`) and `chunk-d688kptq.js:5765` (`$9478fa` in the `capabilities` array).
+[^after-compact]: The program, `chunk-c203g5kd.js:806` (`CLAUDE_AFTER_LAST_COMPACT`), `chunk-c203g5kd.js:2982` (its type, `bool()`), and `chunk-bzyb60p0.js:20103` (the read).
+[^idle-timeout]: The program, `chunk-c203g5kd.js:1277` (`API_FORCE_IDLE_TIMEOUT`), `chunk-c203g5kd.js:3491` (its type, `triBool()`), and `chunk-3jjr3wje.js:6768` (the read).
+[^memory-index]: The program, `chunk-c203g5kd.js:1161` (`CLAUDE_COWORK_MEMORY_INDEX_CONTENT`), `chunk-c203g5kd.js:3186` (its type, `rawStr()`), and `chunk-bzyb60p0.js:106326` (the read).
+[^sandbox-runtime]: The program, `chunk-0rtj0bmp.js:4656` (`sandbox_runtime`) and `chunk-1ag56sne.js:491` (`SANDBOX_RUNTIME=1`).
+[^buf-bigint]: A search of the `2.1.330` build finds no `BUF_BIGINT_DISABLE`. The `2.1.329` build named it.

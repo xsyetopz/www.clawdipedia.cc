@@ -204,17 +204,17 @@ The betas `per-turn-control-2026-07-01` and `timing-2026-09-09` match the flags 
 
 ## Sources
 
-[^overrides]: The program, `chunk-aq3ms068.js:13413` (the lookup from a model name to a `modelOverrides` key) and `chunk-bpdncsrm.js:47` (the comparison that ignores letter case and a trailing `[1m]`).
-[^best]: The program, `chunk-cd3hqxcc.js:1062` (`best: "opus"`).
-[^fable-alias]: The program, `chunk-cd3hqxcc.js:1055-1059` (the `fable` alias: `default` is `claude-fable-5-2`, and `per_provider` maps `gateway` to `claude-fable-5`). `chunk-cd3hqxcc.js:1356-1362` (`$df72a4`) looks up `per_provider` first and `default` second. `chunk-cd3hqxcc.js:1635` (`$b22891`) returns `gateway` when any of three checks is true, before it tests the Bedrock, Foundry, and other provider variables. `chunk-cd3hqxcc.js:8-10` imports the three checks as `$446177`, `$f1d3f6`, and `$7407cb`. They are the exports `Po`, `L7e`, and `Pre`, which `chunk-kgzzwvwc.js:9202` (`$e355c2`), `chunk-kgzzwvwc.js:9208` (`$fca019`), and `chunk-kgzzwvwc.js:9210` (`$929fb6`) set. They are `gatewayAuth()` (`chunk-kgzzwvwc.js:7444-7446`), `gatewayServerProcess()` (`chunk-kgzzwvwc.js:7464-7466`), and `gatewayRequiredByHostPolicy()` (`chunk-kgzzwvwc.js:7470-7472`). `gatewayAuth()` returns the stored sign-in without a check of `expiresAt`; a separate function checks it (`chunk-kgzzwvwc.js:7447-7450`). `chunk-aq3ms068.js:13263` and `chunk-aq3ms068.js:22226` (`$8595b3`) pass the provider to the alias lookup. `chunk-aq3ms068.js:7190` maps the provider to the "gateway" key. `chunk-cd3hqxcc.js:779-791` holds the `claude-fable-5` entry with display name "Fable 5".
-[^opusplan]: The program, `chunk-aq3ms068.js:22416` (`opusplan` and `haiku` are the plan-mode aliases) and `chunk-aq3ms068.js:22419` (`opusplan` plans on `opus`).
-[^aliases]: The aliases are from the official page, and the exceptions are from the program, `chunk-cd3hqxcc.js:1055` (`per_provider`).
-[^suffix]: The program, `chunk-aq3ms068.js:23525` (the `(1M context)` label needs a model with `supports_1m_suffix`) and `chunk-bpdncsrm.js:46` (the alias list with `[1m]`).
-[^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-cd3hqxcc.js:42`.
-[^fallback-3p]: The program, field `fallback_3p`, `chunk-cd3hqxcc.js:742` (`claude-opus-5-5`), `chunk-cd3hqxcc.js:841` (`claude-fable-5-1`), and `chunk-cd3hqxcc.js:890` (`claude-fable-5-2`).
-[^window-default]: The program, `chunk-aq3ms068.js:24231`, `return TN()?Ryt:g1`; `g1` is `1e6`, `Ryt` is `200000` (`chunk-aq3ms068.js:24068`, `chunk-aq3ms068.js:24068`). `CLAUDE_CODE_MAX_CONTEXT_TOKENS` is checked first, and a model the catalog does not know reaches this line.
-[^window-hint]: The program, `chunk-b2p40vmw.js:121`.
-[^zeta]: The program, `chunk-77xmgbnc.js:615` (the `/model` reply, `for this session only`), `chunk-b2p40vmw.js:134` (the warning text), and `chunk-h2e446cb.js:5057` (the startup notice).
-[^sonnet-migration]: The program, `chunk-txash88y.js:1278`.
-[^fable-migration]: The program, `chunk-mjwpm8mh.js:5058`.
-[^fable-deadline]: The program, `chunk-mjwpm8mh.js:5058` (the date) and `chunk-mjwpm8mh.js:4974` (the deferred move).
+[^overrides]: The program, `chunk-865at33z.js:13481` (the lookup from a model name to a `modelOverrides` key) and `chunk-zmb62hr5.js:47` (the comparison that ignores letter case and a trailing `[1m]`).
+[^best]: The program, `chunk-zhr7rpv7.js:1062` (`best: "opus"`).
+[^fable-alias]: The program, `chunk-zhr7rpv7.js:1055-1059` (the `fable` alias: `default` is `claude-fable-5-2`, and `per_provider` maps `gateway` to `claude-fable-5`). `chunk-zhr7rpv7.js:1356-1362` (`$df72a4`) looks up `per_provider` first and `default` second. `chunk-zhr7rpv7.js:1636` (`$db748d`) returns `gateway` when any of three checks is true, before it tests the Bedrock, Foundry, and other provider variables. `chunk-zhr7rpv7.js:8-10` imports the three checks as `$115e81`, `$6e183d`, and `$31e211`. They are the exports `Io`, `xQe`, and `kse`, which `chunk-f9x2f6cx.js:9197` (`$08e868`), `chunk-f9x2f6cx.js:9203` (`$312b55`), and `chunk-f9x2f6cx.js:9205` (`$25d07c`) set. They are `gatewayAuth()` (`chunk-f9x2f6cx.js:7446-7448`), `gatewayServerProcess()` (`chunk-f9x2f6cx.js:7466-7468`), and `gatewayRequiredByHostPolicy()` (`chunk-f9x2f6cx.js:7472-7474`). `gatewayAuth()` returns the stored sign-in without a check of `expiresAt`; a separate function checks it (`chunk-f9x2f6cx.js:7449-7452`). `chunk-865at33z.js:13331` and `chunk-865at33z.js:22318` (`$a797ad`) pass the provider to the alias lookup. `chunk-865at33z.js:7224` maps the provider to the "gateway" key. `chunk-zhr7rpv7.js:779-791` holds the `claude-fable-5` entry with display name "Fable 5".
+[^opusplan]: The program, `chunk-865at33z.js:22508` (`opusplan` and `haiku` are the plan-mode aliases) and `chunk-865at33z.js:22511` (`opusplan` plans on `opus`).
+[^aliases]: The aliases are from the official page, and the exceptions are from the program, `chunk-zhr7rpv7.js:1055` (`per_provider`).
+[^suffix]: The program, `chunk-865at33z.js:23617` (the `(1M context)` label needs a model with `supports_1m_suffix`) and `chunk-zmb62hr5.js:46` (the alias list with `[1m]`).
+[^catalog]: The program holds a JavaScript object with the comment `Hand-maintained baked-in model catalog`, `chunk-zhr7rpv7.js:42`.
+[^fallback-3p]: The program, field `fallback_3p`, `chunk-zhr7rpv7.js:742` (`claude-opus-5-5`), `chunk-zhr7rpv7.js:841` (`claude-fable-5-1`), and `chunk-zhr7rpv7.js:890` (`claude-fable-5-2`).
+[^window-default]: The program, `chunk-865at33z.js:24330`, `return TN()?Ryt:g1`; `g1` is `1e6`, `Ryt` is `200000` (`chunk-865at33z.js:24167`, `chunk-865at33z.js:24167`). `CLAUDE_CODE_MAX_CONTEXT_TOKENS` is checked first, and a model the catalog does not know reaches this line.
+[^window-hint]: The program, `chunk-eg7q2c7h.js:121`.
+[^zeta]: The program, `chunk-d3brd7gb.js:614` (the `/model` reply, `for this session only`), `chunk-eg7q2c7h.js:134` (the warning text), and `chunk-w3q7cmdt.js:5098` (the startup notice).
+[^sonnet-migration]: The program, `chunk-rckksdmd.js:1280`.
+[^fable-migration]: The program, `chunk-0rtj0bmp.js:5443`.
+[^fable-deadline]: The program, `chunk-0rtj0bmp.js:5443` (the date) and `chunk-0rtj0bmp.js:5359` (the deferred move).

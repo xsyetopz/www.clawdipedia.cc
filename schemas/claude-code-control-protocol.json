@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-control-protocol.json",
-	"title": "Claude Code control protocol (Claude Code 2.1.329)",
-	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code control protocol (Claude Code 2.1.330)",
+	"$comment": "For the request and response of each control_request subtype in stream-json mode (definitions <subtype>Request and <subtype>Response, direction in x-direction). Generated from Claude Code 2.1.330 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, table of rows {request, originator, response}; the request union is described as \"Control requests a client sends to drive the loop\". Do not edit by hand: run \"bun run schemas\".",
 	"$defs": {
 		"apply_flag_settingsRequest": {
 			"type": "object",
@@ -323,9 +323,10 @@
 						"auto_mode_stop_no_check_in_session",
 						"auto_mode_stop_no_result_for_calls",
 						"auto_mode_stop_no_verdict",
-						"org_ask_ceiling"
+						"org_ask_ceiling",
+						"denial_limit_host_reset"
 					],
-					"description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'; or the limit on the connector behind the ask is 'ask' or could not be read, with any type). The type also lists auto_mode_ values, which are sent on system/permission_denied only, never on this request. Absent for every other reason; new values are additive."
+					"description": "@internal A closed-set code for a reason a host can act on, beside decision_reason_type (whose values are unchanged, so type-keyed host policy decides as before): 'outside_reads_blocked', 'memory_paused', 'classifier_transcript_too_long', 'org_ask_ceiling' (the MCP tool's ceiling, toolPermissions, is 'ask', and an ask rule or the ceiling itself raised the ask: type 'rule' or 'other'; or the limit on the connector behind the ask is 'ask' or could not be read, with any type), 'denial_limit_host_reset' (the prompt raised at three or more blocks in a row, by auto mode or by the Chrome tools' check outside it, but not the one at twenty blocks in all, sent only when the spawn environment sets CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK, no org_ask_ceiling applies and nothing else takes the request_id off the pending_action; requires_user_interaction is true). The type also lists auto_mode_ values, which are sent on system/permission_denied only, never on this request. Absent for every other reason; new values are additive."
 				},
 				"auto_modes_check_raised": {
 					"type": "boolean",
@@ -351,7 +352,7 @@
 				},
 				"server_policy_ask_only": {
 					"type": "boolean",
-					"description": "@internal Sent with decision_reason_type 'rule', and for an MCP tool's ask that has none. true = when the frame was built, nothing asked for a person on this call but the default prompt for a tool that no rule allows and, at most, a tool policy that the host itself pushed (permission_policy 'always_ask'): no other ask rule that the permission check applies to the call, no hook's or plugin's ask, no PermissionRequest hook, no organization ceiling, no plan-mode floor, no safety check, no ask or veto on a standing grant of the tool's own, no auto-mode classifier active for the call. false = something else did, or may have. It says nothing of WHY the host pushed that policy, which only the host knows; nothing of whose server the tool is (see mcp_server), so a host answers only for a tool that it holds a person's grant for; and nothing of what changes after the frame is sent. Absent on other reason types, on another tool's ask without a reason type, wherever a request is listed, mirrored or passed on again (pending_permission_requests), and from older versions."
+					"description": "@internal Sent with decision_reason_type 'rule', and for an MCP tool's ask that has none. true = when the frame was built, nothing asked for a person on this call but the default prompt for a tool that no rule allows and, at most, a tool policy that the host itself pushed (permission_policy 'always_ask'): no other ask rule that the permission check applies to the call, no hook's or plugin's ask, no PermissionRequest hook, no organization ceiling, no plan-mode floor, no safety check, no ask or veto on a standing grant of the tool's own, no auto-mode classifier active for the call. false = something else did, or may have. It says nothing of WHY the host pushed that policy, which only the host knows; nothing of whose server the tool is (see mcp_server), so a host answers only for a tool that it holds a grant for, a person's or its administrator's; and nothing of what changes after the frame is sent. Absent on other reason types, on another tool's ask without a reason type, wherever a request is listed, mirrored or passed on again (pending_permission_requests), and from older versions."
 				},
 				"classifier_approvable": {
 					"type": "boolean",
@@ -406,7 +407,7 @@
 				},
 				"requires_user_interaction": {
 					"type": "boolean",
-					"description": "True when one-tap Approve/Deny must not be offered: the tool's approval card IS the user-interaction surface (Tool.requiresUserInteraction(): the user responds on the card itself), OR the pending ask is localDisplayOnly (its consent disclosure cannot ride this wire and only the local dialog renders it), OR the auto-mode classifier blocked the call and it was handed to a person (decision_reason_type 'classifier' on a person-only ask), which no stored grant or automatic approval may answer, OR a grant keyed on the tool name must not answer it: the MCP server's name spells a claude.ai connector's key and the server came from neither claude.ai nor whoever launched the session, or, while Claude Code enforces grants, two tools of the server get that name, OR the SDK host worded the ask (title and description are its consent copy, which a push cannot carry whole), OR the ask stands in for the classifier's verdict on a call to Claude Desktop's Cowork shell, which no stored grant or automatic approval may answer. In each case the user has to open the session to answer."
+					"description": "True when one-tap Approve/Deny must not be offered: the tool's approval card IS the user-interaction surface (Tool.requiresUserInteraction(): the user responds on the card itself), OR the pending ask is localDisplayOnly (its consent disclosure cannot ride this wire and only the local dialog renders it), OR the auto-mode classifier blocked the call and it was handed to a person (decision_reason_type 'classifier' on a person-only ask), which no stored grant or automatic approval may answer, OR a grant keyed on the tool name must not answer it: the MCP server's name spells a claude.ai connector's key and the server came from neither claude.ai nor whoever launched the session, or, while Claude Code enforces grants, two tools of the server get that name, OR the SDK host worded the ask (title and description are its consent copy, which a push cannot carry whole), OR the ask stands in for the classifier's verdict on a call to Claude Desktop's Cowork shell, which no stored grant or automatic approval may answer. In each of those cases the user has to open the session to answer. Also true on the prompt raised at auto mode's limit of blocks in a row when the launch environment sets CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK and nothing else takes the request_id off the pending_action: its Allow starts that count over, so no stored grant or automatic approval may answer it. The worker's own pending_action keeps its request_id; a Remote Control bridge's push for it still opens the session."
 				},
 				"server_prompt": {
 					"type": "string",
@@ -432,8 +433,31 @@
 				},
 				"tool_kind": {
 					"type": "string",
-					"enum": ["browser"],
+					"enum": ["browser", "mcp_skill"],
 					"description": "@internal Structured tool category so SDK hosts can route to a specialized permission UI without name-matching tool_name. 'browser' = a Claude-in-Chrome MCP tool under any of its registered server names: the mcp__claude-in-chrome__* extension server, the mcp__Claude_in_Chrome__* Cowork desktop server, the Claude Desktop pane under mcp__Claude_Preview__* / mcp__Claude_Browser__* (both pane names are live during its rename rollout), or the mcp__remote-devices__* spellings bridged through Claude Code Remote (the bridged forms of the current names; the retiring Claude_Preview name has no bridged form). Open for future kinds."
+				},
+				"mcp_skill": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "@internal The skill's name. See the field mcp_skill."
+						},
+						"version": {
+							"type": "string",
+							"description": "@internal The approval key of the skill's version. See the field mcp_skill."
+						},
+						"uri": {
+							"type": "string",
+							"description": "@internal The skill's address. See the field mcp_skill."
+						},
+						"server_description": {
+							"type": "string",
+							"description": "@internal The skill's description. See the field mcp_skill."
+						}
+					},
+					"required": ["name", "version"],
+					"description": "@internal Claude Code sends this field with tool_kind 'mcp_skill', when the Skill tool asks before it loads a skill that an MCP server serves. mcp_server names the server, and this field names the skill and its version. name is the skill's name as Skill rules write it, '<server>:<skill>'. version is the approval key of the version that the ask is about: 'sha256:' and 64 hex digits. The key changes when a file of the skill changes. uri is the address of the SKILL.md file that the load reads. An older build does not send it. When the ask offers a rule, permission_suggestions holds one rule for the Skill tool, which approves this version: the name, an at sign, then the version. The ask offers none for a server whose name Claude Code cannot show. It offers none in plan mode, or under an ask rule that names the skill or the whole Skill tool. It offers none where the organization's limit on the server's connector is 'ask' or could not be read: decision_reason_code is then 'org_ask_ceiling', on a request that carries a reason.\n\nserver_description is the skill's description as Claude Code shows it, on one line, with '<' and '>' written as '&lt;' and '&gt;'. For an official plugin's server it can be Anthropic's replacement text. It is absent when the server gave an empty description. For this ask, description holds Claude Code's own sentence. name, uri and server_description are untrusted text."
 				}
 			},
 			"required": ["subtype", "tool_name", "input", "tool_use_id"],
@@ -985,6 +1009,82 @@
 				"timings_ms"
 			],
 			"description": "@internal Success payload answering comparison_fork.",
+			"x-direction": "client"
+		},
+		"dictateRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "dictate"
+				},
+				"op": {
+					"type": "string",
+					"enum": ["start", "audio", "stop", "cancel"]
+				},
+				"language": {
+					"type": "string",
+					"description": "@internal With start: the language spoken, as a code (en, pt-BR) or a name. Absent: the CLI's language setting."
+				},
+				"pcm": {
+					"type": "string",
+					"description": "@internal With audio: base64 of 16 kHz mono 16-bit little-endian samples, two seconds at most."
+				}
+			},
+			"required": ["subtype", "op"],
+			"description": "@internal Turns speech that the host recorded into text, with the service and the sign-in of /voice. A reply holds text (finished words), interim (the current guess, shown after text) and done, or a reason why not. The reply to stop holds all the words. A dictation ends after two minutes of audio, and is dropped with its words after 15 seconds with no request. Answered only for the program that started the CLI on the same machine, over its stdin; in a public build only for the VS Code extension, behind a flag.",
+			"x-direction": "client"
+		},
+		"dictateResponse": {
+			"oneOf": [
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "ok"
+						},
+						"text": {
+							"type": "string"
+						},
+						"interim": {
+							"type": "string"
+						},
+						"done": {
+							"type": "boolean"
+						}
+					},
+					"required": ["status", "text", "interim", "done"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "unavailable"
+						},
+						"reason": {
+							"type": "string",
+							"enum": [
+								"started_by_session",
+								"provider",
+								"nonessential_traffic",
+								"not_available_here",
+								"policy",
+								"launcher_started",
+								"not_signed_in",
+								"not_started",
+								"connection_failed"
+							]
+						},
+						"text": {
+							"type": "string"
+						}
+					},
+					"required": ["status", "reason", "text"]
+				}
+			],
+			"description": "@internal ok: the words so far. unavailable: the dictation has ended or never began, and text holds the words that it had.",
 			"x-direction": "client"
 		},
 		"elicitationRequest": {
@@ -5389,6 +5489,34 @@
 										},
 										"mcp_server": {
 											"$ref": "#/$defs/hook_callbackRequest____schema8"
+										},
+										"tool_kind": {
+											"type": "string",
+											"const": "mcp_skill",
+											"description": "@internal Set for the ask before a skill of an MCP server loads. mcp_server then names that server."
+										},
+										"mcp_skill": {
+											"type": "object",
+											"properties": {
+												"name": {
+													"type": "string",
+													"description": "@internal The skill's name. See the field mcp_skill."
+												},
+												"version": {
+													"type": "string",
+													"description": "@internal The approval key of the skill's version. See the field mcp_skill."
+												},
+												"uri": {
+													"type": "string",
+													"description": "@internal The skill's address. See the field mcp_skill."
+												},
+												"server_description": {
+													"type": "string",
+													"description": "@internal The skill's description. See the field mcp_skill."
+												}
+											},
+											"required": ["name", "version"],
+											"description": "@internal Set with tool_kind. The same field as in can_use_tool."
 										}
 									},
 									"required": ["hook_event_name", "tool_name", "tool_input"]
@@ -6879,8 +7007,11 @@
 								},
 								"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
-							"dataFlowServer": {
+							"remoteControlMetaKeys": {
 								"$ref": "#/$defs/initializeRequest____schema31"
+							},
+							"dataFlowServer": {
+								"$ref": "#/$defs/initializeRequest____schema34"
 							},
 							"onPersonsMachine": {
 								"type": "object",
@@ -6896,11 +7027,11 @@
 								"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 							},
 							"tools": {
-								"$ref": "#/$defs/initializeRequest____schema35"
+								"$ref": "#/$defs/initializeRequest____schema38"
 							}
 						}
 					},
-					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId, autoModeVerdictTools, dataFlowServer and onPersonsMachine apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
+					"description": "Settings for the SDK-hosted MCP servers named in sdkMcpServers, keyed by server name. Sent as a separate field so a CLI that predates it ignores it; entries whose name is not in sdkMcpServers, and values that do not match this shape, are ignored rather than rejected. timeout, disableAutoBackground, connectorId, autoModeVerdictTools, remoteControlMetaKeys, dataFlowServer and onPersonsMachine apply when the server is first registered; tools (the per-tool permission policy) adds its ask and deny rules on every initialize that names the server. An initialize never removes a rule; mcp_set_servers replaces them."
 				},
 				"sdkMcpServerManifests": {
 					"type": "object",
@@ -7038,7 +7169,7 @@
 												"type": "string"
 											},
 											"additionalProperties": {
-												"$ref": "#/$defs/initializeRequest____schema75"
+												"$ref": "#/$defs/initializeRequest____schema78"
 											}
 										}
 									]
@@ -7170,6 +7301,14 @@
 					"type": "boolean",
 					"description": "@internal Asks Claude Code to also send the tool_use and tool_result messages of sub-agents that other sub-agents start, and of skills a sub-agent forks, each with `parent_tool_use_id` set to the call that started it. That call is itself a tool_use in the messages of the parent sub-agent, so a consumer can place every sub-agent under the one that started it and list its tool calls. Their text and thinking stay unsent unless `forwardSubagentText` is set, which already sends all of it. ABSENCE sends none of them, as before. First-attached-client-wins on multi-client sessions; later initializes do not change it."
 				},
+				"offersBypassSwitchBack": {
+					"type": "boolean",
+					"description": "@internal Set by a consumer that can show the way back to bypassPermissions (`bypass_auto_switch` in the response), for a launch whose mode came from the consumer's own setting and not from a pick in this conversation. Only then may Claude Code start a launch in bypassPermissions in auto instead. Honored only on the session's first initialize, from the process that owns the CLI's stdin, in the VS Code extension. ABSENCE fails closed: the session keeps the mode it was launched with."
+				},
+				"keepsBypassHeld": {
+					"type": "boolean",
+					"description": "@internal For a launch in another mode than bypassPermissions, in a conversation that was switched or may have been (the consumer's own setting asks for bypassPermissions): where such a launch would be switched, Claude Code holds bypassPermissions and sends `bypass_auto_switch`, so that restarting doesn't skip the question. Honored only on the first initialize, from the process that owns the CLI's stdin, in the VS Code extension. ABSENCE holds nothing."
+				},
 				"rapidFollowupPreempt": {
 					"type": "boolean",
 					"description": "@internal Declares that this consumer renders the `system/turn_preempted` frame and expects Claude Code to stop a turn on its own: when a person's follow-up message arrives while the running turn has shown nothing yet, the turn is stopped as an interrupt would stop it (its messages get `command_lifecycle` 'cancelled' and its result is an aborted one) and the follow-up runs next, announced by `turn_preempted`. Honored only while the rollout flag is on. ABSENCE fails closed: the follow-up waits its turn exactly as before, because a consumer that does not know the frame would see a message it never withdrew reported cancelled. Messages arriving over the Remote Control bridge never stop a turn, whatever was declared here. First-attached-client-wins on multi-client sessions; later initializes do not change it."
@@ -7217,7 +7356,7 @@
 						"type": "string"
 					},
 					"additionalProperties": {
-						"$ref": "#/$defs/initializeRequest____schema75"
+						"$ref": "#/$defs/initializeRequest____schema78"
 					},
 					"description": "MCP servers for Claude Code to run or connect to, keyed by server name: the serializable entries of the SDK `mcpServers` option (host-resident servers go in sdkMcpServers), as the stdin form of one --mcp-config item, which keeps server credentials (stdio `env`, http and sse `headers`) off the command line. Read only at launch under --await-initialize, and then handled as --mcp-config: an invalid entry is skipped and reported in system/init, not fatal; one difference is that a Claude Code process this one starts is not handed them. Without that flag, on a repeated initialize, or over a remote session transport it loads nothing; use mcp_set_servers in a running session. mcp_servers_applied in the response says whether these are the set read at launch."
 				},
@@ -7287,6 +7426,14 @@
 			"description": "@internal The id of the claude.ai connector this server proxies, for a host that keys the server by another name. The server must declare the same id in its own capabilities for the CLI to treat it as that connector. With or without that declaration, deny and ask rules, hook matchers and disallowed-tool lists that spell mcp__<connectorId> also reach this server's tools, and nothing that allows does; the id is read as a tool's name would spell it (a character other than a letter, a digit, '-' and '_' as '_'), and one that is then longer than 128 characters or holds '__' is not used for that. Read from initialize and mcp_set_servers, not --mcp-config, when the server is first registered."
 		},
 		"initializeRequest____schema31": {
+			"maxItems": 16,
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "@internal The keys of this server's tool results' _meta that Remote Control clients may read. Over Remote Control, a successful result of the main conversation that holds one of them has tool_use_result {content, _meta} with only those keys in _meta, in place of its bare content, unless a hook replaced its output or its message holds several tool results. A listed nextStep with a recap, held to WrapUp's rules for its text and labels, also goes at the top level of tool_use_result. Name only keys that the host itself writes, and nothing a person would not want on their other devices: they are uploaded and stored with the session. Keys under com.anthropic/, and anthropic/dataFlowSessions, are never sent. At most 16 keys of at most 128 characters: a longer list, or a longer key, leaves the whole list out. The keys of one result may hold at most 4,096 characters of JSON: past that, none of them is sent. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+		},
+		"initializeRequest____schema34": {
 			"anyOf": [
 				{
 					"type": "object",
@@ -7348,7 +7495,7 @@
 			],
 			"description": "@internal Where the host got this server, for the data flow records of calls to it: one of Anthropic's, by its registry id; a claude.ai connector, by its id (tagged or a bare UUID) and its directory id or null; or one the user configured, by the transport the host reaches it over. The first two are taken only in a session a desktop host started; in a session the VS Code extension started, the first is taken too, but only with the id of its claude-vscode server. Without it, or with a value of another shape, the records say unknown (docs/desktop-host-contract.md, D139). Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 		},
-		"initializeRequest____schema35": {
+		"initializeRequest____schema38": {
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -7371,7 +7518,7 @@
 			},
 			"description": "Per-tool permission policy the host declares for this server's tools (not the tool definitions passed to createSdkMcpServer). always_ask: the CLI asks the host (canUseTool or the permission prompt tool) before each call, even where an allow rule or allowedTools covers the tool, and under bypassPermissions outside a hosted remote session (CLAUDE_CODE_REMOTE); under dontAsk the call is denied; in auto mode the classifier decides, except that by default a tool annotated destructiveHint still asks. always_deny: calls are denied, except a mod's own ($.tool.call, $.mcp.call). always_allow and org_max_permission are ignored on sdk servers; grant allows with allowedTools or canUseTool. Read from initialize (sdkMcpServerConfigs) and from each mcp_set_servers entry that names the server. On the wire an entry without tools states no policy: on initialize the stored list and the rules stand; on mcp_set_servers the rules are replaced without them. The Agent SDK always re-sends the registered list. An entry whose policy is not one of the three asks; an entry without a string name is dropped and the rest apply; a value that is not a list reads as absent."
 		},
-		"initializeRequest____schema75": {
+		"initializeRequest____schema78": {
 			"anyOf": [
 				{
 					"type": "object",
@@ -7585,8 +7732,11 @@
 							},
 							"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 						},
-						"dataFlowServer": {
+						"remoteControlMetaKeys": {
 							"$ref": "#/$defs/initializeRequest____schema31"
+						},
+						"dataFlowServer": {
+							"$ref": "#/$defs/initializeRequest____schema34"
 						},
 						"onPersonsMachine": {
 							"type": "object",
@@ -7602,7 +7752,7 @@
 							"description": "@internal States that this server runs on the person's own computer. In a session that runs elsewhere (cloud, SSH, a VM), the CLI then refuses an mcp_tool hook's or a mod's call to it. exceptTools names, exactly as this server lists them, the tools that a hook may still call; it lifts nothing for a mod (docs/desktop-host-contract.md, D166a). Leave it out for any other server: a value of another shape marks the server and excepts nothing. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 						},
 						"tools": {
-							"$ref": "#/$defs/initializeRequest____schema35"
+							"$ref": "#/$defs/initializeRequest____schema38"
 						}
 					},
 					"required": ["type", "name"]
@@ -7862,6 +8012,41 @@
 					],
 					"description": "@internal The user-settings defaultMode the one-shot auto-default nudge should offer to replace with auto. IDE hosts only; absent when the user isn't eligible."
 				},
+				"bypass_auto_switch": {
+					"type": "object",
+					"properties": {
+						"pause_days": {
+							"type": "integer",
+							"minimum": -9007199254740991,
+							"maximum": 9007199254740991,
+							"description": "For how many days the \"for N days\" answer holds. 0: this session alone."
+						},
+						"offers_setup": {
+							"type": "boolean",
+							"description": "Whether to offer auto mode's setup."
+						},
+						"introduces_setup": {
+							"type": "boolean",
+							"description": "Whether to lead with the setup where it is offered: it was neither run nor declined."
+						},
+						"has_switched": {
+							"type": "boolean",
+							"description": "Whether this launch was switched, which the person is told. False where bypassPermissions is held again."
+						},
+						"asks_reason": {
+							"type": "boolean",
+							"description": "Whether the person may be asked why they went back to bypassPermissions."
+						}
+					},
+					"required": [
+						"pause_days",
+						"offers_setup",
+						"introduces_setup",
+						"has_switched",
+						"asks_reason"
+					],
+					"description": "@internal Present when the session was launched in bypassPermissions and Claude Code started it in auto instead, or holds bypassPermissions again (keepsBypassHeld). bypassPermissions is refused until a set_permission_mode with answers_bypass_switch_back. Only in answer to offersBypassSwitchBack or keepsBypassHeld."
+				},
 				"pid": {
 					"type": "number",
 					"description": "@internal CLI process PID for tmux socket isolation"
@@ -8104,7 +8289,7 @@
 				},
 				"cancel_queued": {
 					"type": "boolean",
-					"description": "When true, the interrupt also cancels every uuid-stamped main-thread command still in the queue or already dequeued for the imminent turn but not yet reachable by the abort (the first-command prewait window) — the same set the response would otherwise list under `still_queued`. Each is closed with a terminal 'cancelled' lifecycle and listed on the response's `cancelled` field. `still_queued` is then empty, except that a client driving a hosted session lists there what it can no longer recall (a send already in flight to that session, or the first prompt the session was created with) and, when the session's own sweep then cancels one of those or a send it had already delivered, follows up with a command_lifecycle 'cancelled' frame for it. (The isFoldInFlight guard cancel_async_message uses does not apply here: this request also aborts the running turn, so a fold-in-flight uuid is never delivered and is swept with the rest. A fold-in-flight uuid's queued_command attachment may already appear in the aborted turn's transcript if the abort landed after the fold's attachment yield — pre-existing leave-queued semantics; it never runs as its own turn.) Uuid-less commands (task notifications, other than a passive notice that a task was stopped or paused, which stays queued) still in the queue are also dequeued but cannot be listed; a uuid-less command already in the prewait window is unreachable by either cancel leg — the first-command prewait latch covers it (this request latches exactly like a plain interrupt; see still_queued): its turn starts aborted. When false or absent, queued commands survive the interrupt and are listed under `still_queued` — the interrupt_receipt_v1 contract is unchanged. A Stop-means-stop-everything client (a remote UI's Stop button) sets this true so one round-trip halts the session; a wrapper that wants per-uuid control leaves it false and follows up with cancel_async_message. Advertised by the `interrupt_cancel_queued_v1` capability on system/init; older CLIs ignore the field and behave as if false."
+					"description": "When true, the interrupt also cancels every uuid-stamped main-thread command still in the queue or already dequeued for the imminent turn but not yet reachable by the abort (the first-command prewait window) — the same set the response would otherwise list under `still_queued`. Each is closed with a terminal 'cancelled' lifecycle and listed on the response's `cancelled` field. `still_queued` is then empty, except that a client driving a hosted session lists there what it can no longer recall (a send already in flight to that session, or the first prompt the session was created with) and, when the session's own sweep then cancels one of those or a send it had already delivered, follows up with a command_lifecycle 'cancelled' frame for it. (The isFoldInFlight guard cancel_async_message uses does not apply here: this request also aborts the running turn, so a fold-in-flight uuid is never delivered and is swept with the rest. A fold-in-flight uuid's queued_command attachment may already appear in the aborted turn's transcript if the abort landed after the fold's attachment yield — pre-existing leave-queued semantics; it never runs as its own turn.) In a hosted session, a note that the session server itself added as context (shouldQuery false) may stay: it starts no turn and is listed under neither field. Uuid-less commands (task notifications, other than a passive notice that a task was stopped or paused, which stays queued) still in the queue are also dequeued but cannot be listed; a uuid-less command already in the prewait window is unreachable by either cancel leg — the first-command prewait latch covers it (this request latches exactly like a plain interrupt; see still_queued): its turn starts aborted. When false or absent, queued commands survive the interrupt and are listed under `still_queued` — the interrupt_receipt_v1 contract is unchanged. A Stop-means-stop-everything client (a remote UI's Stop button) sets this true so one round-trip halts the session; a wrapper that wants per-uuid control leaves it false and follows up with cancel_async_message. Advertised by the `interrupt_cancel_queued_v1` capability on system/init; older CLIs ignore the field and behave as if false."
 				},
 				"send_now": {
 					"type": "boolean",
@@ -8144,7 +8329,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "Uuids of async user messages that survive this interrupt: commands still in the queue, plus any batch already dequeued for the imminent turn but not yet reachable by the abort, plus any user message this process has read but not yet queued, from its own input stream (held, for instance, while a model change is still being checked or behind start-up work; a message a Remote Control client sent that is still being ingested is not listed). An interrupt — plain or cancel_queued:true — that lands during the FIRST-command prewait window (before the first turn of the session has armed a controller) is additionally LATCHED, scoped to the user-intent work pending at that instant — the batch already dequeued and parked for the imminent turn, plus the user-intent main-thread commands then in the queue or held ahead of it (the work this list enumerates): the first turn to arm that carries any of that doomed work starts already aborted, exactly once, so the listed prewait batch is delivered into an immediately-aborted turn, its frames and result flowing through the normal abort path, instead of running to completion. A turn carrying none of it arms live and leaves the latch waiting: a system delivery turn (for example a replayed host event), or a prompt enqueued after the interrupt — post-interrupt work is never coalesced with the doomed work and never dies to the latch, so the Stop kills exactly what this receipt listed. A worker of a cloud session may treat a plain interrupt from a person differently. If it reads the interrupt before its first turn, while it holds a prompt from the worker before it, the interrupt stops the turn of that prompt, and listed messages that no turn has started then run. The latch is released when the doomed work is retired without arming: if a parked prewait batch is entirely cancelled, the latch is released even when other queued commands remain (those arm and run normally); with nothing parked, it is released once none of the doomed commands remains queued or held — work enqueued after the interrupt neither holds it up nor is aborted by it. Survivors that ride any later turn run normally. These WILL run (subject to that latch) unless cancelled first (or unless the request set cancel_queued:true, in which case every uuid-stamped survivor this process holds is removed, emitted a terminal `cancelled` synchronously, and listed under `cancelled` instead — leaving here only what a client driving a hosted session can no longer recall: a send already in flight to that session, or the first prompt the session was created with; a send that client still holds on its own machine behind a send gate (it waits there until that session is ready to take it) has not gone out, so it is withdrawn and listed under `cancelled` like a queued one, and cancel_async_message can withdraw it too, while a plain interrupt leaves it held and lists it here). Cancellation granularity: uuids still in the queue are individually cancellable via cancel_async_message (the re-run of an interrupted turn that also answers for other client messages only if this interrupt was for it; see the response to that request); a listed uuid whose message the process running the session (never a client driving a hosted session) still keeps out of its queue, behind a model change or start-up work, is not yet cancellable that way: cancel_async_message answers cancelled:false for it and plants a cancel-pending mark, which the drain honours once the message is queued and the mid-turn fold of a running turn does not; once a batch is dequeued and coalesced into one turn, cancelling a NON-representative member uuid is a no-op (its content still runs), while cancelling the batch-representative uuid drops the WHOLE coalesced batch — in both cases the cancel response reports cancelled:false because the message was no longer in the queue. Coverage caveats: only uuid-STAMPED messages appear (a message enqueued without a uuid still runs but is never listed, so [] does not mean \"nothing will run\"); only main-thread messages are listed (subagent-addressed messages are out of scope); and the list may include internally-enqueued uuids the client never sent (cron triggers, auto-resume continuations) — ignore unknown uuids rather than treating them as an error. Ordering: on a clean interrupt this receipt is written before the interrupted turn result; a turn that crashes during interrupt handling emits its error result on a direct-write path that may precede the receipt. Snapshot is taken synchronously with abort processing — probing the queue after the interrupted result instead always loses the race against the drain loop, which starts the next queued turn immediately."
+					"description": "Uuids of async user messages that survive this interrupt: commands still in the queue, plus any batch already dequeued for the imminent turn but not yet reachable by the abort, plus any user message this process has read but not yet queued, from its own input stream (held, for instance, while a model change is still being checked or behind start-up work; a message a Remote Control client sent that is still being ingested is not listed). An interrupt — plain or cancel_queued:true — that lands during the FIRST-command prewait window (before the first turn of the session has armed a controller) is additionally LATCHED, scoped to the user-intent work pending at that instant — the batch already dequeued and parked for the imminent turn, plus the user-intent main-thread commands then in the queue or held ahead of it (the work this list enumerates): the first turn to arm that carries any of that doomed work starts already aborted, exactly once, so the listed prewait batch is delivered into an immediately-aborted turn, its frames and result flowing through the normal abort path, instead of running to completion. A turn carrying none of it arms live and leaves the latch waiting: a system delivery turn (for example a replayed host event), or a prompt enqueued after the interrupt — post-interrupt work is never coalesced with the doomed work and never dies to the latch, so the Stop kills exactly what this receipt listed. A worker of a cloud session may treat a plain interrupt from a person differently. If it reads the interrupt before its first turn, while it holds a prompt from the worker before it, the interrupt stops the turn of that prompt, and listed messages that no turn has started then run. The latch is released when the doomed work is retired without arming: if a parked prewait batch is entirely cancelled, the latch is released even when other queued commands remain (those arm and run normally); with nothing parked, it is released once none of the doomed commands remains queued or held — work enqueued after the interrupt neither holds it up nor is aborted by it. Survivors that ride any later turn run normally. These WILL run (subject to that latch) unless cancelled first (or unless the request set cancel_queued:true, in which case every uuid-stamped survivor this process holds (less a context note of the server that stays, see cancel_queued) is removed, emitted a terminal `cancelled` synchronously, and listed under `cancelled` instead — leaving here only what a client driving a hosted session can no longer recall: a send already in flight to that session, or the first prompt the session was created with; a send that client still holds on its own machine behind a send gate (it waits there until that session is ready to take it) has not gone out, so it is withdrawn and listed under `cancelled` like a queued one, and cancel_async_message can withdraw it too, while a plain interrupt leaves it held and lists it here). Cancellation granularity: uuids still in the queue are individually cancellable via cancel_async_message (the re-run of an interrupted turn that also answers for other client messages only if this interrupt was for it; see the response to that request); a listed uuid whose message the process running the session (never a client driving a hosted session) still keeps out of its queue, behind a model change or start-up work, is not yet cancellable that way: cancel_async_message answers cancelled:false for it and plants a cancel-pending mark, which the drain honours once the message is queued and the mid-turn fold of a running turn does not; once a batch is dequeued and coalesced into one turn, cancelling a NON-representative member uuid is a no-op (its content still runs), while cancelling the batch-representative uuid drops the WHOLE coalesced batch — in both cases the cancel response reports cancelled:false because the message was no longer in the queue. Coverage caveats: only uuid-STAMPED messages appear (a message enqueued without a uuid still runs but is never listed, so [] does not mean \"nothing will run\"); only main-thread messages are listed (subagent-addressed messages are out of scope); and the list may include internally-enqueued uuids the client never sent (cron triggers, auto-resume continuations) — ignore unknown uuids rather than treating them as an error. Ordering: on a clean interrupt this receipt is written before the interrupted turn result; a turn that crashes during interrupt handling emits its error result on a direct-write path that may precede the receipt. Snapshot is taken synchronously with abort processing — probing the queue after the interrupted result instead always loses the race against the drain loop, which starts the next queued turn immediately."
 				},
 				"put_back": {
 					"type": "array",
@@ -8168,7 +8353,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "Present only when the request set cancel_queued:true, with one exception that the last sentence names — uuids of main-thread commands cancelled by this interrupt: every survivor that would otherwise have appeared under `still_queued`, including any uuid that was mid-fold at the interrupt instant (this request also aborts, so the fold never delivers it). Each listed uuid has been removed (queue-resident), dropped before it was queued (a message this process had read and was still holding), or marked cancel-pending (the first-command prewait window, closed by the drain loop's backstop) and emits a terminal 'cancelled' lifecycle synchronously at the first such interrupt (a repeat interrupt over the same parked batch re-lists the uuid idempotently without re-emitting); none will run. Where one of them is the re-run of an interrupted turn that also answered for other client messages whose re-sent copies had been set aside for it, those messages' uuids are listed behind the commands' too: they were in no queue and never under `still_queued`, each has its terminal 'cancelled' lifecycle, and a repeat interrupt does not list them again. Same coverage caveats as `still_queued` (uuid-stamped main-thread only; internally-enqueued uuids may appear). Advertised by the `interrupt_cancel_queued_v1` capability. The exception, in a remote session and behind a flag: an interrupt with neither cancel_queued nor for_user_message_uuids, which no service wrote, also carries this field where it cancelled messages that the server had sent again and that this process held aside to run later; it then lists those alone, and no capability advertises it."
+					"description": "Present only when the request set cancel_queued:true, with one exception that the last sentence names — uuids of main-thread commands cancelled by this interrupt: every survivor that would otherwise have appeared under `still_queued` (less a server's context note that stays, see cancel_queued), including any uuid that was mid-fold at the interrupt instant (this request also aborts, so the fold never delivers it). Each listed uuid has been removed (queue-resident), dropped before it was queued (a message this process had read and was still holding), or marked cancel-pending (the first-command prewait window, closed by the drain loop's backstop) and emits a terminal 'cancelled' lifecycle synchronously at the first such interrupt (a repeat interrupt over the same parked batch re-lists the uuid idempotently without re-emitting); none will run. Where one of them is the re-run of an interrupted turn that also answered for other client messages whose re-sent copies had been set aside for it, those messages' uuids are listed behind the commands' too: they were in no queue and never under `still_queued`, each has its terminal 'cancelled' lifecycle, and a repeat interrupt does not list them again. Same coverage caveats as `still_queued` (uuid-stamped main-thread only; internally-enqueued uuids may appear). Advertised by the `interrupt_cancel_queued_v1` capability. The exception, in a remote session and behind a flag: an interrupt with neither cancel_queued nor for_user_message_uuids, which no service wrote, also carries this field where it cancelled messages that the server had sent again and that this process held aside to run later; it then lists those alone, and no capability advertises it."
 				}
 			},
 			"required": ["still_queued"],
@@ -8726,6 +8911,138 @@
 			"description": "Success payload of list_permission_rules.",
 			"x-direction": "client"
 		},
+		"log_host_eventsRequest": {
+			"type": "object",
+			"properties": {
+				"subtype": {
+					"type": "string",
+					"const": "log_host_events"
+				},
+				"host": {
+					"type": "object",
+					"properties": {
+						"session_id": {
+							"type": "string",
+							"description": "The host's own id for its install or its process, not a Claude Code session id."
+						},
+						"app_name": {
+							"type": "string"
+						},
+						"host_version": {
+							"type": "string"
+						},
+						"extension_version": {
+							"type": "string"
+						},
+						"platform": {
+							"type": "string"
+						},
+						"arch": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"session_id",
+						"app_name",
+						"host_version",
+						"extension_version",
+						"platform",
+						"arch"
+					],
+					"description": "What the host says of itself on each row."
+				},
+				"events": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"event_id": {
+								"type": "string",
+								"description": "A UUID that the host makes. It is the same if the host sends the event again by another way, so that the two can be told as one event."
+							},
+							"name": {
+								"type": "string",
+								"description": "One of a fixed list of names."
+							},
+							"occurred_at_ms": {
+								"type": "number",
+								"description": "When it happened, in milliseconds since the epoch."
+							},
+							"fields": {
+								"type": "object",
+								"propertyNames": {
+									"type": "string"
+								},
+								"additionalProperties": {
+									"type": ["string", "number", "boolean"]
+								},
+								"description": "At most 24. A key is lower-case letters, digits and underscores. A number is whole and not negative. A string is one short token or a stack frame location, never free text."
+							}
+						},
+						"required": ["event_id", "name", "occurred_at_ms", "fields"]
+					},
+					"description": "1 to 32 events."
+				}
+			},
+			"required": ["subtype", "host", "events"],
+			"description": "@internal Sent by the VS Code extension's host: its own telemetry events, for the CLI to send to Anthropic with the CLI's own sign-in, in one request. Refused where list_cloud_sessions is.",
+			"x-direction": "client"
+		},
+		"log_host_eventsResponse": {
+			"oneOf": [
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "ok"
+						}
+					},
+					"required": ["status"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "dropped"
+						},
+						"reason": {
+							"type": "string",
+							"enum": [
+								"telemetry_off",
+								"sink_off",
+								"evaluation_run",
+								"ingest_refused"
+							]
+						}
+					},
+					"required": ["status", "reason"]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"const": "unavailable"
+						},
+						"reason": {
+							"type": "string",
+							"enum": [
+								"disabled",
+								"wrong_caller",
+								"malformed",
+								"not_signed_in",
+								"not_sent"
+							]
+						}
+					},
+					"required": ["status", "reason"]
+				}
+			],
+			"description": "@internal ok: all events were sent. dropped: none was sent and the host must not send them either, because no telemetry may leave or the service refused them. unavailable: none was sent, and the host may send them itself. After not_sent the request may still have arrived. After malformed, a member of the request failed a check.",
+			"x-direction": "client"
+		},
 		"mcp_callRequest": {
 			"type": "object",
 			"properties": {
@@ -9249,6 +9566,14 @@
 										},
 										"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 									},
+									"remoteControlMetaKeys": {
+										"maxItems": 16,
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "@internal The keys of this server's tool results' _meta that Remote Control clients may read. Over Remote Control, a successful result of the main conversation that holds one of them has tool_use_result {content, _meta} with only those keys in _meta, in place of its bare content, unless a hook replaced its output or its message holds several tool results. A listed nextStep with a recap, held to WrapUp's rules for its text and labels, also goes at the top level of tool_use_result. Name only keys that the host itself writes, and nothing a person would not want on their other devices: they are uploaded and stored with the session. Keys under com.anthropic/, and anthropic/dataFlowSessions, are never sent. At most 16 keys of at most 128 characters: a longer list, or a longer key, leaves the whole list out. The keys of one result may hold at most 4,096 characters of JSON: past that, none of them is sent. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+									},
 									"dataFlowServer": {
 										"anyOf": [
 											{
@@ -9691,6 +10016,14 @@
 														},
 														"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
+													"remoteControlMetaKeys": {
+														"maxItems": 16,
+														"type": "array",
+														"items": {
+															"type": "string"
+														},
+														"description": "@internal The keys of this server's tool results' _meta that Remote Control clients may read. Over Remote Control, a successful result of the main conversation that holds one of them has tool_use_result {content, _meta} with only those keys in _meta, in place of its bare content, unless a hook replaced its output or its message holds several tool results. A listed nextStep with a recap, held to WrapUp's rules for its text and labels, also goes at the top level of tool_use_result. Name only keys that the host itself writes, and nothing a person would not want on their other devices: they are uploaded and stored with the session. Keys under com.anthropic/, and anthropic/dataFlowSessions, are never sent. At most 16 keys of at most 128 characters: a longer list, or a longer key, leaves the whole list out. The keys of one result may hold at most 4,096 characters of JSON: past that, none of them is sent. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
 													"dataFlowServer": {
 														"anyOf": [
 															{
@@ -10110,11 +10443,11 @@
 							"required": ["kind", "within"]
 						}
 					],
-					"description": "@internal How to find the file `path` names, instead of resolving it against the live cwd, which a `cd` in the shell moves. workspace_root, diff_root and repo each name a directory the session looks up on each request; as_written names none, and has its contract in its own description. workspace_root is the root list_directory lists from. diff_root is the repository get_workspace_diff diffs, so a path taken from that diff opens the file the diff shows. It is refused in a session whose diff follows the shell's cwd between several repositories; a client that knows the repository should send `repo`. A diff_root anchor may also carry a `rootId`, which has its contract in its own description. repo is the checkout the session declares for that repository or, failing that, diff_root when its origin remote ends in that owner/name. With those three, `path` must stay inside that directory as spelled (the check follows no symlink). Whatever the anchor, the read is gated as any other read_file is. A path that is `~`, starts with `~/` or leaves that directory, or an anchor the session cannot resolve or does not serve, is refused with the error `read denied: <path>`. Leave the field out when there is no anchor: null is refused. A CLI that predates this field ignores it and reads against the live cwd; the response's `anchor` tells the two apart."
+					"description": "@internal How to find the file `path` names, instead of resolving it against the live cwd, which a `cd` in the shell moves. workspace_root, diff_root and repo each name a directory the session looks up on each request; as_written names none, and has its contract in its own description. workspace_root is the root list_directory lists from. diff_root is the repository get_workspace_diff diffs, so a path taken from that diff opens the file the diff shows. It is refused in a session whose diff follows the shell's cwd between several repositories; a client that knows the repository should send `repo`. A diff_root anchor may also carry a `rootId`, which has its contract in its own description. repo is the checkout the session declares for that repository or, failing that, diff_root when its origin remote ends in that owner/name. With those three, `path` must stay inside that directory as spelled (the check follows no symlink). Whatever the anchor, the read is gated as any other read_file is. A path that is `~`, starts with `~/` or leaves that directory, or an anchor the session cannot resolve or does not serve, is refused with the error `read denied: <path>`. Leave the field out when there is no anchor: null is refused. A session that reads through a tool container refuses null and an unknown kind with the error `read_file: the request is malformed` instead. A CLI that predates this field ignores it, and a tool container that predates it is sent none. Both read against the live cwd: only an answer that has `anchor` used it."
 				},
 				"offset": {
 					"type": "number",
-					"description": "@internal The byte the read starts at, counted from the file's start or, when negative, back from its end, which is the response's `total_bytes`. It is held within the file: further back than the start counts as the start, and past the end as the end. The response's `offset` says where the read started. Up to `max_bytes` bytes (1,000,000 by default, 10,000,000 at most) are read from there, through the same gates as any other read_file, and `truncated` says that more lie past them. To read on, send the response's `offset` plus its `read_bytes`; an answer whose `offset` is less than the one sent did not start there, because the file ends sooner or is one that is only read from its start. Anything but a whole number from -(2^53 - 1) to 2^53 - 1, null included, is refused with the error `read denied: <path>`. A CLI that predates this field, and a session that reads through a tool container, ignore it, refusing no value of it, and read from the file's start: only an answer that has `offset` used it."
+					"description": "@internal The byte the read starts at, counted from the file's start or, when negative, back from its end, which is the response's `total_bytes`. It is held within the file: further back than the start counts as the start, and past the end as the end. The response's `offset` says where the read started. Up to `max_bytes` bytes (1,000,000 by default, 10,000,000 at most, 3,000,000 through a tool container) are read from there, through the same gates as any other read_file, and `truncated` says that more lie past them. To read on, send the response's `offset` plus its `read_bytes`; an answer whose `offset` is less than the one sent did not start there, because the file ends sooner or is one that is only read from its start. Anything but a whole number from -(2^53 - 1) to 2^53 - 1, null included, is refused with the error `read denied: <path>`. A session that reads through a tool container refuses what is not a number with the error `read_file: the request is malformed` instead. A CLI that predates this field ignores it, refusing no value of it, and a tool container that predates it is sent none. Both read from the file's start: only an answer that has `offset` used it."
 				},
 				"for_upload": {
 					"type": "boolean",
@@ -10153,11 +10486,11 @@
 				"anchor": {
 					"type": "string",
 					"enum": ["workspace_root", "diff_root", "repo", "as_written"],
-					"description": "@internal The kind of the request's `anchor`, set when the file was found by it. Absent when the request sent no anchor, or when an older CLI ignored it and read against the live cwd."
+					"description": "@internal The kind of the request's `anchor`, set when the file was found by it. Absent when the request sent no anchor, or when an older CLI or tool container ignored it and read against the live cwd."
 				},
 				"offset": {
 					"type": "number",
-					"description": "@internal The byte `contents` starts at, counted from the file's start, set when the request's `offset` was used. Absent when the request sent none, or when an older CLI or a tool container ignored it and read from the file's start."
+					"description": "@internal The byte `contents` starts at, counted from the file's start, set when the request's `offset` was used. Absent when the request sent none, or when an older CLI or tool container ignored it and read from the file's start."
 				},
 				"read_bytes": {
 					"type": "number",
@@ -10178,7 +10511,7 @@
 				},
 				"requested_path": {
 					"type": "string",
-					"description": "@internal The request's `path`, exactly as sent, on every success reply whose `absPath` is what that path resolved to. If it differs from the path you sent, the reply answers another request under the same request_id: drop it and keep waiting. Compare the reply's `anchor` with your anchor's kind as well. Both can still match for another file where what the path is resolved against changes between requests (the live cwd, an as_written look-up) or isn't in the reply (which repository, for the anchor kind repo). Absent where `absPath` is itself the path as sent (Remote Control, and a session that reads through a tool container), from the engine's readFile, and in replies of an older CLI. It does not prove who wrote the reply."
+					"description": "@internal The request's `path`, exactly as sent. It is on every success reply whose `absPath` is what that path resolved to, and on every success reply of a session that reads through a tool container, where `absPath` is also the path as sent. If it differs from the path you sent, the reply answers another request under the same request_id: drop it and keep waiting. Compare the reply's `anchor` with your anchor's kind as well. Both can still match for another file where what the path is resolved against changes between requests (the live cwd, an as_written look-up) or isn't in the reply (which repository, for the anchor kind repo). Absent under Remote Control, whose `absPath` is itself the path as sent, from the engine's readFile, and in replies of an older CLI. It does not prove who wrote the reply."
 				}
 			},
 			"required": ["contents", "absPath"],
@@ -11013,6 +11346,14 @@
 															"type": "string"
 														},
 														"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
+													},
+													"remoteControlMetaKeys": {
+														"maxItems": 16,
+														"type": "array",
+														"items": {
+															"type": "string"
+														},
+														"description": "@internal The keys of this server's tool results' _meta that Remote Control clients may read. Over Remote Control, a successful result of the main conversation that holds one of them has tool_use_result {content, _meta} with only those keys in _meta, in place of its bare content, unless a hook replaced its output or its message holds several tool results. A listed nextStep with a recap, held to WrapUp's rules for its text and labels, also goes at the top level of tool_use_result. Name only keys that the host itself writes, and nothing a person would not want on their other devices: they are uploaded and stored with the session. Keys under com.anthropic/, and anthropic/dataFlowSessions, are never sent. At most 16 keys of at most 128 characters: a longer list, or a longer key, leaves the whole list out. The keys of one result may hold at most 4,096 characters of JSON: past that, none of them is sent. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered."
 													},
 													"dataFlowServer": {
 														"anyOf": [
@@ -12283,6 +12624,11 @@
 				"from_settings": {
 					"type": "boolean",
 					"description": "@internal The mode is the default of the creating person's settings, not a choice of the launch."
+				},
+				"answers_bypass_switch_back": {
+					"type": "string",
+					"enum": ["bypass_now", "bypass_always"],
+					"description": "@internal The person chose bypassPermissions, for `pause_days` or for good, when the host asked the question that `bypass_auto_switch` calls for. Gives the held bypassPermissions back first, and saves the answer for this host's later launches. Honored only from the process that owns the CLI's stdin. ABSENCE fails closed: a held bypassPermissions is refused."
 				}
 			},
 			"required": ["subtype", "mode"],
@@ -12605,7 +12951,7 @@
 				},
 				"requires_rewind_request_id": {
 					"type": "string",
-					"description": "@internal The request_id of a rewind_conversation control request that the client sent ahead of this one, when the turn is meant only for the conversation as that rewind leaves it. A worker that advertises requires_rewind_request_id: true in turn_handoff_available reads it; a worker without that key ignores it and appends the turn whether or not the rewind was made, and the request may start a new worker whose build the client cannot know, so a client sends the member only once every worker that could read it has the key. A worker that reads it appends the turn only if that rewind is the last one it carried out (answered rewound: true), the last user or assistant message is still the one that rewind left at the end, and nothing it holds waits to be appended ahead of the turn (a turn in progress, or a message it received since). Otherwise it appends nothing and runs no call, and answers an error that starts \"invalid_handoff: required_rewind_\" and then one word: unknown, this worker has carried out no rewind (it replaced the worker that answered that request, or the request was refused or not read yet); other, its last rewind is a different request (the named one was refused here, not read yet, or followed by another); moved_on, it made that cut and the conversation has changed since; lines_waiting, it made that cut and something waits to be appended first. After unknown or other, go by the rewind's own answer where one was given, bearing in mind that a rewound: false of persist_failed or state_changed can still leave the cut for the next worker, and that the same rewind delivered again after its cut was stored answers target_not_found, except on a later worker that loaded the stored record of that cut, where the record names the row it cut at: that worker answers it rewound: true again, with the same fields, and then takes the turn. A client that saw rewound: true and is then answered unknown may send the turn again without the member: the cut stands, though the new worker may have appended lines since, so the turn lands at the conversation's end, not necessarily right after the cut. After other, moved_on or lines_waiting do not send the turn again without the member: the conversation is not, or may no longer be, as that rewind left it. The check is skipped once any of the turn's messages is in the conversation or queued from an earlier delivery: a request sent again after that is answered as without the member. A value that is not a string is refused (invalid_handoff)."
+					"description": "@internal The request_id of a rewind_conversation control request that the client sent ahead of this one, when the turn is meant only for the conversation as that rewind leaves it. A worker that advertises requires_rewind_request_id: true in turn_handoff_available reads it; a worker without that key ignores it and appends the turn whether or not the rewind was made, and the request may start a new worker whose build the client cannot know, so a client sends the member only once every worker that could read it has the key. A worker that reads it appends the turn only if that rewind is the last one it carried out (answered rewound: true), the last user or assistant message is still the one that rewind left at the end, and nothing it holds waits to be appended ahead of the turn (a turn in progress, or a message it received since). Otherwise it appends nothing and runs no call, and answers an error that starts \"invalid_handoff: required_rewind_\" and then one word: unknown, this worker has carried out no rewind (it replaced the worker that answered that request, or the request was refused or not read yet); other, its last rewind is a different request (the named one was refused here, not read yet, or followed by another); moved_on, it made that cut and the conversation has changed since; lines_waiting, it made that cut and something waits to be appended first. After unknown or other, go by the rewind's own answer where one was given, bearing in mind that a rewound: false of persist_failed or state_changed can still leave the cut for the next worker, and that the same rewind delivered again after its cut was stored answers target_not_found, except on a later worker that loaded the stored record of that cut, where the record names the row it cut at: that worker answers it rewound: true again, with the same fields but for timing, and then takes the turn. A client that saw rewound: true and is then answered unknown may send the turn again without the member: the cut stands, though the new worker may have appended lines since, so the turn lands at the conversation's end, not necessarily right after the cut. After other, moved_on or lines_waiting do not send the turn again without the member: the conversation is not, or may no longer be, as that rewind left it. The check is skipped once any of the turn's messages is in the conversation or queued from an earlier delivery: a request sent again after that is answered as without the member. A value that is not a string is refused (invalid_handoff)."
 				},
 				"relay_marker": {
 					"type": "object",
@@ -12752,6 +13098,10 @@
 						"maxLength": 64
 					},
 					"description": "@internal What this client draws beyond what every client of its surface draws: `Theme` (what `$.theme.set` sets, the scene behind the conversation and the look alike; only a `desktop` or `mobile` client's word counts), `Input` and `Select` (on `mobile`: a client that does not name one is sent an empty Box in its place, as is an ask with no `client_id`, since no attach can name its default id), `Progress` (on `mobile`: a client that does not name it, or an ask with no `client_id`, is sent the Box and Text that draw it), `Shader` (in a backdrop: a client that does not name it is sent the Svg it holds). Held per client like `answers`: a later `ui_attach` under the same id that names it replaces it, and it leaves with the client. A name this version does not know, or one said twice, is ignored, so a newer client keeps its attach; a list of more than 16 names, or a name of more than 64 characters, is refused with the attach. Absent: a client still attached, or one put back, keeps what it said, and a first attach draws none. Empty, or nothing known in it: none, and `$.theme.set` answers that nothing draws it."
+				},
+				"later_answers": {
+					"type": "boolean",
+					"description": "@internal True when the client takes later answers: over the remote transport, when its `AbovePrompt` or shown `Pane` goes stale, the engine may draw the client's newest `ui_render` body for it again (or the `render` a newer ui_press carried) and send the result as a further `control_response` under that request's id, marked `later`, just ahead of the `ui_invalidate` and in the same upload. The notice is sent as ever, and one with no such answer is asked on as before. Held per client like `draws`: a given value replaces the earlier one and an absent field keeps it."
 				}
 			},
 			"required": ["subtype", "surface", "client_id"],
@@ -12769,6 +13119,13 @@
 						"description": "@internal Where the engine draws: the terminal (Ink) or a remote surface (src/plugins/functionHooks/types/render/render-surface)."
 					},
 					"description": "@internal The surfaces the session draws on after the attach, each once: `terminal` first when bound, then the remote surfaces in attach order."
+				},
+				"unhooked": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "@internal The components no loaded plugin hooks `ui.render` for now: the surface may read it as a `hooked: false` answer for each. Sent over the remote transport only. If absent, the surface asks as before."
 				}
 			},
 			"required": ["surfaces"],
@@ -14000,6 +14357,23 @@
 							},
 							"description": "@internal The plugins something of `tree` or `props` may be owed to, by the name each is loaded under, in chain order: those whose `ui.render` hook ran for this ask and did more than hand on (told one by one for the vscode surface; elsewhere neighbours that share the sandbox are told together), or every plugin hooked on the instance where that is not known. Plugins the binary carries are left out, so an empty list says the drawing is Claude Code's own. The engine's word, which no hook can set: what a surface marks a drawing with. Absent from a CLI that predates the field: whose the drawing is, is then not known."
 						},
+						"later": {
+							"type": "object",
+							"properties": {
+								"seq": {
+									"type": "integer",
+									"exclusiveMinimum": 0,
+									"maximum": 9007199254740991
+								},
+								"same_as": {
+									"type": "integer",
+									"minimum": 0,
+									"maximum": 9007199254740991
+								}
+							},
+							"required": ["seq"],
+							"description": "@internal Marks a later answer (ui_attach's `later_answers`), never the first under an id. `seq` counts them from 1 under that id. With `same_as` the answer holds this mark alone: the drawing equals, handles included, the one sent as that `seq`, 0 being the id's first (the ui_render's answer, or the press's `drawn`); a client that does not hold that one asks."
+						},
 						"bench": {
 							"type": "object",
 							"properties": {
@@ -14017,7 +14391,7 @@
 						}
 					},
 					"required": ["tree", "props", "rewritten", "hooked"],
-					"description": "@internal What a ui_render request with the press's `render` would have answered as the handler settled, through the same `ui.render` chain and with fresh handles. Absent when the press carried no `render` or one that does not read, when it was not handled, when the client it names is no longer attached, when a redraw of that instance was pushed during each of three draws, and when the draw was refused or failed: the page asks ui_render as before. The pushes do not change: a write the engine holds back to pace redraws, or made after this answer, is told by its ui_invalidate, and the page asks again."
+					"description": "@internal What a ui_render request with the press's `render` would have answered once the handler settled and the `$` calls it left running went quiet, redrew the site, asked the page something or began long work, or 500 ms passed, through the same `ui.render` chain and with fresh handles. Absent when the press carried no `render` or one that does not read, when it was not handled, when the client it names is no longer attached, when a redraw of that instance was pushed during each of three draws, and when the draw was refused or failed: the page asks ui_render as before. A redraw the handler asked for by then is pushed ahead of this answer; a write made after it is told by its ui_invalidate, and the page asks again."
 				}
 			},
 			"required": ["handled"],
@@ -14789,6 +15163,11 @@
 					"type": "boolean",
 					"const": true,
 					"description": "@internal Present when a newer edit from the same client came in first: this one was never raised, and its own box is echoed with no runs."
+				},
+				"unheard": {
+					"type": "boolean",
+					"const": true,
+					"description": "@internal Present when no hook hears `prompt.edit` and a read of the prompt goes to a client: the client may then report less often than each edit, and goes back to each edit on an answer without this or on a `ui_invalidate`."
 				}
 			},
 			"required": ["text", "cursor"],
@@ -15315,6 +15694,23 @@
 						"type": "string"
 					},
 					"description": "@internal The plugins something of `tree` or `props` may be owed to, by the name each is loaded under, in chain order: those whose `ui.render` hook ran for this ask and did more than hand on (told one by one for the vscode surface; elsewhere neighbours that share the sandbox are told together), or every plugin hooked on the instance where that is not known. Plugins the binary carries are left out, so an empty list says the drawing is Claude Code's own. The engine's word, which no hook can set: what a surface marks a drawing with. Absent from a CLI that predates the field: whose the drawing is, is then not known."
+				},
+				"later": {
+					"type": "object",
+					"properties": {
+						"seq": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"maximum": 9007199254740991
+						},
+						"same_as": {
+							"type": "integer",
+							"minimum": 0,
+							"maximum": 9007199254740991
+						}
+					},
+					"required": ["seq"],
+					"description": "@internal Marks a later answer (ui_attach's `later_answers`), never the first under an id. `seq` counts them from 1 under that id. With `same_as` the answer holds this mark alone: the drawing equals, handles included, the one sent as that `seq`, 0 being the id's first (the ui_render's answer, or the press's `drawn`); a client that does not hold that one asks."
 				},
 				"bench": {
 					"type": "object",

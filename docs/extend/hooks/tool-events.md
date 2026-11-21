@@ -179,7 +179,7 @@ Every `PostToolUse` input has `hook_event_name`, `tool_name`, `tool_input`, `too
 ## Sources
 
 [^interactive]: Interactive probe on the `PermissionRequest` hook.
-[^denied-code]: The program, the retry text at `chunk-e9fhcxkx.js:231` and its use at `chunk-hg1yqkjk.js:208759-208771` (`retry`, the verdict check, and the end of the turn), and the reason text at `chunk-hg1yqkjk.js:208748` (`reason`).
-[^shapes-code]: The program, for `Glob` at `chunk-hg1yqkjk.js:105855-105873` (`$592d5a`), for `Grep` at `chunk-hg1yqkjk.js:106217-106222` (`$ca64fc`), for `WebSearch` at `chunk-b2932m4d.js:3453-3462` (`$87540b`), and for `NotebookEdit` at `chunk-hg1yqkjk.js:282643-282666` (`$1c1830`).
-[^bash-diff]: The program, `chunk-t39fw2cy.js:8657` (`bashEditDiffEnabled`), `chunk-hg1yqkjk.js:289051-289052` (the caps 5 and 200), `chunk-hg1yqkjk.js:289385` (`moreFiles` and `changedFiles`), and `chunk-hg1yqkjk.js:284069` (`skipped`).
-[^several-hooks]: The program, `chunk-hg1yqkjk.js:88221-88286` and the changelog text `chunk-zthba38p.js:136` (`updatedInput`).
+[^denied-code]: The program, the retry text at `chunk-0ha8wex8.js:174` and its use at `chunk-bzyb60p0.js:211439-211451` (`retry`, the verdict check, and the end of the turn), and the reason text at `chunk-bzyb60p0.js:211428` (`reason`).
+[^shapes-code]: The program, for `Glob` at `chunk-bzyb60p0.js:106976-106994` (`$200ca1`), for `Grep` at `chunk-bzyb60p0.js:107338-107343` (`$d3b341`), for `WebSearch` at `chunk-aw5nczax.js:3277-3286` (`$f36c7f`), and for `NotebookEdit` at `chunk-bzyb60p0.js:285812-285835` (`$fafe9b`).
+[^bash-diff]: The program, `chunk-xcgcdx61.js:8692` (`bashEditDiffEnabled`), `chunk-bzyb60p0.js:292285-292286` (the caps 5 and 200), `chunk-bzyb60p0.js:292629` (`moreFiles` and `changedFiles`), and `chunk-bzyb60p0.js:287240` (`skipped`).
+[^several-hooks]: The program, `chunk-bzyb60p0.js:89358-89423`.

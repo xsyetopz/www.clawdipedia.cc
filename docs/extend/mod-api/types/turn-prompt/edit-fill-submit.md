@@ -285,6 +285,6 @@ What a `prompt.submit` hook returns, and what `next(e)` resolves to: the prompt 
 
 ## Sources
 
-[^shared-sections]: The program, `chunk-hg1yqkjk.js:138504` and `chunk-hg1yqkjk.js:138504` (`lean_body`, in the shared list; the shared sections are plain entries of the compose list; only session sections get a decision). The type file names `lean_body` in `PromptComposeSection`.
-[^media-hold]: The program, `chunk-dn6qb495.js:150`, gives each attachment its `id` before the `prompt.submit` hooks run (cap `4194304` bytes, at `chunk-ydjn02g5.js:5`). `chunk-hg1yqkjk.js:213794` and `chunk-hg1yqkjk.js:213788` answer only when the hook in flight lists that `id` (`chunk-hg1yqkjk.js:214554`). No step checks where the mod was installed.
-[^fill-unanswered]: The program, `chunk-hg1yqkjk.js:212910` (`refusal: "unanswered"` when no app answered).
+[^shared-sections]: The program, `chunk-bzyb60p0.js:140662` and `chunk-bzyb60p0.js:140662` (`lean_body`, in the shared list; the shared sections are plain entries of the compose list; only session sections get a decision). The type file names `lean_body` in `PromptComposeSection`.
+[^media-hold]: The program, `chunk-7f901c6t.js:150`, gives each attachment its `id` before the `prompt.submit` hooks run (cap `4194304` bytes, at `chunk-hgh71h4h.js:5`). `chunk-bzyb60p0.js:216619` and `chunk-bzyb60p0.js:216613` answer only when the hook in flight lists that `id` (`chunk-bzyb60p0.js:217631`). No step checks where the mod was installed.
+[^fill-unanswered]: The program, `chunk-bzyb60p0.js:215731` (`refusal: "unanswered"` when no app answered).

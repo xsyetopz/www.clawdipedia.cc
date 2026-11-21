@@ -4,9 +4,9 @@
 		"probes": [],
 		"note": "release history: when it started; recheck only if the feature is removed"
 	},
-	"docs/configure/settings/enterprise.md#require-a-version-range:716aff09": {
+	"docs/configure/settings/enterprise.md#require-a-version-range:7725e2bd": {
 		"kind": "manual",
 		"probes": [],
-		"note": "program behaviour; no probe checks it yet"
+		"note": "read in the program at chunk-xcgcdx61.js:9308"
 	}
 }

@@ -343,6 +343,10 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
+	"error:${…} The prompt was not run. Run the same claude command again after switching.": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
 	"error:${…} The retry over SSH failed too: ${…} Check the repository and ref in the marketplace entry and that github.com can be reached. If the repository is private, add an SSH key to your GitHub account o…": {
 		"route": "/extend/plugins/marketplace",
 		"anchor": "errors"
@@ -635,6 +639,10 @@
 		"route": "/extend/plugins/cli",
 		"anchor": "errors"
 	},
+	"error:${…} is not an absolute path.": {
+		"route": "/extend/mod-api/calls/vcs",
+		"anchor": "errors"
+	},
 	"error:${…} is not supported": {
 		"route": "/configure/cli/flags",
 		"anchor": "errors"
@@ -686,6 +694,10 @@
 	"error:${…} may only contain letters, digits, hyphens, and underscores — it is interpolated into the claude.googleapis.com request path, so URL metacharacters in its value would rewrite the project/workspace…": {
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
+	},
+	"error:${…} must be <owner>/<repo>=<folder>, once for each repository (entry ${…} is not)": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runner-errors"
 	},
 	"error:${…} must be <owner>/<repo>=<folder>, or <owner>/*=<folder>/* (got: ${…})": {
 		"route": "/configure/cli/self-hosted-runner",
@@ -1126,6 +1138,10 @@
 	"error:${…}: ${…} is not a PEM ${…}": {
 		"route": "/configure/permissions/sandbox",
 		"anchor": "errors"
+	},
+	"error:${…}: ${…} is not available in this mode": {
+		"route": "/extend/mod-api/calls/vcs",
+		"anchor": "members"
 	},
 	"error:${…}: ${…} leads to an automounter map directory (/net, /net/<host>; macOS /Network, /home) — refusing it (naming anything in it asks the automounter or a host)": {
 		"route": "/extend/mod-api/calls/testing",
@@ -1855,6 +1871,14 @@
 		"route": "/extend/plugins/loading",
 		"anchor": "errors"
 	},
+	"error:A vcs.isolate hook refused to make a copy: ${…}": {
+		"route": "/extend/mod-api/calls/vcs",
+		"anchor": "errors"
+	},
+	"error:A worktree name can't start with a dash. Choose a different name.": {
+		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
 	"error:ANTHROPIC_*": {
 		"route": "/configure/settings/auth",
 		"anchor": "errors"
@@ -1880,6 +1904,10 @@
 		"anchor": "agents-plugins-mcp-and-context"
 	},
 	"error:Agent ${…} is *": {
+		"route": "/reference/tools/agents-and-tasks",
+		"anchor": "errors"
+	},
+	"error:Agent '${…}' was not started: its model is no longer allowed. Start it again with an allowed model.": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
@@ -2032,10 +2060,6 @@
 		"anchor": "errors"
 	},
 	"error:Cannot ent*": {
-		"route": "/reference/tools/agents-and-tasks",
-		"anchor": "errors"
-	},
-	"error:Cannot enter an existing worktree: the current directory is not in a git repository.": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
@@ -2917,6 +2941,10 @@
 	},
 	"error:Invalid JSON in t*": {
 		"route": "/how-it-works/sessions-and-storage",
+		"anchor": "errors"
+	},
+	"error:Invalid JSON provided to the settings option.": {
+		"route": "/extend/headless",
 		"anchor": "errors"
 	},
 	"error:Invalid UR*": {
@@ -3863,6 +3891,10 @@
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
+	"error:The folder is not in a Git repository": {
+		"route": "/extend/mod-api/calls/vcs",
+		"anchor": "errors"
+	},
 	"error:The goal condition *": {
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
@@ -3903,6 +3935,10 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
+	"error:The name ${…} is another worktree's or branch's, or has the form of an agent's": {
+		"route": "/extend/mod-api/calls/vcs",
+		"anchor": "errors"
+	},
 	"error:The name that this hook's matcher is tested against (for a tool call, the tool's name) has over ${…} characters, the most that a cloud session tests this matcher against.": {
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
@@ -3927,7 +3963,7 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
-	"error:The sandbox could not create a folder that it has to hide from the command (${…}), so the command was not started.": {
+	"error:The sandbox could not create a folder that it must protect from the command (${…}), so the command was not started.": {
 		"route": "/configure/permissions/sandbox",
 		"anchor": "errors"
 	},
@@ -3963,16 +3999,8 @@
 		"route": "/reference/tools/agents-and-tasks",
 		"anchor": "errors"
 	},
-	"error:The working directory no longer leads where it did when this call was permission-checked (it was deleted, a part of its path was replaced, or it can't be examined), so the call was not run. Make the c…": {
-		"route": "/reference/tools/shell-and-web",
-		"anchor": "errors"
-	},
 	"error:There is no JSON on stdin. Pipe it in, or pass it as the argument.": {
 		"route": "/extend/mcp/cli",
-		"anchor": "errors"
-	},
-	"error:These settings files are not used: they are in a connector-downloads folder, where Claude Code saves files from claude.ai connectors: ${…}": {
-		"route": "/configure/settings",
 		"anchor": "errors"
 	},
 	"error:This Claude Code does not take \"${…}\" in --initialize-fields. Update Claude Code, or send the value by its flag.": {
@@ -4293,6 +4321,10 @@
 	},
 	"error:Workload identity federation is configured in this environment (ANTHROPIC_FEDERATION_RULE_ID and ANTHROPIC_ORGANIZATION_ID), and it takes precedence over the default profile. Set ANTHROPIC_PROFILE to …": {
 		"route": "/configure/settings/auth",
+		"anchor": "errors"
+	},
+	"error:Workspace trust is not accepted there": {
+		"route": "/extend/mod-api/calls/vcs",
 		"anchor": "errors"
 	},
 	"error:Workspace trust not yet accepted. Run `claude` once in this directory and accept the trust dialog, then retry with --worktree.": {
@@ -5327,10 +5359,6 @@
 		"route": "/extend/hooks/configuration",
 		"anchor": "errors"
 	},
-	"error:hostMatchesAny: non-string pattern in list": {
-		"route": "/configure/permissions/sandbox",
-		"anchor": "errors"
-	},
 	"error:iTerm2 image: *": {
 		"route": "/extend/skills-and-commands/slash-commands",
 		"anchor": "errors"
@@ -5483,7 +5511,7 @@
 		"route": "/configure/cli/subcommands",
 		"anchor": "errors"
 	},
-	"error:mapSources: cannot extract repo slug from source URL '${…}' — not scp-form (user@host:path) and not a parseable URL": {
+	"error:mapSources: cannot extract repo slug from source URL (source ${…} of ${…}) — not scp-form (user@host:path) and not a parseable URL": {
 		"route": "/how-it-works/sessions-and-storage",
 		"anchor": "errors"
 	},
@@ -6423,12 +6451,20 @@
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
+	"error:this folder may not be read": {
+		"route": "/extend/mod-api/calls/vcs",
+		"anchor": "members"
+	},
 	"error:this input was approved as a create from an Artifact type and no longer names one — nothing was published; retry so it is checked again": {
 		"route": "/reference/tools/gated-and-other",
 		"anchor": "errors"
 	},
 	"error:this machine*": {
 		"route": "/extend/hooks/configuration",
+		"anchor": "errors"
+	},
+	"error:this mod may not run Git here": {
+		"route": "/extend/mod-api/calls/vcs",
 		"anchor": "errors"
 	},
 	"error:this platform cannot open a file without following it": {
@@ -7716,6 +7752,10 @@
 		"anchor": "runtime-options"
 	},
 	"flag:self-hosted-runner --sigkill-timeout-sec": {
+		"route": "/configure/cli/self-hosted-runner",
+		"anchor": "runtime-options"
+	},
+	"flag:self-hosted-runner --start-dir": {
 		"route": "/configure/cli/self-hosted-runner",
 		"anchor": "runtime-options"
 	},

@@ -251,14 +251,14 @@ One tool_use block of an assistant message, with its outcome once the transcript
 
 ## Sources
 
-[^read-only]: The program, `chunk-hg1yqkjk.js:8807` (`isReadOnly: true` when the tool reports the call read-only).
-[^consent]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`. The text of `ToolCallReserved`. The run of `$.tool.call`, `chunk-hg1yqkjk.js:210350`, throws unless `consent` is a string, adds it to the messages of the run as a message with origin `human` only when the call answers a vouched press or input of the plugin, and otherwise logs `consent left out, unvouched`.
+[^read-only]: The program, `chunk-bzyb60p0.js:8989` (`isReadOnly: true` when the tool reports the call read-only).
+[^consent]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`. The text of `ToolCallReserved`. The run of `$.tool.call`, `chunk-bzyb60p0.js:213172`, throws unless `consent` is a string, adds it to the messages of the run as a message with origin `human` only when the call answers a vouched press or input of the plugin, and otherwise logs `consent left out, unvouched`.
 [^ceiling]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^ceiling-result]: `schemas/claude-code.d.ts`, `ToolCheckInput`.
 [^break-cache]: `schemas/claude-code.d.ts`, `PromptSectionResult` and `ToolDescribeResult` (`breakPromptCache`).
-[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-nxwpaxwj.js:5818`, `chunk-hg1yqkjk.js:210776`.
+[^tool-info]: `schemas/claude-code.d.ts`, `ToolInfo`. The program, `chunk-s3qtr6en.js:6073`, `chunk-bzyb60p0.js:213598`.
 [^tool-mcp-server]: `schemas/claude-code.d.ts`, `ToolDescribeInput` and `ToolMcpServer`.
-[^op-hold]: `opHoldMs: 30000`, `chunk-qsd8sbe8.js:9668`.
-[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-qsd8sbe8.js:9568` (the keys of the judged call, such as `tool_use_id` and `isReadOnly`, that a hook cannot change).
-[^tool-offer]: `schemas/claude-code.d.ts`, `ToolOfferInput` and `ToolOfferResult`. The program, `chunk-wm04tzdx.js:1914` (the input of `tool.offer`) and `chunk-hg1yqkjk.js:207667` (the refusal message).
-[^decider]: The program, `chunk-qsd8sbe8.js:9516`.
+[^op-hold]: `opHoldMs: 30000`, `chunk-0w2wb7gk.js:9786`.
+[^tool-judge]: `schemas/claude-code.d.ts`, `ToolJudgeInput`. The program, `chunk-0w2wb7gk.js:9684` (the keys of the judged call, such as `tool_use_id` and `isReadOnly`, that a hook cannot change).
+[^tool-offer]: `schemas/claude-code.d.ts`, `ToolOfferInput` and `ToolOfferResult`. The program, `chunk-k5r71ad2.js:1937` (the input of `tool.offer`) and `chunk-bzyb60p0.js:210346` (the refusal message).
+[^decider]: The program, `chunk-0w2wb7gk.js:9631`.

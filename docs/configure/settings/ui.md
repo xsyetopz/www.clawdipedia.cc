@@ -94,5 +94,5 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-t39fw2cy.js:8211` (`breakReminder`), `chunk-t39fw2cy.js:8242` (`quietHours`), and `chunk-t39fw2cy.js:8978` (`clawdFileProgressEnabled`).
+[^schema]: The program, its bundled settings schema, `chunk-xcgcdx61.js:8239` (`breakReminder`), `chunk-xcgcdx61.js:8270` (`quietHours`), and `chunk-xcgcdx61.js:9013` (`clawdFileProgressEnabled`).
 [^clawd]: The settings schema and the `/config` code.

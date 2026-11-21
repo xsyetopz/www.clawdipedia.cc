@@ -14,13 +14,13 @@ Bundled skill. The program stores the text in the module `SKILL-558b9a0c.md.zst`
 
 ## How to Override It
 
-Create `.claude/skills/plugin-authoring/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-hg1yqkjk.js:190384`, `chunk-6d5r944q.js:115`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-hg1yqkjk.js:279997`). See [Override a Prompt](../other/override.md).
+Create `.claude/skills/plugin-authoring/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-bzyb60p0.js:192808`, `chunk-8704k7wd.js:23`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-bzyb60p0.js:283166`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
 Temp folder paths were replaced with `<temp-dir>` or `<bundled-skill-dir>`, and emoji not on the site's allow-list are shown in brackets. `PROBE-ARG` is the test's argument.
 
-The program fills `${CLAUDE_DEV_MODS_DIR}` and `${CLAUDE_SKILL_DIR}` when it loads the skill. The text of the paragraph that starts `THIS SESSION` is the one for a `-p` session, from `chunk-c183zp3n.js:162`.
+The program fills `${CLAUDE_DEV_MODS_DIR}` and `${CLAUDE_SKILL_DIR}` when it loads the skill. The text of the paragraph that starts `THIS SESSION` is the one for a `-p` session, from `chunk-wpvqn8n1.js:162`.
 
 ````text
 <command-message>plugin-authoring</command-message>

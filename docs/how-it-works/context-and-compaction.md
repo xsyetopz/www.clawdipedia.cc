@@ -222,17 +222,17 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^levels]: The program, `chunk-hg1yqkjk.js:116920-116932` (the `"blocked"` test, then `"compact"`, then `"warn"`).
-[^subagent-window]: The program, `chunk-hg1yqkjk.js:117098-117103` (the ceiling branch: it keeps the window found when that is at most the ceiling, and otherwise uses the smaller of the model window and the ceiling, before the `CLAUDE_CODE_AUTO_COMPACT_WINDOW` branch is read) and `chunk-f00gew3e.js:6391` (the subagent value becomes the `ceiling` around the `inner` value).
-[^reactive]: The program, `chunk-wm04tzdx.js:16896` (the reactive route, `reactive_compact_retry`), `chunk-hg1yqkjk.js:120554-120555` (the "Usage credits are required for long context" test) and `chunk-hg1yqkjk.js:119503` (the "Usage credits required for 1M context" message).
-[^second-ask]: The program, `chunk-hg1yqkjk.js:130514` (the second ask for the `<summary>` block).
-[^summary-error]: The program, `chunk-hg1yqkjk.js:143286`.
-[^gate]: The program, `chunk-zamn1mv0.js:164` (the server flag `tengu_dapper_fountain`), read at `chunk-hg1yqkjk.js:130512` (`$71b0f7`).
-[^gates]: The program, `chunk-hg1yqkjk.js:145515` (`DISABLE_COMPACT`), `chunk-hg1yqkjk.js:117499` (`Autocompact is thrashing`) and `chunk-hg1yqkjk.js:145296-145304` (`routedThroughReactive`).
-[^check-timing]: The program, `chunk-wm04tzdx.js:13800-13829` (`query_autocompact_start` and `query_autocompact_end` around the check).
-[^cleared]: The program, the server-side clearing code, `chunk-hg1yqkjk.js:114093` (`[Old tool result content cleared]`).
-[^prompt]: The program, the compaction prompt, `chunk-hg1yqkjk.js:129581-129582` (the `<summary>` form) and `chunk-hg1yqkjk.js:129657` (the `<summary>` tag with the nine parts that follow).
-[^attachments]: The program, `chunk-hg1yqkjk.js:260917`, `4127083`, `4129346`, `4155646`, `168761`, `4147098`, `4126462` and `4108538`, and `chunk-kgzzwvwc.js:3315` and `60683`.
-[^window-suffix]: The program, `chunk-hg1yqkjk.js:117104` (`CLAUDE_CODE_AUTO_COMPACT_WINDOW` is parsed) and `chunk-hg1yqkjk.js:116790` (`a4 === "k" ? 1000`, with `"m"` for 1e6, in either case).
-[^spinner]: The program, `chunk-kkty3tcc.js:520-533` (the `hooks_start` case sets the text; any `hookType` other than `pre_compact` or `post_compact` gets the `SessionStart` text, `$2f6afd`), `chunk-kkty3tcc.js:539-540` (the `compact_end` case calls the clear, `b10`, at `chunk-kkty3tcc.js:475-489`; the switch has no case for the end of the hooks), `chunk-kkty3tcc.js:501-515` (the end-of-turn reset, `b12`, which `chunk-kkty3tcc.js:554` exports as `resetOverrides`), `chunk-hg1yqkjk.js:304566` (the text `Running SessionStart hooks…`, `jKo`), `chunk-hg1yqkjk.js:131755` (`compact_end`) and `chunk-hg1yqkjk.js:132234` (`hooks_start` with the `session_start` type, sent after it).
-[^agent-reminder]: The program, `chunk-hg1yqkjk.js:302070`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`.
+[^levels]: The program, `chunk-bzyb60p0.js:118127-118139` (the `"blocked"` test, then `"compact"`, then `"warn"`).
+[^subagent-window]: The program, `chunk-bzyb60p0.js:118305-118310` (the ceiling branch: it keeps the window found when that is at most the ceiling, and otherwise uses the smaller of the model window and the ceiling, before the `CLAUDE_CODE_AUTO_COMPACT_WINDOW` branch is read) and `chunk-knp99ee7.js:2318` (the subagent value becomes the `ceiling` around the `inner` value).
+[^reactive]: The program, `chunk-k5r71ad2.js:17388` (the reactive route, `reactive_compact_retry`), `chunk-bzyb60p0.js:121787-121788` (the "Usage credits are required for long context" test) and `chunk-bzyb60p0.js:120723` (the "Usage credits required for 1M context" message).
+[^second-ask]: The program, `chunk-bzyb60p0.js:132578` (the second ask for the `<summary>` block).
+[^summary-error]: The program, `chunk-bzyb60p0.js:145485`.
+[^gate]: The program, `chunk-2xjdqky3.js:167` (the server flag `tengu_dapper_fountain`), read at `chunk-bzyb60p0.js:132576` (`$868881`).
+[^gates]: The program, `chunk-bzyb60p0.js:147752` (`DISABLE_COMPACT`), `chunk-bzyb60p0.js:118706` (`Autocompact is thrashing`) and `chunk-bzyb60p0.js:147533-147541` (`routedThroughReactive`).
+[^check-timing]: The program, `chunk-k5r71ad2.js:14249-14278` (`query_autocompact_start` and `query_autocompact_end` around the check).
+[^cleared]: The program, the server-side clearing code, `chunk-bzyb60p0.js:115300` (`[Old tool result content cleared]`).
+[^prompt]: The program, the compaction prompt, `chunk-bzyb60p0.js:131597-131598` (the `<summary>` form) and `chunk-bzyb60p0.js:131677` (the `<summary>` tag with the nine parts that follow).
+[^attachments]: The program, `chunk-bzyb60p0.js:264085`, `4127083`, `4129346`, `4155646`, `168761`, `4147098`, `4126462` and `4108538`, and `chunk-f9x2f6cx.js:3284` and `60683`.
+[^window-suffix]: The program, `chunk-bzyb60p0.js:118311` (`CLAUDE_CODE_AUTO_COMPACT_WINDOW` is parsed) and `chunk-bzyb60p0.js:117997` (`a4 === "k" ? 1000`, with `"m"` for 1e6, in either case).
+[^spinner]: The program, `chunk-9rvw567f.js:520-533` (the `hooks_start` case sets the text; any `hookType` other than `pre_compact` or `post_compact` gets the `SessionStart` text, `$2f6afd`), `chunk-9rvw567f.js:539-540` (the `compact_end` case calls the clear, `b10`, at `chunk-9rvw567f.js:475-489`; the switch has no case for the end of the hooks), `chunk-9rvw567f.js:501-515` (the end-of-turn reset, `b12`, which `chunk-9rvw567f.js:554` exports as `resetOverrides`), `chunk-bzyb60p0.js:307943` (the text `Running SessionStart hooks…`, `jKo`), `chunk-bzyb60p0.js:133843` (`compact_end`) and `chunk-bzyb60p0.js:134322` (`hooks_start` with the `session_start` type, sent after it).
+[^agent-reminder]: The program, `chunk-bzyb60p0.js:305447`. A server flag, `tengu_shimmering_clock`, can turn the text off; it is on unless the flag is `false`.

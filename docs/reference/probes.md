@@ -1,10 +1,10 @@
 ---
 title: Probes
-description: Facts checked by running Claude Code 2.1.329 against a local stub, and the env vars and settings that changed what the program sent.
+description: Facts checked by running Claude Code 2.1.330 against a local stub, and the env vars and settings that changed what the program sent.
 sidebar_position: 5
 ---
 
-A probe is a small test that runs Claude Code `2.1.329` and checks what one setting changes.
+A probe is a small test that runs Claude Code `2.1.330` and checks what one setting changes.
 The probes ran against a local stub of the Messages API, so they cost nothing and sent no data to Anthropic.
 They show which environment variables and settings have an effect that you can see. Use the results to learn what a variable does before you set it. The [Example](#example) shows one probe that you can run by hand.
 
@@ -22,12 +22,12 @@ Look for `context-1m-2025-08-07` in the `anthropic-beta` header. Run it again wi
 
 ## How We Probed
 
-1. We ran the unmodified `2.1.329` program with `claude -p "Reply with 'OK'." --output-format stream-json --verbose`. Every probe used that prompt unless a row says otherwise.
+1. We ran the unmodified `2.1.330` program with `claude -p "Reply with 'OK'." --output-format stream-json --verbose`. Every probe used that prompt unless a row says otherwise.
 2. We gave each run a fresh config folder, a fresh home folder, a fake API key, and a base URL that points to the local stub.
 3. We turned off telemetry and other optional traffic. We pointed the proxy settings to a closed port, so a stray request to `api.anthropic.com` fails.
 4. The stub answered `POST /v1/messages` as a stream or as JSON. It sent one scripted tool call and then the plain text `OK`. It wrote the method, path, headers, and body of each request to a log.
 5. We made two baselines. The first was a plain run. The second ran a `Bash` tool call with command hooks and a local plugin with a skill, a hook, and an MCP server. Two repeat runs of each baseline were identical after we removed ids, paths, and times.
-6. We set each variable name to `1` in both baselines. The release toolkit built the name list from the strings of the program and from its list of environment names. The sweep tested 2,123 names and skipped 104, because `childEnv` fixes them or their names look like credentials (`ANTHROPIC_API_KEY` is one). Each run got an explicit environment with only the probe setup and the name under test, so no variable of the parent shell reached the program. We compared headers, betas, the system prompt, tools, body fields, output events, files in the config folder, the hook log, and the environment names that hooks saw. The sweep keeps the names of the changed fields, not their values. We read each wording in the table below from a request in a separate run that set the one variable, or from the text of the program, and we keep the field name alone where we did not.
+6. We set each variable name to `1` in both baselines. The release toolkit built the name list from the strings of the program and from its list of environment names. The sweep tested 2,133 names and skipped 104, because `childEnv` fixes them or their names look like credentials (`ANTHROPIC_API_KEY` is one). Each run got an explicit environment with only the probe setup and the name under test, so no variable of the parent shell reached the program. We compared headers, betas, the system prompt, tools, body fields, output events, files in the config folder, the hook log, and the environment names that hooks saw. The sweep keeps the names of the changed fields, not their values. We read each wording in the table below from a request in a separate run that set the one variable, or from the text of the program, and we keep the field name alone where we did not.
 7. Some names got extra runs: auto mode with a `Bash` call, `--brief`, `--resume`, and the plugin variables with a plugin.
    `--brief` changed the requests (see the table).[^brief] `--resume` with the id of an earlier run kept the session id.
 
@@ -43,8 +43,8 @@ flowchart TD
 
 ## Results
 
-Of the 2,123 names, 138 had an effect that we could see: 68 are <Undocumented /> in the [Environment Variables](../configure/env-vars/index.md) pages and 70 are documented there. The rest had none. The sweep flagged 40 more names (`BUILDKITE` to `YARN_REGISTRY`). Their only change was in the first message of the second baseline, so we counted them as noise.
-The table below leaves out 13 of the 138, because their only difference was in the environment names that hooks saw. The 14th, `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`, is in [Static and Print Probes](#static-and-print-probes).
+Of the 2,133 names, 137 had an effect that we could see: 69 are <Undocumented /> in the [Environment Variables](../configure/env-vars/index.md) pages and 68 are documented there. The rest had none.
+The table below leaves out 13 of the 137, because their only difference was in the environment names that hooks saw. The 14th, `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`, is in [Static and Print Probes](#static-and-print-probes).
 No visible effect in print mode does not prove that a variable does nothing.
 Many variables work only in other modes, in remote sessions, or with a login.
 This page lists the undocumented names with a clear effect and the items that differ from the docs. The other documented names with an effect, and all names with no visible effect, are left out.
@@ -114,7 +114,7 @@ Names that ended the run with the value `1`, because they need a real value: `CL
 
 ## Request Details
 
-- `cc_version=2.1.329.25f`: this suffix appeared in a run with the prompt `Reply with 'OK'.` on the default model `claude-opus-5-5` and on `claude-sonnet-5-5`.
+- `cc_version=2.1.330.05b`: this suffix appeared in a run with the prompt `Reply with 'OK'.` on the default model `claude-opus-5-5` and on `claude-sonnet-5-5`.
 - `/v1/messages/cache_touch`: never called. In the `cachetouch` cases, with and without `CLAUDE_INTERNAL_FC_OVERRIDES`, the stub got no `cache_touch` request and no `cache-keepalive` beta, and only `/v1/messages` was called. The program sends a touch only when the response has `anthropic-cache-keepalive: active` for a request with the `cache-keepalive-2026-09-03` beta.
   The program turns that beta on only when `allow_cache_keepalive` is set and `ANTHROPIC_UNIX_SOCKET` is not.
   The body is `{"request_id": ...}`. Touches repeat every 30 s by default (10 to 120). The path, the header name, the body field, and the interval range come from the program.[^cache-touch]
@@ -147,7 +147,7 @@ The cc-inspect `code` action `cli` ran `claude auto-mode` subcommands with a fak
 
 ### `autoMode.classifyAllShell`
 
-We ran `claude -p --permission-mode auto` against the stub with `CLAUDE_CODE_AUTO_MODE_SERVER=0`, the command `curl -s http://127.0.0.1:9/x`, and a user allow rule `Bash(curl -s http://127.0.0.1:9/x)`. The table shows whether the stub got requests that carried the classifier system prompt: `1` means the classifier ran (10 requests), `0` means it did not. Without the variable, the stub gives the [server-side check](../configure/permissions/auto-mode.md#the-server-side-check) no verdict, and the stub gets no classifier request. A managed folder needs `sudo`, so the user ran the managed cases (`managed.*.classify-*`): managed `true`, managed `false`, and managed unset, each in 7 settings combinations.
+We ran `claude -p --permission-mode auto` against the stub with `CLAUDE_CODE_AUTO_MODE_SERVER=0`, the command `curl -s http://127.0.0.1:9/x`, and a user allow rule `Bash(curl -s http://127.0.0.1:9/x)`. The table shows whether the stub got requests that carried the classifier system prompt: `1` means the classifier ran (10 requests), `0` means it did not. Without the variable, the stub gives the [server-side check](../configure/permissions/auto-mode.md#the-server-side-check) no verdict, and the stub gets no classifier request. A managed folder needs `sudo`, so the user ran the managed cases on `2.1.329` (`managed.*.classify-*`): managed `true`, managed `false`, and managed unset, each in 7 settings combinations.
 
 | Settings | Classifier Requests |
 | --- | --- |
@@ -164,7 +164,7 @@ Any `true` in user, `--settings`, or managed settings turns the flag on. `false`
 
 ## Subagents and Hooks
 
-Follow-up probes ran `2.1.329` against the same stub, with a fake key, a temp home folder, and `-p "Reply with 'OK'." --output-format stream-json --verbose`. The stub scripted `Agent`, `Workflow`, `Bash`, and `Skill` calls, so each subagent request could be logged. No login was used. The interactive screen has its own section below.
+Follow-up probes ran `2.1.330` against the same stub, with a fake key, a temp home folder, and `-p "Reply with 'OK'." --output-format stream-json --verbose`. The stub scripted `Agent`, `Workflow`, `Bash`, and `Skill` calls, so each subagent request could be logged. No login was used. The interactive screen has its own section below.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
@@ -180,7 +180,7 @@ Follow-up probes ran `2.1.329` against the same stub, with a fake key, a temp ho
 
 ## Configure and Memory
 
-These checks ran `2.1.329` against the same stub. Nothing was run with a login.
+These checks ran `2.1.330` against the same stub. Nothing was run with a login.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
@@ -197,11 +197,11 @@ This run used the default model, with a fresh config folder and a project that h
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
-| `claude -p "/context" --output-format stream-json` in an empty session | <Undocumented /> | The server accepted the login, so the numbers are counts from the token counting endpoint, not a local estimate. The session reported the model `claude-sonnet-5-5`. The session held 13,244 tokens: System prompt 2,250, System tools 8,790, and Skills 2,194. After one prompt it held 17,125 tokens, with Messages 3,695 and System tools 8,986. See [Context Budget](../how-it-works/context-budget.md). |
+| `claude -p "/context" --output-format stream-json` in an empty session | <Undocumented /> | The server accepted the login, so the numbers are counts from the token counting endpoint, not a local estimate. The session reported the model `claude-sonnet-5-5`. The session held 13,240 tokens: System prompt 2,246, System tools 8,790, and Skills 2,194. After one prompt it held 17,119 tokens, with Messages 3,693 and System tools 8,986. See [Context Budget](../how-it-works/context-budget.md). |
 
 ## Live Login Probes
 
-These runs used a subscription login (`CLAUDE_CODE_OAUTH_TOKEN`) on `2.1.329` with a fresh config folder and an empty project. The service accepted the token: the message request got status `200`, `policy_limits` got `200`, and `settings` got `404`. The request runs went through a local proxy that kept only the paths and the `anthropic-beta` header.
+These runs used a subscription login (`CLAUDE_CODE_OAUTH_TOKEN`) on `2.1.330` with a fresh config folder and an empty project. The service accepted the token: the message request got status `200`, `policy_limits` got `200`, and `settings` got `404`. The request runs went through a local proxy that kept only the paths and the `anthropic-beta` header.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
@@ -224,7 +224,7 @@ The stub reply to `GET /api/oauth/profile` set every field: `account` with `uuid
 
 ## Static and Print Probes
 
-These runs used `2.1.329`, the same stub, a fake key, a temp home folder, and a dead proxy, plus static reading of the program. Nothing was run with a login or with `sudo`. The [Managed Folder Probe](#managed-folder-probe) is the one section that used `sudo`.
+These runs used `2.1.330`, the same stub, a fake key, a temp home folder, and a dead proxy, plus static reading of the program. Nothing was run with a login or with `sudo`. The [Managed Folder Probe](#managed-folder-probe) is the one section that used `sudo`.
 
 A hook inherits the environment of the probe, so a change in the probe environment shows as a change in the hook environment. Read a hook-environment difference against `tools/release/lib/env.ts` before you record it.
 
@@ -243,7 +243,7 @@ A hook inherits the environment of the probe, so a change in the probe environme
 
 ## Toolkit Case Groups
 
-The release toolkit runs the case files in `tools/release/probes/` against the installed `claude`. A print case uses the local stub and a fake key. A pty case drives the interactive screen. A live case runs through `tools/release/secret-runner.sh`, which loads the login inside the child process. The `2.1.329` captures are in `captures/2.1.329/`. The table lists the groups and what they run. It does not repeat their results, which are in the tables above and in the pages they link to.
+The release toolkit runs the case files in `tools/release/probes/` against the installed `claude`. A print case uses the local stub and a fake key. A pty case drives the interactive screen. A live case runs through `tools/release/secret-runner.sh`, which loads the login inside the child process. The `2.1.330` captures are in `captures/2.1.330/`. The table lists the groups and what they run. It does not repeat their results, which are in the tables above and in the pages they link to.
 
 | Layer | Group or Case | Cases | Status | What It Runs |
 | --- | --- | --- | --- | --- |
@@ -269,7 +269,7 @@ The live `ultrareview` steps were removed by the owner's decision, so this site 
 
 ## Managed Folder Probe
 
-The user ran the 61 managed cases with `sudo` on `2.1.329`. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`) on macOS. It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`.
+The user ran the 61 managed cases with `sudo` on `2.1.329`. On `2.1.330` only the 19 baseline cases ran again, and all 19 ended ok. The `sudo` variant runs were not repeated on `2.1.330`, so every result below that needs the managed folder comes from `2.1.329`. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`) on macOS. It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
@@ -287,7 +287,7 @@ The user ran the 61 managed cases with `sudo` on `2.1.329`. The managed folder `
 
 ## Interactive Probes
 
-These runs used the real `2.1.329` binary in a pseudo-terminal driven by the release toolkit (`probe:pty`). The stub, the fake key, the temp home and config folders, and the dead proxy were as in the other probes. Plain prompts were `Reply with 'OK'.` and the stub answered `OK`. Onboarding and trust were skipped by seeding the config file. The stub answered a scripted tool call where a case needed one. No login and no real credentials were used.
+These runs used the real `2.1.330` binary in a pseudo-terminal driven by the release toolkit (`probe:pty`). The stub, the fake key, the temp home and config folders, and the dead proxy were as in the other probes. Plain prompts were `Reply with 'OK'.` and the stub answered `OK`. Onboarding and trust were skipped by seeding the config file. The stub answered a scripted tool call where a case needed one. No login and no real credentials were used.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |
@@ -346,27 +346,27 @@ A change in a header, the system prompt, the tool list, or an event is an effect
 ## Sources
 
 [^brief]: The sweep keys for `CLAUDE_CODE_BRIEF` include the tool list, the system prompt, and a second request.
-[^sdk-version]: The program, `chunk-aq3ms068.js:31171` (`agent-sdk/${process.env.CLAUDE_AGENT_SDK_VERSION}`), `chunk-aq3ms068.js:50920` (`CLAUDE_AGENT_SDK_VERSION`).
-[^protection]: The program, `chunk-76t3g1yn.js:18611`.
-[^container]: The program, `chunk-aq3ms068.js:19516`, `chunk-76t3g1yn.js:18959`.
-[^summary]: The program, `chunk-w03c3634.js:15830`.
-[^wire]: The program, `chunk-w03c3634.js:12968` (`wire_tool_inputs`).
-[^startup-perf]: The program, `chunk-541wtx57.js:453`.
-[^session-state]: The program, `chunk-w03c3634.js:15290`.
-[^startup-mark]: The program, `chunk-541wtx57.js:88`, `chunk-541wtx57.js:88` (`startup_mark`).
-[^one-m]: The program, `chunk-w03c3634.js:6777` (the beta table, `context-1m-2025-08-07`), `chunk-aq3ms068.js:24076` (the test for `[1m]`, `/\[1m\]/i`), `chunk-aq3ms068.js:23866` (the strip function for `[1m]`, `/\[1m\]/gi`).
-[^cache-touch]: The program, `chunk-hg1yqkjk.js:20245` (the path `/v1/messages/cache_touch` and the header name), `chunk-hg1yqkjk.js:20265` (`touchIntervalSeconds`: the interval range), `chunk-hg1yqkjk.js:20769` (the request code, the body field `request_id`), `chunk-w03c3634.js:6791` (the `cache-keepalive` beta).
-[^oauth-config]: The program, `chunk-3q5b9bqc.js:7` (`return "prod"`).
-[^req-id-pattern]: The program, `chunk-v6p5k257.js:5` (the pattern `^req_[A-Za-z0-9_-]{1,36}$`), `chunk-aq3ms068.js:46915`.
-[^managed-note]: The program, `chunk-qsd8sbe8.js:7143`.
-[^managed-note-entry]: The program, `chunk-d2hzm69x.js:5`, `chunk-0v6g5ynk.js:188` (`remote_cowork`).
-[^push-flag]: The program, `chunk-fcpsf9hj.js:257`, `chunk-apt8rb8k.js:10`.
-[^worker-prompt]: The program, `chunk-zs9k1w9q.js:116222`, `chunk-zs9k1w9q.js:116404`.
-[^auth-notify]: The program, `chunk-z9j6gvtc.js:1391` (`auth_storage_failure`), `chunk-z9j6gvtc.js:1223` and `chunk-z9j6gvtc.js:1413` (`auth_success`).
-[^agent-completed]: The program, `chunk-rmx0yhc6.js:11696`.
-[^quota-fired]: The program, `chunk-ev45d3pa.js:457`, `chunk-ev45d3pa.js:563`.
-[^type-list]: The program, `chunk-0wbf18qr.js:29`, `chunk-0wbf18qr.js:29`.
-[^refusal-subtype]: The program, `chunk-w03c3634.js:14693`.
-[^usage-partial]: The program, `chunk-vxkg9ahh.js:3850`.
-[^usage-limit]: The program, `chunk-vxkg9ahh.js:3850`.
-[^usage-fail]: The program, `chunk-vxkg9ahh.js:3735`.
+[^sdk-version]: The program, `chunk-865at33z.js:31448` (`agent-sdk/${process.env.CLAUDE_AGENT_SDK_VERSION}`), `chunk-865at33z.js:51591` (`CLAUDE_AGENT_SDK_VERSION`).
+[^protection]: The program, `chunk-gq1dr8pm.js:17223`.
+[^container]: The program, `chunk-865at33z.js:19602`, `chunk-gq1dr8pm.js:17567`.
+[^summary]: The program, `chunk-xfj2cwfv.js:15870`.
+[^wire]: The program, `chunk-xfj2cwfv.js:12982` (`wire_tool_inputs`).
+[^startup-perf]: The program, `chunk-k5jn5rx9.js:453`.
+[^session-state]: The program, `chunk-xfj2cwfv.js:15325`.
+[^startup-mark]: The program, `chunk-k5jn5rx9.js:88`, `chunk-k5jn5rx9.js:88` (`startup_mark`).
+[^one-m]: The program, `chunk-xfj2cwfv.js:6780` (the beta table, `context-1m-2025-08-07`), `chunk-865at33z.js:24175` (the test for `[1m]`, `/\[1m\]/i`), `chunk-865at33z.js:23965` (the strip function for `[1m]`, `/\[1m\]/gi`).
+[^cache-touch]: The program, `chunk-bzyb60p0.js:20959` (the path `/v1/messages/cache_touch` and the header name), `chunk-bzyb60p0.js:20979` (`touchIntervalSeconds`: the interval range), `chunk-bzyb60p0.js:21483` (the request code, the body field `request_id`), `chunk-xfj2cwfv.js:6794` (the `cache-keepalive` beta).
+[^oauth-config]: The program, `chunk-ephf358x.js:7` (`return "prod"`).
+[^req-id-pattern]: The program, `chunk-rwa52046.js:5` (the pattern `^req_[A-Za-z0-9_-]{1,36}$`), `chunk-865at33z.js:47574`.
+[^managed-note]: The program, `chunk-0w2wb7gk.js:7246`.
+[^managed-note-entry]: The program, `chunk-jwbpjwas.js:5`, `chunk-3t7ve0wy.js:188` (`remote_cowork`).
+[^push-flag]: The program, `chunk-gys72mpb.js:257`, `chunk-rnad4hj1.js:10`.
+[^worker-prompt]: The program, `chunk-3pqaw3hv.js:118318`, `chunk-3pqaw3hv.js:118500`.
+[^auth-notify]: The program, `chunk-bxvzmae8.js:1414` (`auth_storage_failure`), `chunk-bxvzmae8.js:1231` and `chunk-bxvzmae8.js:1437` (`auth_success`).
+[^agent-completed]: The program, `chunk-3pe3q4ea.js:11728`.
+[^quota-fired]: The program, `chunk-6bnjn6js.js:455`, `chunk-6bnjn6js.js:561`.
+[^type-list]: The program, `chunk-h4xqg980.js:29`, `chunk-h4xqg980.js:29`.
+[^refusal-subtype]: The program, `chunk-xfj2cwfv.js:14723`.
+[^usage-partial]: The program, `chunk-9z1q8yk5.js:3864`.
+[^usage-limit]: The program, `chunk-9z1q8yk5.js:3864`.
+[^usage-fail]: The program, `chunk-9z1q8yk5.js:3749`.

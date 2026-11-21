@@ -165,7 +165,7 @@ Executes a bash command and returns its output.
 
 ### `CronCreate`
 
-Sent in full by default: ❌ No, deferred. Description: 3,438 characters. Schema: 958 characters.
+Sent in full by default: ❌ No, deferred. Description: 3,716 characters. Schema: 1,020 characters.
 
 ```text
 Schedule a prompt to be enqueued at a future time. Use for both recurring schedules and one-shot reminders.
@@ -195,7 +195,7 @@ Only use minute 0 or 30 when the user names that exact time and clearly means it
 
 ## Durability
 
-By default (durable: false) the job lives only in this Claude session — nothing is written to disk, and the job is gone when Claude exits. Pass durable: true to write to .claude/scheduled_tasks.json so the job survives restarts. Only use durable: true when the user explicitly asks for the task to persist ("keep doing this every day", "set this up permanently"). Most "remind me in 5 minutes" / "check back in an hour" requests should stay session-only.
+By default (durable: false) the job lives only in this Claude session — nothing is written to disk, and the job is gone when Claude exits. Pass durable: true to write to .claude/scheduled_tasks.json so the job survives restarts. If Claude Code can't tell which organization this session is signed in to, the job stays session-only even with durable: true. If the result says "Session-only" after durable: true, tell the user that the job won't survive restarts. Only use durable: true when the user explicitly asks for the task to persist ("keep doing this every day", "set this up permanently"). Most "remind me in 5 minutes" / "check back in an hour" requests should stay session-only.
 
 ## Not for live watching
 
@@ -203,9 +203,9 @@ CronCreate re-runs a prompt at fixed wall-clock intervals. To watch a log file, 
 
 ## Runtime behavior
 
-Jobs only fire while the REPL is idle (not mid-query). Durable jobs persist to .claude/scheduled_tasks.json and survive session restarts — on the next launch signed in to the same organization they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to 50% of its period late (max 30 min), and a one-shot job landing on :00 or :30 runs up to 90 s early. The result of this tool and of CronList gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
+Jobs only fire while the REPL is idle (not mid-query). Durable jobs that were saved to .claude/scheduled_tasks.json survive session restarts — on the next launch signed in to the same organization they resume automatically. One-shot durable tasks that were missed while the REPL was closed are surfaced for catch-up. Session-only jobs die with the process. The scheduler shifts each job by a fixed per-job offset on top of whatever you pick: by default a recurring job runs up to 50% of its period late (max 30 min), and a one-shot job landing on :00 or :30 runs up to 90 s early. The result of this tool and of CronList gives each job's actual next run time: when you tell the user when a job will run, give that time, not the minute in the cron expression. Picking an off-minute is still the bigger lever.
 
-Recurring tasks auto-expire after 7 days — they fire one final time, then are deleted. This bounds session lifetime. Tell the user about the 7-day limit when scheduling recurring jobs.
+Recurring tasks auto-expire after 30 days — they fire one final time, with a note that it is their last run, then are deleted. This bounds session lifetime. Tell the user about the 30-day limit when scheduling recurring jobs.
 
 Returns a job ID you can pass to CronDelete.
 ```
@@ -224,11 +224,11 @@ Returns a job ID you can pass to CronDelete.
       "type": "string"
     },
     "recurring": {
-      "description": "true (default) = fire on every cron match until deleted or auto-expired after 7 days. false = fire once at the next match, then auto-delete. Use false for \"remind me at X\" one-shot requests with pinned minute/hour/dom/month.",
+      "description": "true (default) = fire on every cron match until deleted or auto-expired after 30 days. false = fire once at the next match, then auto-delete. Use false for \"remind me at X\" one-shot requests with pinned minute/hour/dom/month.",
       "type": "boolean"
     },
     "durable": {
-      "description": "true = persist to .claude/scheduled_tasks.json and survive restarts. false (default) = in-memory only, dies when this Claude session ends. Use true only when the user asks the task to survive across sessions.",
+      "description": "true = persist to .claude/scheduled_tasks.json and survive restarts (the result says Session-only if the job could not be saved). false (default) = in-memory only, dies when this Claude session ends. Use true only when the user asks the task to survive across sessions.",
       "type": "boolean"
     }
   },

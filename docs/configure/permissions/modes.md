@@ -105,14 +105,14 @@ A tool call in `bypassPermissions` mode asks for approval when the permission ch
 
 ## Sources
 
-[^mode-names]: The program, `chunk-phb99ctz.js:92`.
-[^project-default]: The program, `chunk-xvh0qanc.js:421` (bypass), `chunk-xvh0qanc.js:442` (auto) and the picker text in `chunk-7rp6z1yt.js:616`.
-[^killswitch]: The program, `chunk-xvh0qanc.js:306` (the `--permission-mode` flag), `chunk-xvh0qanc.js:332` (an agent definition's `permissionMode: auto`), `chunk-xvh0qanc.js:400` (`defaultMode: auto` in an IDE session), and `chunk-xvh0qanc.js:449`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
-[^bypass-errors]: The program, `chunk-xvh0qanc.js:472` and `chunk-0cw29n2z.js:573`.
-[^cloud-bypass]: The program error text, `chunk-mjwpm8mh.js:2401`.
-[^reasons]: The program, `chunk-phb99ctz.js:259` (the list of the 11 types, from `rule` to `other`, with `asyncAgent`).
-[^changes-327]: The symbolic link refusals are in the program at `chunk-c2c9kwmh.js:1140` and `chunk-c2c9kwmh.js:1132`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-4hvh0e00.js:168` (`stopsAtLastRow`). The list turns this on at `chunk-4hvh0e00.js:1883` (the function `$cbfd8c`) when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-d2wnhh84.js:213`, where it gives the value true to the context that the list reads. The default kind of that frame is `permission` at `chunk-d2wnhh84.js:205`.
-[^long-vars]: The program, `chunk-hg1yqkjk.js:63815` (the message) and `chunk-hg1yqkjk.js:63825` (the denial that uses it).
+[^mode-names]: The program, `chunk-pbteexar.js:92`.
+[^project-default]: The program, `chunk-k67pwqya.js:418` (bypass), `chunk-k67pwqya.js:439` (auto) and the picker text in `chunk-5m5vdxpd.js:616`.
+[^killswitch]: The program, `chunk-k67pwqya.js:303` (the `--permission-mode` flag), `chunk-k67pwqya.js:329` (an agent definition's `permissionMode: auto`), `chunk-k67pwqya.js:397` (`defaultMode: auto` in an IDE session), and `chunk-k67pwqya.js:446`. The program logs `auto mode killswitch active (override- or payload-served) — falling back to default`.
+[^bypass-errors]: The program, `chunk-k67pwqya.js:469` and `chunk-awvk50qj.js:578`.
+[^cloud-bypass]: The program error text, `chunk-0rtj0bmp.js:2449`.
+[^reasons]: The program, `chunk-pbteexar.js:259` (the list of the 11 types, from `rule` to `other`, with `asyncAgent`).
+[^changes-327]: The symbolic link refusals are in the program at `chunk-w578pjby.js:1140` and `chunk-w578pjby.js:1132`, with the text "Refusing to read a file whose path could not be vetted". The list control stops the Down key at the last row in the program at `chunk-z8dyhx9v.js:111` (`stopsAtLastRow`). The list turns this on at `chunk-s73318k8.js:287` (the function `$a12c52`) when the permission prompt frame sets it, the numbers show, and the last answer is the decline answer. The permission prompt frame sets it at `chunk-v65a0pbg.js:213`, where it gives the value true to the context that the list reads. The default kind of that frame is `permission` at `chunk-v65a0pbg.js:205`.
+[^long-vars]: The program, `chunk-bzyb60p0.js:64788` (the message) and `chunk-bzyb60p0.js:64798` (the denial that uses it).
 [^mode-use]: Official page [Choose a Permission Mode](https://code.claude.com/docs/en/permission-modes), table "Available modes", column "Best for".
-[^crashed-check]: The program, `chunk-hg1yqkjk.js:277541` (the decision reason), `chunk-hg1yqkjk.js:277557` (the message), `chunk-hg1yqkjk.js:277710` (the crash becomes an ask, through the `crashIsObjection` option, before the mode decides), and `chunk-hg1yqkjk.js:273575` (the `asyncAgent` denial where no one can be asked, which adds the message at line 273587).
-[^rm-unparsed]: The program, `chunk-hg1yqkjk.js:62039`.
+[^crashed-check]: The program, `chunk-bzyb60p0.js:280744` (the decision reason), `chunk-bzyb60p0.js:280760` (the message), `chunk-bzyb60p0.js:280918` (the crash becomes an ask, through the `crashIsObjection` option, before the mode decides), and `chunk-bzyb60p0.js:276788` (the `asyncAgent` denial where no one can be asked, which adds the message at line 273587).
+[^rm-unparsed]: The program, `chunk-bzyb60p0.js:62901`.

@@ -211,14 +211,14 @@ A local stub of the Messages API showed these facts. No model call left the mach
 
 ## Sources
 
-[^body-fields]: The official docs. The program, `chunk-hg1yqkjk.js:18924` (the `api-request` line with `params`).
-[^markers]: The program, `chunk-hg1yqkjk.js:160885` (`cache_control` on a block of the request) and `chunk-hg1yqkjk.js:160716` (the marker builder, `$849646`). The count of blocks and markers comes from a request that was observed.
-[^plain-markers]: The program, `chunk-hg1yqkjk.js:160718` (`ephemeral`, with `ttl` and `scope` only when set) and `chunk-hg1yqkjk.js:123470` (the `5m` and `1h` choice).
-[^attribution]: The program, `chunk-aq3ms068.js:46978`.
-[^retry-notes]: The program, `chunk-hg1yqkjk.js:154443` (`lowerAfter` resends only when the model is unrecognized and the sent `max_tokens` is above the cap), `chunk-hg1yqkjk.js:167204` (call site, skips 401 and policy-blocked errors), and `chunk-aq3ms068.js:24313` (the unrecognized-model check with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`).
-[^retry-cap]: The program, `chunk-hg1yqkjk.js:154470` (the `[max_tokens]` warning text) and `chunk-aq3ms068.js:24066` (the `32000` value).
-[^overage]: The program, `chunk-hg1yqkjk.js:46690`.
-[^env-wins]: The program, `chunk-hg1yqkjk.js:123420`.
-[^ledger]: The program, `chunk-h1btt56e.js:5` (`300000` and `3600000`) and `chunk-nchg3ttk.js:3409` (the `5m` and `1h` ledger values, `$60cd29`).
-[^usage-line]: The program, `chunk-hg1yqkjk.js:116186`.
-[^causes]: The program, `chunk-nchg3ttk.js:3411` (the cause texts, from `system prompt changed`) and `chunk-nchg3ttk.js:3425` (`idle past the 5m TTL`).
+[^body-fields]: The official docs. The program, `chunk-bzyb60p0.js:19635` (the `api-request` line with `params`).
+[^markers]: The program, `chunk-bzyb60p0.js:163148` (`cache_control` on a block of the request) and `chunk-bzyb60p0.js:162989` (the marker builder, `$849646`). The count of blocks and markers comes from a request that was observed.
+[^plain-markers]: The program, `chunk-bzyb60p0.js:162991` (`ephemeral`, with `ttl` and `scope` only when set) and `chunk-bzyb60p0.js:125491` (the `5m` and `1h` choice).
+[^attribution]: The program, `chunk-865at33z.js:47637`.
+[^retry-notes]: The program, `chunk-bzyb60p0.js:156693` (`lowerAfter` resends only when the model is unrecognized and the sent `max_tokens` is above the cap), `chunk-bzyb60p0.js:169492` (call site, skips 401 and policy-blocked errors), and `chunk-865at33z.js:24406` (the unrecognized-model check with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`).
+[^retry-cap]: The program, `chunk-bzyb60p0.js:156725` (the `[max_tokens]` warning text) and `chunk-865at33z.js:24165` (the `32000` value).
+[^overage]: The program, `chunk-bzyb60p0.js:47532`.
+[^env-wins]: The program, `chunk-bzyb60p0.js:125448`.
+[^ledger]: The program, `chunk-15rtfjxv.js:5` (`300000` and `3600000`) and `chunk-cy0ck7w2.js:3388` (the `5m` and `1h` ledger values, `$4653c4`).
+[^usage-line]: The program, `chunk-bzyb60p0.js:117393`.
+[^causes]: The program, `chunk-cy0ck7w2.js:3390` (the cause texts, from `system prompt changed`) and `chunk-cy0ck7w2.js:3404` (`idle past the 5m TTL`).

@@ -249,27 +249,27 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 
 ## Sources
 
-[^v322]: The program, `chunk-aq3ms068.js:17821` (the regions `global`, `us`, and `eu`) and `chunk-aq3ms068.js:17826` (the region check).
-[^capability]: The program, `chunk-aq3ms068.js:17725` (`fast_mode` for the Anthropic API and `vertex_fast_mode` for Vertex).
+[^v322]: The program, `chunk-865at33z.js:17895` (the regions `global`, `us`, and `eu`) and `chunk-865at33z.js:17900` (the region check).
+[^capability]: The program, `chunk-865at33z.js:17799` (`fast_mode` for the Anthropic API and `vertex_fast_mode` for Vertex).
 [^fast-first-party]: Probe case `print.cli322.fast-first-party`.
 [^fast-vertex-regions]: Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
 [^fast-other]: Probe cases for Bedrock and Foundry: `print.cli322.fast-bedrock`, `.fast-foundry`.
-[^provider-text]: The program, `chunk-aq3ms068.js:17838` (`Fast mode is not available on this provider`).
+[^provider-text]: The program, `chunk-865at33z.js:17912` (`Fast mode is not available on this provider`).
 [^fast-toggle]: Probe case `print.cli322.fast-vertex-toggle`.
-[^fast-bad-arg]: Probe case `print.cli322.fast-vertex-bad-argument`. The program, `chunk-e3yy3xqp.js:620`.
-[^fast-flag]: The program, `chunk-zgnhhsca.js:181`.
+[^fast-bad-arg]: Probe case `print.cli322.fast-vertex-bad-argument`. The program, `chunk-an25r0yj.js:644`.
+[^fast-flag]: The program, `chunk-9x0gppnz.js:181`.
 [^fast-flag-case]: Probe case `print.cli322.fast-vertex-flag`, and a cc-inspect run for the `speed: "fast"` field.
-[^fast-mode-vertex]: The program, `chunk-aq3ms068.js:17885` (`fastMode` of the settings counts on the Anthropic API; on other providers only the `flagSettings` value counts).
-[^fast-mode-text]: The program, `chunk-t39fw2cy.js:9153`.
+[^fast-mode-vertex]: The program, `chunk-865at33z.js:17959` (`fastMode` of the settings counts on the Anthropic API; on other providers only the `flagSettings` value counts).
+[^fast-mode-text]: The program, `chunk-xcgcdx61.js:9188`.
 [^fast-disabled]: Probe case `print.cli322.fast-vertex-disabled`.
-[^org-check]: The program, `chunk-aq3ms068.js:17741`.
-[^keybinding]: The program, `chunk-ghw8dnvs.js:78`.
+[^org-check]: The program, `chunk-865at33z.js:17815`.
+[^keybinding]: The program, `chunk-q4pszsad.js:79`.
 [^fast-print]: Probe cases `print.cli322.fast-vertex-no-settings` and `.fast-vertex-settings-off`.
-[^toggle-source]: The program, `chunk-hg1yqkjk.js:188262` (`Toggle fast mode`), and the official page section cited in the sentence.
-[^model-support]: The program, `chunk-aq3ms068.js:17928` (`$8a07f3`: the capability lookup, then, on the Anthropic API only, the ID check with `opus-4-8` and `opus-5`). The lookup is `chunk-cd3hqxcc.js:1322` (`capabilities.includes`).
-[^catalog-first-party]: The program, `chunk-cd3hqxcc.js:655`, `chunk-cd3hqxcc.js:706`, `chunk-cd3hqxcc.js:761`, `chunk-cd3hqxcc.js:904`, and `chunk-cd3hqxcc.js:1010` (the capability `fast_mode` of each model), and `chunk-cd3hqxcc.js:988` (`claude-mythos-5-2`).
-[^default-fast]: The program, `chunk-aq3ms068.js:17869`.
-[^catalog-vertex]: The program, `chunk-cd3hqxcc.js:905` and `chunk-cd3hqxcc.js:1011` (the capability `vertex_fast_mode` of `claude-fable-5-2` and `claude-mythos-5-2`).
+[^toggle-source]: The program, `chunk-bzyb60p0.js:190678` (`Toggle fast mode`), and the official page section cited in the sentence.
+[^model-support]: The program, `chunk-865at33z.js:18002` (`$8a07f3`: the capability lookup, then, on the Anthropic API only, the ID check with `opus-4-8` and `opus-5`). The lookup is `chunk-zhr7rpv7.js:1322` (`capabilities.includes`).
+[^catalog-first-party]: The program, `chunk-zhr7rpv7.js:655`, `chunk-zhr7rpv7.js:706`, `chunk-zhr7rpv7.js:761`, `chunk-zhr7rpv7.js:904`, and `chunk-zhr7rpv7.js:1010` (the capability `fast_mode` of each model), and `chunk-zhr7rpv7.js:988` (`claude-mythos-5-2`).
+[^default-fast]: The program, `chunk-865at33z.js:17943`.
+[^catalog-vertex]: The program, `chunk-zhr7rpv7.js:905` and `chunk-zhr7rpv7.js:1011` (the capability `vertex_fast_mode` of `claude-fable-5-2` and `claude-mythos-5-2`).
 [^case-vertex-global]: Probe case `print.cli322.fast-vertex-global`.
 [^case-vertex-fable]: Probe case `print.cli322.fast-vertex-fable`.
 [^case-vertex-mythos]: Probe case `print.cli322.fast-vertex-mythos`.
@@ -278,43 +278,43 @@ The `result` event of a `/fast on` turn that also changes the model has `fast_mo
 [^case-cap-on]: Probe case `print.cli322.fast-vertex-capability-on`.
 [^case-cap-off]: Probe case `print.cli322.fast-vertex-capability-off`. A cc-inspect run with the same value showed the next request without a `speed` field.
 [^case-cap-first-party]: Probe case `print.cli322.fast-capability-first-party`.
-[^fable-choice]: The program, `chunk-aq3ms068.js:18104` (`claude-fable-5-2` and `claude-mythos-5-2`) and `chunk-aq3ms068.js:18109` (`chosenOnOptInModelThisSession` or `fastModeChosenOnFableOrMythos`).
-[^fable-flag]: The program, `chunk-aq3ms068.js:18117` (`flagSettings` with `fastMode`).
-[^fable-key]: The program, `chunk-aq3ms068.js:18113`.
-[^fable-source]: The program, `chunk-aq3ms068.js:18113` (`fastModeChosenOnFableOrMythos`), and the official page section cited in the sentence.
-[^region-need]: The program, `chunk-aq3ms068.js:17821` (`global`, `us`, `eu`).
-[^region-check]: The program, `chunk-aq3ms068.js:17824` (`$e43185`: the model of the check) and `chunk-aq3ms068.js:17868` (the Vertex fallback `claude-fable-5-2`).
-[^region-default]: The program, `chunk-8wtweva8.js:226`.
-[^region-text]: The program, `chunk-8wtweva8.js:226`.
+[^fable-choice]: The program, `chunk-865at33z.js:18178` (`claude-fable-5-2` and `claude-mythos-5-2`) and `chunk-865at33z.js:18183` (`chosenOnOptInModelThisSession` or `fastModeChosenOnFableOrMythos`).
+[^fable-flag]: The program, `chunk-865at33z.js:18191` (`flagSettings` with `fastMode`).
+[^fable-key]: The program, `chunk-865at33z.js:18187`.
+[^fable-source]: The program, `chunk-865at33z.js:18187` (`fastModeChosenOnFableOrMythos`), and the official page section cited in the sentence.
+[^region-need]: The program, `chunk-865at33z.js:17895` (`global`, `us`, `eu`).
+[^region-check]: The program, `chunk-865at33z.js:17898` (`$e43185`: the model of the check) and `chunk-865at33z.js:17942` (the Vertex fallback `claude-fable-5-2`).
+[^region-default]: The program, `chunk-2gtmjt3y.js:226`.
+[^region-text]: The program, `chunk-2gtmjt3y.js:226`.
 [^case-region-ok]: Probe cases `print.cli322.fast-vertex-global`, `.fast-vertex-us`, `.fast-vertex-eu`.
 [^case-region-east5]: Probe case `print.cli322.fast-vertex-us-east5`.
 [^case-region-model]: Probe case `print.cli322.fast-vertex-model-region`.
 [^case-region-bad]: Probe case `print.cli322.fast-vertex-model-region-bad`.
 [^case-region-mythos]: Probe case `print.cli322.fast-vertex-mythos-region`.
 [^case-off]: Probe case `print.cli322.fast-vertex-off`.
-[^remote-workspace]: The program, `chunk-1kc5sfs8.js:154` (`apply_flag_settings` with `fastMode`).
-[^unavailable-prefix]: The program, `chunk-1kc5sfs8.js:233`.
-[^reason-field]: The program, `chunk-6dccy31z.js:5376` (`fast_mode_disabled_reason`).
-[^free]: The program, `chunk-aq3ms068.js:17778`.
-[^reason-source]: The program, `chunk-aq3ms068.js:17848` (the texts, for example "Checking fast mode availability"), and the official pages cited in the sentence.
-[^fallback]: The program, `chunk-hg1yqkjk.js:159580` (the retry sets `fastMode` to false and sends the request again).
-[^cooldown]: The program, `chunk-hg1yqkjk.js:160464` (`20000`, the 20-second wait limit; `600000`, the 10-minute floor), `chunk-aq3ms068.js:17947` (the 30-minute default, `1800000`), `chunk-hg1yqkjk.js:159520` (`429`), `chunk-hg1yqkjk.js:159573` (`rate_limit` and `overloaded`).
-[^overage]: The program, `chunk-aq3ms068.js:18215`.
-[^vertex-refusal]: The program, `chunk-hg1yqkjk.js:160206` (`$c7d5c1` returns false on the Anthropic API; for other providers it tests for `403`, `404`, and `400`).
+[^remote-workspace]: The program, `chunk-0r3gejp7.js:154` (`apply_flag_settings` with `fastMode`).
+[^unavailable-prefix]: The program, `chunk-0r3gejp7.js:233`.
+[^reason-field]: The program, `chunk-d688kptq.js:5409` (`fast_mode_disabled_reason`).
+[^free]: The program, `chunk-865at33z.js:17852`.
+[^reason-source]: The program, `chunk-865at33z.js:17922` (the texts, for example "Checking fast mode availability"), and the official pages cited in the sentence.
+[^fallback]: The program, `chunk-bzyb60p0.js:161853` (the retry sets `fastMode` to false and sends the request again).
+[^cooldown]: The program, `chunk-bzyb60p0.js:162737` (`20000`, the 20-second wait limit; `600000`, the 10-minute floor), `chunk-865at33z.js:18021` (the 30-minute default, `1800000`), `chunk-bzyb60p0.js:161793` (`429`), `chunk-bzyb60p0.js:161846` (`rate_limit` and `overloaded`).
+[^overage]: The program, `chunk-865at33z.js:18289`.
+[^vertex-refusal]: The program, `chunk-bzyb60p0.js:162479` (`$c7d5c1` returns false on the Anthropic API; for other providers it tests for `403`, `404`, and `400`).
 [^refusal-run]: A cc-inspect run.
-[^cooldown-panel]: The program, `chunk-zs9k1w9q.js:36120`.
-[^cooldown-texts]: The program, `chunk-zs9k1w9q.js:121750` (the three texts, `Fast mode is busy right now`, `Fast limit reached, fast mode paused`, and `Fast mode paused: your cloud provider refused a fast request`).
-[^cooldown-end]: The program, `chunk-zs9k1w9q.js:121738` (`Trying fast mode again` and `Fast limit reset`).
-[^cooldown-source]: The official page section cited in the sentence, and the program, `chunk-hg1yqkjk.js:159573` (`rate_limit`, `overloaded`).
-[^speed-body]: The program, `chunk-hg1yqkjk.js:116261` (`speed: "fast"`).
+[^cooldown-panel]: The program, `chunk-3pqaw3hv.js:36917`.
+[^cooldown-texts]: The program, `chunk-3pqaw3hv.js:123982` (the three texts, `Fast mode is busy right now`, `Fast limit reached, fast mode paused`, and `Fast mode paused: your cloud provider refused a fast request`).
+[^cooldown-end]: The program, `chunk-3pqaw3hv.js:123970` (`Trying fast mode again` and `Fast limit reset`).
+[^cooldown-source]: The official page section cited in the sentence, and the program, `chunk-bzyb60p0.js:161846` (`rate_limit`, `overloaded`).
+[^speed-body]: The program, `chunk-bzyb60p0.js:117468` (`speed: "fast"`).
 [^case-request-first-party]: Probe case `print.cli322.fast-request-first-party`.
 [^case-request-off]: Probe case `print.cli322.fast-request-first-party-off`.
 [^case-request-disabled]: Probe case `print.cli322.fast-request-first-party-disabled`.
-[^system-prompt]: The program, `chunk-hg1yqkjk.js:138689` (`switches the session to` and `Claude Opus`).
-[^price-text]: The program, `chunk-1kc5sfs8.js:69` (`2x` and `standard price`) and `chunk-zs9k1w9q.js:36054` (`Draws from usage credits` and `Billed`).
-[^prices]: The program, `chunk-aq3ms068.js:18777` (the model to price map, `claude-fable-5-2` and the others).
-[^price-tier]: The program, `chunk-aq3ms068.js:18559` (`inputTokens: 30`, the 30 and 150 row) and `chunk-aq3ms068.js:18593` (`$5cc9fc` for the catalog price, with that row as the fallback).
-[^panel]: The program, `chunk-hg1yqkjk.js:188258` (the `local-jsx` command `fast`).
-[^panel-results]: The program, `chunk-zs9k1w9q.js:35967` and `chunk-1kc5sfs8.js:80` for the first four texts, and `chunk-1kc5sfs8.js:106` (`$6590b4`) for the three workspace texts.
-[^result-state]: The program, `chunk-6dccy31z.js:5375` (`fast_mode_state` of the `result` event) and `chunk-w03c3634.js:16606` (the values `off`, `cooldown`, and `on`).
+[^system-prompt]: The program, `chunk-bzyb60p0.js:140849` (`switches the session to` and `Claude Opus`).
+[^price-text]: The program, `chunk-0r3gejp7.js:69` (`2x` and `standard price`) and `chunk-3pqaw3hv.js:36851` (`Draws from usage credits` and `Billed`).
+[^prices]: The program, `chunk-865at33z.js:18851` (the model to price map, `claude-fable-5-2` and the others).
+[^price-tier]: The program, `chunk-865at33z.js:18633` (`inputTokens: 30`, the 30 and 150 row) and `chunk-865at33z.js:18667` (`$5cc9fc` for the catalog price, with that row as the fallback).
+[^panel]: The program, `chunk-bzyb60p0.js:190674` (the `local-jsx` command `fast`).
+[^panel-results]: The program, `chunk-3pqaw3hv.js:36764` and `chunk-0r3gejp7.js:80` for the first four texts, and `chunk-0r3gejp7.js:106` (`$6590b4`) for the three workspace texts.
+[^result-state]: The program, `chunk-d688kptq.js:5408` (`fast_mode_state` of the `result` event) and `chunk-xfj2cwfv.js:16646` (the values `off`, `cooldown`, and `on`).
 [^result-switch]: Probe case `print.cli322.fast-vertex-global` and the cc-inspect run in [Models](#models).

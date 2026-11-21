@@ -49,9 +49,9 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, for example the `enabledMcpjsonServers` entry at `chunk-t39fw2cy.js:8494`.
-[^v305]: The program, `chunk-t39fw2cy.js:8534` (the `allowedMcpServers` schema text, which names `command`, `args`, `url`, and header values as the fields that count).
-[^exact-match]: The program, `chunk-be81kym3.js:1172` (`$652b6e` selects exact matching). The gate `tengu_misty_oasis` is named at `chunk-be81kym3.js:835` and is on by default (`$688ed9_2.read($7cece2, !0)` at `chunk-be81kym3.js:841`).
-[^v328-mcp-schema]: The program, its bundled settings schema, `chunk-t39fw2cy.js:8717` and `chunk-t39fw2cy.js:8538`.
-[^v328-denied-cloud]: The program, `chunk-hg1yqkjk.js:202310` (a `serverName` entry blocks the server of that name) and `chunk-hg1yqkjk.js:202374` (a dynamic server with a `displayName` is blocked by the entry `claude.ai <name>`), `chunk-yzbs7cc9.js:892` (the request `mcp_set_servers`), and `chunk-fc94807g.js:21` (a config with no `readFrom` gets `scope` `dynamic`; the `displayName` stays, and `chunk-fc94807g.js:30` drops it only when a `scope` other than `dynamic` or `claudeai` is set). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^desktop-mcp-scope]: The program, `chunk-t39fw2cy.js:8719` (the `desktopMcpServersListScope` key) and `chunk-t39fw2cy.js:8725` (its field text).
+[^schema]: The program, its bundled settings schema, for example the `enabledMcpjsonServers` entry at `chunk-xcgcdx61.js:8522`.
+[^v305]: The program, `chunk-xcgcdx61.js:8569` (the `allowedMcpServers` schema text, which names `command`, `args`, `url`, and header values as the fields that count).
+[^exact-match]: The program, `chunk-px0hhsq7.js:1183` (`$cb90c4` selects exact matching). The gate `tengu_misty_oasis` is named at `chunk-px0hhsq7.js:838` and is on by default (`$688ed9_2.read($7cece2, !0)` at `chunk-px0hhsq7.js:844`).
+[^v328-mcp-schema]: The program, its bundled settings schema, `chunk-xcgcdx61.js:8752` and `chunk-xcgcdx61.js:8573`.
+[^v328-denied-cloud]: The program, `chunk-bzyb60p0.js:204893` (a `serverName` entry blocks the server of that name) and `chunk-bzyb60p0.js:204957` (a dynamic server with a `displayName` is blocked by the entry `claude.ai <name>`), `chunk-nfz758rv.js:903` (the request `mcp_set_servers`), and `chunk-2mm785sn.js:21` (a config with no `readFrom` gets `scope` `dynamic`; the `displayName` stays, and `chunk-2mm785sn.js:30` drops it only when a `scope` other than `dynamic` or `claudeai` is set). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^desktop-mcp-scope]: The program, `chunk-xcgcdx61.js:8754` (the `desktopMcpServersListScope` key) and `chunk-xcgcdx61.js:8760` (its field text).

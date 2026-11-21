@@ -57,4 +57,4 @@ These types are aliases, unions, or plain shapes. Each row gives its use and its
 
 ## Sources
 
-[^settings-layers]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`: `SettingsLayer`, `SettingsReadInput`, and `$.settings.read`, where what the hooks answer is what every reader of the merged settings reads.
+[^settings-layers]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`: `SettingsLayer`, `SettingsReadInput`, and `$.settings.read`, where what the hooks answer is what every reader of the merged settings reads.

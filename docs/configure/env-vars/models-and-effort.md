@@ -131,17 +131,17 @@ Claude Code picks the model in a fixed order: the `--model` flag or `/model` fir
 
 ## Sources
 
-[^names]: The program, `chunk-gvhwnc7g.js:341` (for example `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK`), variable names, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^names]: The program, `chunk-c203g5kd.js:344` (for example `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK`), variable names, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 [^amber]: [Probes](../../reference/probes.md).
-[^fast-vertex]: The program, `chunk-aq3ms068.js:17733`. Probe case `print.cli322.fast-vertex-disabled`.
-[^refusal-name]: The program, `chunk-76t3g1yn.js:16023` (`CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK`), `chunk-76t3g1yn.js:16029` (the `switchModelsOnFlag` gate), and `chunk-76t3g1yn.js:16126` (`refusal_fallback`; a recognized name, `$d810cc`, that no rule flags gets no switch).
-[^ultrathink]: The program, `chunk-aq3ms068.js:24478`, gate `tengu_turtle_carbon`.
-[^thinking-titles]: The program, `chunk-hg1yqkjk.js:170331` (`thinkingTitles` and `CLAUDE_CODE_FIRST_CALL_THINKING_TITLES`). The second check is at `chunk-wm04tzdx.js:12724` (`showThinkingSummaries`).
+[^fast-vertex]: The program, `chunk-865at33z.js:17807`. Probe case `print.cli322.fast-vertex-disabled`.
+[^refusal-name]: The program, `chunk-gq1dr8pm.js:14652` (`CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK`), `chunk-gq1dr8pm.js:14658` (the `switchModelsOnFlag` gate), and `chunk-gq1dr8pm.js:14755` (`refusal_fallback`; a recognized name, `$d810cc`, that no rule flags gets no switch).
+[^ultrathink]: The program, `chunk-865at33z.js:24571`, gate `tengu_turtle_carbon`.
+[^thinking-titles]: The program, `chunk-bzyb60p0.js:172633` (`thinkingTitles` and `CLAUDE_CODE_FIRST_CALL_THINKING_TITLES`). The second check is at `chunk-k5r71ad2.js:13117` (`showThinkingSummaries`).
 [^fast-capability]: Probe case `print.cli322.fast-vertex-capability-on`.
-[^canonical]: The program, `chunk-y3bkspwa.js:330` (the name is canonicalized with `deterministic: true`).
-[^vertex-org]: The program, `chunk-aq3ms068.js:17741`.
-[^subagent-effort]: The program, `chunk-fg6bvsxp.js:97` (`CLAUDE_CODE_SUBAGENT_EFFORT`), `chunk-xvh0qanc.js:1266` (`$98d823`, trim and lowercase), `chunk-hg1yqkjk.js:105163` (`tengu_snappy_pelican`), and `chunk-sm35x1rt.js:93` ("use the configured subagent default"). Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
+[^canonical]: The program, `chunk-ge3qft6b.js:330` (the name is canonicalized with `deterministic: true`).
+[^vertex-org]: The program, `chunk-865at33z.js:17815`.
+[^subagent-effort]: The program, `chunk-6hkrqqbp.js:98` (`CLAUDE_CODE_SUBAGENT_EFFORT`), `chunk-k67pwqya.js:1263` (`$8d0954`, trim and lowercase), `chunk-bzyb60p0.js:106284` (`tengu_snappy_pelican`), and `chunk-z2gzpw6w.js:94` ("use the configured subagent default"). Flag `tengu_snappy_pelican`. Telemetry event `subagent_effort_default` records `unknown_level` for a bad value.
 [^workflow-model]: [Probes](../../reference/probes.md#subagents-and-hooks).
-[^thinking-resumption]: The program, `chunk-hg1yqkjk.js:152192` (`CLAUDE_CODE_THINKING_RESUMPTION`, the read), `chunk-hg1yqkjk.js:152223` and `chunk-hg1yqkjk.js:152302` (the gate), and `chunk-3kp5jwr6.js:11765` (the runner).
-[^betas-managed]: The program, `chunk-t39fw2cy.js:6469` (the message names managed settings as a place that sets it).
-[^spindle]: The program, `chunk-2ry3tbza.js:2187` (`mayReachMax` is true unless `CLAUDE_CODE_LINKED_SPINDLE` is false).
+[^thinking-resumption]: The program, `chunk-bzyb60p0.js:154439` (`CLAUDE_CODE_THINKING_RESUMPTION`, the read), `chunk-bzyb60p0.js:154470` and `chunk-bzyb60p0.js:154549` (the gate), and `chunk-q0y1fm2x.js:12089` (the runner).
+[^betas-managed]: The program, `chunk-xcgcdx61.js:6493` (the message names managed settings as a place that sets it).
+[^spindle]: The program, `chunk-kb3nnh8q.js:2184` (`mayReachMax` is true unless `CLAUDE_CODE_LINKED_SPINDLE` is false).

@@ -10,11 +10,11 @@ This is the verbatim text that Claude Code 2.1.329 uses for the built-in `/insig
 
 ## Where It Comes From
 
-The program, `chunk-ecdyd2et.js:3433` (the summary message). Captured with (`claude -p "/insights PROBE-ARG"` against a local stub, with a fake key and a clean environment). The file holds several requests, each starting with a `=== request system` line. It includes the system request, the usage data prompt, and the output lines that point to the report.
+The program, `chunk-6e1znsy2.js:3458` (the summary message). Captured with (`claude -p "/insights PROBE-ARG"` against a local stub, with a fake key and a clean environment). The file holds several requests, each starting with a `=== request system` line. It includes the system request, the usage data prompt, and the output lines that point to the report.
 
 ## How to Override It
 
-Create `.claude/skills/insights/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-hg1yqkjk.js:190384`, `chunk-6d5r944q.js:115`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-hg1yqkjk.js:279997`). See [Override a Prompt](../other/override.md).
+Create `.claude/skills/insights/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-bzyb60p0.js:192808`, `chunk-8704k7wd.js:23`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-bzyb60p0.js:283166`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 

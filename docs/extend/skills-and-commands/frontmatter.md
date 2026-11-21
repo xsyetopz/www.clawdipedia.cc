@@ -100,9 +100,9 @@ The exact fields are in the `skill` definition in `https://clawdipedia.cc/schema
 
 ## Sources
 
-[^bamum]: The program, `chunk-hg1yqkjk.js:48543` (the name rule message, "blank-like characters") and `chunk-k936fbc4.js:584` (its pattern of blank-looking characters holds `\u{16910}`, a Bamum letter).
-[^managed-tools]: The program, `chunk-t39fw2cy.js:8705-8710` (`allowManagedPermissionRulesOnly` and its `allowed-tools` text in the bundled settings schema).
-[^bool]: The program, `chunk-32gs4rex.js:4032-4042` (the boolean reader `$c6b0fd`) and `chunk-cqahc80t.js:7-17` (the accepted words `1`, `true`, `yes`, `on`, `0`, `false`, `no`, and `off`, after lowercase and trim).
-[^background]: The program, `chunk-hg1yqkjk.js:46556-46559` (`background` in the frontmatter schema).
-[^discovery]: The program, `chunk-hg1yqkjk.js:281357-281358` for the base directory and the walk of `.claude/skills` folders (`while (c1.startsWith(a7 + $8ec263_7))`), and `chunk-hg1yqkjk.js:281376` and `chunk-hg1yqkjk.js:281381` for the skip ("Skipped gitignored or unconfirmed skills dir").
-[^validators]: The program, the `skill` frontmatter schema, `chunk-hg1yqkjk.js:46530` (it extends the shared schema) and `chunk-hg1yqkjk.js:46588` (the fields for a `skill` only). See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).
+[^bamum]: The program, `chunk-bzyb60p0.js:49178` (the name rule message, "blank-like characters") and `chunk-kx2fp6pc.js:584` (its pattern of blank-looking characters holds `\u{16910}`, a Bamum letter).
+[^managed-tools]: The program, `chunk-xcgcdx61.js:8740-8745` (`allowManagedPermissionRulesOnly` and its `allowed-tools` text in the bundled settings schema).
+[^bool]: The program, `chunk-p1ewvgeh.js:4062-4072` (the boolean reader `$c6b0fd`) and `chunk-69qhefwa.js:7-17` (the accepted words `1`, `true`, `yes`, `on`, `0`, `false`, `no`, and `off`, after lowercase and trim).
+[^background]: The program, `chunk-bzyb60p0.js:46556-46559` (`background` in the frontmatter schema).
+[^discovery]: The program, `chunk-bzyb60p0.js:284526-284527` for the base directory and the walk of `.claude/skills` folders (`while (c1.startsWith(a7 + $8ec263_7))`), and `chunk-bzyb60p0.js:284545` and `chunk-bzyb60p0.js:284550` for the skip ("Skipped gitignored or unconfirmed skills dir").
+[^validators]: The program, the `skill` frontmatter schema, `chunk-bzyb60p0.js:47372` (it extends the shared schema) and `chunk-bzyb60p0.js:47430` (the fields for a `skill` only). See also [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

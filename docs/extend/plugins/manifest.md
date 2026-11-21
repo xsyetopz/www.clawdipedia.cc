@@ -170,9 +170,9 @@ A malformed display field, such as `author` or `homepage`, does not stop an enab
 
 ## Sources
 
-[^schema]: The program, `chunk-t39fw2cy.js:2429` (`metadata`, which keeps a value only if it is an object), `chunk-t39fw2cy.js:4072` (the dependency pattern, with the `@^range` part), and `chunk-t39fw2cy.js:4080` (the range is removed), and `chunk-t39fw2cy.js:4082` (the object form, `name`).
-[^engines]: The program, `chunk-t39fw2cy.js:2361` (`claude-code` as a semver range) and `chunk-mf7vnf0k.js:663` (`engine-range-invalid`).
-[^settings-key]: The program, `chunk-mf7vnf0k.js:149-155`.
-[^status-line]: The program, `chunk-hg1yqkjk.js:246092` (`subagentStatusLine`, the last plugin that sets it) and `chunk-hg1yqkjk.js:246101` (the data directory error).
-[^icon]: The program, `chunk-wqygnvsa.js:152` (`ICON_MISSING` and its fix text) and `chunk-wqygnvsa.js:262` (the icon paths that the validator looks for, such as `.claude-plugin/icon.png`).
-[^display-field]: The program, `chunk-mf7vnf0k.js:576` (`manifest-field-ignored`: the note text `malformed and ignored`), `chunk-hg1yqkjk.js:242590` (the loader returns the `warnings`; `chunk-hg1yqkjk.js:243964` adds those of a plugin only when it is enabled), `chunk-4g68nm9m.js:14276` (the note is a row of the `errors` tab), `chunk-4g68nm9m.js:11430` (the plugin detail screen lists the `noun: "note"` entries of the plugin), and `chunk-kx248ng6.js:1242` (`claude plugin list` prints a `Note:` line).
+[^schema]: The program, `chunk-xcgcdx61.js:2453` (`metadata`, which keeps a value only if it is an object), `chunk-xcgcdx61.js:4096` (the dependency pattern, with the `@^range` part), and `chunk-xcgcdx61.js:4104` (the range is removed), and `chunk-xcgcdx61.js:4106` (the object form, `name`).
+[^engines]: The program, `chunk-xcgcdx61.js:2385` (`claude-code` as a semver range) and `chunk-mgntjepj.js:676` (`engine-range-invalid`).
+[^settings-key]: The program, `chunk-mgntjepj.js:149-155`.
+[^status-line]: The program, `chunk-bzyb60p0.js:249209` (`subagentStatusLine`, the last plugin that sets it) and `chunk-bzyb60p0.js:249218` (the data directory error).
+[^icon]: The program, `chunk-afkr0w52.js:151` (`ICON_MISSING` and its fix text) and `chunk-afkr0w52.js:261` (the icon paths that the validator looks for, such as `.claude-plugin/icon.png`).
+[^display-field]: The program, `chunk-mgntjepj.js:589` (`manifest-field-ignored`: the note text `malformed and ignored`), `chunk-bzyb60p0.js:245689` (the loader returns the `warnings`; `chunk-bzyb60p0.js:247080` adds those of a plugin only when it is enabled), `chunk-e1cgntxd.js:14421` (the note is a row of the `errors` tab), `chunk-e1cgntxd.js:11707` (the plugin detail screen lists the `noun: "note"` entries of the plugin), and `chunk-y45hgb0m.js:1242` (`claude plugin list` prints a `Note:` line).

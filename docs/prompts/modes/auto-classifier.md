@@ -35,7 +35,7 @@ The text below is every part of the request that Claude Code builds before your 
 
 ```text
 === system[0] (no cache marker) ===
-x-anthropic-billing-header: cc_version=2.1.329.<build>; cc_entrypoint=sdk-cli;
+x-anthropic-billing-header: cc_version=2.1.330.<build>; cc_entrypoint=sdk-cli;
 
 === system[1] (cache marker: {"type":"ephemeral"}) ===
 You are a security monitor for autonomous AI coding agents.
@@ -364,7 +364,7 @@ Lines added: 284. Lines removed: 94. Size change: +124,703 characters.
 --- default-lean
 +++ auto-classifier
 @@ -2,129 +2,317 @@
- x-anthropic-billing-header: cc_version=2.1.329.<build>; cc_entrypoint=sdk-cli;
+ x-anthropic-billing-header: cc_version=2.1.330.<build>; cc_entrypoint=sdk-cli;
 
  === system[1] (cache marker: {"type":"ephemeral"}) ===
 -You are a Claude agent, built on Anthropic's Claude Agent SDK.

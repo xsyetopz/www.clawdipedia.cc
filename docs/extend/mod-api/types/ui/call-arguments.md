@@ -281,11 +281,11 @@ The background task that a `UserMessage` notification row reports on: a subagent
 
 ## Sources
 
-[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-qsd8sbe8.js:7736`.
+[^ui-input]: `schemas/claude-code.d.ts`, `UiInputArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-0w2wb7gk.js:7839`.
 [^notify]: `schemas/claude-code.d.ts`, `NotifyOptions` and `CancelNotifyArgs`.
 [^ui-open]: `schemas/claude-code.d.ts`, `UiOpenResult`.
 [^ui-pane]: `schemas/claude-code.d.ts`, `UiPane`.
-[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-qsd8sbe8.js:7736`.
+[^ui-press]: `schemas/claude-code.d.ts`, `UiPressArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-0w2wb7gk.js:7839`.
 [^scroll]: `schemas/claude-code.d.ts`, `UiScrollArgs`.
-[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-qsd8sbe8.js:7736`.
-[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-qsd8sbe8.js:9158`.
+[^ui-select]: `schemas/claude-code.d.ts`, `UiSelectArgument`. The program, the default matcher keys `plugin` and `component` and the `"*"` wildcard, `chunk-0w2wb7gk.js:7839`.
+[^ui-pointer]: `schemas/claude-code.d.ts`, `UiPointerInput`. The program, `chunk-0w2wb7gk.js:9261`.

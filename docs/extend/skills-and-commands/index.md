@@ -110,12 +110,12 @@ See [Substitutions](substitutions.md#invocation-control) for what compaction kee
 
 ## Sources
 
-[^plugin-skip]: The program, `chunk-hg1yqkjk.js:281342` (the log text `Skipped the nested skills search for a file in a sync-owned or plugin folder`) and `chunk-38jz3ehd.js:208` (the `plugins` and `cowork_plugins` folders).
-[^sync]: The program, `chunk-dy11tw28.js:297` (10 minutes by default, set by `tengu_claudeai_skills_sync_interval_minutes`, and 4 intervals when idle, set by `tengu_claudeai_skills_sync_idle_intervals`) and `chunk-t39fw2cy.js:307` (the reserved name `anthropic-skills`).
-[^disable-slash]: The program, `chunk-txash88y.js:3921`.
-[^loaded-from]: The program, the skill loader and its `loadedFrom` tags, `chunk-bxxahqqj.js:84` and `chunk-hg1yqkjk.js:100432`.
-[^budget]: The program, the skill loader, `chunk-hg1yqkjk.js:138888-139002`. The server flag minimum, `tengu_typed_pebble`, is read at `chunk-hg1yqkjk.js:138888`.
-[^overrides]: The program, the skill loader: `chunk-hg1yqkjk.js:100121` (the values `on`, `name-only`, `user-invocable-only`, and `off`), `chunk-hg1yqkjk.js:139088` (`name-only` lists no description), `chunk-hg1yqkjk.js:254645` (`disable_model_invocation`), `chunk-hg1yqkjk.js:254670` (`off` and `user-invocable-only`), `chunk-hg1yqkjk.js:254683` (`is disabled for model invocation` and `in skillOverrides settings`), and `chunk-hg1yqkjk.js:254593` (`is a ${a2} command, not a skill`, with `UI` or `built-in CLI` at `chunk-hg1yqkjk.js:254691`). Setting text from `schemas/claude-code-settings.json`.
+[^plugin-skip]: The program, `chunk-bzyb60p0.js:284511` (the log text `Skipped the nested skills search for a file in a sync-owned or plugin folder`) and `chunk-sqvd6je2.js:208` (the `plugins` and `cowork_plugins` folders).
+[^sync]: The program, `chunk-539hrhrd.js:299` (10 minutes by default, set by `tengu_claudeai_skills_sync_interval_minutes`, and 4 intervals when idle, set by `tengu_claudeai_skills_sync_idle_intervals`) and `chunk-xcgcdx61.js:307` (the reserved name `anthropic-skills`).
+[^disable-slash]: The program, `chunk-rckksdmd.js:3931`.
+[^loaded-from]: The program, the skill loader and its `loadedFrom` tags, `chunk-4vsz8a99.js:83` and `chunk-bzyb60p0.js:100432`.
+[^budget]: The program, the skill loader, `chunk-bzyb60p0.js:141061-141175`. The server flag minimum, `tengu_typed_pebble`, is read at `chunk-bzyb60p0.js:141061`.
+[^overrides]: The program, the skill loader: `chunk-bzyb60p0.js:178147` (the values `on`, `name-only`, `user-invocable-only`, and `off`), `chunk-bzyb60p0.js:141261` (`name-only` lists no description), `chunk-tfs0ssqe.js:947` (`disable_model_invocation`), `chunk-tfs0ssqe.js:972` (`off` and `user-invocable-only`), `chunk-tfs0ssqe.js:985` (`is disabled for model invocation` and `in skillOverrides settings`), and `chunk-tfs0ssqe.js:896` (`is a ${a2} command, not a skill`, with `UI` or `built-in CLI` at `chunk-tfs0ssqe.js:991`). Setting text from `schemas/claude-code-settings.json`.
 [^schema]: Description of `disableSkillShellExecution` in `schemas/claude-code-settings.json`.
 
 Official pages: [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

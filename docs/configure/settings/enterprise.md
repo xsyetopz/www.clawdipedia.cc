@@ -10,7 +10,7 @@ These keys let an administrator control how managed settings arrive and which Cl
 
 ### Require a Version Range
 
-This file stops versions older than `2.1.300` from starting and merges all managed sources instead of using the top one alone.[^version-range]
+This file stops versions older than `2.1.300` from starting, except for the `update`, `install`, and `doctor` commands. It also merges all managed sources instead of using the top one alone, when two or more managed sources exist.[^version-range]
 
 ```json title="/etc/claude-code/managed-settings.json"
 {
@@ -81,14 +81,14 @@ Claude Code also refuses to write over a stored copy that is not a regular file,
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, for example `chunk-t39fw2cy.js:7868` (`timeoutMs` and `refreshIntervalMs`), `chunk-t39fw2cy.js:7872` (`replace` and `merge`), `chunk-t39fw2cy.js:7881` (`continue` and `refuse`), and `chunk-t39fw2cy.js:7892` (`retries`).
-[^reply-check]: The program, `chunk-txash88y.js:1960` (the debug line), `chunk-txash88y.js:1957` (the sources checked for `disableReplyCheck`), and `chunk-wm04tzdx.js:7653` (the "Reply gate" log line).
-[^windows-split]: The settings schema. The program reads the flag only from the policy tier (`policySettings`, `chunk-hg1yqkjk.js:68450`), and formats the type error as `Expected <type>, but received <type>` (`chunk-zryj96fm.js:2161`). The schema entry is at `chunk-t39fw2cy.js:8645`. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split.
-[^helper-env]: The program, `chunk-pxy9yt8m.js:4763`.
-[^internal]: The program, `chunk-t39fw2cy.js:8179` (the `@internal` text of `policyHelpers`).
-[^policy-default]: The program, `chunk-t39fw2cy.js:7977-9346`.
-[^policy-entry]: The settings schema and the program, `chunk-t39fw2cy.js:8020-9333`.
-[^approval]: The program, `chunk-7vfh1k4y.js:333` (the `oauth` login and the same organization), `chunk-7vfh1k4y.js:340` (the profile store), `chunk-7vfh1k4y.js:361` (the organization pin check, `org_pin_unknown` and `org_pin_mismatch`), `chunk-x6ejkj5y.js:36` (no other review open, `hasOpenReview`), `chunk-x6ejkj5y.js:354` ("Managed settings were not approved; exiting without applying them.") and `chunk-x6ejkj5y.js:356` ("Your organization's managed settings need your approval"), `chunk-pm16xtb3.js:17` (the `forceLoginOrgUUID` pin read and its errors), and `chunk-t39fw2cy.js:5306` and `chunk-t39fw2cy.js:5315` ("the stored copy is not a regular file").
-[^version-range]: The program, its bundled settings schema, `chunk-t39fw2cy.js:9273` (`requiredMinimumVersion`) and `chunk-t39fw2cy.js:8887` (`managedSourcesBehavior`).
+[^schema]: The program, its bundled settings schema, for example `chunk-xcgcdx61.js:7896` (`timeoutMs` and `refreshIntervalMs`), `chunk-xcgcdx61.js:7900` (`replace` and `merge`), `chunk-xcgcdx61.js:7909` (`continue` and `refuse`), and `chunk-xcgcdx61.js:7920` (`retries`).
+[^reply-check]: The program, `chunk-rckksdmd.js:1962` (the debug line), `chunk-rckksdmd.js:1959` (the sources checked for `disableReplyCheck`), and `chunk-k5r71ad2.js:7945` (the "Reply gate" log line).
+[^windows-split]: The settings schema. The program reads the flag only from the policy tier (`policySettings`, `chunk-bzyb60p0.js:69459`), and formats the type error as `Expected <type>, but received <type>` (`chunk-6mfepmbb.js:2164`). The schema entry is at `chunk-xcgcdx61.js:8680`. The Bash command path checks the platform (`windows`), the command length, and `policySettings.disableWindowsBashCommandSplit`. The path cannot run on macOS, so no run shows the split.
+[^helper-env]: The program, `chunk-2yx6c1y2.js:5351`.
+[^internal]: The program, `chunk-xcgcdx61.js:8207` (the `@internal` text of `policyHelpers`).
+[^policy-default]: The program, `chunk-xcgcdx61.js:8005-9381`.
+[^policy-entry]: The settings schema and the program, `chunk-xcgcdx61.js:8048-9368`.
+[^approval]: The program, `chunk-w58msjm6.js:333` (the `oauth` login and the same organization), `chunk-w58msjm6.js:340` (the profile store), `chunk-w58msjm6.js:361` (the organization pin check, `org_pin_unknown` and `org_pin_mismatch`), `chunk-zs6b24vw.js:36` (no other review open, `hasOpenReview`), `chunk-zs6b24vw.js:354` ("Managed settings were not approved; exiting without applying them.") and `chunk-zs6b24vw.js:356` ("Your organization's managed settings need your approval"), `chunk-v6tczjz9.js:17` (the `forceLoginOrgUUID` pin read and its errors), and `chunk-xcgcdx61.js:5330` and `chunk-xcgcdx61.js:5339` ("the stored copy is not a regular file").
+[^version-range]: The program, its bundled settings schema, `chunk-xcgcdx61.js:9308` (`requiredMinimumVersion`) and `chunk-xcgcdx61.js:8922` (`managedSourcesBehavior`), `chunk-amkshz08.js:13` (`update`, `install`, and `doctor`, which the version check skips), `chunk-amkshz08.js:16` (`requiredMinimumVersion`), and `chunk-6mfepmbb.js:5161-5162` (`managedSourcesBehavior`, merged only for two or more sources).
 
-[^checksum-header]: The program, `chunk-76t3g1yn.js:13907` (hint headers on) `chunk-76t3g1yn.js:18565` (the conditions), `chunk-0vn9q90x.js:44` (the direct `api.anthropic.com` test that stops the header), and `chunk-cd3hqxcc.js:1762` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.
+[^checksum-header]: The program, `chunk-gq1dr8pm.js:12513` (hint headers on) `chunk-gq1dr8pm.js:17177` (the conditions), `chunk-vyzg3yfa.js:44` (the direct `api.anthropic.com` test that stops the header), and `chunk-zhr7rpv7.js:1786` (the host test). The [gateway compatibility guide](https://code.claude.com/docs/en/llm-gateway-protocol#gateway-hint-headers) names the hint headers but not this header, and the [settings page](https://code.claude.com/docs/en/settings) and [network page](https://code.claude.com/docs/en/network-config) do not mention it.

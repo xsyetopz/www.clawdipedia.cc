@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-agents-json.json",
-	"title": "Claude Code --agents JSON entry (Claude Code 2.1.329)",
-	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code --agents JSON entry (Claude Code 2.1.330)",
+	"$comment": "For one subagent definition of the --agents JSON (and the SDK agents option). Generated from Claude Code 2.1.330 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Anchor: the SDK schema module, object described as \"Definition for a custom subagent that can be invoked via the Agent tool.\". Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"description": {
@@ -263,6 +263,14 @@
 										"autoModeVerdictTools": {
 											"description": "@internal The names, as this server lists them, of the tools on whose calls the host reads _meta['claudecode/autoModeVerdict']: the CLI may set that key on a call of one of them that auto mode's server-side classifier allowed (docs/desktop-host-contract.md, 'The auto-mode verdict'). At most 64 names of at most 128 characters: a longer list, or a longer name, leaves the whole list out. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered.",
 											"maxItems": 64,
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"remoteControlMetaKeys": {
+											"description": "@internal The keys of this server's tool results' _meta that Remote Control clients may read. Over Remote Control, a successful result of the main conversation that holds one of them has tool_use_result {content, _meta} with only those keys in _meta, in place of its bare content, unless a hook replaced its output or its message holds several tool results. A listed nextStep with a recap, held to WrapUp's rules for its text and labels, also goes at the top level of tool_use_result. Name only keys that the host itself writes, and nothing a person would not want on their other devices: they are uploaded and stored with the session. Keys under com.anthropic/, and anthropic/dataFlowSessions, are never sent. At most 16 keys of at most 128 characters: a longer list, or a longer key, leaves the whole list out. The keys of one result may hold at most 4,096 characters of JSON: past that, none of them is sent. Read from initialize, mcp_set_servers and the Agent SDK's server config, not --mcp-config, when the server is first registered.",
+											"maxItems": 16,
 											"type": "array",
 											"items": {
 												"type": "string"

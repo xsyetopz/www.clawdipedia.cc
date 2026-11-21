@@ -10,9 +10,9 @@ This is the verbatim text that Claude Code 2.1.329 uses for the built-in comment
 
 ## Where It Comes From
 
-The program, `chunk-ds5t6d4a.js:1871`, starts this `comment-thread-analyst` agent for one comment thread on one published artifact. The agent reads and analyzes. A separate composer makes any reply or edit.
+The program, `chunk-91y93gf1.js:1877`, starts this `comment-thread-analyst` agent for one comment thread on one published artifact. The agent reads and analyzes. A separate composer makes any reply or edit.
 
-The text below shows the default tool names (`Artifact action "comments"` and `action "read_page_data"`). When the separate comments tool is in use, the program, `chunk-0jd48asd.js:338`, puts `the ArtifactComments tool, action "read"` and `the Artifact tool, action "read_page_data"` in their place.
+The text below shows the default tool names (`Artifact action "comments"` and `action "read_page_data"`). When the separate comments tool is in use, the program, `chunk-mha8pjbc.js:338`, puts `the ArtifactComments tool, action "read"` and `the Artifact tool, action "read_page_data"` in their place.
 
 ## How to Override It
 

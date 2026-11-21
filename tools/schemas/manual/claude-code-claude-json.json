@@ -44,7 +44,7 @@
 				"apiKeyHelper:()=>«»().optional().describe(\"Path to a script that outputs authentication values\")",
 				"\"apiKeyHelper\",\"installMethod\",\"autoUpdates\""
 			],
-			"note": "The program lists it in the global config keys, and the settings schema key of the same name is a string (zod o().optional(): \"Path to a script that outputs authentication values\"). No write into ~/.claude.json other than through the config command was found, which stores that string. Read at chunk-t39fw2cy.js:215099 and chunk-aq3ms068.js:52771."
+			"note": "The program lists it in the global config keys, and the settings schema key of the same name is a string (zod o().optional(): \"Path to a script that outputs authentication values\"). No write into ~/.claude.json other than through the config command was found, which stores that string. Read at chunk-xcgcdx61.js:215883 and chunk-865at33z.js:53449."
 		},
 		"shiftEnterKeyBindingInstalled": {
 			"schema": {
@@ -107,7 +107,7 @@
 				"«»({enabledByDefault:«»()})",
 				"value:«».claudeInChromeDefaultEnabled??!1,type:\"boolean\",«»(«»){«»((«»)=>({...«»,claudeInChromeDefaultEnabled:«»}))"
 			],
-			"note": "Written from enabledByDefault, which the program validates as a boolean (zod object Ne({enabledByDefault:M()})); readers use ??!1. Read at chunk-b9w9fqw6.js:6444 and chunk-b9w9fqw6.js:6083 and chunk-1yfzbet8.js:33979."
+			"note": "Written from enabledByDefault, which the program validates as a boolean (zod object Ne({enabledByDefault:M()})); readers use ??!1. Read at chunk-hfhpaczj.js:6483 and chunk-hfhpaczj.js:6122 and chunk-s56g10ck.js:34230."
 		},
 		"hasCompletedClaudeInChromeOnboarding": {
 			"schema": {
@@ -235,14 +235,14 @@
 			"anchors": [
 				"\"showStatusInTerminalTab\",\"taskCompleteNotifEnabled\",\"inputNeededNotifEnabled\""
 			],
-			"note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes. Read at chunk-aq3ms068.js:56822."
+			"note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes. Read at chunk-865at33z.js:57205."
 		},
 		"autoAddRemoteControlDaemonWorker": {
 			"schema": {},
 			"anchors": [
 				"\"autoUploadSessions\",\"autoAddRemoteControlDaemonWorker\",\"remoteDialogSeen\""
 			],
-			"note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes. Read at chunk-aq3ms068.js:57234."
+			"note": "Only a name in the global config key list (xzr, tested by isGlobalConfigKey). No code in this build reads or writes the key as a property, so the program gives it no type and keeps any value a user writes. Read at chunk-865at33z.js:57617."
 		}
 	}
 }

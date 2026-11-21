@@ -118,6 +118,7 @@ The docs list the causes in [Troubleshoot a Mod](https://code.claude.com/docs/en
 | [Files, Store, and State](calls/fs-store-state.md) | `$.fs`, `$.store`, `$.state`, and the state helpers. |
 | [Clock, HTTP, Process, Env, and Settings](calls/clock-http-process-env-settings.md) | `$.clock`, `$.http`, `$.process`, `$.env`, `$.settings`. |
 | [Telemetry](calls/telemetry.md) | `$.telemetry`, `telemetry.log`, `telemetry.mark`. |
+| [Version Control](calls/vcs.md) | `$.vcs`, `vcs.detect`, `vcs.diff`, `vcs.isolate`, `vcs.list`, `vcs.status`, `vcs.release`. |
 | [Classic Events](events/classic-events.md) | The `classic.*` events of the settings hooks. |
 | [The `claude-code/testing` Module](calls/testing.md) | `test`, `describe`, `expect`, `mock`, `tier`, `$.ui.mount`. |
 
@@ -169,6 +170,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `${…}: returned` | <Undocumented /> | A render hook returned a drawing that is not allowed. | It holds a Proxy or a `vm` context, a function where plain data goes, an object that is not plain data, or a Client or element that it did not draw. |
 | `${…} after register() returned`, `${…} called twice`, `${…} takes a function` | <Undocumented /> | A `.catch` call on a registration broke a rule. | `.catch()` is for `register()`, a registration takes one `.catch`, and the argument is a function `($, e, next)`. |
 | `${…}: ${…}:` | <Undocumented /> | A refused or failed call from a plugin. | The text names the call and the reason. A `socketPath` is not absolute, has a NUL byte, or is a network location. A URL is not valid, is not http or https, or has credentials. A request body is over the limit, an auth handle is unknown (the text ends in `UNKNOWN_HANDLE`), there were too many redirects, or no complete answer came in time. `$.process.hookEnv` is called for a plugin that is not synced (`NOT_SYNCED`).[^handle-codes] |
+| `A vcs.isolate hook refused`, `Cannot use the ${…} hook's folder`, `no WorktreeCreate hook is enabled` | <Undocumented /> | A `vcs.isolate` hook answered with a refusal, or with a folder that Claude Code cannot use. | See [Errors on the Version Control page](calls/vcs.md#errors). |
 
 ## Related Pages
 
@@ -177,12 +179,12 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tier-327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, the text of `Tier`.
-[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
-[^prompt-edit]: The program, `chunk-qsd8sbe8.js:8505`.
-[^rollout]: The program, `chunk-aq3ms068.js:34650`. The server flag is `tengu_plugin_hooks_modules`.
-[^re-entry]: The program, `chunk-6h88xj3m.js:351`.
-[^paint]: The program, `chunk-qsd8sbe8.js:13334`.
-[^env-set-codes]: The program, `chunk-g8fcpzhr.js:568` (`OUT_OF_STEP`), `chunk-g8fcpzhr.js:568` (`HOST_RULE`), `chunk-g8fcpzhr.js:568` (`PINNED`), `chunk-g8fcpzhr.js:568` (`HELD`), `chunk-g8fcpzhr.js:606` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-g8fcpzhr.js:739` (`NOT_WRITTEN` again, in the `config.set` source branch).
-[^hooks-name]: The program, `chunk-hg1yqkjk.js:87387` (`next.to`), `chunk-hg1yqkjk.js:88210` (`hooks module not loaded`, `policy/scan`), and `chunk-hg1yqkjk.js:89238` (`the engine's own chain member`) and `chunk-hg1yqkjk.js:89242` (`a name that starts with`). The prefix is the constant `hook:` at `chunk-qsd8sbe8.js:2395`. The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
-[^handle-codes]: The program, `chunk-g8fcpzhr.js:644` (`UNKNOWN_HANDLE`) and `chunk-g8fcpzhr.js:644` (`NOT_SYNCED`).
+[^tier-327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, the text of `Tier`.
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `Tier`, `RenderSurface`, `PluginRegisterUses`, `SessionCost`, `ToolDescribeInput`, and `UiPointerResult`.
+[^prompt-edit]: The program, `chunk-0w2wb7gk.js:8608`.
+[^rollout]: The program, `chunk-865at33z.js:34948`. The server flag is `tengu_plugin_hooks_modules`.
+[^re-entry]: The program, `chunk-yg9g0473.js:349`.
+[^paint]: The program, `chunk-0w2wb7gk.js:13770`.
+[^env-set-codes]: The program, `chunk-t9sq3azb.js:583` (`OUT_OF_STEP`), `chunk-t9sq3azb.js:583` (`HOST_RULE`), `chunk-t9sq3azb.js:583` (`PINNED`), `chunk-t9sq3azb.js:583` (`HELD`), `chunk-t9sq3azb.js:621` (`NO_ROW`, `LOCKED`, `NOT_WRITTEN`, and the `config.set: <code>` text), and `chunk-t9sq3azb.js:756` (`NOT_WRITTEN` again, in the `config.set` source branch).
+[^hooks-name]: The program, `chunk-bzyb60p0.js:88524` (`next.to`), `chunk-bzyb60p0.js:89347` (`hooks module not loaded`, `policy/scan`), and `chunk-bzyb60p0.js:90375` (`the engine's own chain member`) and `chunk-bzyb60p0.js:90379` (`a name that starts with`). The prefix is the constant `hook:` at `chunk-0w2wb7gk.js:2421`. The type file `schemas/claude-code.d.ts`, `ToolCheckInput`, names the prefix `hook:`.
+[^handle-codes]: The program, `chunk-t9sq3azb.js:659` (`UNKNOWN_HANDLE`) and `chunk-t9sq3azb.js:659` (`NOT_SYNCED`).

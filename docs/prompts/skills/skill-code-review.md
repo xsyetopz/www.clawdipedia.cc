@@ -14,7 +14,7 @@ Bundled skill. Captured from the program with `PROBE-ARG`, the argument the test
 
 ## How to Override It
 
-Create `.claude/skills/code-review/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-hg1yqkjk.js:190384`, `chunk-6d5r944q.js:115`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-hg1yqkjk.js:279997`). See [Override a Prompt](../other/override.md).
+Create `.claude/skills/code-review/SKILL.md` with the same name. The program lists skill files from the skill folders (`skillDirCommands`) before bundled skills (`bundledSkills`) and uses the first command with a matching name, so your file replaces this text (The program, `chunk-bzyb60p0.js:192808`, `chunk-8704k7wd.js:23`). It adds a `Base directory for this skill:` line above your skill text (The program, `chunk-bzyb60p0.js:283166`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
@@ -153,7 +153,7 @@ The text above is the variant the capture produced. The program builds other var
 
 ### Phase 0 With Origin/HEAD
 
-The program picks the model family's cell, and the cell picks the text. For a model that is not `claude-sonnet-5`, `claude-opus-4-8`, or `claude-opus-5`, the `default` family applies. Its cells are `bugs-low-v1`, `bugs-conventions-v1`, `bugs-conventions-xhigh-v1`, and `bugs-conventions-max-v1` (The program, `chunk-z758pdbe.js:2426`, `chunk-z758pdbe.js:2441`). The `bugs-conventions-v1` cell, for example, uses this `Phase 0` instead of the one shown above (The program, `chunk-z758pdbe.js:1552`, `chunk-z758pdbe.js:2368`).
+The program picks the model family's cell, and the cell picks the text. For a model that is not `claude-sonnet-5`, `claude-opus-4-8`, or `claude-opus-5`, the `default` family applies. Its cells are `bugs-low-v1`, `bugs-conventions-v1`, `bugs-conventions-xhigh-v1`, and `bugs-conventions-max-v1` (The program, `chunk-424x9gf0.js:2429`, `chunk-424x9gf0.js:2444`). The `bugs-conventions-v1` cell, for example, uses this `Phase 0` instead of the one shown above (The program, `chunk-424x9gf0.js:1555`, `chunk-424x9gf0.js:2371`).
 
 ````text
 ## Phase 0 — Gather the diff
@@ -172,11 +172,11 @@ commit. If a PR number, branch name, or file path was passed as an argument,
 review that target instead. Treat this diff as the review scope.
 ````
 
-The `low` text in these cells also reads `git diff origin/HEAD...HEAD` instead of `git diff @{upstream}...HEAD` (The program, `chunk-z758pdbe.js:1889`).
+The `low` text in these cells also reads `git diff origin/HEAD...HEAD` instead of `git diff @{upstream}...HEAD` (The program, `chunk-424x9gf0.js:1892`).
 
 ### Pull Request or Merge Request Target
 
-When the argument is a pull request number, a GitHub pull request URL, or, with a GitLab project, a merge request number, the program adds a block after the `Review target:` line. It names the target and gives the command that reads its diff: `gh pr diff` for GitHub or `glab mr diff` for GitLab, with the number after it (The program, `chunk-z758pdbe.js:2588`, `chunk-z758pdbe.js:2599`, `chunk-z758pdbe.js:2964`). The block starts like this, with the target name and the command filled in:
+When the argument is a pull request number, a GitHub pull request URL, or, with a GitLab project, a merge request number, the program adds a block after the `Review target:` line. It names the target and gives the command that reads its diff: `gh pr diff` for GitHub or `glab mr diff` for GitLab, with the number after it (The program, `chunk-424x9gf0.js:2591`, `chunk-424x9gf0.js:2602`, `chunk-424x9gf0.js:2967`). The block starts like this, with the target name and the command filled in:
 
 ````text
 That target is <name>, and its own diff is this review's scope. Get the diff with this command, run alone, with nothing chained, piped or redirected:
@@ -186,14 +186,14 @@ That target is <name>, and its own diff is this review's scope. Get the diff wit
 It replaces every `git diff` command that the instructions below give for gathering the diff.
 ````
 
-The block goes on to tell the model not to trust local files that lack the diff's added lines, and to give each subagent the diff itself. It also gives a fixed sentence to use if the command fails. With `--fix`, or for a URL target, the model replies "so nothing was reviewed." and posts nothing (The program, `chunk-z758pdbe.js:2626`). With `--comment`, it says "so this review and its comments are of the checked-out code." and reviews the checked-out code (The program, `chunk-z758pdbe.js:2628`). Otherwise it says "This review is of the checked-out branch instead" and reviews the checked-out branch (The program, `chunk-z758pdbe.js:2629`).
+The block goes on to tell the model not to trust local files that lack the diff's added lines, and to give each subagent the diff itself. It also gives a fixed sentence to use if the command fails. With `--fix`, or for a URL target, the model replies "so nothing was reviewed." and posts nothing (The program, `chunk-424x9gf0.js:2629`). With `--comment`, it says "so this review and its comments are of the checked-out code." and reviews the checked-out code (The program, `chunk-424x9gf0.js:2631`). Otherwise it says "This review is of the checked-out branch instead" and reviews the checked-out branch (The program, `chunk-424x9gf0.js:2632`).
 
 ### Level Line
 
-When the session declares the `ReportFindings` tool, and the cell name starts with `bugs-`, the program adds one more instruction (The program, `chunk-z758pdbe.js:2864`, `chunk-z758pdbe.js:2868`):
+When the session declares the `ReportFindings` tool, and the cell name starts with `bugs-`, the program adds one more instruction (The program, `chunk-424x9gf0.js:2867`, `chunk-424x9gf0.js:2871`):
 
 ````text
 In every ReportFindings call for this review, set `level` to `<level>`.
 ````
 
-`<level>` is the effort level that the run uses, such as `high`. The program declares the tool to the skill when the environment variable `CLAUDE_CODE_REPORT_FINDINGS` is set. It skips the tool when the print output format is `text` or `json`. The format is the value of `--output-format` in print mode (`-p`), and its default is `text`; `stream-json` does not skip the tool. (The program, `chunk-z758pdbe.js:2509`, `chunk-z758pdbe.js:2512`, `chunk-txash88y.js:2039` (`--output-format` falls back to `"text"`), `chunk-txash88y.js:3401` (`--output-format <format>`, with the choices `text`, `json`, and `stream-json`), and `chunk-kgzzwvwc.js:7023-7025` (`printOutputFormat`).)
+`<level>` is the effort level that the run uses, such as `high`. The program declares the tool to the skill when the environment variable `CLAUDE_CODE_REPORT_FINDINGS` is set. It skips the tool when the print output format is `text` or `json`. The format is the value of `--output-format` in print mode (`-p`), and its default is `text`; `stream-json` does not skip the tool. (The program, `chunk-424x9gf0.js:2512`, `chunk-424x9gf0.js:2515`, `chunk-rckksdmd.js:2042` (`--output-format` falls back to `"text"`), `chunk-rckksdmd.js:3411` (`--output-format <format>`, with the choices `text`, `json`, and `stream-json`), and `chunk-f9x2f6cx.js:7025-7027` (`printOutputFormat`).)

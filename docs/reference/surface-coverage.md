@@ -1,10 +1,10 @@
 ---
 title: Surface Coverage
-description: Every item that the Claude Code 2.1.329 program holds, by kind, with the page that covers it.
+description: Every item that the Claude Code 2.1.330 program holds, by kind, with the page that covers it.
 sidebar_position: 11
 ---
 
-The program of Claude Code `2.1.329` holds 10514 items in 18 kinds.
+The program of Claude Code `2.1.330` holds 10532 items in 18 kinds.
 Each row below names the page that covers an item, or the reason the item is left out.
 `bun run surface` makes this page from `schemas/surface.json`, so do not edit it by hand.
 
@@ -14,23 +14,23 @@ Each row below names the page that covers an item, or the reason the item is lef
 | --- | --- | --- | --- | --- | --- |
 | [Betas](#betas) | 56 | 56 | 0 | 0 | 0 |
 | [API Endpoints](#api-endpoints) | 461 | 133 | 18 | 310 | 0 |
-| [Environment Variables](#environment-variables) | 2117 | 1586 | 20 | 511 | 0 |
-| [Error Texts](#error-texts) | 4220 | 49 | 2328 | 1843 | 0 |
+| [Environment Variables](#environment-variables) | 2130 | 1598 | 20 | 512 | 0 |
+| [Error Texts](#error-texts) | 4196 | 60 | 2336 | 1800 | 0 |
 | [Files](#files) | 78 | 56 | 0 | 22 | 0 |
-| [CLI Flags](#cli-flags) | 430 | 128 | 302 | 0 | 0 |
-| [Gates](#gates) | 1819 | 0 | 0 | 1819 | 0 |
+| [CLI Flags](#cli-flags) | 431 | 128 | 303 | 0 | 0 |
+| [Gates](#gates) | 1834 | 0 | 0 | 1834 | 0 |
 | [Hook Events](#hook-events) | 33 | 33 | 0 | 0 | 0 |
 | [Keybindings](#keybindings) | 207 | 66 | 141 | 0 | 0 |
-| [Mod API](#mod-api) | 257 | 257 | 0 | 0 | 0 |
+| [Mod API](#mod-api) | 269 | 269 | 0 | 0 | 0 |
 | [Models](#models) | 76 | 48 | 20 | 8 | 0 |
 | [OpenTelemetry Events](#opentelemetry-events) | 28 | 28 | 0 | 0 | 0 |
 | [Permission Rules](#permission-rules) | 6 | 6 | 0 | 0 | 0 |
 | [Settings](#settings) | 205 | 202 | 0 | 3 | 0 |
 | [Nested Setting Keys](#nested-setting-keys) | 203 | 159 | 44 | 0 | 0 |
-| [Slash Commands](#slash-commands) | 139 | 103 | 30 | 6 | 0 |
+| [Slash Commands](#slash-commands) | 140 | 104 | 30 | 6 | 0 |
 | [Subcommands](#subcommands) | 81 | 7 | 74 | 0 | 0 |
 | [Tools](#tools) | 98 | 92 | 0 | 6 | 0 |
-| Total | 10514 | 3009 | 2977 | 4528 | 0 |
+| Total | 10532 | 3045 | 2986 | 4501 | 0 |
 
 ## Betas
 
@@ -116,9 +116,9 @@ Items: 461.
 | `/api/claude_code_penguin_mode` | [Endpoints and Headers](api/endpoints.md) |
 | `/api/claude_code_shared_session_transcripts` | [Endpoints and Headers](api/endpoints.md) |
 | `/api/cowork/widgets_mcp` | [Endpoints and Headers](api/endpoints.md) |
-| `/api/desktop/` | Excluded: A link (`/api/desktop/`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:750); Claude Code does not call it. The other use is a path in the Claude Desktop app's update table (chunk-5jz97z42.js:75). |
-| `/api/desktop/darwin/universal/dmg/latest/redirect` | Excluded: A link (`/api/desktop/`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:750); Claude Code does not call it. The other use is a path in the Claude Desktop app's update table (chunk-5jz97z42.js:75). |
-| `/api/desktop/win32/x64/exe/latest/redirect` | Excluded: A link (`/api/desktop/`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:750); Claude Code does not call it. The other use is a path in the Claude Desktop app's update table (chunk-5jz97z42.js:75). |
+| `/api/desktop/` | Excluded: A link (`/api/desktop/`) that the program prints or opens in a browser (chunk-ebn67vqt.js:779); Claude Code does not call it. The other use is a path in the Claude Desktop app's update table (chunk-t2enjxg6.js:75). |
+| `/api/desktop/darwin/universal/dmg/latest/redirect` | Excluded: A link (`/api/desktop/`) that the program prints or opens in a browser (chunk-ebn67vqt.js:779); Claude Code does not call it. The other use is a path in the Claude Desktop app's update table (chunk-t2enjxg6.js:75). |
+| `/api/desktop/win32/x64/exe/latest/redirect` | Excluded: A link (`/api/desktop/`) that the program prints or opens in a browser (chunk-ebn67vqt.js:779); Claude Code does not call it. The other use is a path in the Claude Desktop app's update table (chunk-t2enjxg6.js:75). |
 | `/api/directory/plugins` | [Endpoints and Headers](api/endpoints.md) |
 | `/api/directory/server-urls` | [Endpoints and Headers](api/endpoints.md) |
 | `/api/directory/servers?${…}` | [Endpoints and Headers](api/endpoints.md) |
@@ -210,10 +210,10 @@ Items: 461.
 | `/v1/agents/${…}?beta=true` | Excluded: A path of the embedded Anthropic SDK client; the Claude Code loop does not call it (see the note under Account and Service Endpoints). |
 | `/v1/agents?beta=true` | Excluded: A path of the embedded Anthropic SDK client; the Claude Code loop does not call it (see the note under Account and Service Endpoints). |
 | `/v1/claude/test/` | Excluded: A path prefix in an allow list next to `/v1/design/`, not a call. |
-| `/v1/claude/test/mcp` | Excluded: A path in a lookup of the address ids of Anthropic-hosted MCP servers, next to `/v1/design/mcp` (chunk-hg1yqkjk.js:75598); not a call, and no page uses it. |
+| `/v1/claude/test/mcp` | Excluded: A path in a lookup of the address ids of Anthropic-hosted MCP servers, next to `/v1/design/mcp` (chunk-vhpt9t1j.js:103); not a call, and no page uses it. |
 | `/v1/claudeai-agents/mcp` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code` | [Endpoints and Headers](api/endpoints.md) |
-| `/v1/code/` | Excluded: A path prefix (`/v1/code/`) that the program joins or matches, not a call (chunk-73rzabst.js:226). |
+| `/v1/code/` | Excluded: A path prefix (`/v1/code/`) that the program joins or matches, not a call (chunk-2mwshd9r.js:226). |
 | `/v1/code/.well-known/jwks.json` | Excluded: A key set path of the cloud code service; no source states its use. |
 | `/v1/code/agent-proxy` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code/auth/refresh` | [Endpoints and Headers](api/endpoints.md) |
@@ -227,15 +227,15 @@ Items: 461.
 | `/v1/code/github/get-batch-branch-status` | Excluded: Covered by the `/v1/code/github/*` row of Account and Service Endpoints; no source states each sub-path. |
 | `/v1/code/github/import-token` | Excluded: Covered by the `/v1/code/github/*` row of Account and Service Endpoints; no source states each sub-path. |
 | `/v1/code/github/post-review-comment` | Excluded: Covered by the `/v1/code/github/*` row of Account and Service Endpoints; no source states each sub-path. |
-| `/v1/code/local/` | Excluded: A path prefix (`/v1/code/local/`) that the program joins or matches, not a call (chunk-73rzabst.js:545). |
+| `/v1/code/local/` | Excluded: A path prefix (`/v1/code/local/`) that the program joins or matches, not a call (chunk-2mwshd9r.js:545). |
 | `/v1/code/local/memory/credential` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code/local/memory/mounts` | [Endpoints and Headers](api/endpoints.md) |
-| `/v1/code/mcp/` | Excluded: A path prefix (`/v1/code/mcp/`) that the program joins or matches, not a call (chunk-73rzabst.js:545). |
+| `/v1/code/mcp/` | Excluded: A path prefix (`/v1/code/mcp/`) that the program joins or matches, not a call (chunk-2mwshd9r.js:545). |
 | `/v1/code/mcp/ccr-artifacts` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code/mcp/cowork` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code/mcp/hearthbot` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code/mcp/meta` | [Endpoints and Headers](api/endpoints.md) |
-| `/v1/code/memory/` | Excluded: A path prefix (`/v1/code/memory/`) that the program joins or matches, not a call (chunk-32gs4rex.js:2148). |
+| `/v1/code/memory/` | Excluded: A path prefix (`/v1/code/memory/`) that the program joins or matches, not a call (chunk-p1ewvgeh.js:2178). |
 | `/v1/code/memory/channel/${…}/memories` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/code/runners/self-hosted/deregister` | [/reference/api/endpoints#self-hosted-runner-paths](/reference/api/endpoints#self-hosted-runner-paths) |
 | `/v1/code/runners/self-hosted/pools` | Excluded: The protocol between a self-hosted runner and the service (register, poll, hints, release, requeue, pools); no source states each call. |
@@ -371,7 +371,7 @@ Items: 461.
 | `/v1/models?limit=1000` | [/reference/api/endpoints#model-endpoints](/reference/api/endpoints#model-endpoints) |
 | `/v1/oauth/hello` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/oauth/token` | [Endpoints and Headers](api/endpoints.md) |
-| `/v1/organizations/` | Excluded: A path prefix (`/v1/organizations/`) that the program joins or matches, not a call (chunk-79c0jxd4.js:129). |
+| `/v1/organizations/` | Excluded: A path prefix (`/v1/organizations/`) that the program joins or matches, not a call (chunk-vcq9tvvq.js:129). |
 | `/v1/organizations/analytics/cost` | [Endpoints and Headers](api/endpoints.md) |
 | `/v1/organizations/api_keys/${…}?beta=true` | Excluded: A path of the embedded Anthropic SDK client; the Claude Code loop does not call it (see the note under Account and Service Endpoints). |
 | `/v1/organizations/api_keys?beta=true` | Excluded: A path of the embedded Anthropic SDK client; the Claude Code loop does not call it (see the note under Account and Service Endpoints). |
@@ -461,9 +461,9 @@ Items: 461.
 | `/v1/vaults/${…}?beta=true` | Excluded: A path of the embedded Anthropic SDK client; the Claude Code loop does not call it (see the note under Account and Service Endpoints). |
 | `/v1/vaults?beta=true` | Excluded: A path of the embedded Anthropic SDK client; the Claude Code loop does not call it (see the note under Account and Service Endpoints). |
 | `https://anthropic.com/claude-code/plugin.schema.json` | [Endpoints and Headers](api/endpoints.md) |
-| `https://anthropic.com/legal/privacy` | Excluded: A link (`https://anthropic.com/legal/terms`) that the program prints or opens in a browser (chunk-49pak1a4.js:695); Claude Code does not call it. |
-| `https://anthropic.com/legal/terms` | Excluded: A link (`https://anthropic.com/legal/terms`) that the program prints or opens in a browser (chunk-49pak1a4.js:695); Claude Code does not call it. |
-| `https://anthropic.com/supported-countries` | Excluded: A link that the program prints or opens in a browser (chunk-5z9daa9a.js:975); Claude Code does not call it. |
+| `https://anthropic.com/legal/privacy` | Excluded: A link (`https://anthropic.com/legal/terms`) that the program prints or opens in a browser (chunk-z0tmmwht.js:695); Claude Code does not call it. |
+| `https://anthropic.com/legal/terms` | Excluded: A link (`https://anthropic.com/legal/terms`) that the program prints or opens in a browser (chunk-z0tmmwht.js:695); Claude Code does not call it. |
+| `https://anthropic.com/supported-countries` | Excluded: A link that the program prints or opens in a browser (chunk-stg0yq3a.js:1004); Claude Code does not call it. |
 | `https://api-staging.anthropic.com` | Excluded: A host in an internal environment list (staging or FedStart); no source states its use. |
 | `https://api.anthropic.com` | [Endpoints and Headers](api/endpoints.md) |
 | `https://api.anthropic.com/` | [Endpoints and Headers](api/endpoints.md) |
@@ -472,66 +472,66 @@ Items: 461.
 | `https://api.anthropic.com/api/oauth/claude_cli/roles` | [Endpoints and Headers](api/endpoints.md) |
 | `https://api.anthropic.com/api/oauth/cri` | [Endpoints and Headers](api/endpoints.md) |
 | `https://beacon.claude-ai.staging.ant.dev` | Excluded: A host in an internal environment list (staging or FedStart); no source states its use. |
-| `https://clau.de/chrome/permissions` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/chrome/reconnect` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/chrome/tab/` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/desktop` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/desktop-3p` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/enterprise` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/radio` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
-| `https://clau.de/wrap-up` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ng4dqxv7.js:746); Claude Code does not call it. |
+| `https://clau.de/chrome/permissions` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/chrome/reconnect` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/chrome/tab/` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/desktop` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/desktop-3p` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/enterprise` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/radio` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
+| `https://clau.de/wrap-up` | Excluded: A link (`https://clau.de/desktop`) that the program prints or opens in a browser (chunk-ebn67vqt.js:775); Claude Code does not call it. |
 | `https://claude-ai.staging.ant.dev` | Excluded: A host in an internal environment list (staging or FedStart); no source states its use. |
 | `https://claude.ai` | [Endpoints and Headers](api/endpoints.md) |
-| `https://claude.ai/admin-settings/usage` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/api/desktop/darwin/universal/dmg/latest/redirect` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/api/desktop/win32/x64/exe/latest/redirect` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/chrome` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/code` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/code/artifact/` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/code/onboarding?magic=env-setup` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/design?utm_source=claude_code&utm_medium=tip&utm_campaign=tengu_cedar_plume` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/mobile?entrypoint=claude_code_cli` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
+| `https://claude.ai/admin-settings/usage` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/api/desktop/darwin/universal/dmg/latest/redirect` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/api/desktop/win32/x64/exe/latest/redirect` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/chrome` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/code` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/code/artifact/` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/code/onboarding?magic=env-setup` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/design?utm_source=claude_code&utm_medium=tip&utm_campaign=tengu_cedar_plume` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/mobile?entrypoint=claude_code_cli` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
 | `https://claude.ai/oauth/claude-code-client-metadata` | [Endpoints and Headers](api/endpoints.md) |
-| `https://claude.ai/restricted` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/settings/data-privacy-controls` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/settings/usage` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.ai/settings/usage?from=cc_cli_limit_message` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-49pak1a4.js:649); Claude Code does not call it. |
-| `https://claude.com/blog/the-advisor-strategy` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-5kgxbvye.js:698); Claude Code does not call it. |
+| `https://claude.ai/restricted` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/settings/data-privacy-controls` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/settings/usage` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.ai/settings/usage?from=cc_cli_limit_message` | Excluded: A link (`https://claude.ai/settings/data-privacy-controls`) that the program prints or opens in a browser (chunk-z0tmmwht.js:649); Claude Code does not call it. |
+| `https://claude.com/blog/the-advisor-strategy` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-bbk7fqmg.js:725); Claude Code does not call it. |
 | `https://claude.com/cai/oauth/authorize` | [Endpoints and Headers](api/endpoints.md) |
-| `https://claude.com/claude-code` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-5kgxbvye.js:698); Claude Code does not call it. |
+| `https://claude.com/claude-code` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-bbk7fqmg.js:725); Claude Code does not call it. |
 | `https://claude.com/docs/claude-tag/overview.md` | [Endpoints and Headers](api/endpoints.md) |
 | `https://claude.com/docs/llms.txt` | [Endpoints and Headers](api/endpoints.md) |
-| `https://claude.com/docs/third-party/claude-desktop` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-5kgxbvye.js:698); Claude Code does not call it. |
-| `https://claude.com/docs/third-party/claude-desktop/gateway#auto-mode-checks` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-5kgxbvye.js:698); Claude Code does not call it. |
-| `https://claude.com/download#mobile` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-5kgxbvye.js:698); Claude Code does not call it. |
-| `https://claude.com/enterprise` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-5kgxbvye.js:698); Claude Code does not call it. |
+| `https://claude.com/docs/third-party/claude-desktop` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-bbk7fqmg.js:725); Claude Code does not call it. |
+| `https://claude.com/docs/third-party/claude-desktop/gateway#auto-mode-checks` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-bbk7fqmg.js:725); Claude Code does not call it. |
+| `https://claude.com/download#mobile` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-bbk7fqmg.js:725); Claude Code does not call it. |
+| `https://claude.com/enterprise` | Excluded: A link (`https://claude.com/blog/the-advisor-strategy`) that the program prints or opens in a browser (chunk-bbk7fqmg.js:725); Claude Code does not call it. |
 | `https://claude.fedstart.com` | Excluded: A host in an internal environment list (staging or FedStart); no source states its use. |
-| `https://code.claude.com/docs/en` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/auto-mode-classifier-billing` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/changelog` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/chrome` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/claude-code-on-the-web` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
+| `https://code.claude.com/docs/en` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/auto-mode-classifier-billing` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/changelog` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/chrome` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/claude-code-on-the-web` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
 | `https://code.claude.com/docs/en/claude_code_docs_map.md` | [Endpoints and Headers](api/endpoints.md) |
-| `https://code.claude.com/docs/en/commands` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/costs` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/data-usage#session-quality-surveys` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/fast-mode` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/gitlab-ci-cd` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/hooks` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/keybindings` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/mcp` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/memory` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/microsoft-foundry` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/model-config` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/overview` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/permission-modes` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/permission-modes#server-side-classifier-review` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/sandboxing` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/sandboxing#configure-sandboxing` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/security` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/sub-agents` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/en/vs-code#install-the-extension` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
-| `https://code.claude.com/docs/s/claude-code-auto-mode` | Excluded: A link that the program prints or opens in a browser (chunk-0a2wm2a2.js:4007); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/commands` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/costs` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/data-usage#session-quality-surveys` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/fast-mode` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/gitlab-ci-cd` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/hooks` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/keybindings` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/mcp` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/memory` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/microsoft-foundry` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/model-config` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/overview` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/permission-modes` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/permission-modes#server-side-classifier-review` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/sandboxing` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/sandboxing#configure-sandboxing` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/security` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/sub-agents` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/en/vs-code#install-the-extension` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
+| `https://code.claude.com/docs/s/claude-code-auto-mode` | Excluded: A link that the program prints or opens in a browser (chunk-tvttgr51.js:3029); Claude Code does not call it. |
 | `https://downloads.claude.ai/claude-code-releases` | [Endpoints and Headers](api/endpoints.md) |
 | `https://downloads.claude.ai/claude-code-releases/plugins/claude-plugins-official` | [Endpoints and Headers](api/endpoints.md) |
 | `https://downloads.claude.ai/model-catalog/v1/catalog.json` | [Endpoints and Headers](api/endpoints.md) |
@@ -549,23 +549,23 @@ Items: 461.
 | `https://platform.claude.com/v1/oauth/token` | [Endpoints and Headers](api/endpoints.md) |
 | `https://preview.claude.ai` | [Endpoints and Headers](api/endpoints.md) |
 | `https://status.claude.com` | [Endpoints and Headers](api/endpoints.md) |
-| `https://support.claude.com/en/articles/12429409` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/12875061-claude-code-guest-passes` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/13456702-claude-code-guest-passes` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/14604842-real-time-cyber-safeguards-on-claude` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/15363606` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/16049681` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/17440474` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://support.claude.com/en/articles/8106465` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-aq3ms068.js:13564); Claude Code does not call it. |
-| `https://www.anthropic.com/legal/consumer-terms` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-49pak1a4.js:689); Claude Code does not call it. |
-| `https://www.anthropic.com/legal/promotion-terms` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-49pak1a4.js:689); Claude Code does not call it. |
-| `https://www.anthropic.com/news/` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-49pak1a4.js:689); Claude Code does not call it. |
-| `https://www.anthropic.com/news/updates-to-our-consumer-terms` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-49pak1a4.js:689); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/12429409` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/12875061-claude-code-guest-passes` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/13456702-claude-code-guest-passes` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/14604842-real-time-cyber-safeguards-on-claude` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/15363606` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/16049681` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/17440474` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://support.claude.com/en/articles/8106465` | Excluded: A link (`https://support.claude.com/en/articles/12429409-extra-usage-for-paid-claude-plans`) that the program prints or opens in a browser (chunk-865at33z.js:13632); Claude Code does not call it. |
+| `https://www.anthropic.com/legal/consumer-terms` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-z0tmmwht.js:689); Claude Code does not call it. |
+| `https://www.anthropic.com/legal/promotion-terms` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-z0tmmwht.js:689); Claude Code does not call it. |
+| `https://www.anthropic.com/news/` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-z0tmmwht.js:689); Claude Code does not call it. |
+| `https://www.anthropic.com/news/updates-to-our-consumer-terms` | Excluded: A link (`https://www.anthropic.com/news/updates-to-our-consumer-terms`) that the program prints or opens in a browser (chunk-z0tmmwht.js:689); Claude Code does not call it. |
 
 ## Environment Variables
 
-Items: 2117.
+Items: 2130.
 
 | Item | Where |
 | --- | --- |
@@ -578,9 +578,9 @@ Items: 2117.
 | `AI_AGENT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `ALACRITTY_LOG` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `ALACRITTY_WINDOW_ID` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `ALLOW_ANT_COMPUTER_USE_MCP` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ALLOW_ANT_COMPUTER_USE_MCP` only in its table of environment names (chunk-gvhwnc7g.js:789), and no code that reads it by name was found. It is not meant for users. |
+| `ALLOW_ANT_COMPUTER_USE_MCP` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ALLOW_ANT_COMPUTER_USE_MCP` only in its table of environment names (chunk-c203g5kd.js:796), and no code that reads it by name was found. It is not meant for users. |
 | `ALLUSERSPROFILE` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `ALL_INPUTS` | Excluded: Variable of the OS or another tool. Claude Code only names `ALL_INPUTS` in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. The scrub lists are at chunk-rjw4t165.js:630 and chunk-rjw4t165.js:944, and the scrub compares the name at chunk-rjw4t165.js:1883. |
+| `ALL_INPUTS` | Excluded: Variable of the OS or another tool. Claude Code only names `ALL_INPUTS` in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. The scrub lists are at chunk-9zdrdv25.js:629 and chunk-9zdrdv25.js:943, and the scrub compares the name at chunk-9zdrdv25.js:1882. |
 | `ALL_PROXY` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `ANACONDA_API_TOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `ANDROID_HOME` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -651,16 +651,16 @@ Items: 2117.
 | `ANTHROPIC_WORKSPACE_ID` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `ANTHROPIC_WORK_ID` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `ANTHROPIC_WORK_SECRET` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
-| `ANT_ARGS` | Excluded: Variable of the OS or another tool. Claude Code only names `ANT_ARGS` in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. The lists are at chunk-rjw4t165.js:1200 and chunk-h88tzssk.js:49. |
-| `ANT_CLAUDE_CODE_METRICS_ENDPOINT` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_CLAUDE_CODE_METRICS_ENDPOINT` only in its table of environment names (chunk-gvhwnc7g.js:115), and no code that reads it by name was found. It is not meant for users. |
+| `ANT_ARGS` | Excluded: Variable of the OS or another tool. Claude Code only names `ANT_ARGS` in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. The lists are at chunk-9zdrdv25.js:1199 and chunk-d70fgf5t.js:49. |
+| `ANT_CLAUDE_CODE_METRICS_ENDPOINT` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_CLAUDE_CODE_METRICS_ENDPOINT` only in its table of environment names (chunk-c203g5kd.js:116), and no code that reads it by name was found. It is not meant for users. |
 | `ANT_OPTS` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `ANT_OTEL_EXPORTER_OTLP_ENDPOINT` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
-| `ANT_OTEL_EXPORTER_OTLP_HEADERS` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
-| `ANT_OTEL_EXPORTER_OTLP_PROTOCOL` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
-| `ANT_OTEL_LOGS_EXPORTER` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
-| `ANT_OTEL_METRICS_EXPORTER` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
-| `ANT_OTEL_RESOURCE_ATTRIBUTES` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
-| `ANT_OTEL_TRACES_EXPORTER` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-rqs3939j.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-rqs3939j.js:456). It is not meant for users. |
+| `ANT_OTEL_EXPORTER_OTLP_ENDPOINT` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
+| `ANT_OTEL_EXPORTER_OTLP_HEADERS` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
+| `ANT_OTEL_EXPORTER_OTLP_PROTOCOL` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
+| `ANT_OTEL_LOGS_EXPORTER` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
+| `ANT_OTEL_METRICS_EXPORTER` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
+| `ANT_OTEL_RESOURCE_ATTRIBUTES` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
+| `ANT_OTEL_TRACES_EXPORTER` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `ANT_OTEL_LOGS_EXPORTER` in a list (chunk-gd77dyw4.js:454) and builds the ANT_ prefix of its OpenTelemetry names (chunk-gd77dyw4.js:456). It is not meant for users. |
 | `API_FORCE_IDLE_TIMEOUT` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `API_TIMEOUT_MS` | [Environment Variables](../configure/env-vars/index.md) |
 | `APPDATA` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -736,16 +736,14 @@ Items: 2117.
 | `BASH_MAX_OUTPUT_LENGTH` | [Environment Variables](../configure/env-vars/index.md) |
 | `BASH_MAX_TIMEOUT_MS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `BASH_SOURCE_PATH` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
-| `BAT_THEME` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `BETA_TRACING_ENDPOINT` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `BINSTAR_API_TOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `BLOCK_SIZE` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `BOTO_CONFIG` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `BOTO_PATH` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `BROWSER` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `BUF_BIGINT_DISABLE` | [Bundled Libraries](../configure/env-vars/bundled-libraries.md) |
-| `BUGHUNTER_DEV_BUNDLE_B64` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `BUGHUNTER_DEV_BUNDLE_B64`, but it is not meant for users (chunk-71kv8x50.js:1270). |
-| `BUGHUNTER_FLEET_SIZE` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `BUGHUNTER_FLEET_SIZE`, but it is not meant for users (chunk-g3fe0enm.js:53). |
+| `BUGHUNTER_DEV_BUNDLE_B64` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `BUGHUNTER_DEV_BUNDLE_B64`, but it is not meant for users (chunk-tb2czq5h.js:1303). |
+| `BUGHUNTER_FLEET_SIZE` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `BUGHUNTER_FLEET_SIZE`, but it is not meant for users (chunk-d28sbgqz.js:53). |
 | `BUILDKITE` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `BUNDLE_APP_CONFIG` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `BUNDLE_CONFIG` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -754,7 +752,7 @@ Items: 2117.
 | `BUN_CHROME_PATH` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `BUN_CONFIG_FILE` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `BUN_CONFIG_REGISTRY` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
-| `BUN_GC_TIMER_DISABLE` | Excluded: Bun runtime variable. The program only reads `BUN_GC_TIMER_DISABLE` to record the setting (chunk-9f0nxt59.js:42) and passes it through. Print cases env319a.plain.BUN_GC_TIMER_DISABLE.* gave the same request with and without it. |
+| `BUN_GC_TIMER_DISABLE` | Excluded: Bun runtime variable. The program only reads `BUN_GC_TIMER_DISABLE` to record the setting (chunk-axd2vhx2.js:42) and passes it through. Print cases env319a.plain.BUN_GC_TIMER_DISABLE.* gave the same request with and without it. |
 | `BUN_INSTALL` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `BUN_INSTALL_CACHE_DIR` | Excluded: Set or read by Claude Code for its own helper programs, sandbox, or built-in services. The code does not show an effect that a user can use or change, so it is left out. |
 | `BUN_OPTIONS` | [Bundled Libraries](../configure/env-vars/bundled-libraries.md) |
@@ -772,7 +770,7 @@ Items: 2117.
 | `CCR_AGENT_PROXY_FRAME_HOSTS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CCR_AGENT_PROXY_INCLUDE_HOSTS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CCR_AGENT_PROXY_JAVA_STORE_DIRECT_DISABLED` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CCR_AGENT_PROXY_MAX_BUSY_TUNNELS` | Excluded: Set by the remote host for the agent proxy. The program reads `CCR_AGENT_PROXY_MAX_BUSY_TUNNELS` and passes it to the agent proxy as its busy tunnel limit `maxBusyTunnels` (chunk-d1h726az.js:4514, chunk-d1h726az.js:4691). Print cases env319a.plain.CCR_AGENT_PROXY_MAX_BUSY_TUNNELS.* gave the same request. |
+| `CCR_AGENT_PROXY_MAX_BUSY_TUNNELS` | Excluded: Set by the remote host for the agent proxy. The program reads `CCR_AGENT_PROXY_MAX_BUSY_TUNNELS` and passes it to the agent proxy as its busy tunnel limit `maxBusyTunnels` (chunk-jnfvrctd.js:4516, chunk-jnfvrctd.js:4693). Print cases env319a.plain.CCR_AGENT_PROXY_MAX_BUSY_TUNNELS.* gave the same request. |
 | `CCR_AGENT_PROXY_NO_PROXY_LOCAL_ONLY` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CCR_AGENT_PROXY_NSS_RECORDS_DISABLED` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CCR_AGENT_PROXY_RECEIVE_GATE_DISABLED` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -794,7 +792,7 @@ Items: 2117.
 | `CCR_SESSION_PROFILE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CCR_SHR_SSE_HINTS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CCR_SPAWN_TIMESTAMP_MS` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `CCR_UPSTREAM_PROXY_ENABLED` | Excluded: Remote runner check. The program names `CCR_UPSTREAM_PROXY_ENABLED` in a list (chunk-5pbdvfsr.js:1335) and reads each name of that list from the server environment of a session (chunk-5pbdvfsr.js:1343), so that a runner with an agent proxy URL refuses a session on the hosted relay. It has no setting for it. |
+| `CCR_UPSTREAM_PROXY_ENABLED` | Excluded: Remote runner check. The program names `CCR_UPSTREAM_PROXY_ENABLED` in a list (chunk-ybxa8kcj.js:1335) and reads each name of that list from the server environment of a session (chunk-ybxa8kcj.js:1343), so that a runner with an agent proxy URL refuses a session on the hosted relay. It has no setting for it. |
 | `CDPATH` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `CF_PAGES` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `CGO_ENABLED` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
@@ -803,7 +801,7 @@ Items: 2117.
 | `CIRCLECI` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `CI_DEPLOY_USER` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `CI_REGISTRY_USER` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
-| `CLAUBBIT` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `CLAUBBIT`, but it is not meant for users (chunk-aq3ms068.js:50723). |
+| `CLAUBBIT` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `CLAUBBIT`, but it is not meant for users (chunk-865at33z.js:51394). |
 | `CLAUDECODE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_AFK_COUNTDOWN_MS` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_AFK_TIMEOUT_MS` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
@@ -841,7 +839,7 @@ Items: 2117.
 | `CLAUDE_BG_PTY_AUTH` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_BG_RENDEZVOUS_SOCK` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_BG_RV_AUTH` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
-| `CLAUDE_BG_SESSION_CREDENTIAL` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `CLAUDE_BG_SESSION_CREDENTIAL`, but it is not meant for users (chunk-qwnvprck.js:99). |
+| `CLAUDE_BG_SESSION_CREDENTIAL` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads `CLAUDE_BG_SESSION_CREDENTIAL`, but it is not meant for users (chunk-97tvwnfb.js:99). |
 | `CLAUDE_BG_SESSION_PERMISSION_RULES` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_BG_SILENT_PEER_TIMEOUT_MS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_BG_SOCKET_TOKENS_PATH` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
@@ -851,7 +849,7 @@ Items: 2117.
 | `CLAUDE_BG_TCC_DISCLAIMED` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_BG_WORKSPACE_TRUSTED` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_BRIDGE_BASE_URL` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_BRIDGE_OAUTH_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_BRIDGE_OAUTH_TOKEN` was found (chunk-gvhwnc7g.js:836). It has no known effect. |
+| `CLAUDE_BRIDGE_OAUTH_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_BRIDGE_OAUTH_TOKEN` was found (chunk-c203g5kd.js:836). It has no known effect. |
 | `CLAUDE_BRIDGE_REATTACH_GROUPING` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_BRIDGE_REATTACH_NO_BACKFILL` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_BRIDGE_REATTACH_OUTBOUND_ONLY` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -859,7 +857,7 @@ Items: 2117.
 | `CLAUDE_BRIDGE_REATTACH_OWNER_ORG` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_BRIDGE_REATTACH_SEQ` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_BRIDGE_REATTACH_SESSION` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_BRIDGE_SESSION_INGRESS_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_BRIDGE_SESSION_INGRESS_URL` was found (chunk-gvhwnc7g.js:844). It has no known effect. |
+| `CLAUDE_BRIDGE_SESSION_INGRESS_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_BRIDGE_SESSION_INGRESS_URL` was found (chunk-c203g5kd.js:844). It has no known effect. |
 | `CLAUDE_BYTE_STREAM_IDLE_TIMEOUT_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CHROME_CLASSIFIER_FLOOR` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CHROME_PAIRED_DEVICE_ID` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -894,13 +892,13 @@ Items: 2117.
 | `CLAUDE_CODE_API_KEY_FILE_DESCRIPTOR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_API_KEY_HELPER_TTL_MS` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_APPEND_PROMPT_HEAD` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_ARG_KEY_SHAPE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARG_KEY_SHAPE` by name was found (chunk-rjw4t165.js:1402). It has no known effect. |
+| `CLAUDE_CODE_ARG_KEY_SHAPE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARG_KEY_SHAPE` by name was found (chunk-9zdrdv25.js:1401). It has no known effect. |
 | `CLAUDE_CODE_ARTIFACT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
-| `CLAUDE_CODE_ARTIFACTS_API_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACTS_API_BASE_URL` was found (chunk-gvhwnc7g.js:856). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACTS_API_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACTS_API_BASE_URL` was found (chunk-c203g5kd.js:856). It has no known effect. |
 | `CLAUDE_CODE_ARTIFACTS_API_TOKEN` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_ARTIFACT_ASK_FIRST` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_ASSETS` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
-| `CLAUDE_CODE_ARTIFACT_ASSET_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_ASSET_BASE_URL` was found (chunk-gvhwnc7g.js:858). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACT_ASSET_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_ASSET_BASE_URL` was found (chunk-c203g5kd.js:858). It has no known effect. |
 | `CLAUDE_CODE_ARTIFACT_AUTO_OPEN` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_ARTIFACT_COMMENTS` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_COMMENTS_AUTOREACT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
@@ -913,7 +911,7 @@ Items: 2117.
 | `CLAUDE_CODE_ARTIFACT_FRESH_READ` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_HOT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_INHERITED_TYPE_GRANT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
-| `CLAUDE_CODE_ARTIFACT_LIVE_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_LIVE_BASE_URL` was found (chunk-gvhwnc7g.js:860). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACT_LIVE_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_LIVE_BASE_URL` was found (chunk-c203g5kd.js:860). It has no known effect. |
 | `CLAUDE_CODE_ARTIFACT_LIVE_WATCH` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_MCP` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_ARTIFACT_MULTI_FILE` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
@@ -926,25 +924,25 @@ Items: 2117.
 | `CLAUDE_CODE_ARTIFACT_PREVIEW_EMULATOR` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_PUBLISH_EDITS` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_QUICKSTART` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
-| `CLAUDE_CODE_ARTIFACT_REPL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_REPL` was found (chunk-gvhwnc7g.js:222). It has no known effect. |
-| `CLAUDE_CODE_ARTIFACT_ROOM` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_ROOM` was found (chunk-gvhwnc7g.js:223). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACT_REPL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_REPL` was found (chunk-c203g5kd.js:223). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACT_ROOM` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_ROOM` was found (chunk-c203g5kd.js:224). It has no known effect. |
 | `CLAUDE_CODE_ARTIFACT_SHARE` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_SHARE_PROBE_REUSE_MS` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_START_KIT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
-| `CLAUDE_CODE_ARTIFACT_SYNC_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_SYNC_BASE_URL` was found (chunk-gvhwnc7g.js:861). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACT_SYNC_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_SYNC_BASE_URL` was found (chunk-c203g5kd.js:861). It has no known effect. |
 | `CLAUDE_CODE_ARTIFACT_TOOLSET` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_TYPES` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_TYPE_CATALOG` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_TYPE_CLOUD_CREATE` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_VERIFY` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ARTIFACT_VERSIONS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
-| `CLAUDE_CODE_ARTIFACT_VIEWER_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_VIEWER_BASE_URL` was found (chunk-gvhwnc7g.js:862). It has no known effect. |
+| `CLAUDE_CODE_ARTIFACT_VIEWER_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ARTIFACT_VIEWER_BASE_URL` was found (chunk-c203g5kd.js:862). It has no known effect. |
 | `CLAUDE_CODE_ATTACHMENTS_BY_PATH` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ATTACHMENTS_IN_USER_DATA` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_ATTRIBUTION_ANNOUNCEMENT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_ATTRIBUTION_HEADER` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_ATTRIBUTION_PROJECT` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
-| `CLAUDE_CODE_ATTRIBUTION_STATUS_TIMEOUT_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ATTRIBUTION_STATUS_TIMEOUT_MS` was found (chunk-gvhwnc7g.js:865). It has no known effect. |
+| `CLAUDE_CODE_ATTRIBUTION_STATUS_TIMEOUT_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ATTRIBUTION_STATUS_TIMEOUT_MS` was found (chunk-c203g5kd.js:865). It has no known effect. |
 | `CLAUDE_CODE_AUTH_FAIL_EXIT_MS` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_AUTOMOUNT_ROOTS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_AUTOUPDATER_DISABLED_BY_HOST` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
@@ -960,7 +958,7 @@ Items: 2117.
 | `CLAUDE_CODE_AUTO_MODE_EDIT_REMOVAL_CAP` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_AUTO_MODE_EMAIL_SENDER_REPLY_TURN` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_AUTO_MODE_EMAIL_SENDER_TURN` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
-| `CLAUDE_CODE_AUTO_MODE_EXTERNAL_PERMISSIONS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_AUTO_MODE_EXTERNAL_PERMISSIONS` was found (chunk-gvhwnc7g.js:868). It has no known effect. |
+| `CLAUDE_CODE_AUTO_MODE_EXTERNAL_PERMISSIONS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_AUTO_MODE_EXTERNAL_PERMISSIONS` was found (chunk-c203g5kd.js:868). It has no known effect. |
 | `CLAUDE_CODE_AUTO_MODE_FULL_CONTEXT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_AUTO_MODE_GIT_STATUS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_AUTO_MODE_GIT_STATUS_LIMIT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
@@ -975,7 +973,7 @@ Items: 2117.
 | `CLAUDE_CODE_AUTO_MODE_SERVER` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_AUTO_MODE_TEMPERATURE` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_AUTO_MODE_THREAD_ASK_HELD` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
-| `CLAUDE_CODE_AUTO_MODE_THREAD_ASK_OWN_WORK` | Excluded: `CLAUDE_CODE_AUTO_MODE_THREAD_ASK_OWN_WORK`: Overrides a killswitch flag for a thread ask mode, and the mode applies only when the compact thread rule is on (chunk-j1xdtawv.js:170). The sweep showed no request change. |
+| `CLAUDE_CODE_AUTO_MODE_THREAD_ASK_OWN_WORK` | Excluded: `CLAUDE_CODE_AUTO_MODE_THREAD_ASK_OWN_WORK`: Overrides a killswitch flag for a thread ask mode, and the mode applies only when the compact thread rule is on (chunk-5w3q7h0v.js:195). The sweep showed no request change. |
 | `CLAUDE_CODE_AUTO_MODE_TIER` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_AWS_CHAIN_RESOLVE_TIMEOUT_MS` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `CLAUDE_CODE_BASALT_COVE` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
@@ -985,7 +983,7 @@ Items: 2117.
 | `CLAUDE_CODE_BASH_OUTPUT_AUDIENCE_NOTE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_BASH_SANDBOX_SHOW_INDICATOR` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_BENCH_LIVE_COUNTS` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `CLAUDE_CODE_BG_CLASSIFIER_MODEL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_BG_CLASSIFIER_MODEL` was found (chunk-gvhwnc7g.js:1238). It has no known effect. |
+| `CLAUDE_CODE_BG_CLASSIFIER_MODEL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_BG_CLASSIFIER_MODEL` was found (chunk-c203g5kd.js:1250). It has no known effect. |
 | `CLAUDE_CODE_BG_TASKS_REPORT_RUNNING` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_BISON_CAIRN` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1022,12 +1020,12 @@ Items: 2117.
 | `CLAUDE_CODE_CCR_OWN_CONNECTION_POOL` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_CCR_REQUESTS_BY_FETCH` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_CCR_SKIP_FRESH_MIGRATIONS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_CCR_SKIP_HYDRATE_ON_CURRENT_TIP` | Excluded: Remote session variable. The program names `CLAUDE_CODE_CCR_SKIP_HYDRATE_ON_CURRENT_TIP` only in a list of remote session variables (chunk-aq3ms068.js:31645); no code that reads its value was found. The sweep showed no request change. |
-| `CLAUDE_CODE_CCR_SLOW_SKILLS_WATCH` | Excluded: Remote session variable. The program names `CLAUDE_CODE_CCR_SLOW_SKILLS_WATCH` only in a list of variable names (chunk-aq3ms068.js:31656) and in a name check (chunk-59xdgreq.js:684); no code that reads its value was found. The sweep showed no request change. |
+| `CLAUDE_CODE_CCR_SKIP_HYDRATE_ON_CURRENT_TIP` | Excluded: Remote session variable. The program names `CLAUDE_CODE_CCR_SKIP_HYDRATE_ON_CURRENT_TIP` only in a list of remote session variables (chunk-865at33z.js:31929); no code that reads its value was found. The sweep showed no request change. |
+| `CLAUDE_CODE_CCR_SLOW_SKILLS_WATCH` | Excluded: Remote session variable. The program names `CLAUDE_CODE_CCR_SLOW_SKILLS_WATCH` only in a list of variable names (chunk-865at33z.js:31940) and in a name check (chunk-r6r2wdsw.js:686); no code that reads its value was found. The sweep showed no request change. |
 | `CLAUDE_CODE_CCR_SURFACE` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_CCR_WORKER_SOCKET` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_CERT_STORE` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_CFC_REFUSED` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. Nothing in the program sets it; it is read in chunk-g232kg9k.js:959 and holds a host-set reason such as `browser_extension_off`. |
+| `CLAUDE_CODE_CFC_REFUSED` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. Nothing in the program sets it; it is read in chunk-v3y6s069.js:984 and holds a host-set reason such as `browser_extension_off`. |
 | `CLAUDE_CODE_CHILD_NOTES_DIR` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_CHILD_SESSION` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_CHROME_LATE_MCP_SERVER` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -1043,7 +1041,7 @@ Items: 2117.
 | `CLAUDE_CODE_CONFIG_LOCK_WAIT_MS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_CONFIG_PROBE` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_CONFIG_WATCH_EVENTS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_CONNECT_TIMEOUT_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_CONNECT_TIMEOUT_MS` was found (chunk-rwevfvv3.js:1417). It has no known effect. |
+| `CLAUDE_CODE_CONNECT_TIMEOUT_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_CONNECT_TIMEOUT_MS` was found (chunk-agsb1bpm.js:1461). It has no known effect. |
 | `CLAUDE_CODE_CONTAINER_ID` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_COORDINATOR_EXTRA_TOOLS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_COORDINATOR_FORCE_WORKER_INHERIT_MODEL` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
@@ -1053,6 +1051,7 @@ Items: 2117.
 | `CLAUDE_CODE_COUNT_GARBAGE_COLLECTIONS` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. In a cloud session it turns on a garbage collection count that goes out in an internal result field; it is not meant for users. |
 | `CLAUDE_CODE_COWORK_FRAME_ARTIFACTS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_COWORK_PLUGIN_SKILL` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
+| `CLAUDE_CODE_COWORK_SHELL_CHECK` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_COZY_TEAPOT` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_CRYPTIC_HORIZON` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_CURRIED_TRINKET` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1064,7 +1063,7 @@ Items: 2117.
 | `CLAUDE_CODE_DEBUG_LOGS_DIR` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_DEBUG_LOG_LEVEL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_DEBUG_REPAINTS` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
-| `CLAUDE_CODE_DEEP_TWILIGHT` | Excluded: `CLAUDE_CODE_DEEP_TWILIGHT`: Overrides a flag in a host-only mid-turn prompt path that needs a host that asked for it (chunk-hg1yqkjk.js:296324, hostAsked at chunk-hg1yqkjk.js:257075). The sweep showed no request change. |
+| `CLAUDE_CODE_DEEP_TWILIGHT` | Excluded: `CLAUDE_CODE_DEEP_TWILIGHT`: Overrides a flag in a host-only mid-turn prompt path that needs a host that asked for it (chunk-bzyb60p0.js:299599, hostAsked at chunk-bzyb60p0.js:260192). The sweep showed no request change. |
 | `CLAUDE_CODE_DESIGN_OAUTH_CLIENT_ID` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_DESKTOP_APP_VERSION` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_DESKTOP_CONNECTOR_NAMES` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
@@ -1074,8 +1073,8 @@ Items: 2117.
 | `CLAUDE_CODE_DESKTOP_RESULT_FIRST` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_DESKTOP_SKILLS_PLUGIN_DIR` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_DESKTOP_SKILL_SWITCHES` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
-| `CLAUDE_CODE_DESKTOP_WORKFLOW_LIMIT_WAIT` | Excluded: Set by the desktop host. The program moves `CLAUDE_CODE_DESKTOP_WORKFLOW_LIMIT_WAIT` into a host setting and unsets it (chunk-0v6g5ynk.js:726, chunk-0v6g5ynk.js:744). The sweep showed no request change. |
-| `CLAUDE_CODE_DEV_RAW_CHANGELOG_URL` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `CLAUDE_CODE_DEV_RAW_CHANGELOG_URL` only in its table of environment names (chunk-gvhwnc7g.js:902), and no code that reads it by name was found. It is not meant for users. |
+| `CLAUDE_CODE_DESKTOP_WORKFLOW_LIMIT_WAIT` | Excluded: Set by the desktop host. The program moves `CLAUDE_CODE_DESKTOP_WORKFLOW_LIMIT_WAIT` into a host setting and unsets it (chunk-3t7ve0wy.js:733, chunk-3t7ve0wy.js:755). The sweep showed no request change. |
+| `CLAUDE_CODE_DEV_RAW_CHANGELOG_URL` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `CLAUDE_CODE_DEV_RAW_CHANGELOG_URL` only in its table of environment names (chunk-c203g5kd.js:902), and no code that reads it by name was found. It is not meant for users. |
 | `CLAUDE_CODE_DIAGNOSTICS_FILE` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_DIFF_COPY_ROOT` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_DISABLE_1M_CONTEXT` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1087,8 +1086,8 @@ Items: 2117.
 | `CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_DISABLE_ARTIFACT` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_DISABLE_ATTACHMENTS` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
-| `CLAUDE_CODE_DISABLE_ATTRIBUTION_BASELINE_REUSE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_DISABLE_ATTRIBUTION_BASELINE_REUSE` was found (chunk-gvhwnc7g.js:904). It has no known effect. |
-| `CLAUDE_CODE_DISABLE_ATTRIBUTION_CROSS_REPO` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_DISABLE_ATTRIBUTION_CROSS_REPO` was found (chunk-gvhwnc7g.js:285). It has no known effect. |
+| `CLAUDE_CODE_DISABLE_ATTRIBUTION_BASELINE_REUSE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_DISABLE_ATTRIBUTION_BASELINE_REUSE` was found (chunk-c203g5kd.js:904). It has no known effect. |
+| `CLAUDE_CODE_DISABLE_ATTRIBUTION_CROSS_REPO` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_DISABLE_ATTRIBUTION_CROSS_REPO` was found (chunk-c203g5kd.js:285). It has no known effect. |
 | `CLAUDE_CODE_DISABLE_AUTH_REFRESH_LOCK` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_DISABLE_AUTO_MEMORY` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_DISABLE_AWAITING_USER_IDLE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
@@ -1123,7 +1122,7 @@ Items: 2117.
 | `CLAUDE_CODE_DISABLE_HTTPS_AGENT_KEEPING` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_DISABLE_INLINE_SHELL_RM_PROMPT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_DISABLE_LAUNCHER_SIGN_IN` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
-| `CLAUDE_CODE_DISABLE_LAUNCH_COMPOSER` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_DISABLE_LAUNCH_COMPOSER` was found (chunk-gvhwnc7g.js:312). It has no known effect. |
+| `CLAUDE_CODE_DISABLE_LAUNCH_COMPOSER` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_DISABLE_LAUNCH_COMPOSER` was found (chunk-c203g5kd.js:312). It has no known effect. |
 | `CLAUDE_CODE_DISABLE_LAYOUT_CHECK` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_DISABLE_LEGACY_MODEL_REMAP` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_DISABLE_LONE_SEC_DEFAULT_SHORTCUT` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
@@ -1160,20 +1159,21 @@ Items: 2117.
 | `CLAUDE_CODE_DISABLE_PROACTIVITY` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_DISABLE_PROXY_SCHEME_REPAIR` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_DISABLE_QUIET_BACKGROUND_WAIT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
+| `CLAUDE_CODE_DISABLE_REDIRECT_DENY_RECHECK` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_DISABLE_REFUSAL_RETRY` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_DISABLE_RESPONSE_COMPARISON` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The program names `CLAUDE_CODE_DISABLE_RESPONSE_COMPARISON` only in a table and two lists of environment names, and no code reads it, so it is left out (chunk-gvhwnc7g.js:343). |
-| `CLAUDE_CODE_DISABLE_RESUME_LOAD_GOODBYE_SKIP` | Excluded: `CLAUDE_CODE_DISABLE_RESUME_LOAD_GOODBYE_SKIP`: Remote worker only. It stops a goodbye skip while a resume loads (chunk-b79bvzj7.js:3910). The sweep showed no request change. |
+| `CLAUDE_CODE_DISABLE_RESPONSE_COMPARISON` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The program names `CLAUDE_CODE_DISABLE_RESPONSE_COMPARISON` only in a table and two lists of environment names, and no code reads it, so it is left out (chunk-c203g5kd.js:343). |
+| `CLAUDE_CODE_DISABLE_RESUME_LOAD_GOODBYE_SKIP` | Excluded: `CLAUDE_CODE_DISABLE_RESUME_LOAD_GOODBYE_SKIP`: Remote worker only. It stops a goodbye skip while a resume loads (chunk-c44qd7ec.js:3930). The sweep showed no request change. |
 | `CLAUDE_CODE_DISABLE_SELF_NAMED_CERT_DROP` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_DISABLE_SHELL_HEAD_START` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_DISABLE_STARTUP_WORK_GATE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_DISABLE_STOP_OF_HELD_MESSAGES` | Excluded: `CLAUDE_CODE_DISABLE_STOP_OF_HELD_MESSAGES`: Makes an internal check return false (chunk-614w915w.js:20218). It has no visible effect in print mode. The sweep showed no request change. |
+| `CLAUDE_CODE_DISABLE_STOP_OF_HELD_MESSAGES` | Excluded: `CLAUDE_CODE_DISABLE_STOP_OF_HELD_MESSAGES`: Makes an internal check return false (chunk-a0tz781a.js:20919). It has no visible effect in print mode. The sweep showed no request change. |
 | `CLAUDE_CODE_DISABLE_STRUCTURED_OUTPUTS` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_DISABLE_SUBAGENT_HANDBACK` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_DISABLE_SUBSTITUTION_RM_PROMPT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_DISABLE_TERMINAL_TITLE` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_DISABLE_THINKING` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_DISABLE_TRANSCRIPT_READ_AHEAD` | Excluded: `CLAUDE_CODE_DISABLE_TRANSCRIPT_READ_AHEAD`: Remote worker only. It needs an SDK URL, a remote transport, and a flag (chunk-614w915w.js:52403). The sweep showed no request change. |
+| `CLAUDE_CODE_DISABLE_TRANSCRIPT_READ_AHEAD` | Excluded: `CLAUDE_CODE_DISABLE_TRANSCRIPT_READ_AHEAD`: Remote worker only. It needs an SDK URL, a remote transport, and a flag (chunk-a0tz781a.js:54552). The sweep showed no request change. |
 | `CLAUDE_CODE_DISABLE_TURN_HANDOFF` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_DISABLE_ULTRATHINK` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
@@ -1199,19 +1199,19 @@ Items: 2117.
 | `CLAUDE_CODE_EMIT_TOOL_USE_SUMMARIES` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_EMIT_USER_PROMPT_SUBMIT_HOOK_EVENTS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_ENABLE_APPEND_SUBAGENT_PROMPT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_ENABLE_AUTO_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_AUTO_MODE` was found (chunk-rqs3939j.js:1033). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_AUTO_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_AUTO_MODE` was found (chunk-gd77dyw4.js:1033). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_AWAY_SUMMARY` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_ENABLE_BACKGROUND_PLUGIN_REFRESH` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_ENABLE_CFC` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_CODE_ENABLE_DESIGN_SYNC` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_DESIGN_SYNC` was found (chunk-gvhwnc7g.js:365). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_DESIGN_SYNC` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_DESIGN_SYNC` was found (chunk-c203g5kd.js:365). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` was found (chunk-rqs3939j.js:1168). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` was found (chunk-gd77dyw4.js:1168). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_ENABLE_LAUNCH_COMPOSER` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_LAUNCH_COMPOSER` was found (chunk-gvhwnc7g.js:369). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_LAUNCH_COMPOSER` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_LAUNCH_COMPOSER` was found (chunk-c203g5kd.js:369). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_MENU_KIND_LANES` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
-| `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` was found (chunk-rwevfvv3.js:1419). It has no known effect. |
+| `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_ENABLE_OPUS_4_7_FAST_MODE` was found (chunk-agsb1bpm.js:1463). It has no known effect. |
 | `CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_ENABLE_PROXY_AUTH_HELPER` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_ENABLE_REFRESH_MCP_TOOLS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
@@ -1239,9 +1239,9 @@ Items: 2117.
 | `CLAUDE_CODE_EXIT_AFTER_FIRST_RENDER` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_EXIT_AFTER_STOP_DELAY` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE` | Excluded: `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE`: Interactive only, and gated by a server flag the live account does not have. The startup opt-in check (chunk-3y52b1p1.js:335) needs the cli entrypoint, a first-party login, the server flag `tengu_rustling_blossom` from the payload or an override, and saved caveat acceptance. Live case `live.code-mode` (secret-runner with the OAuth token in the child only, temp HOME and CLAUDE_CONFIG_DIR, `cli` entrypoint through a pty, `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE=on` in user settings env, both caveats accepted in the temp `.claude.json`, telemetry on, prompt "Reply with 'OK'.", exit 0): the cached live payload held 1113 flags, 1107 named `tengu_*`, and `tengu_rustling_blossom` was absent, so the flag reads off and the gate refuses. Hard limit: the flag is not in the payload of this account, and the override for it is null. A missing flag no longer refuses Code Mode; only an explicit off does (`$dd7fc8`, chunk-3y52b1p1.js:200). Earlier runs: print cases env319a.code-mode.unset, .v1, .von, .vbogus (same tools and result) and a fake-key pty run (no opt-in line). |
-| `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTART` | Excluded: Internal restart hand-off. The program reads `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTART` once at startup (chunk-3y52b1p1.js:259) and sets it for the restart (chunk-3y52b1p1.js:410). Cases env319a.code-mode.* showed no print mode effect. |
-| `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTARTED_FROM` | Excluded: Internal restart hand-off. The program sets `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTARTED_FROM` with the restart variable and unsets it after one read (chunk-3y52b1p1.js:411, chunk-3y52b1p1.js:265-266). Cases env319a.code-mode.* showed no print mode effect. |
+| `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE` | Excluded: `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE`: Interactive only, and gated by a server flag the live account does not have. The startup opt-in check (chunk-37g0b5az.js:344) needs the cli entrypoint, a first-party login, the server flag `tengu_rustling_blossom` from the payload or an override, and saved caveat acceptance. Live case `live.code-mode` (secret-runner with the OAuth token in the child only, temp HOME and CLAUDE_CONFIG_DIR, `cli` entrypoint through a pty, `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE=on` in user settings env, both caveats accepted in the temp `.claude.json`, telemetry on, prompt "Reply with 'OK'.", exit 0): the cached live payload held 1113 flags, 1107 named `tengu_*`, and `tengu_rustling_blossom` was absent, so the flag reads off and the gate refuses. Hard limit: the flag is not in the payload of this account, and the override for it is null. A missing flag no longer refuses Code Mode; only an explicit off does (`$dd7fc8`, chunk-37g0b5az.js:206). Earlier runs: print cases env319a.code-mode.unset, .v1, .von, .vbogus (same tools and result) and a fake-key pty run (no opt-in line). |
+| `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTART` | Excluded: Internal restart hand-off. The program reads `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTART` once at startup (chunk-37g0b5az.js:265) and sets it for the restart (chunk-37g0b5az.js:494). Cases env319a.code-mode.* showed no print mode effect. |
+| `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTARTED_FROM` | Excluded: Internal restart hand-off. The program sets `CLAUDE_CODE_EXPERIMENTAL_CODE_MODE_RESTARTED_FROM` with the restart variable and unsets it after one read (chunk-37g0b5az.js:495, chunk-37g0b5az.js:271-272). Cases env319a.code-mode.* showed no print mode effect. |
 | `CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_EXTRA_BODY` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_EXTRA_METADATA` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
@@ -1253,16 +1253,16 @@ Items: 2117.
 | `CLAUDE_CODE_FILE_READ_MAX_PDF_PAGES_PER_MESSAGE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_FILE_READ_MAX_PDF_PAGES_PER_TURN` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_FIRST_CALL_THINKING_TITLES` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_FIZZY_GROVE` | Excluded: `CLAUDE_CODE_FIZZY_GROVE`: Overrides a flag, which defaults to off, that picks an internal result for an interrupt (chunk-hg1yqkjk.js:198421). The sweep showed no request change. |
+| `CLAUDE_CODE_FIZZY_GROVE` | Excluded: `CLAUDE_CODE_FIZZY_GROVE`: Overrides a flag, which defaults to off, that picks an internal result for an interrupt (chunk-bzyb60p0.js:201003). The sweep showed no request change. |
 | `CLAUDE_CODE_FLAG_FETCH_WAIT_MS` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_FLEETVIEW_SIMPLE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_FLEET_PAST_SESSIONS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_FOOTER_INDICATOR` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
-| `CLAUDE_CODE_FORCE_BRIDGE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_FORCE_BRIDGE` was found (chunk-gvhwnc7g.js:934). It has no known effect. |
-| `CLAUDE_CODE_FORCE_EVALUATE_MEMORY` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_FORCE_EVALUATE_MEMORY` was found (chunk-gvhwnc7g.js:935). It has no known effect. |
+| `CLAUDE_CODE_FORCE_BRIDGE` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_FORCE_BRIDGE` was found (chunk-c203g5kd.js:934). It has no known effect. |
+| `CLAUDE_CODE_FORCE_EVALUATE_MEMORY` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_FORCE_EVALUATE_MEMORY` was found (chunk-c203g5kd.js:935). It has no known effect. |
 | `CLAUDE_CODE_FORCE_FIRST_LAUNCH` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_FORCE_FULLSCREEN_UPSELL` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
-| `CLAUDE_CODE_FORCE_MEMORY_SURVEY` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_FORCE_MEMORY_SURVEY` was found (chunk-gvhwnc7g.js:937). It has no known effect. |
+| `CLAUDE_CODE_FORCE_MEMORY_SURVEY` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_FORCE_MEMORY_SURVEY` was found (chunk-c203g5kd.js:937). It has no known effect. |
 | `CLAUDE_CODE_FORCE_MID_CONVERSATION_SYSTEM` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_FORCE_RC_LONG_TURN_NUDGE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_FORCE_SESSION_PERSISTENCE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
@@ -1277,11 +1277,12 @@ Items: 2117.
 | `CLAUDE_CODE_FOUND_REPOSITORY_GIT` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_FRAME_TIMING_LOG` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_FRAME_TIMING_SAMPLE_EVERY` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
+| `CLAUDE_CODE_FULL_SIGN_IN_LINK` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_GATEWAY_HINT_HEADERS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_GATEWAY_MODEL_DISCOVERY_TIMEOUT_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_GATEWAY_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_GATEWAY_TOKEN` was found (chunk-gvhwnc7g.js:69). It has no known effect. |
+| `CLAUDE_CODE_GATEWAY_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_GATEWAY_TOKEN` was found (chunk-c203g5kd.js:70). It has no known effect. |
 | `CLAUDE_CODE_GATEWAY_TOKEN_FILE_DESCRIPTOR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
-| `CLAUDE_CODE_GB_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_GB_BASE_URL` was found (chunk-gvhwnc7g.js:1385). It has no known effect. |
+| `CLAUDE_CODE_GB_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_GB_BASE_URL` was found (chunk-c203g5kd.js:1397). It has no known effect. |
 | `CLAUDE_CODE_GB_DISK_CACHE_WHEN_TELEMETRY_OFF` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_GENTLE_PARASOL` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_GIT_BASH_PATH` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
@@ -1303,7 +1304,7 @@ Items: 2117.
 | `CLAUDE_CODE_HARBOR_KITE_CLOUD` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_HARBOR_KITE_PACING_OFF` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_HARMONIC_RIDDLE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_HFI_BEARER_TOKEN` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `CLAUDE_CODE_HFI_BEARER_TOKEN` only in its table of environment names (chunk-gvhwnc7g.js:70), and no code that reads it by name was found. It is not meant for users. |
+| `CLAUDE_CODE_HFI_BEARER_TOKEN` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program names `CLAUDE_CODE_HFI_BEARER_TOKEN` only in its table of environment names (chunk-c203g5kd.js:71), and no code that reads it by name was found. It is not meant for users. |
 | `CLAUDE_CODE_HIDE_CWD` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_HIDE_REPLY_SERVER_NAME` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_HIDE_SETTINGS_HINT` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
@@ -1312,7 +1313,8 @@ Items: 2117.
 | `CLAUDE_CODE_HOME_SEED_VERDICT_TIMEOUT_MS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_HOOKS_SAME_THREAD` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_HOOK_HEARTBEAT_INTERVAL_MS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
-| `CLAUDE_CODE_HOSTED_DESKTOP` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_HOSTED_DESKTOP` was found (chunk-gvhwnc7g.js:949). It has no known effect. |
+| `CLAUDE_CODE_HOSTED_DESKTOP` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_HOSTED_DESKTOP` was found (chunk-c203g5kd.js:956). It has no known effect. |
+| `CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_HOST_ARTIFACT_TYPE_COMMANDS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_HOST_AUTH_ASK_AT_START` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_HOST_AUTH_ENV_VAR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
@@ -1321,18 +1323,19 @@ Items: 2117.
 | `CLAUDE_CODE_HOST_CREDS_FILE` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_HOST_GATEWAY_LINEAGE` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_HOST_GUARDS_ARTIFACTS_MCP` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_HOST_HTTP_PROXY_PORT` | Excluded: Set by Claude Code for its sandboxed child process with `--setenv` (chunk-f7fdz8jz.js:38396). No code that reads `CLAUDE_CODE_HOST_HTTP_PROXY_PORT` by name was found. It has no setting for it. |
-| `CLAUDE_CODE_HOST_HYBRID_ORGANIZATION_UUID` | Excluded: Set by the desktop host. The program reads it only when `CLAUDE_CODE_ENTRYPOINT` is `claude-desktop-3p` (chunk-t39fw2cy.js:12920). The Claude Desktop app is out of scope. |
+| `CLAUDE_CODE_HOST_HTTP_PROXY_PORT` | Excluded: Set by Claude Code for its sandboxed child process with `--setenv` (chunk-ha393e1n.js:22227). No code that reads `CLAUDE_CODE_HOST_HTTP_PROXY_PORT` by name was found. It has no setting for it. |
+| `CLAUDE_CODE_HOST_HYBRID_ORGANIZATION_UUID` | Excluded: Set by the desktop host. The program reads it only when `CLAUDE_CODE_ENTRYPOINT` is `claude-desktop-3p` (chunk-xcgcdx61.js:12967). The Claude Desktop app is out of scope. |
 | `CLAUDE_CODE_HOST_OWNED_CONFIG_DIR` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_HOST_OWNED_SPAWN_ENV` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_HOST_PLATFORM` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_HOST_PROMPT_SUPERSEDES_RECORD` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
+| `CLAUDE_CODE_HOST_READS_NO_BASH_EDIT_DIFF` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_HOST_SCHEDULED_RUN` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_HOST_SESSION_ID` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_HOST_SHORT_TEMP_DIRS` | Excluded: `CLAUDE_CODE_HOST_SHORT_TEMP_DIRS`: Set by the host, and the program writes it for child processes (chunk-7kvz9y39.js:1650, chunk-wxt5k3a2.js:41). The sweep showed no request change. |
-| `CLAUDE_CODE_HOST_SHOWS_CONNECTION_NOTICE` | Excluded: Set by the desktop host. The program reads `CLAUDE_CODE_HOST_SHOWS_CONNECTION_NOTICE` in chunk-thkm8vx1.js:502. The Claude Desktop app is out of scope. |
+| `CLAUDE_CODE_HOST_SHORT_TEMP_DIRS` | Excluded: `CLAUDE_CODE_HOST_SHORT_TEMP_DIRS`: Set by the host, and the program writes it for child processes (chunk-95amtstn.js:1654, chunk-mf29k4y3.js:41). The sweep showed no request change. |
+| `CLAUDE_CODE_HOST_SHOWS_CONNECTION_NOTICE` | Excluded: Set by the desktop host. The program reads `CLAUDE_CODE_HOST_SHOWS_CONNECTION_NOTICE` in chunk-gnwhpqbr.js:503. The Claude Desktop app is out of scope. |
 | `CLAUDE_CODE_HOST_SKILL_CATALOG` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_HOST_SOCKS_PROXY_PORT` | Excluded: Set by Claude Code for its sandboxed child process with `--setenv` (chunk-f7fdz8jz.js:38398). No code that reads `CLAUDE_CODE_HOST_SOCKS_PROXY_PORT` by name was found. It has no setting for it. |
+| `CLAUDE_CODE_HOST_SOCKS_PROXY_PORT` | Excluded: Set by Claude Code for its sandboxed child process with `--setenv` (chunk-ha393e1n.js:22229). No code that reads `CLAUDE_CODE_HOST_SOCKS_PROXY_PORT` by name was found. It has no setting for it. |
 | `CLAUDE_CODE_HOST_WORKTREE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_HOST_WORKTREE_FENCE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_HOVER_REST` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
@@ -1349,8 +1352,8 @@ Items: 2117.
 | `CLAUDE_CODE_INCLUDE_PARTIAL_MESSAGES` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_INCREMENTAL_REQUEST_BODY` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_INLINE_TOOLS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_INSTALLED_VIA_NPM_WRAPPER` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_INSTALLED_VIA_NPM_WRAPPER` was found (chunk-rwevfvv3.js:1425). It has no known effect. |
-| `CLAUDE_CODE_INVOKED_SKILLS` | Excluded: Only a name in the program's lists (chunk-hg1yqkjk.js:51792) and in a constant that nothing uses (chunk-hg1yqkjk.js:246225). No code reads CLAUDE_CODE_INVOKED_SKILLS by name. It has no setting for it. |
+| `CLAUDE_CODE_INSTALLED_VIA_NPM_WRAPPER` | Excluded: Named in the program's table or lists of environment names, but no code that reads `CLAUDE_CODE_INSTALLED_VIA_NPM_WRAPPER` was found (chunk-agsb1bpm.js:1469). It has no known effect. |
+| `CLAUDE_CODE_INVOKED_SKILLS` | Excluded: Only a name in the program's lists (chunk-bzyb60p0.js:52502) and in a constant that nothing uses (chunk-bzyb60p0.js:249465). No code reads CLAUDE_CODE_INVOKED_SKILLS by name. It has no setting for it. |
 | `CLAUDE_CODE_IS_COWORK` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_JIT_POLICY_AFTER_STARTUP` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_JUNIPER_SUNDIAL` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1363,7 +1366,7 @@ Items: 2117.
 | `CLAUDE_CODE_LINKED_SPINDLE` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_LOOP_KEEPALIVE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_LOOP_PERSISTENT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_MAIN_REPLY_HOLD_MS` | Excluded: Remote only. The program reads CLAUDE_CODE_MAIN_REPLY_HOLD_MS when CLAUDE_CODE_REMOTE is true and CLAUDE_CODE_ENVIRONMENT_KIND is not set (chunk-76t3g1yn.js:18189, chunk-92h2y9s9.js:41). Case env319a.main-reply-hold.* with CLAUDE_CODE_REMOTE=1 gave 0 s and 1 request with and without 8000. |
+| `CLAUDE_CODE_MAIN_REPLY_HOLD_MS` | Excluded: Remote only. The program reads CLAUDE_CODE_MAIN_REPLY_HOLD_MS when CLAUDE_CODE_REMOTE is true and CLAUDE_CODE_ENVIRONMENT_KIND is not set (chunk-gq1dr8pm.js:16801, chunk-6e68m1dj.js:42). Case env319a.main-reply-hold.* with CLAUDE_CODE_REMOTE=1 gave 0 s and 1 request with and without 8000. |
 | `CLAUDE_CODE_MANAGED_CONFIG_PREFETCH` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_MANAGED_SETTINGS_PATH` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_MARKETPLACE_NAME` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
@@ -1374,7 +1377,7 @@ Items: 2117.
 | `CLAUDE_CODE_MAX_MCP_DESCRIPTION_LENGTH` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | [Environment Variables](../configure/env-vars/index.md) |
 | `CLAUDE_CODE_MAX_RETRIES` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION was found (chunk-rqs3939j.js:1197). It has no known effect. |
+| `CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION was found (chunk-gd77dyw4.js:1197). It has no known effect. |
 | `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_MAX_TURNS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
@@ -1401,12 +1404,12 @@ Items: 2117.
 | `CLAUDE_CODE_MCP_SERVE_MEMORY_WALKS_DEADLINE_MS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MCP_SERVE_SETTINGS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MCP_SERVE_TOOL_OUTPUT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_MCP_SERVE_TUNNEL_BINARY_FRAMES` | Excluded: Set only by the MCP tunnel host in the child env (chunk-0zxdr4d5.js:749, cleared for runner children at chunk-3kp5jwr6.js:11886); no user path sets CLAUDE_CODE_MCP_SERVE_TUNNEL_BINARY_FRAMES. Run: env319b.inert.tunnel-binary-frames. |
+| `CLAUDE_CODE_MCP_SERVE_TUNNEL_BINARY_FRAMES` | Excluded: Set only by the MCP tunnel host in the child env (chunk-gm9xy089.js:266, cleared for runner children at chunk-q0y1fm2x.js:12216); no user path sets CLAUDE_CODE_MCP_SERVE_TUNNEL_BINARY_FRAMES. Run: env319b.inert.tunnel-binary-frames. |
 | `CLAUDE_CODE_MCP_SERVE_WORKSPACE_ROOT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_MCP_SKIP_UNCHANGED_RELIST` | Excluded: Only a name in lists of flag names. The program has no read of the value of CLAUDE_CODE_MCP_SKIP_UNCHANGED_RELIST (chunk-aq3ms068.js:31660). |
+| `CLAUDE_CODE_MCP_SKIP_UNCHANGED_RELIST` | Excluded: Only a name in lists of flag names. The program has no read of the value of CLAUDE_CODE_MCP_SKIP_UNCHANGED_RELIST (chunk-865at33z.js:31944). |
 | `CLAUDE_CODE_MCP_STARTUP_WAIT_MS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_MEMORY_API_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_MEMORY_API_BASE_URL was found (chunk-rqs3939j.js:562). It has no known effect. |
+| `CLAUDE_CODE_MEMORY_API_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_MEMORY_API_BASE_URL was found (chunk-gd77dyw4.js:562). It has no known effect. |
 | `CLAUDE_CODE_MEMORY_API_TOKEN` | Excluded: Set or read by Claude Code for its own helper programs, sandbox, or built-in services. The code does not show an effect that a user can use or change, so it is left out. |
 | `CLAUDE_CODE_MEMORY_CONTEXT_NO_WAIT` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_MEMORY_PUSH_DELETE_MODE` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1418,15 +1421,16 @@ Items: 2117.
 | `CLAUDE_CODE_MODEL_CAPABILITIES` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_MODEL_CATALOG` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_MODEL_CATALOG_URL` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
+| `CLAUDE_CODE_MODEL_NOBODY_CHOSE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_NANKEEN_KESTREL` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_NATIVE_APP_BUNDLE` | Excluded: Read by the installer only (chunk-ecns4dsm.js:2429), with flag tengu_purring_aurora as fallback; the print path never reaches it. Run: env319b.inert.native-app-bundle. |
+| `CLAUDE_CODE_NATIVE_APP_BUNDLE` | Excluded: Read by the installer only (chunk-gqy9qzxq.js:2427), with flag tengu_purring_aurora as fallback; the print path never reaches it. Run: env319b.inert.native-app-bundle. |
 | `CLAUDE_CODE_NATIVE_CURSOR` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_NEW_INIT` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_NEW_RENDERER` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_NONBLOCKING_STDOUT` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_NONSTREAMING_TIMEOUT_RETRIES` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_NORMALIZE_PREFIX_CACHE` | Excluded: Sampling switch behind flag tengu_wise_salamander at 0.02 (chunk-vh81eg60.js:65); no request change seen. Run: env319b.inert.normalize-prefix-cache. |
-| `CLAUDE_CODE_NORMALIZE_PREFIX_CACHE_VERIFY` | Excluded: Check for the same flag-gated path, where `verify` takes CLAUDE_CODE_NORMALIZE_PREFIX_CACHE_VERIFY (chunk-hg1yqkjk.js:12419); no request change seen. Run: env319b.inert.normalize-prefix-cache-verify. |
+| `CLAUDE_CODE_NORMALIZE_PREFIX_CACHE` | Excluded: Sampling switch behind flag tengu_wise_salamander at 0.02 (chunk-qp5chy39.js:64); no request change seen. Run: env319b.inert.normalize-prefix-cache. |
+| `CLAUDE_CODE_NORMALIZE_PREFIX_CACHE_VERIFY` | Excluded: Check for the same flag-gated path, where `verify` takes CLAUDE_CODE_NORMALIZE_PREFIX_CACHE_VERIFY (chunk-bzyb60p0.js:13077); no request change seen. Run: env319b.inert.normalize-prefix-cache-verify. |
 | `CLAUDE_CODE_NOTIFICATIONS_HOST` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_NO_FLICKER` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_NO_MODEL_FALLBACK` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
@@ -1437,7 +1441,7 @@ Items: 2117.
 | `CLAUDE_CODE_OAUTH_TOKEN` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_OFF_PERSONS_MACHINE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE was found (chunk-rwevfvv3.js:1428). It has no known effect. |
+| `CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_OPUS_4_6_FAST_MODE_OVERRIDE was found (chunk-agsb1bpm.js:1472). It has no known effect. |
 | `CLAUDE_CODE_ORGANIZATION_UUID` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_OTEL_CONTENT_MAX_LENGTH` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_OTEL_DIAG_STDERR` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
@@ -1447,7 +1451,7 @@ Items: 2117.
 | `CLAUDE_CODE_OVERLOADED_RETRY_BASE_DELAY_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_OVERLOADED_RETRY_MAX_DELAY_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_OVERLOADED_RETRY_MAX_WAIT_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_CODE_OVERRIDE_DATE` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_OVERRIDE_DATE was found (chunk-gvhwnc7g.js:995). It has no known effect. |
+| `CLAUDE_CODE_OVERRIDE_DATE` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_OVERRIDE_DATE was found (chunk-c203g5kd.js:995). It has no known effect. |
 | `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_PARKED_PERMISSION_WAIT_MS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_PARKED_RUN_BEFORE_CLEAR` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -1455,7 +1459,7 @@ Items: 2117.
 | `CLAUDE_CODE_PARSED_WILLOW` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_PEPPY_STARLIGHT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_PERFETTO_TRACE` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `CLAUDE_CODE_PERFETTO_WRITE_INTERVAL_S` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_PERFETTO_WRITE_INTERVAL_S was found (chunk-gvhwnc7g.js:142). It has no known effect. |
+| `CLAUDE_CODE_PERFETTO_WRITE_INTERVAL_S` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_PERFETTO_WRITE_INTERVAL_S was found (chunk-c203g5kd.js:143). It has no known effect. |
 | `CLAUDE_CODE_PERFORCE_MODE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_PERSONAL_CONFIG_FIX` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_PERSONAL_HOOKS_OFF` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
@@ -1486,7 +1490,7 @@ Items: 2117.
 | `CLAUDE_CODE_POLICY_HELPER_PSMODULEPATH` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_POLISHED_DEWDROP` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_POLL_EVENTS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
-| `CLAUDE_CODE_POLL_EVENT_DECLARATIONS` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_POLL_EVENT_DECLARATIONS was found (chunk-gvhwnc7g.js:454). It has no known effect. |
+| `CLAUDE_CODE_POLL_EVENT_DECLARATIONS` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_POLL_EVENT_DECLARATIONS was found (chunk-c203g5kd.js:454). It has no known effect. |
 | `CLAUDE_CODE_POST_TURN_MEMORY` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_POST_TURN_MEMORY_CONFIG` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_POST_TURN_MEMORY_SYNC` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1497,8 +1501,9 @@ Items: 2117.
 | `CLAUDE_CODE_PROCESS_WRAPPER` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_PROFILE_QUERY` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_PROFILE_STARTUP` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `CLAUDE_CODE_PROGRAM_USE_CASE_ID` | Excluded: Returns null unless flag tengu_federated_possum holds and the host does not refuse the id (chunk-w03c3634.js:8879); no beta header change. Run: env319b.inert.use-case-id. |
-| `CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED` | Excluded: Same gate as the use case id, read from CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED (chunk-w03c3634.js:8932); no change. Run: env319b.inert.use-case-id-stamped. |
+| `CLAUDE_CODE_PROGRAM_USE_CASE_ID` | Excluded: Returns null unless flag tengu_federated_possum holds and the host does not refuse the id (chunk-xfj2cwfv.js:8812); no beta header change. Run: env319b.inert.use-case-id. |
+| `CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED` | Excluded: Same gate as the use case id, read from CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED (chunk-xfj2cwfv.js:8865); no change. Run: env319b.inert.use-case-id-stamped. |
+| `CLAUDE_CODE_PROJECTS_FEATURE_FLAGS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_PROJECTS_SESSION` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_PROJECT_DIR_NAME` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_PROJECT_DOC_LOOK_TIMEOUT_MS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
@@ -1514,16 +1519,17 @@ Items: 2117.
 | `CLAUDE_CODE_QUESTION_EXTENDED` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_QUESTION_OPTIONAL_DESCRIPTIONS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_QUESTION_PREVIEW_FORMAT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_QUEUED_NOTIFICATIONS_BY_POLL` | Excluded: Remote session variable. The program reads it in chunk-614w915w.js:9861 and needs `CLAUDE_CODE_REMOTE` true, a remote transport, and auto mode. Cloud sessions are out of scope. |
+| `CLAUDE_CODE_QUEUED_NOTIFICATIONS_BY_POLL` | Excluded: Remote session variable. The program reads it in chunk-a0tz781a.js:10057 and needs `CLAUDE_CODE_REMOTE` true, a remote transport, and auto mode. Cloud sessions are out of scope. |
 | `CLAUDE_CODE_RATE_LIMIT_TIER` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_CODE_RC_PERMISSION_NUDGE` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_REFUSAL_FALLBACK_CATCH_ALL` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
+| `CLAUDE_CODE_RELAUNCH_BYPASS_SWITCH` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_RELAUNCH_HOME_TRUST` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_BASELINE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_DECIDED` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_EVER_ON` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RELAUNCH_PROACTIVITY_LEVEL` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_RELAUNCH_RESUME_HINT_FLAGS` | Excluded: Set by the program for its own relaunch, read once then unset (chunk-6bse8y7r.js:111-114, CLAUDE_CODE_RELAUNCH_RESUME_HINT_FLAGS). Run: env319b.inert.resume-hint-flags. |
+| `CLAUDE_CODE_RELAUNCH_RESUME_HINT_FLAGS` | Excluded: Set by the program for its own relaunch, read once then unset (chunk-aeefyj9w.js:111-114, CLAUDE_CODE_RELAUNCH_RESUME_HINT_FLAGS). Run: env319b.inert.resume-hint-flags. |
 | `CLAUDE_CODE_RELAUNCH_SANDBOX_HOLD` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RELAUNCH_TERMINAL_SIZE` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_REMOTE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -1531,15 +1537,15 @@ Items: 2117.
 | `CLAUDE_CODE_REMOTE_HERMETIC_MODE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_MCP_CONFIG` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_MEMORY_DIR` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
-| `CLAUDE_CODE_REMOTE_RAW_EVENTS_FILE` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_REMOTE_RAW_EVENTS_FILE was found (chunk-gvhwnc7g.js:1035). It has no known effect. |
+| `CLAUDE_CODE_REMOTE_RAW_EVENTS_FILE` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_REMOTE_RAW_EVENTS_FILE was found (chunk-c203g5kd.js:1035). It has no known effect. |
 | `CLAUDE_CODE_REMOTE_SDK_URL` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_SEND_KEEPALIVES` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_SESSION_ID` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_SESSION_ORIGIN` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_SESSION_UUID` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_SETTINGS_PATH` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_CODE_REMOTE_SETTINGS_POLL_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_REMOTE_SETTINGS_POLL_MS was found (chunk-gvhwnc7g.js:1041). It has no known effect. |
-| `CLAUDE_CODE_REMOTE_STALL_CHECK_INTERVAL_MS` | Excluded: Read only when CLAUDE_CODE_REMOTE is set (chunk-fce3ggrv.js:179); run also with CLAUDE_CODE_REMOTE=true, no change. Run: env319b.inert.remote-stall-interval and remote-stall-interval-remote. |
+| `CLAUDE_CODE_REMOTE_SETTINGS_POLL_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_REMOTE_SETTINGS_POLL_MS was found (chunk-c203g5kd.js:1041). It has no known effect. |
+| `CLAUDE_CODE_REMOTE_STALL_CHECK_INTERVAL_MS` | Excluded: Read only when CLAUDE_CODE_REMOTE is set (chunk-4apy9zxp.js:179); run also with CLAUDE_CODE_REMOTE=true, no change. Run: env319b.inert.remote-stall-interval and remote-stall-interval-remote. |
 | `CLAUDE_CODE_REMOTE_TOOLS_ADOPT_MCP` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_REMOTE_TOOLS_ASK_SEATS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_REMOTE_TOOLS_CALLER_SESSIONS_MAX` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
@@ -1554,16 +1560,16 @@ Items: 2117.
 | `CLAUDE_CODE_REMOTE_TOOLS_SESSION_CHANNEL` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REMOTE_TOOLS_SPECULATIVE_CLASSIFIER` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_REMOVE_PROMPT_STRINGS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
-| `CLAUDE_CODE_REPL` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_REPL was found (chunk-gvhwnc7g.js:1043). It has no known effect. |
+| `CLAUDE_CODE_REPL` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_REPL was found (chunk-c203g5kd.js:1043). It has no known effect. |
 | `CLAUDE_CODE_REPLY_GATE_POLICY` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_REPORT_FINDINGS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_REPORT_REPO_PROVENANCE` | Excluded: CLAUDE_CODE_REPORT_REPO_PROVENANCE is set or read by Claude Code for its own helper programs, sandbox, or built-in services. The runner sets `1` for the child session (chunk-3kp5jwr6.js:11782). The code does not show an effect that a user can use or change, so it is left out. |
+| `CLAUDE_CODE_REPORT_REPO_PROVENANCE` | Excluded: CLAUDE_CODE_REPORT_REPO_PROVENANCE is set or read by Claude Code for its own helper programs, sandbox, or built-in services. The runner sets `1` for the child session (chunk-q0y1fm2x.js:12108). The code does not show an effect that a user can use or change, so it is left out. |
 | `CLAUDE_CODE_REPO_CHECKOUTS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_REQUIRED_PLUGINS_HOLD` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_RESTRICTED` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RESULT_NONCE` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_RESUME_CACHE_WARM` | Excluded: Read only with CLAUDE_CODE_REMOTE and flag tengu_resume_cache_warm_config (chunk-614w915w.js:27428); also run with REMOTE=true, no change. Run: env319b.inert.resume-cache-warm and resume-cache-warm-remote. |
+| `CLAUDE_CODE_RESUME_CACHE_WARM` | Excluded: Read only with CLAUDE_CODE_REMOTE and flag tengu_resume_cache_warm_config (chunk-a0tz781a.js:28288); also run with REMOTE=true, no change. Run: env319b.inert.resume-cache-warm and resume-cache-warm-remote. |
 | `CLAUDE_CODE_RESUME_FROM_SESSION` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RESUME_HINT_COMMAND` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_RESUME_INTERRUPTED_TURN` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
@@ -1584,12 +1590,13 @@ Items: 2117.
 | `CLAUDE_CODE_RETRY_WATCHDOG_USAGE_LIMIT_RECHECK_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_CODE_RIPPLING_TULIP` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_RUNNER_MODEL_SOCKET` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
+| `CLAUDE_CODE_RUNNER_START_NOTES` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_RUSTLING_PIXEL` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_SAFE_MODE` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_SANDBOXED` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_SANDBOX_LEAVE_DENIES_TO_SRT_WIN` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_SANDBOX_LEAVE_PARENT_FOLDERS_ALONE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_SCRATCHPAD_DIR` | Excluded: CLAUDE_CODE_SCRATCHPAD_DIR is a switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. The host supplies it, and the program reads it only in chunk-s4344qe9.js:72. |
+| `CLAUDE_CODE_SCRATCHPAD_DIR` | Excluded: CLAUDE_CODE_SCRATCHPAD_DIR is a switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. The host supplies it, and the program reads it only in chunk-zsz02y6d.js:80. |
 | `CLAUDE_CODE_SCRIPT_CAPS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_SCROLL_SPEED` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_SDK_HAS_HOST_AUTH_REFRESH` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
@@ -1613,8 +1620,8 @@ Items: 2117.
 | `CLAUDE_CODE_SESSION_ORIGIN` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_SESSION_START_ANNOUNCEMENTS_BEFORE_PROMPT` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_SHELL` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_SHELL_HANDOVER_KEY` | Excluded: Internal variable that Claude Code sets itself. CLAUDE_CODE_SHELL_HANDOVER_KEY holds the key of the hand-over file for a PowerShell that Claude Code started ahead of a command (chunk-hg1yqkjk.js:247536), and the hand-over script clears it (chunk-hg1yqkjk.js:247551); not meant for users. |
-| `CLAUDE_CODE_SHELL_HANDOVER_PATH` | Excluded: Internal variable that Claude Code sets itself. CLAUDE_CODE_SHELL_HANDOVER_PATH holds the path of the hand-over file for a PowerShell that Claude Code started ahead of a command (chunk-hg1yqkjk.js:247535), and the hand-over script clears it (chunk-hg1yqkjk.js:247551); not meant for users. |
+| `CLAUDE_CODE_SHELL_HANDOVER_KEY` | Excluded: Internal variable that Claude Code sets itself. CLAUDE_CODE_SHELL_HANDOVER_KEY holds the key of the hand-over file for a PowerShell that Claude Code started ahead of a command (chunk-bzyb60p0.js:250896), and the hand-over script clears it (chunk-bzyb60p0.js:250911); not meant for users. |
+| `CLAUDE_CODE_SHELL_HANDOVER_PATH` | Excluded: Internal variable that Claude Code sets itself. CLAUDE_CODE_SHELL_HANDOVER_PATH holds the path of the hand-over file for a PowerShell that Claude Code started ahead of a command (chunk-bzyb60p0.js:250895), and the hand-over script clears it (chunk-bzyb60p0.js:250911); not meant for users. |
 | `CLAUDE_CODE_SHELL_LAUNCHER_SCRIPT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_SHELL_PREFIX` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_SHOWN_PLUGINS_DIR` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
@@ -1635,7 +1642,7 @@ Items: 2117.
 | `CLAUDE_CODE_SKIP_FAST_MODE_NETWORK_ERRORS` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_SKIP_FAST_MODE_ORG_CHECK` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_SKIP_FOUNDRY_AUTH` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
-| `CLAUDE_CODE_SKIP_HFI_VERSION_CHECK` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SKIP_HFI_VERSION_CHECK was found (chunk-gvhwnc7g.js:1390). It has no known effect. |
+| `CLAUDE_CODE_SKIP_HFI_VERSION_CHECK` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SKIP_HFI_VERSION_CHECK was found (chunk-c203g5kd.js:1402). It has no known effect. |
 | `CLAUDE_CODE_SKIP_MANTLE_AUTH` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `CLAUDE_CODE_SKIP_MCP_DEBUG_LOG_FILES` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_SKIP_MODEL_ACCESS_MEMORY` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
@@ -1643,11 +1650,11 @@ Items: 2117.
 | `CLAUDE_CODE_SKIP_PLUGIN_MCP_BUNDLES` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_SKIP_PLUGIN_MCP_SERVERS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `CLAUDE_CODE_SKIP_PLUGIN_MCP_SERVERS_EXCEPT` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_SKIP_PROJECT_BACKFILL` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SKIP_PROJECT_BACKFILL was found (chunk-gvhwnc7g.js:486). It has no known effect. |
+| `CLAUDE_CODE_SKIP_PROJECT_BACKFILL` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SKIP_PROJECT_BACKFILL was found (chunk-c203g5kd.js:486). It has no known effect. |
 | `CLAUDE_CODE_SKIP_PROMPT_HISTORY` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_CODE_SKIP_REPO_UPLOAD` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SKIP_REPO_UPLOAD was found (chunk-gvhwnc7g.js:488). It has no known effect. |
+| `CLAUDE_CODE_SKIP_REPO_UPLOAD` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SKIP_REPO_UPLOAD was found (chunk-c203g5kd.js:493). It has no known effect. |
 | `CLAUDE_CODE_SKIP_VERTEX_AUTH` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
-| `CLAUDE_CODE_SLACK_TAG_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SLACK_TAG_TOKEN by name was found (chunk-rqs3939j.js:721). It has no known effect. |
+| `CLAUDE_CODE_SLACK_TAG_TOKEN` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_SLACK_TAG_TOKEN by name was found (chunk-gd77dyw4.js:721). It has no known effect. |
 | `CLAUDE_CODE_SLEEPY_SNOWFLAKE` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `CLAUDE_CODE_SLEEP_COMPACT` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_SLEEP_COMPACT_AFTER_MS` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1659,15 +1666,17 @@ Items: 2117.
 | `CLAUDE_CODE_SPAWN_TIMESTAMP_MS` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `CLAUDE_CODE_SSE_PORT` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_STALL_TIMEOUT_MS_FOR_TESTING` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
+| `CLAUDE_CODE_STARTER_MAY_HOLD_CONNECTOR_FILE` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_STARTUP_FAILURE_RESULTS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_CODE_STELLAR_DRIFT` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_STOP_HOOK_BLOCK_CAP` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
+| `CLAUDE_CODE_STOP_ON_UNUSABLE_PROFILE` | Excluded: Named as `CLAUDE_CODE_STOP_ON_UNUSABLE_PROFILE` in the program's table of environment names (chunk-c203g5kd.js:498) and in lists of names that Claude Code passes to or keeps from child processes (chunk-5e3gtsn9.js:583, chunk-sdks5h78.js:143), but no code that reads its value was found. It has no known effect. |
 | `CLAUDE_CODE_STREAMED_BUMBLEBEE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_STREAMED_BUMBLEBEE_TEXT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_STREAM_EVENT_HOLD_MS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_STREAM_EVENT_MAX_LINE_BYTES` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_STREAM_EVENT_NO_SUBSCRIBER_HOLD_MS` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
-| `CLAUDE_CODE_STREAM_TIMER_SLACK_MS` | Excluded: The program names CLAUDE_CODE_STREAM_TIMER_SLACK_MS only in a list of variable names (chunk-aq3ms068.js:31687) and in a name check (chunk-59xdgreq.js:689); no code that reads its value was found. Run: env319b.inert.stream-timer-slack. |
+| `CLAUDE_CODE_STREAM_TIMER_SLACK_MS` | Excluded: The program names CLAUDE_CODE_STREAM_TIMER_SLACK_MS only in a list of variable names (chunk-865at33z.js:31971) and in a name check (chunk-r6r2wdsw.js:691); no code that reads its value was found. Run: env319b.inert.stream-timer-slack. |
 | `CLAUDE_CODE_STRICT_INLINE_SHELL_RM_PROMPT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_SUBAGENT_CACHE_EVICT` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_SUBAGENT_CONFIG_WARNING` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
@@ -1698,19 +1707,19 @@ Items: 2117.
 | `CLAUDE_CODE_SYSTEM_PROMPT_FEATURE_FLAG` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_SYSTEM_PROMPT_GB_FEATURE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_TAGS` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `CLAUDE_CODE_TAG_ISMETA_MESSAGES` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_TAG_ISMETA_MESSAGES was found (chunk-gvhwnc7g.js:504). It has no known effect. |
+| `CLAUDE_CODE_TAG_ISMETA_MESSAGES` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_TAG_ISMETA_MESSAGES was found (chunk-c203g5kd.js:511). It has no known effect. |
 | `CLAUDE_CODE_TASK_LIST_ID` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_TEAMMATE_COMMAND` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_TEAM_TEARDOWN_PARK_TIMEOUT_MS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_TEE_SDK_STDOUT` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_CODE_TELEPORT_MOVE` | Excluded: CLAUDE_CODE_TELEPORT_MOVE is set by the program for a teleport hand-off (chunk-drt4p535.js:978), read once and unset (chunk-t0rf1ym6.js:616-619), deleted from child env at chunk-fnffp7f4.js:291. Run: env319b.inert.teleport-move. |
+| `CLAUDE_CODE_TELEPORT_MOVE` | Excluded: CLAUDE_CODE_TELEPORT_MOVE is set by the program for a teleport hand-off (chunk-dwve1cyy.js:1005), read once and unset (chunk-nf14rdkz.js:641-644), deleted from child env at chunk-4wtfvxk7.js:279. Run: env319b.inert.teleport-move. |
 | `CLAUDE_CODE_TERMINAL_MCP_TOOLS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_TERMINAL_RECORDING` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_TERMINAL_RECORDING was found (chunk-gvhwnc7g.js:146). It has no known effect. |
+| `CLAUDE_CODE_TERMINAL_RECORDING` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_TERMINAL_RECORDING was found (chunk-c203g5kd.js:147). It has no known effect. |
 | `CLAUDE_CODE_TETHER_LIVE` | [SDK and Automation](../configure/env-vars/sdk-and-automation.md) |
 | `CLAUDE_CODE_THINKING_DISPLAY_UPDATES` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_THINKING_RESUMPTION` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `CLAUDE_CODE_THISTLE_GREBE` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_THREAD_CPU_ONE_IN` | Excluded: Read only when CLAUDE_CODE_REMOTE is 'true' and the runner is not self-hosted (chunk-kxsewe3a.js:223); sampling for telemetry. Also run with REMOTE=true, no change. Run: env319b.inert.thread-cpu-one-in. |
+| `CLAUDE_CODE_THREAD_CPU_ONE_IN` | Excluded: Read only when CLAUDE_CODE_REMOTE is 'true' and the runner is not self-hosted (chunk-ae4rjsvk.js:223); sampling for telemetry. Also run with REMOTE=true, no change. Run: env319b.inert.thread-cpu-one-in. |
 | `CLAUDE_CODE_THRIFTY_SONIC` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_TICKLISH_WHISPER` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_TICKLISH_WHISPER_TIMEOUT_MS` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
@@ -1724,7 +1733,7 @@ Items: 2117.
 | `CLAUDE_CODE_TOOL_MEMORY_CGROUP_EXCLUDE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_TOOL_MEMORY_LIMIT` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_TOOL_PICTURE_SERVERS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `CLAUDE_CODE_TOOL_USE_ID` | Excluded: Named in the program's lists of environment names (chunk-aq3ms068.js:31798). Claude Code removes it from the environment of a long-running PowerShell process and sets it again for each command (the list at chunk-hg1yqkjk.js:247537, the removal at chunk-hg1yqkjk.js:247832). No code that reads it by name was found. It has no CLAUDE_CODE_TOOL_USE_ID setting. |
+| `CLAUDE_CODE_TOOL_USE_ID` | Excluded: Named in the program's lists of environment names (chunk-865at33z.js:32086). Claude Code removes it from the environment of a long-running PowerShell process and sets it again for each command (the list at chunk-bzyb60p0.js:250897, the removal at chunk-bzyb60p0.js:251192). No code that reads it by name was found. It has no CLAUDE_CODE_TOOL_USE_ID setting. |
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_AFTER_USER_TURN` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_BUDGET` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
@@ -1736,8 +1745,8 @@ Items: 2117.
 | `CLAUDE_CODE_TUI_JUST_SWITCHED` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_TUI_TRIAL` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `CLAUDE_CODE_TURN_UPDATES` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `CLAUDE_CODE_TWO_STAGE_CLASSIFIER` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_TWO_STAGE_CLASSIFIER was found (chunk-gvhwnc7g.js:516). It has no known effect. |
-| `CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD` | Excluded: CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD is set by the parent ultrareview process for its child (chunk-bt99ga19.js:156); the child writes the session id after a cloud launch (chunk-1qfrm10g.js:780). Offline runs offline.ur-base and offline.ur-record exit 1 with 'Ultrareview is currently unavailable.' and write no file, so the write path is not reached without the cloud. Run: env319b.inert.ultrareview-launch-record. |
+| `CLAUDE_CODE_TWO_STAGE_CLASSIFIER` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_CODE_TWO_STAGE_CLASSIFIER was found (chunk-c203g5kd.js:523). It has no known effect. |
+| `CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD` | Excluded: CLAUDE_CODE_ULTRAREVIEW_LAUNCH_RECORD is set by the parent ultrareview process for its child (chunk-weavzzv1.js:156); the child writes the session id after a cloud launch (chunk-qq27e2h3.js:805). Offline runs offline.ur-base and offline.ur-record exit 1 with 'Ultrareview is currently unavailable.' and write no file, so the write path is not reached without the cloud. Run: env319b.inert.ultrareview-launch-record. |
 | `CLAUDE_CODE_ULTRAREVIEW_PR_AS_MERGED` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_ULTRAREVIEW_REVIEW_MD_FILE` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_CODE_UNWATCHED_REPLY_HOLD_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
@@ -1765,7 +1774,7 @@ Items: 2117.
 | `CLAUDE_CODE_WARN_MEMORY_FREE_GIB` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_WEBFETCH_CACHE_TTL_MS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_WEBFETCH_DEADLINE_MS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `CLAUDE_CODE_WEBFETCH_MCP_TOOL` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The program reads CLAUDE_CODE_WEBFETCH_MCP_TOOL as a JSON value with `server`, `tool`, and `askHost` (chunk-n4fsmf7d.js:23), and a value that is set turns off a check that includes CLAUDE_CODE_WEBFETCH_USE_CCR_PROXY (chunk-c0v81j9q.js:38). A parent session passes `1` to a child (chunk-7kvz9y39.js:1657). No user setting for it is shown. |
+| `CLAUDE_CODE_WEBFETCH_MCP_TOOL` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The program reads CLAUDE_CODE_WEBFETCH_MCP_TOOL as a JSON value with `server`, `tool`, and `askHost` (chunk-fc3gfgch.js:23), and a value that is set turns off a check that includes CLAUDE_CODE_WEBFETCH_USE_CCR_PROXY (chunk-pkzhb7kv.js:37). A parent session passes `1` to a child (chunk-95amtstn.js:1661). No user setting for it is shown. |
 | `CLAUDE_CODE_WEBFETCH_USE_CCR_PROXY` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_WEBSEARCH_CITATIONS` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `CLAUDE_CODE_WEBSEARCH_USE_CCR_PROXY` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
@@ -1781,7 +1790,7 @@ Items: 2117.
 | `CLAUDE_CODE_WORKER_CHECKIN_SCHEDULE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_WORKER_EPOCH` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_CODE_WORKFLOWS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
-| `CLAUDE_CODE_WORKFLOW_LAUNCH_SHA256` | Excluded: Set by the host for a remote worker, not by a user. The program reads it only through a constant (chunk-38c8wz0m.js:37) and compares it with the stored artifact digest in `getDispatchedDigest` (chunk-38c8wz0m.js:417). No code reads it by name. It has no CLAUDE_CODE_WORKFLOW_LAUNCH_SHA256 setting. |
+| `CLAUDE_CODE_WORKFLOW_LAUNCH_SHA256` | Excluded: Set by the host for a remote worker, not by a user. The program reads it only through a constant (chunk-ppzrm4tz.js:37) and compares it with the stored artifact digest in `getDispatchedDigest` (chunk-ppzrm4tz.js:417). No code reads it by name. It has no CLAUDE_CODE_WORKFLOW_LAUNCH_SHA256 setting. |
 | `CLAUDE_CODE_WORKFLOW_MAX_CONCURRENT_AGENTS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `CLAUDE_CODE_WORKFLOW_PROMPT_PROVENANCE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
@@ -1810,8 +1819,8 @@ Items: 2117.
 | `CLAUDE_GATEWAY_LOG_LEVEL` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `CLAUDE_GATEWAY_PROXY_IS_EGRESS_BOUNDARY` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `CLAUDE_IMPORT_CONVERSATIONS` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
-| `CLAUDE_INTERNAL_ASSISTANT_TEAM_NAME` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads CLAUDE_INTERNAL_ASSISTANT_TEAM_NAME, but it is not meant for users (chunk-frvyjgay.js:202). |
-| `CLAUDE_INTERNAL_FC_OVERRIDES` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads CLAUDE_INTERNAL_FC_OVERRIDES, but it is not meant for users (chunk-aq3ms068.js:52643). |
+| `CLAUDE_INTERNAL_ASSISTANT_TEAM_NAME` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads CLAUDE_INTERNAL_ASSISTANT_TEAM_NAME, but it is not meant for users (chunk-z40hbys4.js:203). |
+| `CLAUDE_INTERNAL_FC_OVERRIDES` | Excluded: Internal variable for Anthropic staff or Anthropic-run services. The program reads CLAUDE_INTERNAL_FC_OVERRIDES, but it is not meant for users (chunk-865at33z.js:53321). |
 | `CLAUDE_INTERNAL_SESSION_TASK_LIST_ID` | Excluded: Set or read by Claude Code for its own helper programs, sandbox, or built-in services. The code does not show an effect that a user can use or change, so it is left out. |
 | `CLAUDE_JOB_DIR` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `CLAUDE_LOCAL_OAUTH_API_BASE` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
@@ -1866,20 +1875,21 @@ Items: 2117.
 | `CLAUDE_RUNNER_SKIP_GIT_VERIFY` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_RUNNER_SPAWN_REASON` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_RUNNER_STALL_GIVEUP` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
+| `CLAUDE_RUNNER_START_FOLDER` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_RUNNER_TRUST_CANONICAL_PREWARM` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_RUNNER_UPDATE_BIN` | Excluded: Switch or override for a feature flag, experiment, or host-to-process state. The code reads it but does not show what it changes for a user, so it is left out. |
 | `CLAUDE_RUNNER_USE_GIT_PROXY` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_RUNNER_WORKSPACE_PATHS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_RUNNER_WORK_ORDER_FILE` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_SECURESTORAGE_CONFIG_DIR` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
-| `CLAUDE_SERVE_DRAIN_TIMEOUT_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SERVE_DRAIN_TIMEOUT_MS was found (chunk-gvhwnc7g.js:1176). It has no known effect. |
+| `CLAUDE_SERVE_DRAIN_TIMEOUT_MS` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SERVE_DRAIN_TIMEOUT_MS was found (chunk-c203g5kd.js:1188). It has no known effect. |
 | `CLAUDE_SESSION_INGRESS_TOKEN_FILE` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
 | `CLAUDE_SLOW_FIRST_BYTE_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `CLAUDE_SNIP` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SNIP was found (chunk-gvhwnc7g.js:1177). It has no known effect. |
+| `CLAUDE_SNIP` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SNIP was found (chunk-c203g5kd.js:1189). It has no known effect. |
 | `CLAUDE_SSH_DAEMON_CHILD` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_SSH_LOCAL_BINARY` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SSH_LOCAL_BINARY was found (chunk-gvhwnc7g.js:1179). It has no known effect. |
+| `CLAUDE_SSH_LOCAL_BINARY` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SSH_LOCAL_BINARY was found (chunk-c203g5kd.js:1191). It has no known effect. |
 | `CLAUDE_SSH_RUN_DIR` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `CLAUDE_SSH_VERSION` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SSH_VERSION was found (chunk-gvhwnc7g.js:1181). It has no known effect. |
+| `CLAUDE_SSH_VERSION` | Excluded: Named in the program's table or lists of environment names, but no code that reads CLAUDE_SSH_VERSION was found (chunk-c203g5kd.js:1193). It has no known effect. |
 | `CLAUDE_STAGE_FILE_ROOT` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `CLAUDE_STREAM_FIRST_BYTE_TIMEOUT_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `CLAUDE_STREAM_IDLE_TIMEOUT_MS` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
@@ -1992,16 +2002,17 @@ Items: 2117.
 | `ENABLE_BETA_TRACING_DETAILED` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `ENABLE_CLAUDEAI_MCP_SERVERS` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
 | `ENABLE_ENHANCED_TELEMETRY_BETA` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `ENABLE_LOCKLESS_UPDATES` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_LOCKLESS_UPDATES was found (chunk-gvhwnc7g.js:571). It has no known effect. |
-| `ENABLE_LSP_TOOL` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_LSP_TOOL was found (chunk-gvhwnc7g.js:572). It has no known effect. |
+| `ENABLE_LOCKLESS_UPDATES` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_LOCKLESS_UPDATES was found (chunk-c203g5kd.js:578). It has no known effect. |
+| `ENABLE_LSP_TOOL` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_LSP_TOOL was found (chunk-c203g5kd.js:579). It has no known effect. |
 | `ENABLE_MCP_LARGE_OUTPUT_FILES` | [Plugins and MCP](../configure/env-vars/plugins-and-mcp.md) |
-| `ENABLE_PID_BASED_VERSION_LOCKING` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_PID_BASED_VERSION_LOCKING was found (chunk-gvhwnc7g.js:574). It has no known effect. |
+| `ENABLE_PID_BASED_VERSION_LOCKING` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_PID_BASED_VERSION_LOCKING was found (chunk-c203g5kd.js:574). It has no known effect. |
 | `ENABLE_PROMPT_CACHING_1H` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `ENABLE_PROMPT_CACHING_1H_BEDROCK` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
-| `ENABLE_SESSION_BACKGROUNDING` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_SESSION_BACKGROUNDING was found (chunk-gvhwnc7g.js:577). It has no known effect. |
-| `ENABLE_SESSION_PERSISTENCE` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_SESSION_PERSISTENCE was found (chunk-gvhwnc7g.js:578). It has no known effect. |
+| `ENABLE_SESSION_BACKGROUNDING` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_SESSION_BACKGROUNDING was found (chunk-c203g5kd.js:577). It has no known effect. |
+| `ENABLE_SESSION_PERSISTENCE` | Excluded: Named in the program's table or lists of environment names, but no code that reads ENABLE_SESSION_PERSISTENCE was found (chunk-c203g5kd.js:578). It has no known effect. |
 | `ENABLE_TOOL_SEARCH` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
-| `ENVIRONMENT_SERVICE_KEY` | Excluded: Named in the program's table (chunk-gvhwnc7g.js:107) and in a list of secret variable names (chunk-rqs3939j.js:757), but no code that reads ENVIRONMENT_SERVICE_KEY was found. It has no known effect. |
+| `ENV` | Excluded: Variable of the OS or another tool: the startup file of a POSIX shell. Claude Code reads it only to find the shell startup files that it protects (`ENV` at chunk-j93j69ny.js:1047 and chunk-j93j69ny.js:1423), and names it in its lists of variables that it removes or protects for child processes. It has no setting for it. |
+| `ENVIRONMENT_SERVICE_KEY` | Excluded: Named in the program's table (chunk-c203g5kd.js:108) and in a list of secret variable names (chunk-gd77dyw4.js:757), but no code that reads ENVIRONMENT_SERVICE_KEY was found. It has no known effect. |
 | `ES_JAVA_OPTS` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `FALLBACK_FOR_ALL_PRIMARY_MODELS` | [Models and Effort](../configure/env-vars/models-and-effort.md) |
 | `FASTLANE_SESSION` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
@@ -2022,7 +2033,7 @@ Items: 2117.
 | `GCC_COLORS` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `GCE_METADATA_HOST` | [Bundled Libraries](../configure/env-vars/bundled-libraries.md) |
 | `GCE_METADATA_IP` | [Bundled Libraries](../configure/env-vars/bundled-libraries.md) |
-| `GCE_METADATA_ROOT` | Excluded: Only a name in the list of Google metadata variables inside the provider-managed variable set. Repository and managed-host settings cannot set it. The program has no read of the value of GCE_METADATA_ROOT (chunk-rqs3939j.js:786). |
+| `GCE_METADATA_ROOT` | Excluded: Only a name in the list of Google metadata variables inside the provider-managed variable set. Repository and managed-host settings cannot set it. The program has no read of the value of GCE_METADATA_ROOT (chunk-gd77dyw4.js:786). |
 | `GCLOUD_PROJECT` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `GCM_INTERACTIVE` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `GCONV_PATH` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
@@ -2219,7 +2230,7 @@ Items: 2117.
 | `HUGGINGFACEHUB_API_TOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `HUGGING_FACE_HUB_TOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `IBM_JAVA_OPTIONS` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `IDENTITY_HEADER` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-nnhxds8s.js:13131). Claude Code has no IDENTITY_HEADER setting. |
+| `IDENTITY_HEADER` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-xmxdgc97.js:14632). Claude Code has no IDENTITY_HEADER setting. |
 | `INK_SCREEN_READER` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `INPUT_AWS_BEARER_TOKEN_BEDROCK` | Excluded: Variable of the OS or another tool that Claude Code reads or passes to a child process. It has no setting for it. |
 | `INTELLIJ_TERMINAL_COMMAND_BLOCKS` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
@@ -2289,8 +2300,8 @@ Items: 2117.
 | `MIMALLOC_PURGE_DELAY` | Excluded: Variable of the memory allocator of the Bun runtime. Claude Code only removes it from the environment of child processes in a cloud session and notes that it is set (for `MIMALLOC_PURGE_DELAY`, its value in ms) in an internal result field. It has no setting for it. |
 | `MODULE_PATH` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `MONO_PATH` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
-| `MSAL_FORCE_REGION` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-nnhxds8s.js:10309). Claude Code has no MSAL_FORCE_REGION setting. |
-| `MSI_SECRET` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-nnhxds8s.js:13510). Claude Code has no MSI_SECRET setting. |
+| `MSAL_FORCE_REGION` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-xmxdgc97.js:11810). Claude Code has no MSAL_FORCE_REGION setting. |
+| `MSI_SECRET` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-xmxdgc97.js:15011). Claude Code has no MSI_SECRET setting. |
 | `MSYSTEM` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
 | `MS_TEAMS_WEBHOOK_URI` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `NETLIFY` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
@@ -2320,7 +2331,7 @@ Items: 2117.
 | `NUGET_AUTH_TOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `NoDefaultCurrentDirectoryInExePath` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `OAUTH_TOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
-| `OLDPWD` | Excluded: Variable of the OS or another tool. Claude Code names it in lists of variables to scrub or keep (chunk-hg1yqkjk.js:53784). In a remote Linux session it also reads and sets it for the previous folder of the shell (chunk-hg1yqkjk.js:247921). It has no OLDPWD setting. |
+| `OLDPWD` | Excluded: Variable of the OS or another tool. Claude Code names it in lists of variables to scrub or keep (chunk-bzyb60p0.js:54618). In a remote Linux session it also reads and sets it for the previous folder of the shell (chunk-bzyb60p0.js:251281). It has no OLDPWD setting. |
 | `OPENJ9_JAVA_OPTIONS` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `OPENSSL_CONF` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `OPENSSL_CONF_INCLUDE` | Excluded: Variable of the OS or another tool that Claude Code reads or passes to a child process. It has no setting for it. |
@@ -2363,13 +2374,13 @@ Items: 2117.
 | `OTEL_EXPORTER_OTLP_METRICS_PROTOCOL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_METRICS_TIMEOUT` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
-| `OTEL_EXPORTER_OTLP_PROFILES_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_KEY` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_HEADERS` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_INSECURE` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
-| `OTEL_EXPORTER_OTLP_PROFILES_PROTOCOL` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-rqs3939j.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_CERTIFICATE` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_CLIENT_KEY` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_HEADERS` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_INSECURE` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
+| `OTEL_EXPORTER_OTLP_PROFILES_PROTOCOL` | Excluded: Named in the program's table or lists of environment names, such as OTEL_EXPORTER_OTLP_PROFILES_ENDPOINT, but no code that reads OTEL_EXPORTER_OTLP_PROFILES_* was found (chunk-gd77dyw4.js:490). It has no known effect. |
 | `OTEL_EXPORTER_OTLP_PROTOCOL` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_TIMEOUT` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
 | `OTEL_EXPORTER_OTLP_TRACES_CERTIFICATE` | [Telemetry and Debug](../configure/env-vars/telemetry-and-debug.md) |
@@ -2437,7 +2448,7 @@ Items: 2117.
 | `POETRY_CONFIG_DIR` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `POSIXLY_CORRECT` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `PREFIX` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `PROCESSOR_ARCHITECTURE` | Excluded: Variable of the OS. The program reads PROCESSOR_ARCHITECTURE to report the Windows architecture in a telemetry fact (chunk-d08m01b2.js:1244), and a bundled library passes PROCESSOR_ARCHITECTURE to MCP stdio servers on Windows (chunk-w3gpg1a5.js:1834). Claude Code has no setting for it. |
+| `PROCESSOR_ARCHITECTURE` | Excluded: Variable of the OS. The program reads PROCESSOR_ARCHITECTURE to report the Windows architecture in a telemetry fact (chunk-27h8thr7.js:1245), and a bundled library passes PROCESSOR_ARCHITECTURE to MCP stdio servers on Windows (chunk-54d1gdxa.js:1864). Claude Code has no setting for it. |
 | `PROGRAMDATA` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `PROGRAMFILES` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `PROJECT_DOMAIN` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -2454,7 +2465,7 @@ Items: 2117.
 | `RAILWAY_ENVIRONMENT_NAME` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `RAILWAY_SERVICE_NAME` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `RCLONE_CONFIG` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `REGION_NAME` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-nnhxds8s.js:10308). Claude Code has no REGION_NAME setting. |
+| `REGION_NAME` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-xmxdgc97.js:11809). Claude Code has no REGION_NAME setting. |
 | `REGISTRY_AUTH_FILE` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `RENDER` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `REPL_ID` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -2471,6 +2482,7 @@ Items: 2117.
 | `SAFEUSER` | [Features and Toggles](../configure/env-vars/features-and-toggles.md) |
 | `SANDBOX_OFFICE_PDF_DIR` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `SANDBOX_OFFICE_PDF_SEND` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
+| `SANDBOX_RUNTIME` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `SASL_PATH` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `SBT_CREDENTIALS` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `SBT_OPTS` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -2522,6 +2534,7 @@ Items: 2117.
 | `SELF_HOSTED_RUNNER_SIGKILL_TIMEOUT_MS` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `SELF_HOSTED_RUNNER_STARTUP_TIMEOUT_MS` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
+| `SELF_HOSTED_RUNNER_START_DIR` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `SELF_HOSTED_RUNNER_TRUST_WORKSPACE` | [Agents and Teams](../configure/env-vars/agents-and-teams.md) |
 | `SELF_HOSTED_RUNNER_USE_ANTHROPIC_GH` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
 | `SESSIONNAME` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -2564,7 +2577,7 @@ Items: 2117.
 | `SYSTEM_WGETRC` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `SystemDrive` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `SystemRoot` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `TASK_MAX_OUTPUT_LENGTH` | Excluded: Named in the program's table or lists of environment names, but no code that reads TASK_MAX_OUTPUT_LENGTH was found (chunk-rqs3939j.js:1210). It has no known effect. |
+| `TASK_MAX_OUTPUT_LENGTH` | Excluded: Named in the program's table or lists of environment names, but no code that reads TASK_MAX_OUTPUT_LENGTH was found (chunk-gd77dyw4.js:1210). It has no known effect. |
 | `TEAMS_WEBHOOK_URL` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `TEMP` | [Sessions and Storage](../configure/env-vars/sessions-and-storage.md) |
 | `TERM` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
@@ -2590,11 +2603,11 @@ Items: 2117.
 | `TWINE_REPOSITORY_URL` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `TWINE_USERNAME` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `TZ` | Excluded: Variable of the OS or another tool that Claude Code reads or passes to a child process. It has no setting for it. |
-| `ULTRAPLAN_PROMPT_FILE` | Excluded: Named in the program's table or lists of environment names, but no code that reads ULTRAPLAN_PROMPT_FILE was found (chunk-gvhwnc7g.js:1206). It has no known effect. |
+| `ULTRAPLAN_PROMPT_FILE` | Excluded: Named in the program's table or lists of environment names, but no code that reads ULTRAPLAN_PROMPT_FILE was found (chunk-c203g5kd.js:1218). It has no known effect. |
 | `USER` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `USERNAME` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `USERPROFILE` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
-| `USER_TYPE` | Excluded: Internal user type. The program names the value `ant` as `INTERNAL_USER_TYPE` (chunk-fx4qha4b.js:305). With `USER_TYPE` set to `ant`, it reads a forced tip id, `forcedTipId` (chunk-fx4qha4b.js:333) and reports `ant` in place of `external` in telemetry (chunk-d08m01b2.js:1143). Other values give `external`, so it has no effect a user can use. |
+| `USER_TYPE` | Excluded: Internal user type. The program names the value `ant` as `INTERNAL_USER_TYPE` (chunk-hsa1vcdc.js:306). With `USER_TYPE` set to `ant`, it reads a forced tip id, `forcedTipId` (chunk-hsa1vcdc.js:334) and reports `ant` in place of `external` in telemetry (chunk-27h8thr7.js:1144). Other values give `external`, so it has no effect a user can use. |
 | `USE_API_CONTEXT_MANAGEMENT` | [Context and Compaction](../configure/env-vars/context-and-compaction.md) |
 | `USE_BUILTIN_RIPGREP` | [Tools and Bash](../configure/env-vars/tools-and-bash.md) |
 | `USE_LOCAL_OAUTH` | [Auth and Accounts](../configure/env-vars/auth-and-accounts.md) |
@@ -2640,9 +2653,9 @@ Items: 2117.
 | `VERTEX_REGION_CLAUDE_HAIKU_4_5` | [/configure/env-vars/cloud-providers#variables](/configure/env-vars/cloud-providers#variables) |
 | `VERTEX_REGION_CLAUDE_HAIKU_5_5` | [/configure/env-vars/cloud-providers#variables](/configure/env-vars/cloud-providers#variables) |
 | `VISUAL` | [UI and Terminal](../configure/env-vars/ui-and-terminal.md) |
-| `VITALS_CLI_VERSION` | Excluded: Only a name VITALS_CLI_VERSION that the program sets in the child env of the guest vitals emitter helper (kill switch CLAUDE_CODE_DISABLE_VITALS_EMITTER at chunk-8rzq0hy1.js:26), from a build constant (chunk-8rzq0hy1.js:193). The program does not read it. |
+| `VITALS_CLI_VERSION` | Excluded: Only a name VITALS_CLI_VERSION that the program sets in the child env of the guest vitals emitter helper (kill switch CLAUDE_CODE_DISABLE_VITALS_EMITTER at chunk-0954qjq0.js:26), from a build constant (chunk-0954qjq0.js:193). The program does not read it. |
 | `VITALS_EMITTER_BIN` | [Remote and Cloud Sessions](../configure/env-vars/remote-and-cloud-sessions.md) |
-| `VOICE_STREAM_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads VOICE_STREAM_BASE_URL was found (chunk-rqs3939j.js:714). It has no known effect. |
+| `VOICE_STREAM_BASE_URL` | Excluded: Named in the program's table or lists of environment names, but no code that reads VOICE_STREAM_BASE_URL was found (chunk-gd77dyw4.js:714). It has no known effect. |
 | `VSCODE_GIT_ASKPASS_MAIN` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `VSCODE_INSPECTOR_OPTIONS` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
 | `VSS_NUGET_ACCESSTOKEN` | Excluded: Variable of the OS or another tool. Claude Code only names it in its lists of variables that it removes, protects, or blocks for child processes (see What the Scrub Removes on the Tools and Bash page), or it passes it through to a child process. It has no setting for it. |
@@ -2675,21 +2688,21 @@ Items: 2117.
 | `ZED_TERM` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `ZELLIJ` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `_X_AMZN_TRACE_ID` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-90ykrjwf.js:249). Claude Code has no _X_AMZN_TRACE_ID setting. |
+| `_X_AMZN_TRACE_ID` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-x8v62cn3.js:249). Claude Code has no _X_AMZN_TRACE_ID setting. |
 | `__CFBundleIdentifier` | [System and Third-Party](../configure/env-vars/system-and-third-party.md) |
 | `all_proxy` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `gcloud_project` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `google_application_credentials` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
 | `google_cloud_project` | [Cloud Providers](../configure/env-vars/cloud-providers.md) |
-| `grpc_proxy` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-fb37em01.js:11481). Claude Code also sets it, with GRPC_PROXY, in the proxy variables it builds for sandboxed commands (chunk-2xzxbrx8.js:528). It has no grpc_proxy setting. |
+| `grpc_proxy` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-t2eveqgh.js:11481). Claude Code also sets it, with GRPC_PROXY, in the proxy variables it builds for sandboxed commands (chunk-1ag56sne.js:528). It has no grpc_proxy setting. |
 | `http_proxy` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 | `https_proxy` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
-| `no_grpc_proxy` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-fb37em01.js:11522). Claude Code has no no_grpc_proxy setting. |
+| `no_grpc_proxy` | Excluded: Read only by a library bundled in the program (the Azure identity library, the AWS SDK, gRPC, or a TLS or cloud detector) (chunk-t2eveqgh.js:11522). Claude Code has no no_grpc_proxy setting. |
 | `no_proxy` | [Network and Proxy](../configure/env-vars/network-and-proxy.md) |
 
 ## Error Texts
 
-Items: 4220.
+Items: 4196.
 
 | Item | Where |
 | --- | --- |
@@ -2750,7 +2763,7 @@ Items: 4220.
 | `$.ui.mount: ${…}` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `$.ui.mount: ${…} ${…} is mounted on the ${…} surface already; unmount it first, or name another requestId for a second instance` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `$.ui.mount: the test ended while the drawing was being raised` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
-| `$/cancelRequest names no request` | Excluded: Bundled JSON-RPC connection library; a protocol check on a message of the other side (`$/cancelRequest names no request`, chunk-j0xj243x.js:331), not a Claude Code text |
+| `$/cancelRequest names no request` | Excluded: Bundled JSON-RPC connection library; a protocol check on a message of the other side (`$/cancelRequest names no request`, chunk-jtw93aks.js:332), not a Claude Code text |
 | `$data keyword must have "code" or "validate" function` | Excluded: Bundled Ajv JSON Schema validator |
 | `$schema must be a string` | Excluded: Bundled Ajv JSON Schema validator |
 | `${…} ${…} You are signed in to that organization now. But earlier in this session, you were signed in to a different organization. Parts of the connection to the other organization's cloud provider ca…` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -2771,6 +2784,7 @@ Items: 4220.
 | `${…} No backup was available to restore from.` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
 | `${…} Nothing was deleted, and the known_marketplaces.json entry named "${…}" was left in place: those settings may turn ${…} on again, ${…} the commit the ${…} lists.${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…} The blocks contain NUL bytes, which project docs cannot store. Remove them, then send all the blocks again.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `${…} The prompt was not run. Run the same claude command again after switching.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} The retry over SSH failed too: ${…} Check the repository and ref in the marketplace entry and that github.com can be reached. If the repository is private, add an SSH key to your GitHub account o…` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…} The sign-in was saved but could not be checked against your organization yet; Claude Code checks it again when it next starts.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `${…} The text is only SEARCH/REPLACE blocks, and would have replaced the whole doc. ${…} the doc's whole new text. Do not delete the doc to write it afresh.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -2791,7 +2805,6 @@ Items: 4220.
 | `${…} and this call's permission check did not ask for it. Call read_comments again for this artifact so the user can be asked.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `${…} became a symlink while being created; refusing it (an empty file may have been created at its target, ${…})` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} called twice: a registration takes one .catch` | [/extend/mod-api#errors](/extend/mod-api#errors) |
-| `${…} cannot be NaN or Infinity` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `${…} cannot be combined with --proxy-authorization-command / --proxy-authorization-file: sessions would reach that proxy without the egress listener. Remove one of the two.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} cannot be used in agent contexts` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `${…} cannot clear a goal. The user can end it with /goal clear.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -2804,7 +2817,7 @@ Items: 4220.
 | `${…} could not be examined after being created; refusing to use it` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} could not be opened` | [Plugin Commands](../extend/plugins/cli.md) |
 | `${…} could not be resolved within ${…} seconds. Try again.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
-| `${…} did not resolve here and is not left to the proxy: the name means loopback or cloud metadata, or has an empty label` | Excluded: A bridge WebSocket host check (chunk-3en7bpzn.js:152) that needs a proxy and CLAUDE_CODE_PROXY_RESOLVES_HOSTS; the host is set by the program, not typed by a user. |
+| `${…} did not resolve here and is not left to the proxy: the name means loopback or cloud metadata, or has an empty label` | Excluded: A bridge WebSocket host check (chunk-18mwdpr8.js:152) that needs a proxy and CLAUDE_CODE_PROXY_RESOLVES_HOSTS; the host is set by the program, not typed by a user. |
 | `${…} did not say what became of background command ${…}: it is not attached or did not answer in time, or it no longer reports on the command (it keeps the last 16 that ended, and its record goes with…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `${…} directory name "${…}" contains a character that cannot be scoped safely in a permission rule (one of ( ) [ ] { } * ? ! # or a backslash) — rename it` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} directory name "${…}" starts or ends with whitespace, which cannot be scoped safely in a permission rule — rename it` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -2866,9 +2879,9 @@ Items: 4220.
 | `${…} is not a registry package at an exact version` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `${…} is not a regular file` | [Plugin Commands](../extend/plugins/cli.md) |
 | `${…} is not a regular file (or exceeds 1MiB); refusing read-modify-write` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `${…} is not a value in ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
+| `${…} is not an absolute path.` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `${…} is not an object` | [Marketplaces](../extend/plugins/marketplace.md) |
-| `${…} is not available in this REPL call` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `${…} is not available in this REPL call` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `${…} is not found when adding ${…} middleware ${…} ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `${…} is not supported` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `${…} is not supported as a default browser` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -2884,6 +2897,7 @@ Items: 4220.
 | `${…} is too long (over 64 KB).` | Excluded: Plugin option value checks (required, length, single line, boolean, integer, JSON object) |
 | `${…} is true or false` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} is unavailable. No underlying credential could be used. To troubleshoot, visit https://aka.ms/azsdk/js/identity/environmentcredential/troubleshoot.` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
+| `${…} is, or holds, ${…}, which the copy was to stand apart from.` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `${…} it is outside the plugin's folder (${…})` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…} keys cannot be imported as CryptoKey instances` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `${…} lasts ${…} seconds, and the most is 4: shorten its notes, step or release` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
@@ -2891,6 +2905,7 @@ Items: 4220.
 | `${…} links outside node_modules` | Excluded: Plugin mod load limits on file count, file size, and TypeScript file count; no page lists them |
 | `${…} may only contain letters, digits, hyphens, and underscores — it is interpolated into the claude.googleapis.com request path, so URL metacharacters in its value would rewrite the project/workspace…` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `${…} missing or invalid` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
+| `${…} must be <owner>/<repo>=<folder>, once for each repository (entry ${…} is not)` | [/configure/cli/self-hosted-runner#runner-errors](/configure/cli/self-hosted-runner#runner-errors) |
 | `${…} must be <owner>/<repo>=<folder>, or <owner>/*=<folder>/* (got: ${…})` | [/configure/cli/self-hosted-runner#runner-errors](/configure/cli/self-hosted-runner#runner-errors) |
 | `${…} must be a comma-separated list of model ids, such as <model-id>,<prefix>*. Each id starts with a letter or digit, uses only letters, digits and . _ : @ / -, and may end in one * (got: ${…})` | [/configure/cli/self-hosted-runner#runner-errors](/configure/cli/self-hosted-runner#runner-errors) |
 | `${…} must be a non-negative number of minutes (0 disables, max ${…}), got: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -2903,7 +2918,6 @@ Items: 4220.
 | `${…} must be between ${…} and ${…}, inclusive` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `${…} must be one of 1/true/yes/on or 0/false/no/off (got: ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `${…} must be true or false (or 1/0, yes/no, on/off).` | Excluded: Plugin option value checks (required, length, single line, boolean, integer, JSON object) |
-| `${…} must have a value` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `${…} needs exactly one of drone: true and scatter` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `${…} needs exactly one of gradient and vector` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} no longer holds what this run wrote — something else is writing into ${…}` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -2923,6 +2937,7 @@ Items: 4220.
 | `${…} takes no ${…}: ${…}` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `${…} takes one of ${…} alone, such as ["mono"]` | [/extend/mod-api/ui#style-values](/extend/mod-api/ui#style-values) |
 | `${…} that holds a BigInt, which cannot be written out` | Excluded: Mod API engine refusal (argument, tenant, size, or hook check); no page states the text |
+| `${…} tool is not available in this REPL context` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `${…} value must be ${…}` | Excluded: Bundled Ajv JSON Schema validator |
 | `${…} vanished from ${…}/ while being read; try again` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…} was added by a tool.list hook, and no tool.run or tool.call hook answered this call` | [/extend/mod-api/calls/tool-command-config#events-raised-by-these-calls](/extend/mod-api/calls/tool-command-config#events-raised-by-these-calls) |
@@ -2939,6 +2954,9 @@ Items: 4220.
 | ``${…}'s marketplace changed the command that installs it, or how its output is used (now `${…}`), since it was accepted, so it was not run. Review and accept the new command: ${…}.`` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | ``${…}'s marketplace entry changed while it was being installed (it now declares `${…}`, not the command that was shown), so nothing was run. Re-run the install/update to review the current command.`` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | ``${…}'s marketplace entry now installs it by running a command on this machine (`${…}`) that has not been reviewed yet, so it was not run. Review and accept it: ${…}.`` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
+| `${…}, because Anthropic's safety scan cannot take it. ${…}. Do not repeat it. Tell the server's owner.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
+| `${…}, because Anthropic's safety scan of this skill has no result yet. Try invoking it again in a minute. If a few tries give the same answer, continue without the skill.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
+| `${…}, because Anthropic's safety scan stopped this version of it${…}. Retrying now will not help. Tell the server's owner.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `${…}, if provided, must be a Buffer.` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `${…}, so the session now stands in ${…}, a temporary folder of Claude Code's own. Tell the person to put them right and then start the session again.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `${…}, so the session starts with no prompt: ${…}` | [/configure/cli/flags#sessions-and-worktrees](/configure/cli/flags#sessions-and-worktrees) |
@@ -3018,7 +3036,7 @@ Items: 4220.
 | `${…}: ${…} (host check)` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `${…}: ${…} assigns to its import ${…}` | [/extend/mod-api#errors](/extend/mod-api#errors) |
 | `${…}: ${…} awaits at its top level, which only the entry file may` | [/extend/mod-api#errors](/extend/mod-api#errors) |
-| `${…}: ${…} did not link` | Excluded: Internal assertion of the hooks module bundler (`did not link`, chunk-r2ks4qkk.js:1481); no page states the text |
+| `${…}: ${…} did not link` | Excluded: Internal assertion of the hooks module bundler (`did not link`, chunk-ebhp3wz0.js:1339); no page states the text |
 | `${…}: ${…} does not compile: ${…}` | [/extend/mod-api#errors](/extend/mod-api#errors) |
 | `${…}: ${…} exports no register(on, options) function` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…}: ${…} exports the name "then" (its own, or through an export *), which no entry module may: rename the export` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
@@ -3028,6 +3046,7 @@ Items: 4220.
 | `${…}: ${…} is an automounter path (macOS /Network, or the bare /net root) — refusing it (a lookup there is a network request)` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: ${…} is an eval-directory link that points outside the plugin — remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: ${…} is not a PEM ${…}` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
+| `${…}: ${…} is not available in this mode` | [/extend/mod-api/calls/vcs#members](/extend/mod-api/calls/vcs#members) |
 | `${…}: ${…} is not available in this mode: no session is bound in this process (the REPL has not mounted and no headless session is built); catch it and carry on` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…}: ${…} leads to an automounter map directory (/net, /net/<host>; macOS /Network, /home) — refusing it (naming anything in it asks the automounter or a host)` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: ${…} must be a non-negative integer, got ${…}` | Excluded: Plugin option value checks (required, length, single line, boolean, integer, JSON object) |
@@ -3094,21 +3113,21 @@ Items: 4220.
 | `${…}: a tool server doesn't run a marketplace's headersHelper on its own: the command was not run and the marketplace was not fetched.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `${…}: a version-control directory or one of its pointers could not be resolved (${…}) — make it readable or remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: a version-control store holds too many top-level entries to examine — refusing to run` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
-| `${…}: action is not one that this version knows` | Excluded: Cloud session control request (an @internal request, chunk-w03c3634.js:18019); no page states the text |
-| `${…}: agent_id must be 1 to 128 letters, digits, _ or -` | Excluded: Cloud session control request (an @internal request, chunk-w03c3634.js:17962); no page states the text |
+| `${…}: action is not one that this version knows` | Excluded: Cloud session control request (an @internal request, chunk-xfj2cwfv.js:18104); no page states the text |
+| `${…}: agent_id must be 1 to 128 letters, digits, _ or -` | Excluded: Cloud session control request (an @internal request, chunk-xfj2cwfv.js:18047); no page states the text |
 | `${…}: an add_dir may only name fixture directories inside this case — not the case directory itself, its graders, a sibling case, an eval directory, or the plugin root` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an add_dir must name a directory, not a file` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an add_dirs entry points inside a directory that holds case definitions or version-control data of a plugin under test — point it at the fixtures themselves` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an add_dirs entry points into version-control metadata — point it at the fixtures themselves` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an agent responder needs a description of the server it plays as its body${…}` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: an engine.create hook has no budget and its failure fails the load; .catch does not apply` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
-| `${…}: at must be a time such as 2026-11-16T19:00:00Z, or empty` | Excluded: Cloud session control request (an @internal request, chunk-w03c3634.js:18019); no page states the text |
+| `${…}: at must be a time such as 2026-11-16T19:00:00Z, or empty` | Excluded: Cloud session control request (an @internal request, chunk-xfj2cwfv.js:18104); no page states the text |
 | `${…}: cannot list "${…}" under a plugin or eval directory — make it readable or remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: cannot read ${…} (${…})` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `${…}: cannot tell what "${…}" under the eval directory is — make it readable or remove it` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
-| `${…}: cause must be typing or pickup` | Excluded: Cloud session control request (an @internal request, chunk-w03c3634.js:18019); no page states the text |
+| `${…}: cause must be typing or pickup` | Excluded: Cloud session control request (an @internal request, chunk-xfj2cwfv.js:18104); no page states the text |
 | `${…}: collection must be an odd-depth path of 1-15 segments and doc_id one segment, within the path byte cap, after permission or hook rewrites` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `${…}: cursor must be a next_cursor as it was given` | Excluded: Cloud session control request (an @internal request, chunk-w03c3634.js:17712); no page states the text |
+| `${…}: cursor must be a next_cursor as it was given` | Excluded: Cloud session control request (an @internal request, chunk-xfj2cwfv.js:17797); no page states the text |
 | `${…}: cursor must be a non-empty string of at most ${…} characters` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `${…}: disappeared while loading` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: engine.create must return $ ({ ...await next(e), <noun>: { <event>() {} } }), not ${…}` | [/extend/mod-api#errors](/extend/mod-api#errors) |
@@ -3196,13 +3215,11 @@ Items: 4220.
 | `${…}: the on("${…}") hook returned no result` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…}: the repository layout keeps revealing further working trees — refusing to run` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: theme.set: ${…}: ${…}` | Excluded: Mod API engine refusal (argument, tenant, size, or hook check); no page states the text |
-| `${…}: title must be a string of 1 to ${…} characters` | Excluded: Cloud session control request (an @internal request, chunk-w03c3634.js:18019); no page states the text |
+| `${…}: title must be a string of 1 to ${…} characters` | Excluded: Cloud session control request (an @internal request, chunk-xfj2cwfv.js:18104); no page states the text |
 | `${…}: too many directories to examine for eval manifests — refusing to run` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `${…}: unknown frontmatter key "${…}" (expected one of: ${…})` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…}: unloaded while its module loaded` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `${…}: unloaded while its reload ${…} (${…}); not reloaded` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
-| `${…}: unsupported edition` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `${…}: unsupported syntax "${…}"` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `${…}: unterminated frontmatter (opening "---" with no closing "---")` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `${…}: your organization's managed settings disable marketplace-declared commands (disableCommandPluginSources / allowManagedHooksOnly), ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `${…}; agent ${…} cannot stop it.` | Excluded: TaskStop refusal for a task that another agent owns; no page states the text |
@@ -3221,7 +3238,7 @@ Items: 4220.
 | `'qs' is not a valid configuration option. Please use 'params' instead.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `'requestPayload' is expected to be a string if provided. Got: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `'with' statements are not supported in workflow scripts.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
-| `(script globals)` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `(script globals)` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `--agent-proxy-url requires your proxy's https:// URL` | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md) |
 | `--base-dir (or SELF_HOSTED_RUNNER_BASE_DIR) is required on Windows: the built-in default is a POSIX container path that does not apply there. Pass the directory that repositories should be checked out…` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `--capacity must be a positive integer, got: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -3326,8 +3343,8 @@ Items: 4220.
 | `.omit() cannot be used on object schemas containing refinements` | Excluded: Bundled Zod schema library |
 | `.partial() cannot be used on tuple schemas containing refinements` | Excluded: Bundled Zod schema library |
 | `.pick() cannot be used on object schemas containing refinements` | Excluded: Bundled Zod schema library |
-| `/proc does not list this process` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-kr748280.js:201); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
-| `/proc/self/stat names another pid` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-kr748280.js:167); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
+| `/proc does not list this process` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-khpf2df1.js:201); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
+| `/proc/self/stat names another pid` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-khpf2df1.js:167); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
 | `<${…} url="${…}"/> ${…}. This session has dropped its link to that Artifact — do not pass its url to the Artifact tool again. ${…}; tell the user that link no longer works for them before you republis…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `<Box> can't be nested inside <Text> component${…}` | Excluded: Terminal layout engine and Tree misuse assertions (Yoga config, Ink root, Tree nodes) |
 | `@ant/computer-use-input is not supported on this platform` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -3387,17 +3404,19 @@ Items: 4220.
 | `A diskless session writes no side file to disk` | Excluded: Diskless-session guard: the launch option diskless starts false and replaceDiskless( has no caller in the binary |
 | `A file path cannot be attached here: this tool cannot read files in this session.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `A filesystem path entry must be a path, or { path, literal: true }; got ${…}` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
-| `A frameset took the place of the body` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-hg1yqkjk.js:133575), so the user does not see this text. Thrown at chunk-51ew2vra.js:507. |
-| `A hook changed what the Read was to return.` | Excluded: Internal refusal when a hook changes the Read of a file that the shell tool saved (chunk-xgav7f9x.js:5297); no page states the text |
+| `A frameset took the place of the body` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-bzyb60p0.js:135667), so the user does not see this text. Thrown at chunk-j71v4knm.js:507. |
+| `A hook changed what the Read was to return.` | Excluded: Internal refusal when a hook changes the Read of a file that the shell tool saved (chunk-v7j43e2p.js:5568); no page states the text |
 | `A key or a keyFile must be provided to getCredentials.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `A link in the staged farm could not be read (${…}); refusing to relink it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `A link in the staged farm is not in canonical form; refusing to relink it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `A marketplace named "${…}" is already configured — remove it first: claude plugin marketplace remove ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `A marketplace named "${…}" was added meanwhile — run the command again to see it` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
+| `A multipart body must be given as FormData, a Buffer or a stream` | Excluded: Bundled axios HTTP client |
 | `A part is missing, or a key came with the token` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `A range cuts an extglob in two` | Excluded: Bundled glob matcher: a check on a glob pattern (`A range cuts an extglob in two`, chunk-f7fdz8jz.js:44202); no page states the text |
+| `A range cuts an extglob in two` | Excluded: Bundled glob matcher: a check on a glob pattern (`A range cuts an extglob in two`, chunk-ha393e1n.js:28033); no page states the text |
 | `A read earlier in this same turn recorded this artifact's newer live version but returned only a summary of it, not its source, so nothing was published. ${…}` | Excluded: Result text of the Artifact publish tool for the model; no page covers that tool |
 | `A request handler for ${…} already exists, which would be overridden` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
+| `A settings file was written from inside a write of it` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `A shell tool was granted, but ${…}, so the Windows side could not be put out of the sandboxed shell's reach — the run was refused.` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `A signed token has three parts` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `A space or invisible character in the typed text was refused: another action is holding Control or Option, and together they can open an app launcher. Earlier characters may already have been typed, s…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -3407,7 +3426,9 @@ Items: 4220.
 | `A top-level entry of the plugin directory (${…}) points at a network location or through a link that cannot be trusted; refusing to link it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `A top-level entry of the plugin directory its command produced (${…}) points outside that directory; refusing to link it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `A top-level entry of the plugin directory its command produced could not be resolved (${…}); refusing to link it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
+| `A vcs.isolate hook refused to make a copy: ${…}` | [/extend/mod-api/calls/vcs#errors](/extend/mod-api/calls/vcs#errors) |
 | `A withProject fork cannot re-identify the session — update the root session instead` | Excluded: Internal session guard: a withProject fork cannot change the session ID |
+| `A worktree name can't start with a dash. Choose a different name.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `ALL_PROXY is not a URL` | Excluded: Analytics upload refusal for an ALL_PROXY value that is not a URL; the ALL_PROXY row states only the git use |
 | `ANTHROPIC_API_KEY is set in this environment and takes precedence over a profile, so a profile sign-in would not be used. Unset it to sign in this way.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `ANTHROPIC_API_KEY is set in this environment. Unset it to sign in without an API key.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -3420,11 +3441,10 @@ Items: 4220.
 | `Absolute path key: "${…}"` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | `Access denied to file: ${…}` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | ``Added folder not trusted: ${…}. Leave out its --add-dir or, if you trust it and everything in its repository or below it, start `claude` there once and accept the trust prompt.`` | [/configure/cli/flags#agents-plugins-mcp-and-context](/configure/cli/flags#agents-plugins-mcp-and-context) |
-| `Added line count did not match for hunk at line ${…}` | Excluded: Bundled diff library |
-| `Agent ${…} has no queued results to wake for.` | Excluded: Agent wake check of Code Mode, which needs an interactive terminal and an account gate (the check "has no queued results to wake for" is at chunk-rjy0ddvf.js:2830; search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `Agent ${…} has no queued results to wake for.` | Excluded: Agent wake check of Code Mode, which needs an interactive terminal and an account gate (the check "has no queued results to wake for" is at chunk-ynbv8e5n.js:2862; search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `Agent ${…} is already running or being resumed` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
-| `Agent ${…} was started by this chat's app for one run, so it cannot be continued. Work from its report, if it sent one.` | Excluded: Refusal of a control request from a host app to continue an agent that the app launched for one run (chunk-rjy0ddvf.js:1522); no page states the text |
-| `Agent '${…}' was not started: your organization's settings changed and no longer allow its model. Start it again to use an allowed model.` | Excluded: Agent start refusal when organization settings no longer allow the model of the agent (chunk-f00gew3e.js:7522); no page states the text |
+| `Agent ${…} was started by this chat's app for one run, so it cannot be continued. Work from its report, if it sent one.` | Excluded: Refusal of a control request from a host app to continue an agent that the app launched for one run (chunk-ynbv8e5n.js:1513); no page states the text |
+| `Agent '${…}' was not started: its model is no longer allowed. Start it again with an allowed model.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Agent '${…}' was not started: your organization's settings don't allow it. Restart the session.` | Excluded: Agent start refusal when organization settings do not allow it; no page states the text |
 | `Agent aborted: auto mode classifier request refused by the safety safeguard in headless mode` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Agent aborted: auto mode classifier transcript exceeded context window in headless mode` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -3440,8 +3460,8 @@ Items: 4220.
 | `Already in a worktree session` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `An artifact's earlier versions are not available in this session.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `An encrypted token has five parts` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `An entry needs a size of 1 or more` | Excluded: Bundled lru-cache (`An entry needs a size of 1 or more`, chunk-h6w6b86p.js:53) |
-| `An operator has no operand` | Excluded: Bundled GrowthBook SDK (chunk-aq3ms068.js:1519) |
+| `An entry needs a size of 1 or more` | Excluded: Bundled lru-cache (`An entry needs a size of 1 or more`, chunk-1frjyv5h.js:53) |
+| `An operator has no operand` | Excluded: Bundled GrowthBook SDK (chunk-865at33z.js:1550) |
 | `Another process is installing Claude. Try again in a moment.` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `AnySchema ${…} is loaded but ${…} cannot be resolved` | Excluded: Bundled Ajv JSON Schema validator |
 | `AppStateProvider can not be nested within another AppStateProvider` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
@@ -3503,8 +3523,7 @@ Items: 4220.
 | `CLAUDE_STAGE_FILE_ROOT must be an absolute path` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `Can not add index to a parent that is no array` | Excluded: Bundled jsonc-parser edit helpers |
 | `Can not add property to a parent that is no object` | Excluded: Bundled jsonc-parser edit helpers |
-| `Can not edit inside a comment or string` | Excluded: Bundled JSONC edit library (`Can not edit inside a comment or string`, chunk-pwxp2pn6.js:624); Claude Code wraps it in `Failed to set JSONC property` (chunk-pwxp2pn6.js:1002) |
-| `Can not rewrite read-only method '${…}'` | Excluded: Bundled axios HTTP client |
+| `Can not edit inside a comment or string` | Excluded: Bundled JSONC edit library (`Can not edit inside a comment or string`, chunk-0jve1fep.js:624); Claude Code wraps it in `Failed to set JSONC property` (chunk-0jve1fep.js:1002) |
 | `Can't add to .mcp.json: it lists servers at the top level, and adding an "mcpServers" key would stop a plugin from loading them. Move them under "mcpServers", then try again. If they aren't servers, a…` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
 | `Can't parse token envelope: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Can't parse token payload: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
@@ -3543,7 +3562,6 @@ Items: 4220.
 | `Cannot drain port 0` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Cannot edit file: old_string is a substring of a new_string from a previous edit.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Cannot enqueue task message: taskStore and taskMessageQueue are not configured` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
-| `Cannot enter an existing worktree: the current directory is not in a git repository.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Cannot enter worktree: ${…} belongs to another running Claude Code session (locked: ${…}). Wait for that session to finish or choose a different worktree.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Cannot enter worktree: ${…} does not exist, so ${…} cannot be a worktree managed by Claude Code.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Cannot enter worktree: ${…} is a UNC network path.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -3561,7 +3579,6 @@ Items: 4220.
 | `Cannot fetch ID token in this environment, use GCE or set the GOOGLE_APPLICATION_CREDENTIALS environment variable to a service account credentials JSON file.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Cannot fetch marketplace ${…}: the directory it would use as its backup (${…}) is the registered marketplace ${…}'s directory. Remove or rename that marketplace first (claude plugin marketplace remove…` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Cannot fetch this marketplace: its clone directory name ${…} is the registered marketplace ${…}'s directory. Remove or rename that marketplace first (claude plugin marketplace remove).` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
-| `Cannot find ${…}, imported by ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Cannot find Windows browser in stdout: ${…}` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `Cannot hash more than 2^53 - 1 bits` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Cannot install ${…}: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -3596,7 +3613,10 @@ Items: 4220.
 | `Cannot use 'in' operator on non-object` | Excluded: Bundled tslib helpers |
 | `Cannot use both a settings file path and the sandbox option. Include the sandbox configuration in your settings file instead.` | [/extend/headless#errors](/extend/headless#errors) |
 | `Cannot use remoteEval on GrowthBook Cloud` | Excluded: Bundled GrowthBook SDK |
+| `Cannot use the ${…} hook's folder: ${…} may lead to a network location.` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `Cannot use the ${…} hook's folder: its path holds an angle bracket or a character that does not print.` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `Cannot use the MCP needs-auth cache file in a diskless session: only a storage backend can hold the cache` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
+| `Cannot use the vcs.isolate hook's folder: ${…} could not be pinned down (${…}).` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `Cannot verify path containment (${…}): "${…}"` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | `Cannot write paths outside the finalized plan: ${…}. ${…}` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `Cannot write private member to an object whose class did not declare it` | Excluded: Bundled Anthropic SDK (@anthropic-ai/sdk) |
@@ -3613,7 +3633,6 @@ Items: 4220.
 | `Channel#createCall: method must be a string` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Checksum mismatch: expected ${…}, got ${…} (compressed)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Chrome extension disconnected mid-call` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
-| `Circular reference detected in ${…}` | Excluded: Bundled axios HTTP client |
 | `Class extends value ${…} is not a constructor or null` | Excluded: Bundled tslib helpers |
 | `Claude Code can't start the sign-in to your organization's gateway: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `Claude Code cannot read the existing sign-in on this machine, so it will not overwrite it. Check the permissions on your Anthropic config directory, then try again.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -3681,7 +3700,7 @@ Items: 4220.
 | `CodeGen: prefix "${…}" is not allowed in this scope` | Excluded: Bundled Ajv JSON Schema validator |
 | `CodeGen: ref must be passed in value` | Excluded: Bundled Ajv JSON Schema validator |
 | `CodeGen: wrong number of nodes: ${…} vs ${…} expected` | Excluded: Bundled Ajv JSON Schema validator |
-| `Command '${…}' not found or is in an unsafe location (current directory)` | Excluded: Unreachable in the macOS build only: the build sets its gate to `function $19297d(){return!1}` (chunk-rjw4t165.js:2516). The Windows build can raise this text; this map does not cover it. |
+| `Command '${…}' not found or is in an unsafe location (current directory)` | Excluded: Unreachable in the macOS build only: the build sets its gate to `function $19297d(){return!1}` (chunk-9zdrdv25.js:2515). The Windows build can raise this text; this map does not cover it. |
 | `Compact JWE must be a string or Uint8Array` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Compact JWS must be a string or Uint8Array` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Compaction canceled.` | [/how-it-works/context-and-compaction#errors](/how-it-works/context-and-compaction#errors) |
@@ -3800,8 +3819,8 @@ Items: 4220.
 | `Deep-link launch unsupported: the claude binary path "${…}" contains a single quote, backslash, exclamation mark, dollar sign, or newline, which cannot be portably quoted for every login shell. Reinst…` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `DesignSync needs design-system authorization. ${…}` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `DeviceBridgeTransport start can only be called once.` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
-| `Did not take a rewind back after a refused turn: could not confirm that the copies of the removed rows are in the transcript. The conversation stays as the refused turn left it.` | Excluded: Rewind after a refused turn: a copy of the removed rows was not confirmed (chunk-614w915w.js:35415); no page states the text |
-| `Did not take a rewind back after a refused turn: the session service refused a copy of a removed row. The conversation stays as the refused turn left it.` | Excluded: Rewind after a refused turn: a copy of the removed rows was not confirmed (chunk-614w915w.js:35425); no page states the text |
+| `Did not take a rewind back after a refused turn: could not confirm that the copies of the removed rows are in the transcript. The conversation stays as the refused turn left it.` | Excluded: Rewind after a refused turn: a copy of the removed rows was not confirmed (chunk-a0tz781a.js:37083); no page states the text |
+| `Did not take a rewind back after a refused turn: the session service refused a copy of a removed row. The conversation stays as the refused turn left it.` | Excluded: Rewind after a refused turn: a copy of the removed rows was not confirmed (chunk-a0tz781a.js:37093); no page states the text |
 | `Discriminator property ${…} has duplicate value ${…}` | Excluded: Bundled Zod schema library |
 | `Display-only MCP tool invoked — it exists only for transcript rendering` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `Duplicate discriminator value "${…}"` | Excluded: Bundled Zod schema library |
@@ -3833,10 +3852,7 @@ Items: 4220.
 | `Epoch timestamps must be valid, non-Infinite, non-NaN numerics` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Error "${…}" occurred in serializing the payload - ${…}.` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
 | `Error POSTing to endpoint (HTTP ${…}): ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
-| `Error converting ${…} of ${…} of ${…} to BigInt` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `Error converting ${…} to IANA timezone ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Error converting schema to JSON.` | Excluded: Bundled Zod schema library |
-| `Error evaluating pattern ${…}, invalid RE2 syntax` | Excluded: Bundled protobuf and CEL (the RE2 pattern check of the CEL `matches` function in @bufbuild/cel). |
 | `Error: ${…}` | Excluded: Small shared guards and generic failure messages (type, date, UUID, abort, sanitization) |
 | ``Error: ${…} cannot be evaluated where sessions load it: no session could load it now. ${…} Check the marketplace with `claude plugin marketplace list`, or pass ./<dir> to evaluate a directory.`` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `Error: ${…} has a recorded install path that ${…}; reinstall it, or pass ./<dir> to evaluate a directory.` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -3876,8 +3892,6 @@ Items: 4220.
 | `Expected ${…}-bit integer, got ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Expected 32-bit float, got ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Expected ASCII text` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `Expected CompleteRequestPrompt, but got ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
-| `Expected CompleteRequestResourceTemplate, but got ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Expected WebsocketSignatureV4 signer, please check the client constructor.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | ``Expected `awsRegion` option to be passed to the client or the `AWS_REGION` environment variable to be present`` | Excluded: Bundled Anthropic cloud-provider SDKs (@anthropic-ai/bedrock-sdk, @anthropic-ai/vertex-sdk) |
 | `` Expected `concurrency` to be an integer from 1 and up or `Infinity` `` | Excluded: Bundled p-map and OpenTelemetry exporter helpers |
@@ -3895,12 +3909,12 @@ Items: 4220.
 | `Expected integer, got ${…}: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Expected number, got ${…}: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Expected object, got ${…}: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Expected pattern to be a non-empty string` | Excluded: Bundled glob matcher: a check on a glob pattern (chunk-f7fdz8jz.js:44489); no page states the text |
-| `Expected payload to be of type string or Buffer.` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:1318). |
+| `Expected pattern to be a non-empty string` | Excluded: Bundled glob matcher: a check on a glob pattern (chunk-ha393e1n.js:28320); no page states the text |
+| `Expected payload to be of type string or Buffer.` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:1172). |
 | `Expected real number, got implicit NaN` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Expected request body to be a JSON object for post ${…}` | Excluded: Bundled Anthropic cloud-provider SDKs (@anthropic-ai/bedrock-sdk, @anthropic-ai/vertex-sdk) |
 | `Expected request body to be an object for post /v1/messages` | Excluded: Bundled Anthropic cloud-provider SDKs (@anthropic-ai/bedrock-sdk, @anthropic-ai/vertex-sdk) |
-| `Expected secret to be of type string` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:18804). |
+| `Expected secret to be of type string` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:17414). |
 | `Expected string, got ${…}: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | ``Expected the `timeout` option to be a non-negative integer, got `${…}` (${…})`` | Excluded: Bundled execa process runner |
 | `Expecting a valid host string in proxy settings, but found "${…}".` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
@@ -3929,7 +3943,6 @@ Items: 4220.
 | `Failed to create iTerm2 split pane: ${…}` | [/extend/subagents/runtime#errors](/extend/subagents/runtime#errors) |
 | `Failed to create swarm session: ${…}` | [/extend/subagents/runtime#errors](/extend/subagents/runtime#errors) |
 | `Failed to create swarm-view window: ${…}` | [/extend/subagents/runtime#errors](/extend/subagents/runtime#errors) |
-| `Failed to decode bytes as string: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Failed to disable audio bell for any Terminal.app profile` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
 | `Failed to download marketplace from ${…}: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Failed to enable Option as Meta key for any Terminal.app profile` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
@@ -3952,7 +3965,6 @@ Items: 4220.
 | `Failed to parse refresh_on from body. refresh_on="${…}"` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
 | `Failed to parse sed command: ${…}` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Failed to parse session ID from split output: ${…}` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
-| `Failed to parse timestamp: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Failed to parse token expiration from body. expires_in="${…}", expires_on="${…}"` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
 | `Failed to percent-decode OTEL_RESOURCE_ATTRIBUTES entry "${…}": ${…}` | Excluded: Bundled OpenTelemetry SDK |
 | `Failed to persist gateway TLS pin${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -4001,7 +4013,6 @@ Items: 4220.
 | `Flattened JWS must be an object` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Flattened JWS must have either of the "protected" or "header" members` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Forked dispatch requires forkDispatchHookExecutors` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
-| `FormData instance required` | Excluded: Bundled axios HTTP client |
 | `Found invalid profile name "${…}"` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Function expected` | Excluded: Bundled tslib helpers |
 | `GCP credentials check timed out` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -4031,7 +4042,6 @@ Items: 4220.
 | `Hook returned incorrect event name: expected '${…}' but got '${…}'. Full stdout: ${…}` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `Hooks file not found at ${…} for plugin ${…}. If the manifest declares hooks, the file must exist.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `Hooks file read failed at ${…} for plugin ${…}: ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
-| `Hunk at line ${…} contained invalid line ${…}` | Excluded: Bundled diff library |
 | `IDE client not available` | Excluded: IDE diff tab handling: no connected IDE client |
 | `ITermBackend not registered. Import ITermBackend.ts before using the registry.` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
 | `` IdP claims missing required `sub` `` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -4054,7 +4064,7 @@ Items: 4220.
 | `Ink: this root is React’s (render() was called), so it can’t be drawn with Tree too` | Excluded: Terminal layout engine and Tree misuse assertions (Yoga config, Ink root, Tree nodes) |
 | `Ink: this root is drawn with Tree (tree() was called), so it can’t be React’s too` | Excluded: Terminal layout engine and Tree misuse assertions (Yoga config, Ink root, Tree nodes) |
 | `Input buffers must have the same length` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `Input length: ${…}, exceeds maximum allowed length: ${…}` | Excluded: Bundled glob matcher: a check on a glob pattern (chunk-f7fdz8jz.js:44023); no page states the text |
+| `Input length: ${…}, exceeds maximum allowed length: ${…}` | Excluded: Bundled glob matcher: a check on a glob pattern (chunk-ha393e1n.js:27854); no page states the text |
 | `Installed: ${…} Run 'claude daemon uninstall' to undo.` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Int64 buffers must be exactly 8 bytes` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Internal ZodObject error: invalid unknownKeys value.` | Excluded: Bundled Zod schema library |
@@ -4080,13 +4090,14 @@ Items: 4220.
 | `Invalid JSON in manifest.json: ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `Invalid JSON in transcript file: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `Invalid JSON key file: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
+| `Invalid JSON provided to the settings option.` | [/extend/headless#errors](/extend/headless#errors) |
 | `Invalid JSON-pointer: ${…}` | Excluded: Bundled Ajv JSON Schema validator |
 | `Invalid OTEL_RESOURCE_ATTRIBUTES: empty attribute key in "${…}".` | Excluded: Bundled OpenTelemetry SDK |
 | `Invalid RFC-3339 date-time value` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Invalid RFC-7231 date-time value` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Invalid RFC3339 timestamp format ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Invalid RFC7231 date-time value ${…}.` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Invalid Signature Headers` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:1327). |
+| `Invalid Signature Headers` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:1181). |
 | `Invalid Token or Protected Header formatting` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Invalid URL` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Invalid URL format: ${…}` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
@@ -4094,6 +4105,7 @@ Items: 4220.
 | `Invalid UUID hex length: ${…}` | Excluded: Small shared guards and generic failure messages (type, date, UUID, abort, sanitization) |
 | `Invalid UUID received: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Invalid UUID version: "${…}"` | Excluded: Bundled Zod schema library |
+| `Invalid Version` | Excluded: Bundled semver library |
 | `Invalid X-Api-Key header value${…}: ${…}.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `Invalid afterPhase name: ${…}` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
 | `Invalid array index: '${…}' in path: '${…}'` | Excluded: Bundled AWS SDK and Smithy libraries |
@@ -4108,6 +4120,7 @@ Items: 4220.
 | `Invalid channel: ${…}. Use 'stable' or 'latest'` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Invalid character in header content ["${…}"]` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Invalid client, expected instance of ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
+| `Invalid comparator` | Excluded: Bundled semver library |
 | `Invalid credential_source format "${…}"` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Invalid cwd in deep link: UNC / network paths are not supported, got "${…}"` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `Invalid cwd in deep link: must be an absolute path, got "${…}"` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -4141,10 +4154,10 @@ Items: 4220.
 | `Invalid input type` | Excluded: Bundled OpenTelemetry SDK |
 | `Invalid issuer, expected one of [${…}], but got ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Invalid key size for alg: ${…}` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `Invalid key type: ${…} for google.protobuf.Struct, expected string` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Invalid loadBalancingConfig: load balancing policy name required` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Invalid loadBalancingConfig: unexpected multiple keys ${…}` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Invalid loadBalancingConfig: unexpected type ${…}` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
+| `Invalid major version` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `Invalid managedSettingsDelivery. Expected 'argv' or 'initialize'.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `Invalid manifest: ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `Invalid marketplace config: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -4178,6 +4191,7 @@ Items: 4220.
 | `Invalid method config: invalid timeout.seconds` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Invalid method config: invalid waitForReady` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Invalid method config: retryPolicy and hedgingPolicy cannot both be specified` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
+| `Invalid minor version` | Excluded: Bundled semver library |
 | `Invalid month: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Invalid nanoid length: ${…}` | Excluded: Bundled Zod schema library |
 | `Invalid number of delimiters (${…}) for splitEvery.` | Excluded: Bundled AWS SDK and Smithy libraries |
@@ -4185,11 +4199,13 @@ Items: 4220.
 | `Invalid or unsupported JWK "alg" (Algorithm) Parameter value` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Invalid or unsupported JWK "kty" (Key Type) Parameter value` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Invalid parameter for "defaultsMode", expect ${…}, got ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
+| `Invalid patch version` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Invalid phase name: ${…}` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
 | `Invalid plugin in deep link: expected a plugin name of ASCII letters, digits, ".", "_" and "-" (at most 100 characters)` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `Invalid pluginDelivery. Expected 'argv' or 'initialize'.` | [/extend/headless#errors](/extend/headless#errors) |
-| `Invalid protocol version: '${…}' is not a number` | Excluded: Bundled axios HTTP client |
+| `Invalid proxy authorization` | Excluded: Bundled axios HTTP client |
 | `Invalid queue entry type: ${…}` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
+| `Invalid range` | Excluded: Bundled semver library |
 | `Invalid ref "${…}": cannot start with "-"` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Invalid ref: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Invalid region in client config` | Excluded: Bundled AWS SDK and Smithy libraries |
@@ -4237,6 +4253,7 @@ Items: 4220.
 | `Invalid value given to form, expected a string, number, boolean, object, Array, File or Blob but got ${…} instead` | Excluded: Bundled Anthropic SDK (@anthropic-ai/sdk) |
 | `Invalid version string "${…}": contains path-unsafe characters` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Invalid version string from ${…}: not a well-formed version (${…} characters)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
+| `Invalid version. Must be a string.` | Excluded: Bundled semver library |
 | `Invalid workflow script: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `IssueSessionToken: response missing session_token` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `It must be 'auto', or at least 100k (e.g. 500k, 200000, or 200 as shorthand)` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -4251,7 +4268,7 @@ Items: 4220.
 | `JOSE Header "p2s" (PBES2 Salt) missing or invalid` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `JOSE Header "tag" (Authentication Tag) missing or invalid` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `JOSE Header missing` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `JSON Schema declares an unsupported dialect ("$schema": "${…}"). The default validator supports JSON Schema 2020-12 only; pass a pre-configured Ajv instance to AjvJsonSchemaValidator(ajv) to validate …` | Excluded: A guard in the program's patched copy of the MCP client library (chunk-gpm60stp.js:13510). The program removes a known draft `$schema` before the validator (chunk-w3gpg1a5.js:7464), and the runs err319.mcp-output-schema-draft-07 and err319.mcp-output-schema-unknown-dialect both return the tool result with no error. |
+| `JSON Schema declares an unsupported dialect ("$schema": "${…}"). The default validator supports JSON Schema 2020-12 only; pass a pre-configured Ajv instance to AjvJsonSchemaValidator(ajv) to validate …` | Excluded: A guard in the program's patched copy of the MCP client library (chunk-racn22qq.js:13510). The program removes a known draft `$schema` before the validator (chunk-54d1gdxa.js:7429), and the runs err319.mcp-output-schema-draft-07 and err319.mcp-output-schema-unknown-dialect both return the tool result with no error. |
 | `JSON form must be an array of strings` | Excluded: Argument-list setting parser errors (JSON form and quoting) |
 | `JSON outcome nested past MAX_DEPTH` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `JSON outcome number not representable` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
@@ -4310,13 +4327,14 @@ Items: 4220.
 | `Linux bridge process died unexpectedly` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `Listing ${…} type is blocked by the permission rule ${…}, which names that type by its link. Nothing was listed; tell the user.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `Listing the ${…} type is blocked by the permission rule ${…}, which covers that type however ${…}. Nothing was listed; tell the user.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `Loading a skill by address is not available when the host limits this session's skills; invoke a listed skill by name.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `LocalFileJournal: journal append failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `LocalFileJournal: journal delete failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `LocalFileJournal: journal read cursor failed to advance` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `LocalFileJournal: journal stat failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `Login interrupted.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `Lost connection to the cloud session after repeated retries — the session may still be running` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `Lost the config lock before renaming` | Excluded: Internal assertion in the config save that runs under a lock-only caller (chunk-aq3ms068.js:5114); no user input selects that caller. |
+| `Lost the config lock before renaming` | Excluded: Internal assertion in the config save that runs under a lock-only caller (chunk-865at33z.js:5153); no user input selects that caller. |
 | `MCP OAuth failed for ${…}: ${…}` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
 | `MCP controls aren't available right now — the terminal is still starting up or is showing another view` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
 | `MCP error text or config too long or too deeply encoded` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
@@ -4329,11 +4347,12 @@ Items: 4220.
 | `MCP server "${…}" task for tool "${…}" ${…}: ${…}` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `MCP server "${…}" was not called: it was removed from this session. Continue without it.` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `MCP skill builders not registered — loadSkillsDir.ts has not been evaluated yet` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
+| `MCP skills are turned off for now, so this skill from MCP server "${…}" was not loaded. It cannot load until they are turned on again.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `MCP tool and prompt schemas must describe objects (got type: ${…}). Wrap your schema in z.object({...}) or equivalent.` | Excluded: Bundled MCP SDK v2 (@modelcontextprotocol/client and server 2.4.0) |
 | `MCP tool call to server "${…}" was aborted: the account changed before re-authentication` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `MCP tool call to server "${…}" was aborted: the account changed during re-authentication` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `Malformed RPCv2 CBOR response, status: ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Malformed experiments` | Excluded: Bundled GrowthBook SDK (chunk-aq3ms068.js:1788) |
+| `Malformed experiments` | Excluded: Bundled GrowthBook SDK (chunk-865at33z.js:1819) |
 | `Managed settings file ${…}: expected a JSON object, got ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Managed settings on this machine configure a Cloud gateway sign-in; run interactive /login to authenticate.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `ManagedIdentityCredential: Authentication failed. Message ${…}` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
@@ -4342,7 +4361,7 @@ Items: 4220.
 | `ManagedIdentityCredential: only one of 'clientId', 'resourceId', or 'objectId' can be provided. Received values: ${…}` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
 | `Manifest for ${…} is not a valid release manifest` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Mapper function is required` | Excluded: Bundled p-map and OpenTelemetry exporter helpers |
-| `Markdown lexing stopped short` | Excluded: Internal assertion of the terminal Markdown lexer (chunk-g4jweshk.js:19037); no page states the text |
+| `Markdown lexing stopped short` | Excluded: Internal assertion of the terminal Markdown lexer (chunk-sjqze7qg.js:19181); no page states the text |
 | `Marketplace "${…}" (hosted on claude.ai) is ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Marketplace "${…}" (hosted on claude.ai) is blocked by enterprise policy` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Marketplace "${…}" is registered from an untrusted source: ${…} To fix it, remove the marketplace and re-add it from the official source.` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -4359,9 +4378,8 @@ Items: 4220.
 | `Marketplace name ${…} is not a plain directory name; refusing to cache it` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Marketplace name '${…}' resolves to a path outside the cache directory` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Maximum retries reached with no response or error to throw` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
-| `Message ${…} not found in registry` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `Message timestamp too new` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:1329). |
-| `Message timestamp too old` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:1328). |
+| `Message timestamp too new` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:1183). |
+| `Message timestamp too old` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:1182). |
 | `Metadata key "${…}" contains illegal characters` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Metadata string value "${…}" contains illegal characters` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `Method handler for ${…} already provided.` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
@@ -4374,7 +4392,7 @@ Items: 4220.
 | `Missing clientKey` | Excluded: Bundled GrowthBook SDK |
 | `Missing node for policy ${…}` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
 | `Missing required ${…}: ${…}. Usage: /mcp__${…}__${…} ${…}` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
-| `Missing required headers` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:18886). |
+| `Missing required headers` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:17494). |
 | `Missing required parameter: '${…}'` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Missing required parameter: task_id` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Missing subject_token_field_name for JSON credential_source format` | Excluded: Bundled Google auth library (google-auth-library) |
@@ -4422,7 +4440,7 @@ Items: 4220.
 | `No claude.ai OAuth token available` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `No claude.ai OAuth token found` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `No command provided.` | Excluded: Bundled Google auth library (google-auth-library) |
-| `No connection established for request ID: ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
+| `No connection established for request ID` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `No context available` | Excluded: Bundled @aws/lambda-invoke-store |
 | `No credential left to send a cloud-sessions request with` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `No default load balancer type registered` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
@@ -4434,12 +4452,11 @@ Items: 4220.
 | `No issue time in token: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `No key or keyFile set.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `No matching service config found` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
-| `No matching signature found` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:1313). |
+| `No matching signature found` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:1167). |
 | `No messages found in JSON file` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `No messages found in JSONL file` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `No messages to branch` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `No messages to compact` | [/how-it-works/context-and-compaction#errors](/how-it-works/context-and-compaction#errors) |
-| `No names provided` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `No pem found for envelope: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `No plan file found at ${…}. Please write your plan to this file before calling ExitPlanMode.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `No project attached to this session. Project tools are available when the session is in a claude.ai Project.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -4458,6 +4475,7 @@ Items: 4220.
 | `No sed arguments` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `No session ID provided for teleport` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `No session goal is active, so there is nothing to pause.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
+| `No skill was loaded: Claude Code has no record of the MCP server of this skill, so it cannot apply the web search / connector isolation policy to it. Tell the user.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | ``No socket was returned in the `connect()` function`` | Excluded: Bundled HTTP proxy-agent library (connect, socket and address family handling) |
 | `No task found with ID: ${…}. An ID of this shape is not looked up as an agent's name: send the agent's task ID.` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `No task store configured` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
@@ -4471,7 +4489,6 @@ Items: 4220.
 | `No value provided for input HTTP label: ${…}.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `No walker function defined for node type` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Node is not in a tree with a FocusManager` | Excluded: Terminal layout engine and Tree misuse assertions (Yoga config, Ink root, Tree nodes) |
-| `Not a CEL value: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Not a ZodError: ${…}` | Excluded: Bundled Zod schema library |
 | `Not a token with a header` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Not accepted` | Excluded: IDE diff tab handling: the IDE gave an answer that is no known result |
@@ -4498,6 +4515,7 @@ Items: 4220.
 | `Nothing was saved in ${…}: part of that path is now a link. Check where it leads, then try again.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | ``Nothing was sent: this cloud session was opened with your Console sign-in, and this computer has since signed in to claude.ai instead. In another terminal, run `claude auth logout`, then `ant auth log…`` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `Nothing was uploaded: file_upload hit an internal error in Claude Code. This is a bug, not a problem with the file, so do not retry. Tell the user the upload failed because of a bug in Claude Code.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `Nothing was uploaded: this session's file store may not have the newest version of this file yet. Make sure nothing is still writing the file or holding it open, wait ten seconds, and call file_upload…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `Null byte in path key: "${…}"` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | `OAuth client information must be saveable for dynamic registration` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `OAuth flow completed without producing auth URLs` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
@@ -4508,7 +4526,7 @@ Items: 4220.
 | `OTLP request body chunk is not string or Uint8Array` | Excluded: OTLP exporter request wrapper: the exporter writes only strings and buffers, so the chunk conversion cannot fail |
 | `Object expected` | Excluded: Bundled tslib helpers |
 | `Object expected.` | Excluded: Bundled tslib helpers |
-| `Object iterator must return a key-value pair` | Excluded: Bundled axios HTTP client |
+| `Object is too deeply nested (${…} levels). Max depth: ${…}` | Excluded: Bundled axios HTTP client |
 | `Object not disposable.` | Excluded: Bundled tslib helpers |
 | `Observer ${…} cannot stop itself; use the task UI or a main-session TaskStop.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Offset direction, ${…}, must be "+" or "-"` | Excluded: Bundled AWS SDK and Smithy libraries |
@@ -4593,7 +4611,7 @@ Items: 4220.
 | `PollWork: response assignment_ids is not an array — rejecting the malformed poll response` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `PollWork: response body is not a JSON object (an intercepting proxy may have answered) — rejecting the malformed poll response` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `PollWork: response has no assignment_ids array and no lease_expires_at date, so it most likely did not come from the API (check any proxy or gateway between this host and the API) — rejecting the malf…` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `PollWork: the answer has no lease_expires_at` | Excluded: Shape check of a server answer in the self-hosted runner's report of a startup failure (chunk-3kp5jwr6.js:16101); no page states the text |
+| `PollWork: the answer has no lease_expires_at` | Excluded: Shape check of a server answer in the self-hosted runner's report of a startup failure (chunk-q0y1fm2x.js:16512); no page states the text |
 | `Possible causes:` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `PowerShell is not available` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `PowerShell runs only on ${…}; the session runs it there and it cannot run here.` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
@@ -4623,12 +4641,15 @@ Items: 4220.
 | `Publishing is unavailable: ${…} ${…}` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `Publishing reads file contents and a Read permission check requires approval here — retry the publish so it can be asked.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `Publishing report to claude.ai (private to you)…` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `REPL: a with block is not supported.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `REPL: a with block is not supported.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `REPL: internal error: an op has a field that cannot cross.` | Excluded: REPL tool script limit or internal error; no page states the text |
+| `REPL: internal error: no op that this VM is handed takes such an argument.` | Excluded: REPL tool script limit or internal error; no page states the text |
 | `REPL: internal error: the raw mark did not set up its check (installRawMark). This is a fault in the REPL tool, not in the script.` | Excluded: REPL tool script limit or internal error; no page states the text |
-| `REPL: internal error: the step counter did not set up its clock (installStepBudget). This is a fault in the REPL tool, not in the script.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
-| `REPL: the name __replAt is reserved. Use another name.` | Excluded: REPL tool script limit or internal error; no page states the text (chunk-xgav7f9x.js:3236) |
+| `REPL: internal error: the step counter did not set up its clock (installStepBudget). This is a fault in the REPL tool, not in the script.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `REPL: the name __replAt is reserved. Use another name.` | Excluded: REPL tool script limit or internal error; no page states the text (chunk-zg2mw0h6.js:146) |
+| `REPL: the name __replEnter is reserved. Use another name.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `REPL: the name __replRaw is reserved. Use another name.` | Excluded: REPL tool script limit or internal error; no page states the text |
-| `REPL: the name __replStep is reserved. Use another name.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `REPL: the name __replStep is reserved. Use another name.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `RFC-3339 date-times must be expressed as strings` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `RFC-7231 date-times must be expressed as strings` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `RFC3339 timestamps must be strings` | Excluded: Bundled AWS SDK and Smithy libraries |
@@ -4642,7 +4663,6 @@ Items: 4220.
 | `Raw mode is not supported on the stdin provided to Ink. Read about how to prevent this error on https://github.com/vadimdemedes/ink/#israwmodesupported` | Excluded: Bundled Ink and ow libraries |
 | `React.Children.only expected to receive a single React element child.` | Excluded: Terminal layout engine and Tree misuse assertions (Yoga config, Ink root, Tree nodes) |
 | `Read tool is restricted for this session` | [/reference/tools/files#errors](/reference/tools/files#errors) |
-| `Read's result for a PDF is not a text and a document` | Excluded: Internal assertion on the shape of a PDF read result (chunk-wm04tzdx.js:3658); the program builds that result, no user input changes its shape. |
 | `ReadCalls: ${…} has more than ${…} entries` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `ReadCalls: ${…} is not a valid tool_use_id${…}. An id is 1 to 128 letters, digits or _ . : @ -, and not only dots.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `ReadNotifications can only be called from the main conversation — subagents must not drain the session notification buffer.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -4690,13 +4710,13 @@ Items: 4220.
 | `Remote environments are only available on the first-party Anthropic API provider.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `RemoteIO: transport closed permanently (code ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `RemoteTransport: used before its screen bound a host` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `Removed line count did not match for hunk at line ${…}` | Excluded: Bundled diff library |
 | `Rename it back to ${…}, or reinstall with: npm i -g ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `ReplSessionScope: used before its screen bound a host` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
-| `ReportSessionFailure: the answer has no stuck field` | Excluded: Shape check of a server answer in the self-hosted runner's report of a startup failure (chunk-3kp5jwr6.js:16110); no page states the text |
+| `ReportSessionFailure: the answer has no stuck field` | Excluded: Shape check of a server answer in the self-hosted runner's report of a startup failure (chunk-q0y1fm2x.js:16521); no page states the text |
 | `Reported message length does not match received message length` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Request aborted` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Request body gzip: compression stopped` | Excluded: Internal stop signal: it fires when block compression is switched off mid-request (chunk-39gt2153.js:309). The request caller catches it and sends the body the plain way (`blocksSwitchedOff`, chunk-76t3g1yn.js:12811), and the background caller drops it (`blocksSwitchedOff`, chunk-76t3g1yn.js:12909). |
+| `Request body gzip: compression stopped` | Excluded: Internal stop signal: it fires when block compression is switched off mid-request (chunk-30a5awzz.js:238). The request caller catches it and sends the body the plain way (`blocksSwitchedOff`, chunk-gq1dr8pm.js:11357), and the background caller drops it (`blocksSwitchedOff`, chunk-gq1dr8pm.js:11455). |
+| `Request body larger than maxBodyLength limit` | Excluded: Bundled axios HTTP client |
 | `Request not sent: the API connection settings changed while it was being prepared. Try again.` | Excluded: API request refusal when the connection settings changed during preparation; no page states the text |
 | `Request path contains unescaped characters` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `Request timed out while downloading marketplace from ${…}. The server may be slow or unreachable. Technical details: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -4723,6 +4743,7 @@ Items: 4220.
 | `SELF_HOSTED_RUNNER_HOST_CONFIG_SNAPSHOT must be one of disk/memory (got: ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `SELF_HOSTED_RUNNER_SERVER_AUTO_MODE_LISTS must be one of all/no-allow/none (got: ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `SHA pin verification failed: expected ${…} to be ${…}, got ${…}. The pinned commit may have been removed upstream, or a ref with the same name exists. Refusing to install.` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
+| `SKILL.md write failed: ${…}` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `SSEClientTransport already started! If using Client class, note that connect() calls start() automatically.` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Sandbox configuration is not supported on platform: ${…}` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `Sandbox dependencies not available: ${…}` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
@@ -4739,12 +4760,10 @@ Items: 4220.
 | `Scopes or url must be provided` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Script call limit exceeded: ${…} has been called ${…} times (cap: ${…}). This limit prevents data exfiltration via repeated write operations in untrusted-input workflows.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Second argument must be a buffer` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `Secret can't be empty.` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-76t3g1yn.js:1285). |
+| `Secret can't be empty.` | Excluded: Message of the Standard Webhooks verifier in the bundled Anthropic SDK. The program never calls the SDK webhooks resource, so no user path reaches it (chunk-gq1dr8pm.js:1139). |
 | `SendFile: dispatch needs the permission pipeline (call.ask)` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `SendMessage output is not an object` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `SendMessage: dispatch needs the executor (the issuing message and canUseTool)` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
-| `Server "${…}" does not support resources` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
-| `Server "${…}" is not connected` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `Server "${…}" not found. Available servers: ${…}` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `Server ${…} missing required 'command' field` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `Server ${…} missing required 'extensionToLanguage' field` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
@@ -4753,10 +4772,13 @@ Items: 4220.
 | `Server does not support notifying about resources (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server does not support notifying of prompt list changes (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server does not support notifying of tool list changes (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
+| `Server does not support notifying of tool list changes (required for notifications/tools/list_changed)` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server does not support prompts (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server does not support resources (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server does not support tasks capability (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server does not support tools (required for ${…})` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
+| `Server does not support tools (required for tools/call)` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
+| `Server does not support tools (required for tools/list)` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server not found: ${…}` | [/extend/headless#errors](/extend/headless#errors) |
 | `Server sent invalid initialize result: ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Server status: ${…}` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
@@ -4767,6 +4789,7 @@ Items: 4220.
 | `Service not installed: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Service not installed: ${…} Starting a temporary ${…} for now.` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Session ${…} /remote response is missing inference_auth.access_token` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| ``Session ${…} can't be opened from one of its own commands. Open it from a terminal, or run `claude logs ${…}` to read its output.`` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Session ${…} can't start — ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Session ${…} ended while the background service was off; looking for its saved conversation to resume…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Session ${…} was interrupted while unattended — resuming it…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -4789,6 +4812,7 @@ Items: 4220.
 | `Shell command permission check failed for pattern "${…}": ${…}` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Side question cancelled` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Sign in to claude.ai to add a marketplace it hosts` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
+| `Skill "${…}" was not run, because the permission check was for a skill from an MCP server, and this name now finds no skill from an MCP server. Use the ${…} tool once more.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `Skill "${…}" was not run: ${…}.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Skill ${…} now matches several skills${…} — invoke one by its full name.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Skill names must be non-empty strings.` | [/extend/headless#errors](/extend/headless#errors) |
@@ -4800,19 +4824,19 @@ Items: 4220.
 | `Source file does not exist: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Source path does not exist: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Specify a scope with -s to remove from a specific one.` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
-| `Start can only be called once per transport.` | Excluded: A guard of the program's own WebSocket transport for MCP servers (chunk-ma6zmj8z.js:87). The program builds a new transport for each connection (chunk-w3gpg1a5.js:8120, chunk-w3gpg1a5.js:8120), so start runs once on each, and no config reaches a second call. |
+| `Start can only be called once per transport.` | Excluded: A guard of the program's own WebSocket transport for MCP servers (chunk-ka9ph908.js:87). The program builds a new transport for each connection (chunk-54d1gdxa.js:8085, chunk-54d1gdxa.js:8085), so start runs once on each, and no config reaches a second call. |
 | `Starting ${…}…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `Starting with default settings. The application that started Claude Code manages ${…}, as CLAUDE_CODE_HOST_OWNED_CONFIG_DIR says, so nothing needs to be done: a later save overwrites ${…}.` | [/configure/env-vars/sessions-and-storage#variables](/configure/env-vars/sessions-and-storage#variables) |
 | `Stateless transport cannot be reused across requests. Create a new transport per request.` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Stats tab rendered without getSkillStatsInputs` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `StdioClientTransport already started! If using Client class, note that connect() calls start() automatically.` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
-| `StdioServerTransport already started!` | Excluded: Bundled Model Context Protocol SDK (the stdio server transport); a guard against a second start (chunk-3pqavaqd.js:59) |
+| `StdioServerTransport already started!` | Excluded: Bundled Model Context Protocol SDK (the stdio server transport); a guard against a second start (chunk-a5v5cv8j.js:59) |
 | `Stopped — finishing up…` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `Stopping. Any review that has launched goes on in the cloud and may be billed.` | [Subcommands](../configure/cli/subcommands.md) |
 | `Stream can only be iterated once` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `Stream closed` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
 | `StreamableHTTPClientTransport already started! If using Client class, note that connect() calls start() automatically.` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
-| `StreamedUploadBody must be passed as streamUpload.sliced with no body argument; it was passed as the body, or together with one` | Excluded: Programming-error TypeError in the embedded HTTP client (chunk-aq3ms068.js:45263); the program sets the option, no user input reaches it. |
+| `StreamedUploadBody must be passed as streamUpload.sliced with no body argument; it was passed as the body, or together with one` | Excluded: Programming-error TypeError in the embedded HTTP client (chunk-865at33z.js:45742); the program sets the option, no user input reaches it. |
 | `String not found in file. Failed to apply edit.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Stub tool ${…}.${…} called — stub exists only for permission UI rendering.` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `SubagentSends is already installed` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
@@ -4856,8 +4880,9 @@ Items: 4220.
 | `The IDE connection is managed automatically and can't be reconnected manually` | Excluded: Reconnect refusal for the `ide` server name, thrown by the MCP reconnect function |
 | `The IV is not 96 bits` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `The JSON on stdin is over the limit of 1 MiB.` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
-| `The Markdown is too long` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-hg1yqkjk.js:133575), so the user does not see this text. Thrown at chunk-ww6kx8d9.js:139. |
-| `The REPL tool cannot run scripts in this session: the JavaScript engine under Claude Code failed Code Mode's engine check. Run Claude Code with the repository's pinned Bun (node_modules/.bin/bun) or u…` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `The Markdown is too long` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-bzyb60p0.js:135667), so the user does not see this text. Thrown at chunk-pyp44ndn.js:147. |
+| `The Markdown takes too long to write` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
+| `The REPL tool cannot run scripts in this session: the JavaScript engine under Claude Code failed Code Mode's engine check. Run Claude Code with the repository's pinned Bun (node_modules/.bin/bun) or u…` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `The access token expiry_date field is missing in the provided credentials.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `The account or conversation changed after this action was checked, or that check is no longer on record — nothing was done; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `The algorithm is not allowed` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
@@ -4875,23 +4900,24 @@ Items: 4220.
 | `The command did not run: the MXC command has no environment selection` | Excluded: Windows MXC sandbox backend refusal or internal assertion; no page states the text |
 | `The command did not run: the MXC sandbox backend runs PowerShell commands only, since it cannot run Git Bash yet.` | Excluded: Windows MXC sandbox backend refusal or internal assertion; no page states the text |
 | `The command had already ended when it was to be moved to the background, and its output was not kept. Run it again without run_in_background.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `The command was not run: the sandbox does not start until this pre-started process is in its session's folder.` | Excluded: A refusal for a pre-started spare process on Windows whose session has not yet taken it into its folder (chunk-f7fdz8jz.js:57123); a host sets the spare, and no page states the text |
-| `The config file may be readable now, so the save starts over` | Excluded: Internal retry signal; the config writer catches it and runs the save again (chunk-aq3ms068.js:5087, 5096); the user never sees it |
+| `The command was not run: the sandbox does not start until this pre-started process is in its session's folder.` | Excluded: A refusal for a pre-started spare process on Windows whose session has not yet taken it into its folder (chunk-ha393e1n.js:41043); a host sets the spare, and no page states the text |
+| `The config file may be readable now, so the save starts over` | Excluded: Internal retry signal; the config writer catches it and runs the save again (chunk-865at33z.js:5126, 5096); the user never sees it |
 | `The consent request was not sent` | Excluded: Consent service call failures; no page states the text |
 | `The consent request was not sent in time` | Excluded: Consent service call failures; no page states the text |
 | `The corrupted file has already been backed up.` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `The default temp directory is unavailable in a diskless session` | Excluded: Diskless-session guard: the launch option diskless starts false and replaceDiskless( has no caller in the binary |
 | `The doc hashes came without organization_uuid` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
-| `The elements are nested too deeply` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-hg1yqkjk.js:133575), so the user does not see this text. Thrown at chunk-51ew2vra.js:953. |
-| `The engine reads a slash differently from the parser.` | Excluded: Internal assertion of a JavaScript source scan: the scan compares its tokens with the engine's own parse, and its caller catches the error (chunk-h63j0bpf.js:777); no page states the text |
+| `The elements are nested too deeply` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-bzyb60p0.js:135667), so the user does not see this text. Thrown at chunk-j71v4knm.js:953. |
+| `The engine reads a slash differently from the parser.` | Excluded: Internal assertion of a JavaScript source scan: the scan compares its tokens with the engine's own parse, and its caller catches the error (chunk-76eps20r.js:803); no page states the text |
 | `The fetch tool returned no text for this page.` | [Shell, Web, and Background Tasks](tools/shell-and-web.md) |
 | `The file at the specified path does not contain a PEM-encoded certificate.` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
-| `The file could not be read, or is not the one that the shell tool saved.` | Excluded: Internal refusal when a hook changes the Read of a file that the shell tool saved (chunk-xgav7f9x.js:5302); no page states the text |
+| `The file could not be read, or is not the one that the shell tool saved.` | Excluded: Internal refusal when a hook changes the Read of a file that the shell tool saved (chunk-v7j43e2p.js:5573); no page states the text |
 | `The file path is invalid.` | Excluded: Bundled Google auth library (google-auth-library) |
 | `The file that identifies this container start is empty.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `The file that identifies this container start is not a regular file owned by this user.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `The folder ${…} is a leftover worktree whose .git file points to another location, so it was left as is. Remove it if it has no work to keep, or choose a different worktree name.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `The folder for background command records is a symbolic link or not a directory owned by this user.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `The folder is not in a Git repository` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `The goal condition exceeds ${…} columns once canonicalized for display (tabs expand to spaces, and wide characters count double). Shorten the condition — the user must be able to read all of it in the…` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `The goal condition is empty once whitespace and invisible characters are removed. Provide a visible condition.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `The goal is already paused.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -4915,14 +4941,15 @@ Items: 4220.
 | `The link farm points at a producer reached through a link that cannot be trusted; refusing to relink it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `The link farm points at a producer that now resolves to a network location; refusing to relink it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `The link-farm marker is not a small regular file; refusing to read it.` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
-| `The list of claude.ai connectors could not be read, so nothing changed.` | Excluded: Refusal of a connector reload in a headless session (chunk-5qehrq2v.js:895); no page states the text |
+| `The list of claude.ai connectors could not be read, so nothing changed.` | Excluded: Refusal of a connector reload in a headless session (chunk-vfrxshmx.js:907); no page states the text |
 | `The list of installed plugins (installed_plugins.json) could not be read or is not a valid list, so this remove cannot tell which plugins to turn off. Nothing was deleted, and the known_marketplaces.j…` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `The list of installed plugins (installed_plugins.json) could not be read, so marketplace ${…}, which managed settings declare, cannot be taken back from another source. Repair or restore that file and…` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `The list of installed plugins (installed_plugins.json) could not be read, so the plugins of marketplace ${…} cannot be withdrawn. Repair or restore that file and try again.` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `The listing has no server of that name` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `The lock on ${…} was lost before the change could be saved. Nothing was saved. Try again.` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `The message checksum (${…}) did not match the expected value of ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `The mods folder could not be listed` | Excluded: Internal refusal when the listing of a remote session's mods folder fails at the end of a turn (`The mods folder could not be listed`, chunk-r2ks4qkk.js:1786); no page states the text |
+| `The mods folder could not be listed` | Excluded: Internal refusal when the listing of a remote session's mods folder fails at the end of a turn (`The mods folder could not be listed`, chunk-ebhp3wz0.js:1782); no page states the text |
+| `The name ${…} is another worktree's or branch's, or has the form of an agent's` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `The name that this hook's matcher is tested against (for a tool call, the tool's name) has over ${…} characters, the most that a cloud session tests this matcher against.` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `The names that a connection sent were not read` | Excluded: Internal assertion on the names that a connection sent and on the address count; no page states the text |
 | `The names that an open connection sent were not read` | Excluded: Internal assertion on the names that a connection sent and on the address count; no page states the text |
@@ -4943,13 +4970,13 @@ Items: 4220.
 | `The reason is empty once whitespace and invisible characters are removed. Give a visible reason.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `The repo's MCP servers have been closed` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | ``The request is not an instance of `HttpRequest` and cannot be signed`` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `The sandbox could not create a folder that it has to hide from the command (${…}), so the command was not started.` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
+| `The result for a PDF is not in the form that a row keeps` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
+| `The sandbox could not create a folder that it must protect from the command (${…}), so the command was not started.` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `The scheduled tasks file (.claude/scheduled_tasks.json) could not be read as a list of tasks, so it was not changed. Check or repair that file, then try again.` | Excluded: Scheduled tasks file read refusal; no page states the file or the message |
-| `The search did not run: ripgrep was found by name rather than at a full path, and starting it that way inside the search folder could run a program planted there. This is an internal error; report it …` | Excluded: Internal error that tells the user to report it with /bug (chunk-g10jc9b1.js:917); the path is built by the program. |
-| `The search did not run: this build of Claude Code cannot start ripgrep inside an open directory (Bun.ant.withThreadWorkingDirectory is missing). This is an internal error; report it with /bug.` | Excluded: Internal error that tells the user to report it with /bug (chunk-g10jc9b1.js:929); it depends on the build, not on user input. |
+| `The search did not run: ripgrep was found by name rather than at a full path, and starting it that way inside the search folder could run a program planted there. This is an internal error; report it …` | Excluded: Internal error that tells the user to report it with /bug (chunk-g03qj0bk.js:944); the path is built by the program. |
+| `The search did not run: this build of Claude Code cannot start ripgrep inside an open directory (Bun.ant.withThreadWorkingDirectory is missing). This is an internal error; report it with /bug.` | Excluded: Internal error that tells the user to report it with /bug (chunk-g03qj0bk.js:956); it depends on the build, not on user input. |
 | `The search was cut off before any results arrived. Try again.` | [Shell, Web, and Background Tasks](tools/shell-and-web.md) |
-| `The segmenter passed must have a granularity of "word"` | Excluded: Bundled diff library |
-| `The server sent a redirect that cannot be followed` | Excluded: MCP connector check text and redirect guard of the program's own fetch (chunk-0288z7gm.js:234); the MCP Auth page lists other wording |
+| `The server sent a redirect that cannot be followed` | Excluded: MCP connector check text and redirect guard of the program's own fetch (chunk-3fqcfedz.js:234); the MCP Auth page lists other wording |
 | `The session did not start: an earlier start on this runner has not finished moving ${…} aside. Ask whoever runs this runner to check that disk and, once it answers, to restart the runner.` | [/configure/cli/self-hosted-runner#folder-and-worktree-messages](/configure/cli/self-hosted-runner#folder-and-worktree-messages) |
 | `The session was not started, because the ${…} option can't be sent to Claude Code: ${…}. Fix that value and try again.` | Excluded: Value check of the launch options of an embedding app (hooks, output format, JSON schema); no page states the text |
 | `The sign-in changed, or may not use the consent service` | Excluded: Consent service call failures; no page states the text |
@@ -4959,27 +4986,27 @@ Items: 4220.
 | `The small, fast model that reads the content gave no answer. Trying again may work.` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `The stream has already been transformed.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `The stream has been consumed by other callbacks.` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `The tags take too long to match` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-hg1yqkjk.js:133575), so the user does not see this text. Thrown at chunk-51ew2vra.js:911 (`The tags take too long to match`). |
+| `The subagent was not started: this chat starts no subagents. Do the work yourself.` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
+| `The tags take too long to match` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-bzyb60p0.js:135667), so the user does not see this text. Thrown at chunk-j71v4knm.js:911 (`The tags take too long to match`). |
 | `The temp directory is unavailable in a diskless session: nothing is created, verified or written under the shared per-uid temp root` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `The token could not be decrypted` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `The tool call was interrupted before a result was received. It may or may not have completed on the server — verify before assuming it succeeded, and retry if needed.` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `The user has not yet answered an earlier question about the goal.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `The verifyIdToken method requires an ID Token` | Excluded: Bundled Google auth library (google-auth-library) |
-| `The window at one end of the drag changed after it was checked, so the drag was refused. Take a new screenshot and try again.` | Excluded: Computer-use drag guard text (chunk-fmz9g6zd.js:2829); no page states it |
-| `The working directory no longer leads where it did when this call was permission-checked (it was deleted, a part of its path was replaced, or it can't be examined), so the call was not run. Make the c…` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
-| `The zip lists too many entries` | Excluded: Thrown inside a file type check and caught at once (`The zip lists too many entries`, chunk-zhta808a.js:223, 232); the media type stays and no text is shown |
+| `The window at one end of the drag changed after it was checked, so the drag was refused. Take a new screenshot and try again.` | Excluded: Computer-use drag guard text (chunk-6vxdmxtw.js:2829); no page states it |
+| `The zip lists too many entries` | Excluded: Thrown inside a file type check and caught at once (`The zip lists too many entries`, chunk-d3vfy4gs.js:221, 232); the media type stays and no text is shown |
 | `There is no JSON on stdin. Pipe it in, or pass it as the argument.` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
-| `These settings files are not used: they are in a connector-downloads folder, where Claude Code saves files from claude.ai connectors: ${…}` | [/configure/settings#errors](/configure/settings#errors) |
 | `This Claude Code does not take "${…}" in --initialize-fields. Update Claude Code, or send the value by its flag.` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `This agent has been stopped and its stop is still completing; it cannot resume other agents.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `This agent has been stopped and its stop is still completing; it cannot start monitors.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `This call was interrupted before the monitor started; nothing is running.` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
-| `This cloud browser call was stopped before it was sent.` | Excluded: Cloud browser call abort text (chunk-ttspb34w.js:22); no page states it |
-| `This command didn't run. Its shell ended, or its environment changed, as it was starting. Run it again.` | Excluded: Internal hand-over of a PowerShell that Claude Code started ahead of the command (chunk-hg1yqkjk.js:247684); no page states the text |
+| `This cloud browser call was stopped before it was sent.` | Excluded: Cloud browser call abort text (chunk-4qkqgt25.js:22); no page states it |
+| `This command didn't run. Its shell ended, or its environment changed, as it was starting. Run it again.` | Excluded: Internal hand-over of a PowerShell that Claude Code started ahead of the command (chunk-bzyb60p0.js:251044); no page states the text |
 | `This command is run by the VS Code extension, not by hand. To sign in from a terminal, run /login in Claude Code.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `This conversation ran under more than one organization. Claude Code does not resume it under any of them. Start a new conversation.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `This eval run stubs artifact publishing locally and has no artifact control plane: only publishing (the default action) is available here — list, delete, comments, replies, watches, database writes, a…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | ``This eval run stubs artifact publishing locally: `url` may only name an artifact this run published (an eval-stub:// link), never a live claude.ai artifact. Omit `url` to publish fresh.`` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `This helper is not available, because this session replaces ${…} with another tool.${…}` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `This hook's matcher cannot be tested in a cloud session: it has to be rewritten.` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `This hosted session (claude-code-server) keeps no device key on its machine` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `This link's Artifact type has no readable name, so it cannot be checked against the permission rule ${…}. Nothing was listed; tell the user.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -4996,23 +5023,24 @@ Items: 4220.
 | `This profile is bound to a different Anthropic deployment, so Claude Code will not replace it here. Sign out of it with the tool that created it, then try again.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `This profile keeps its sign-in somewhere custom, so Claude Code cannot replace it. Sign out of it with the tool that created it, then try again.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `This request would go to a model that is not allowed` | [Auth Settings](../configure/settings/auth.md) |
-| `This runtime has no Bun.ant.CellSegmenter. Run Claude Code on the @anthropic-ai/bun-internal version pinned in package.json.` | Excluded: Runtime check: the program needs a Bun build that has the API it calls (chunk-t4zrtehh.js:11) |
+| `This runtime has no Bun.ant.CellSegmenter. Run Claude Code on the @anthropic-ai/bun-internal version pinned in package.json.` | Excluded: Runtime check: the program needs a Bun build that has the API it calls (chunk-mgh1y10w.js:11) |
 | ``This schema contains multiple valid literal values. Use `.values` instead.`` | Excluded: Bundled Zod schema library |
 | `This script is nested too deeply: the limit is ${…} levels of syntax. Build a deep value with a loop or JSON.parse.` | Excluded: REPL tool script limit or internal error; no page states the text |
 | `This script is too costly to parse: it nests default values, destructuring or for heads too deeply, nests a lot of code too deeply, or has a regular expression with too many named groups. Move the inn…` | Excluded: REPL tool script limit or internal error; no page states the text |
-| ``This script uses syntax that REPL code cannot run, such as a decorator, an `accessor` field or a `using` declaration: it needs helper functions that are loaded by import, and REPL code cannot import.`` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
-| `This server could not be checked against your organization's connector settings` | Excluded: MCP connector check text and redirect guard of the program's own fetch (chunk-0288z7gm.js:126); the MCP Auth page lists other wording |
+| ``This script uses syntax that REPL code cannot run, such as a decorator, an `accessor` field or a `using` declaration: it needs helper functions that are loaded by import, and REPL code cannot import.`` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `This server could not be checked against your organization's connector settings` | Excluded: MCP connector check text and redirect guard of the program's own fetch (chunk-3fqcfedz.js:126); the MCP Auth page lists other wording |
 | `This server's configuration sets oauth.clientId or oauth.xaa, so sign-in may need a callback on this computer, which redirectUriOnly does not allow.` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
-| `This session does not load claude.ai connectors.` | Excluded: Refusal of a connector reload in a headless session (chunk-t4rkw2a1.js:304); no page states the text |
+| `This session does not load claude.ai connectors.` | Excluded: Refusal of a connector reload in a headless session (chunk-ts42083x.js:304); no page states the text |
 | `This session doesn't save settings, so the ${…} can't be turned ${…}` | Excluded: Managed settings read and device registry assertions |
 | `This session requires a trusted device, and it still refused this computer after its trusted-device enrollment was renewed. Open the session at claude.ai/code or in the Claude app instead.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `This session uses ${…}, which does not use Anthropic Console sign-in.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `This session's credential cannot record the project approval — approve this project from an interactive Claude Code session (run the write there and accept the approval card), then retry here: this se…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `This session's permission rules now block this agent's type or require approval for it${…}.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `This session's permission rules now block this agent's type${…} or require approval for ${…}${…}.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `This session's requests go to your organization's gateway, which doesn't accept your own Anthropic sign-in, so a profile sign-in would not be used here.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `This skill is no longer available from MCP server "${…}" in this session. ${…}` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `This skill, command or hook and the arguments filled into it add up to more than ${…} characters. Use shorter arguments or fewer placeholders such as $ARGUMENTS.` | [/extend/headless#errors](/extend/headless#errors) |
 | `This teammate's task could not be found, so plan mode was not exited. Ask the lead to approve your plan.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
-| `This tool does not serve project memory in this session: it runs through the remote-session bridge, which has no memory route. ${…} The project's docs are still available through the other methods.` | Excluded: Remote-session bridge only (chunk-13k4vvy5.js:2756); the bridge, not a user, decides the memory route. |
+| `This tool does not serve project memory in this session: it runs through the remote-session bridge, which has no memory route. ${…} The project's docs are still available through the other methods.` | Excluded: Remote-session bridge only (chunk-285q0a13.js:2797); the bridge, not a user, decides the memory route. |
 | `This workflow run hides its script, and this session has not loaded that script, so it cannot resume the run. Start a new run without resumeFromRunId.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `This workflow run hides its script, so it can only be resumed with its original script file, unedited. To run a changed script, start a new run without resumeFromRunId.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Timeout must be between ${…} and ${…} milliseconds.` | Excluded: Bundled Google auth library (google-auth-library) |
@@ -5023,7 +5051,7 @@ Items: 4220.
 | `Token used too early, ${…} < ${…}: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Token used too late, ${…} > ${…}: ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Too many addresses to judge a connection at` | Excluded: Internal assertion on the names that a connection sent and on the address count; no page states the text |
-| `Too many formatting elements are left open` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-hg1yqkjk.js:133575), so the user does not see this text. Thrown at chunk-51ew2vra.js:776. |
+| `Too many formatting elements are left open` | Excluded: Text of the bundled HTML to Markdown converter. WebFetch catches it and logs `Turndown failed, falling back to raw HTML:` (chunk-bzyb60p0.js:135667), so the user does not see this text. Thrown at chunk-j71v4knm.js:776. |
 | `Too many named hosts` | [MCP Authentication](../extend/mcp/auth.md) |
 | `Tool use input must be a string or object` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Trailers are invalid with this transfer encoding` | Excluded: Bundled undici HTTP client |
@@ -5051,7 +5079,6 @@ Items: 4220.
 | `Unable to compress image (${…}) to fit within ${…} — ${…}. ${…}` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Unable to compress image (${…}) to fit within ${…}. Please use a smaller image.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Unable to compress image (${…}) to under ${…}MB. Resize it or use a smaller image.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
-| `Unable to convert string '${…}' to bool` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Unable to create API key. The server accepted the request but did not return a key.` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `Unable to determine AWS region due to missing "options.credential_source.region_url"` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Unable to determine AWS role name due to missing "options.credential_source.url"` | Excluded: Bundled Google auth library (google-auth-library) |
@@ -5065,8 +5092,8 @@ Items: 4220.
 | `Unable to resize image — ${…}, and ${…}, so it cannot be sent. ${…}` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Unable to resize image — could not verify image dimensions are within the ${…}x${…}px API limit.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `Unable to resize image — image processing is unavailable and dimensions could not be read from the file header. Please convert the image to PNG, JPEG, GIF, or WebP.` | [/reference/tools/files#errors](/reference/tools/files#errors) |
-| `Unable to resolve ${…}, imported by ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Under your organization sign-in, Claude Code did not resume the session from a URL, because it would upload the session's new content to that URL. Start a new session.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `Under your organization's MCP policy hearthbot serves only Claude's answers, reads of this Project and thread starts in it. Leave project_id out of any call, and leave out of a read or a thread start …` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `Unexpected ${…} command. Expected 'prompt' command. Use /${…} directly in the main conversation.` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Unexpected auth result: ${…}` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
 | `Unexpected data type: ${…}${…}${…}` | Excluded: Bundled Anthropic SDK (@anthropic-ai/sdk) |
@@ -5076,7 +5103,6 @@ Items: 4220.
 | `Unexpected response from Azure CLI when getting token. Expected "expiresOn" to be a RFC3339 date string. Got: "${…}"` | Excluded: Bundled Azure SDK (@azure/identity, @azure/core) |
 | `Unexpected stream implementation, expect Blob or ReadableStream, got ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Unexpected stream implementation, expect Stream.Readable instance, got ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Unexpected string encoding replacement character. This should be an unreachable error.` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Unexpected value for key ${…}: ${…}. Value should be serialized to string first.` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
 | `Unhandled outcome of a read of the Directory` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Unhandled repo validation status: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -5087,6 +5113,7 @@ Items: 4220.
 | `Unions must have exactly one non-null member. None were found.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Universe domain ${…} in source credentials does not match ${…} universe domain set for impersonated credentials.` | Excluded: Bundled Google auth library (google-auth-library) |
 | ``Unknown `METADATA_SERVER_DETECTION` env variable. Got `${…}`, but it should be `${…}`, or unset`` | Excluded: Bundled Google auth library (google-auth-library) |
+| `Unknown adapter '${…}'` | Excluded: Bundled axios HTTP client |
 | `Unknown browser ID: ${…}` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `Unknown command: ${…}` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Unknown deep link action: "${…}"` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -5095,12 +5122,10 @@ Items: 4220.
 | `Unknown exporter type set in OTEL_LOGS_EXPORTER env var: ${…}` | [/extend/headless#errors](/extend/headless#errors) |
 | `Unknown exporter type set in OTEL_METRICS_EXPORTER env var: ${…}` | [/extend/headless#errors](/extend/headless#errors) |
 | `Unknown exporter type set in OTEL_TRACES_EXPORTER env var: ${…}` | [/extend/headless#errors](/extend/headless#errors) |
-| `Unknown field ${…} for ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Unknown format option provided.` | Excluded: Bundled Anthropic SDK (@anthropic-ai/sdk) |
 | `Unknown hook decision type: ${…}. Valid types are: approve, block` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `Unknown hook permissionDecision type: ${…}. Valid types are: allow, deny, ask, defer` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `Unknown language` | Excluded: Bundled highlight.js syntax highlighter (grammar check or lookup) |
-| `Unknown line ${…} ${…}` | Excluded: Bundled diff library |
 | `Unknown log level '${…}'. Acceptable values: ${…}` | Excluded: Bundled @typespec/ts-http-runtime (Azure core HTTP pipeline) |
 | `Unknown skill: ${…}` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
 | `Unmergable intersection. Error path: ${…}` | Excluded: Bundled Zod schema library |
@@ -5115,23 +5140,23 @@ Items: 4220.
 | `Unsupported JWE "zip" (Compression Algorithm) Header Parameter value` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Unsupported JWE Algorithm: ${…}` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Unsupported JWE Content Encryption Algorithm` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `Unsupported address family: ${…}` | Excluded: The program's own address family check in the proxy host lookup that CLAUDE_CODE_PROXY_RESOLVES_HOSTS turns on (chunk-2jhxnfds.js:10599, used by the lookup at chunk-2jhxnfds.js:10689). It accepts 0, 4, 6, IPv4, IPv6, and no family, the values that the socket layer passes. |
+| `Unsupported address family: ${…}` | Excluded: The program's own address family check in the proxy host lookup that CLAUDE_CODE_PROXY_RESOLVES_HOSTS turns on (chunk-3jjr3wje.js:6492, used by the lookup at chunk-3jjr3wje.js:6582). It accepts 0, 4, 6, IPv4, IPv6, and no family, the values that the socket layer passes. |
 | `Unsupported algorithm` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `Unsupported certificate format ${…}` | Excluded: Bundled Google auth library (google-auth-library) |
 | `Unsupported client authentication method: ${…}` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `Unsupported control request subtype: ${…}` | [/extend/headless/control-protocol#example](/extend/headless/control-protocol#example) |
 | `Unsupported conversion from ${…} to Uint8ArrayBlobAdapter.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `Unsupported endpoint mode: ${…}. Select from ${…}` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `Unsupported git URL protocol (only https/http/ssh/user@host:path allowed): ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
+| `Unsupported git URL protocol (only https/http/ssh/user@host:path allowed)` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Unsupported git source type: ${…}` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
-| `Unsupported input ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `Unsupported marketplace source type` | [Marketplaces](../extend/plugins/marketplace.md) |
 | `Unsupported marketplace source type for refresh` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `Unsupported platform - Claude Desktop integration only works on macOS and WSL.` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
 | `Unsupported platform: ${…} - Claude Desktop integration only works on macOS and WSL.` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
 | `Unsupported platform: darwin` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `Unsupported plugin type: ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
-| `Unsupported protocol version '${…}'` | Excluded: Bundled axios HTTP client |
+| `Unsupported protocol` | Excluded: Bundled axios HTTP client |
+| `Unsupported protocol ${…}` | Excluded: Bundled axios HTTP client |
 | `Unsupported schema: ${…}` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `Unsupported server type: ${…}` | [/extend/mcp/runtime#errors](/extend/mcp/runtime#errors) |
 | `Unsupported task type: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -5163,8 +5188,12 @@ Items: 4220.
 | `Workflow aborted` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `Workflow: launching needs the executor (call.runEngine)` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Workload identity federation is configured in this environment (ANTHROPIC_FEDERATION_RULE_ID and ANTHROPIC_ORGANIZATION_ID), and it takes precedence over the default profile. Set ANTHROPIC_PROFILE to …` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
+| `Workspace trust is not accepted there` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | ``Workspace trust not yet accepted. Run `claude` once in this directory and accept the trust dialog, then retry with --worktree.`` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `Worktree mode needs a git repository or WorktreeCreate hooks. Directory ${…} has neither.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `Worktree mode needs a git repository, WorktreeCreate hooks or a mod, and the mod installed here is not loaded.` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `Worktree not removed, and this session is still in it: another Claude Code session (${…}) is running in the worktree, though it may be idle. If the user ends that session, call this tool again. Otherw…` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `Worktree not removed. The session is still in it, and it no longer reads clean. ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `Worktree not removed; the session is still in it. ${…} ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `WorktreeCreate hook failed: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `WorktreeCreate hook failed: hook is configured but did not run (workspace not trusted or matcher mismatch)` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -5243,7 +5272,7 @@ Items: 4220.
 | `[DaemonLock] Failed to replace daemon lock: ${…}${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `[Error] ${…}` | [/extend/skills-and-commands/substitutions#shell-injection](/extend/skills-and-commands/substitutions#shell-injection) |
 | `[RemoteSessionManager] Cannot send: not connected` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `[Request interrupted by user for tool use]` | Excluded: Transcript marker text (chunk-e9fhcxkx.js:64), not a thrown error; no page states it |
+| `[Request interrupted by user for tool use]` | Excluded: Transcript marker text (chunk-0ha8wex8.js:8), not a thrown error; no page states it |
 | `[Tasks] Could not list the task list to determine its highest task id` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `[Tasks] Failed to create a task: could not claim a free task id after ${…} attempts; last tried ${…}, which exists and could not be claimed — the task listing may have failed, or the entry is not a ta…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `[Tasks] Failed to create task ${…}: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -5262,7 +5291,7 @@ Items: 4220.
 | `[remote-io] warning: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `[runner:session] per-session ${…} ${…} overlaps the child's auto-allowed write scope (${…}) — refusing to spawn` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `[runner:session] refusing to pass unsafe ref to checkout hook: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `[runner:session] refusing to pass unsafe repo URL to checkout hook: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `[runner:session] refusing to pass unsafe repo URL to checkout hook (source ${…} of ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `[toJSONSchema]: Non-representable type encountered: ${…}` | Excluded: Bundled Zod schema library |
 | `[useRemoteSession] Cannot send control request (no manager): not connected` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `` `File` is not defined as a global, which is required for file uploads.${…} `` | Excluded: Bundled Anthropic SDK (@anthropic-ai/sdk) |
@@ -5321,6 +5350,7 @@ Items: 4220.
 | `a directory can be checked against its real path only on Linux` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a directory can be held only on Linux` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a directory moved while its names were being read` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
+| `a diskless session has no folder of its own` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `a file could not be inflated, or holds more than its stated size` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a file does not inflate to its stated size` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a file does not match its stated SHA-256` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
@@ -5328,7 +5358,7 @@ Items: 4220.
 | `a forward proxy would look the name up` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
 | `a function was expected` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `a held-directory leaf must be one plain name` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
-| `a layout node is damaged` | Excluded: Internal assertion of the terminal layout engine (`a layout node is damaged`, chunk-0b3aev3g.js:9967); no page states the text |
+| `a layout node is damaged` | Excluded: Internal assertion of the terminal layout engine (`a layout node is damaged`, chunk-8bkqeb5d.js:9971); no page states the text |
 | `a list of expressions takes scopes by place, and stays put` | Excluded: Bundled highlight.js syntax highlighter (grammar check or lookup) |
 | `a list of files needs the archive that holds them` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a lossless WebP encode wrote a file that is not lossless` | [/reference/tools/files#errors](/reference/tools/files#errors) |
@@ -5336,19 +5366,20 @@ Items: 4220.
 | `a name is in the list twice` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a name under ${…} is not UTF-8` | [Marketplaces](../extend/plugins/marketplace.md) |
 | `a newer turn began before the compaction could be applied` | [/how-it-works/context-and-compaction#errors](/how-it-works/context-and-compaction#errors) |
+| `a pass with no read of the comments` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a permission entry has an impossible size` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `a plugin was placed with no declaration` | [Marketplaces](../extend/plugins/marketplace.md) |
 | `a plugin's list claims a length no list has (got ${…})` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `a proxy helper set by this project is not run by this command` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `` a publish with `type_url` always creates a new Artifact whose page and settings come from the type — remove `url`, `capabilities`, `contract`, `deadline`, and `force` `` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `a saved prompt_snapshot row does not read as one` | Excluded: Internal assertion while reading a saved transcript row (chunk-s01zhv6j.js:389); not shown to the user. |
+| `a saved prompt_snapshot row does not read as one` | Excluded: Internal assertion while reading a saved transcript row (chunk-0snrq607.js:389); not shown to the user. |
 | `a script starts after it is compiled` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `a served tool must have an object input schema` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `a settings file could not be read` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a settings file names another host` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `a shader's source is at most ${…} bytes` | Excluded: Mod API engine refusal (argument, tenant, size, or hook check); no page states the text |
-| `a socket table is too long to count from` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-kr748280.js:80); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
-| `a stat line could not be parsed` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-kr748280.js:167); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
+| `a socket table is too long to count from` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-khpf2df1.js:80); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
+| `a stat line could not be parsed` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-khpf2df1.js:167); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
 | `a string was expected` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `a test start folder must be absolute` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `a timer takes a function` | Excluded: Plugin test kit and render-surface assertions (Client drawing, mounted tree, timers) |
@@ -5368,7 +5399,6 @@ Items: 4220.
 | `addSessionWorktree: worktreePath must not equal canonicalRepoPath` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `add_directory mount_path must be under /uploads/` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `add_directory mount_path must be under /uploads/ and not under /uploads/.home/` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `address must be a string` | Excluded: Bundled axios HTTP client |
 | `adopted agent ${…} declares forked-skill ${…} but its scoping record is unusable (${…})` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `adopted agent ${…} declares forked-skill ${…} but its scoping record names a different skill` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `adopted agent ${…} has an unusable forked-skill scoping record (${…})` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
@@ -5409,6 +5439,7 @@ Items: 4220.
 | `an ArrayBuffer was expected` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | ``an Artifact created from an Artifact type takes only its own files — `capabilities` and `contract` come from the type; drop them and publish again`` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | ``an Artifact was already created from this type for ${…} this session: ${…} — omit `type_url` and pass that `url` to update it`` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `an MCP task has no running poll loop to move` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `an admin-owned settings document could not be read` | Excluded: Managed settings read and device registry assertions |
 | `an entry that is no file, directory or symlink` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `ancestry walk failed` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -5443,7 +5474,7 @@ Items: 4220.
 | `asset not found (404)` | Excluded: Plugin asset download checks (status, size cap, pinned checksum) |
 | `asset_id (32 hex characters) is required for action "${…}"` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `assume_role needs SigV4 source credentials (access keys or the ambient AWS chain); aws_bearer_token cannot call sts:AssumeRole` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
-| `async REPL dispatch rejected: ${…} evals already waiting or running on this context — wait for their settles (Poll) before dispatching more` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `async REPL dispatch rejected: ${…} evals already waiting or running on this context — wait for their settles (Poll) before dispatching more` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `async format in sync schema` | Excluded: Bundled Ajv JSON Schema validator |
 | `async keyword in sync schema` | Excluded: Bundled Ajv JSON Schema validator |
 | `async schema in sync schema` | Excluded: Bundled Ajv JSON Schema validator |
@@ -5452,7 +5483,7 @@ Items: 4220.
 | `auth token must be at least 32 characters` | [/configure/env-vars/plugins-and-mcp#variables](/configure/env-vars/plugins-and-mcp#variables) |
 | `authServerMetadataUrl must use https:// (got: ${…})` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
 | `authentication.type "${…}" is not a known authentication type` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
-| `auto mode leave refused` | Excluded: Internal error when the permission gate refuses the change from auto mode to the default mode (`auto mode leave refused`, chunk-614w915w.js:39891); no page states the text |
+| `auto mode leave refused` | Excluded: Internal error when the permission gate refuses the change from auto mode to the default mode (`auto mode leave refused`, chunk-a0tz781a.js:41717); no page states the text |
 | `auto-edit attribution is no longer staged for this publish — nothing was published` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `auto_reload_settings unavailable: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `aws version "${…}" is not supported in the current build.` | Excluded: Bundled Google auth library (google-auth-library) |
@@ -5474,7 +5505,6 @@ Items: 4220.
 | `bindSessionContext: hosts that wire executor.appScoped must plumb ctx.sessionId (the app-scoped snapshot cache is keyed by session; without it, sessions would share element_index/lastWindowPt state)` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `both "data" and "dataProp" passed, only one allowed` | Excluded: Bundled Ajv JSON Schema validator |
 | `both "keyword" and "schema" passed, only one allowed` | Excluded: Bundled Ajv JSON Schema validator |
-| `boundary must be 10-70 characters long` | Excluded: Bundled axios HTTP client (axios 1.15.2: its form-data encoder and AxiosHeaders). |
 | `bracketedLeadScrubPattern: LEAD_OPEN_END must be the last token in a lead` | Excluded: Scrub-pattern constructor guards for tag and bracketed-lead text |
 | `bracketedLeadScrubPattern: a lead has at least one token` | Excluded: Scrub-pattern constructor guards for tag and bracketed-lead text |
 | `bracketedLeadScrubPattern: words are lowercase ASCII` | Excluded: Scrub-pattern constructor guards for tag and bracketed-lead text |
@@ -5501,37 +5531,11 @@ Items: 4220.
 | `canUseTool callback cannot be used with permissionPromptToolName. Please use one or the other.` | [/extend/headless#errors](/extend/headless#errors) |
 | `canUseTool callback is not provided.` | [/extend/headless#errors](/extend/headless#errors) |
 | `cannot create or write to base directory ${…} (${…}); pass --base-dir <writable path> or set SELF_HOSTED_RUNNER_BASE_DIR` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `cannot decode ${…} from JSON: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode ${…} from JSON: key "${…}" is unknown` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: "@type" is empty` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: "@type" is invalid` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: ${…} is not in the type registry` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: expected object but got ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: invalid RFC 3339 string` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot decode message ${…} from JSON: path names must be lowerCamelCase` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `cannot derive mount name from path: ${…}` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
-| `cannot encode ${…} to JSON: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode ${…} to JSON: expected number, got ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode ${…} to JSON: required field not set` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode ${…} to binary: required field not set` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode field ${…}.${…} to binary: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: "${…}" is not in the type registry` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: lowerCamelCase of path name "${…}" is irreversible` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: nanos must not be greater than 99999999` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: nanos must not be negative` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: nanos sign must match seconds sign` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `cannot encode message ${…} to JSON: value out of range` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `cannot form a device hook id from these inputs` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
-| `cannot parse ${…} default value: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| ``cannot use `getEvalContext` outside of an evaluation`` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `canonicalJson: a value with no JSON form` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
 | `canonicalJson: non-finite number` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
 | `canonicalJson: unsupported ${…}` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
-| `cant skip wire type ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `case "${…}" execution.env key "${…}" is not allowed — only EVAL_* keys can be set from case.yaml. Anything else must come from the operator's shell.` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `case "${…}": ${…} "${…}" resolves (through a link) outside the case directory and the plugin under test, or is not a plain single-link file` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `case "${…}": add_dirs entry "${…}" resolves (through a link) outside the case directory and the plugin under test — it may only grant reads inside them` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -5585,7 +5589,7 @@ Items: 4220.
 | `combineRows: schema rejected already-minted updates` | Excluded: Display-intake validation of consent rows and updates |
 | `command contains the invisible character U+FEFF (byte order mark) or U+180E (Mongolian vowel separator), and was not run. Remove the character, keep the text that needs it in a file that the command r…` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `comments could not be read reliably right now — try again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `comparison_fork: a dry run sends no request` | Excluded: Internal assertion for a dry run of a comparison fork (chunk-hg1yqkjk.js:148032); no page states the text |
+| `comparison_fork: a dry run sends no request` | Excluded: Internal assertion for a dry run of a comparison fork (chunk-bzyb60p0.js:150265); no page states the text |
 | `composed artifact page has an unexpected skeleton` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `computed keys not allowed in meta` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `config file ${…} is missing "authentication"` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -5599,11 +5603,13 @@ Items: 4220.
 | `confusableTagScrubPattern: tag names are lowercase [a-z0-9_-]` | Excluded: Scrub-pattern constructor guards for tag and bracketed-lead text |
 | `connect ${…}:${…}: no peer address` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
 | `content-type header is missing from object` | Excluded: Bundled content-type parser (inside the MCP SDK v2) |
+| `contexts.${…}.log was not delivered — ${…}` | Excluded: REPL tool script limit or internal error; no page states the text |
+| `contexts.${…}.log: text must be 1-${…} chars` | Excluded: REPL tool script limit or internal error; no page states the text |
 | `copy_files without a plan_token always requires per-batch approval — use finalize_plan declaring every destination in writes, then pass the returned plan_token.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `core prompt: a lifted paragraph lacks a spelling it rewrites` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `core table: not an operation` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `could not confirm where the plugin's folder is, so the packages were not added` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
-| `could not load the plugins that settings turn on` | Excluded: Internal error that the callers catch; the hooks list logs it as a warning, `plugin hooks not listed:` (chunk-r2ks4qkk.js:364 and chunk-r2ks4qkk.js:747); no page states the text |
+| `could not load the plugins that settings turn on` | Excluded: Internal error that the callers catch; the hooks list logs it as a warning, `plugin hooks not listed:` (chunk-ebhp3wz0.js:364 and chunk-ebhp3wz0.js:747); no page states the text |
 | `could not open the directory above ${…}: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `could not read ${…} (${…})` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `could not read file (${…})` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
@@ -5616,6 +5622,7 @@ Items: 4220.
 | `could not write the identity line to the run call log — refusing to serve unidentified` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `couldn't check whether ${…} was created from an Artifact type (${…}) — retry` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `couldn't check whether ${…} was created from an Artifact type (its settings read answered 404; ${…}) — retry` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `couldn't find remote ref ${…}` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `couldn't remove ${…} — ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `countLength ${…} greater than remaining buf len.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `create requires body` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -5641,7 +5648,6 @@ Items: 4220.
 | `daemon.json is malformed: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `daemon.json was changed from inside another change to it` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `data and file_path are not accepted with read_db` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `data must be an object` | Excluded: Bundled axios HTTP client |
 | `data type ${…} not compatible for encoding.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `db_op "${…}" is not a read_db operation` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `db_op "${…}" is not a write_db operation` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -5677,10 +5683,10 @@ Items: 4220.
 | `deleteRemoteAgentMetadata: storage delete failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `delivery POST failed` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `denyAllNetwork is not supported on Windows` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
-| `deprecation dates are YYYY-MM-DD, got "${…}"` | Excluded: Guard on the program's own table: the dates come from the built-in BATCH_2026_09 and BATCH_2026_11 constants of @ant/managed-config (chunk-jtdbarzb.js:34). |
+| `deprecation dates are YYYY-MM-DD, got "${…}"` | Excluded: Guard on the program's own table: the dates come from the built-in BATCH_2026_09 and BATCH_2026_11 constants of @ant/managed-config (chunk-mmevw7ty.js:34). |
 | `derived mount name is not a valid path segment: ${…}` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
-| `describeTool: no tool named ${…}. searchTools('words') finds one.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
-| `describeTool: pass a tool name (a string), not a ${…}` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `describeTool: no tool named ${…}. searchTools('words') finds one.` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `describeTool: pass a tool name (a string), not a ${…}` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `describing an Artifact type is not available in this session` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `device unbound-creates read failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `device unbound-creates write failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
@@ -5702,11 +5708,14 @@ Items: 4220.
 | `deviceRegistry: register request failed (${…})` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `deviceRegistry: the ${…} device-key store could not be read` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `deviceRegistry: the ${…} device-key store refused the write` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
+| `dictate: language must be a string of at most ${…} characters` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
+| `dictate: op must be start, audio, stop or cancel` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
+| `dictate: pcm must be base64 that decodes to 1 to ${…} bytes` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `did not return a value` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `digestAlgorithm must one of "sha256", "sha384", or "sha512"` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `directory API ${…}: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `directory modes do not restrict access on Windows` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `disabled: request not written` | Excluded: Guard of a socket client: it refuses to write frames when its server is marked disabled (chunk-pqa8dyy7.js:2639); no page states the text |
+| `disabled: request not written` | Excluded: Guard of a socket client: it refuses to write frames when its server is marked disabled (chunk-tzhcnzkd.js:2645); no page states the text |
 | `disconnected before the request was sent` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `disconnected: the session stream is not connected` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `discovery-cache seal: schema version must fit one byte` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
@@ -5731,7 +5740,6 @@ Items: 4220.
 | `downloaded bytes do not match the pinned sha256` | Excluded: Plugin asset download checks (status, size cap, pinned checksum) |
 | `downloads: request (url="${…}"${…}) does not resolve to the public CDN (downloads.claude.ai). Use firstPartyApi for api.anthropic.com (residency-gated) or externalHttp for non-Anthropic hosts.` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
 | `duplicate --git-host-rewrite for '${…}'` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `duration out of range` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `earlyRemoteLink is only valid for an owns-process RemoteIO` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `either "keyword" or "schema" must be passed` | Excluded: Bundled Ajv JSON Schema validator |
 | `either setProtectedHeader or setUnprotectedHeader must be called before #sign()` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
@@ -5753,7 +5761,6 @@ Items: 4220.
 | `error: ${…}` | [/configure/cli/self-hosted-runner#runner-errors](/configure/cli/self-hosted-runner#runner-errors) |
 | `eval mock stand-in: agent relay failed: ${…}` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `eval mock stand-in: could not write the abort record to the call log` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
-| `executor must be a function.` | Excluded: Bundled axios HTTP client |
 | `exp field using invalid format` | Excluded: Bundled Google auth library (google-auth-library) |
 | `` expected `region` to be configured for `aws.auth#sigv4` `` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `expected array type under "${…}"` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
@@ -5767,14 +5774,12 @@ Items: 4220.
 | `exportIntervalMillis must be greater than 0` | Excluded: Bundled OpenTelemetry SDK |
 | `exportIntervalMillis must be greater than or equal to exportTimeoutMillis` | Excluded: Bundled OpenTelemetry SDK |
 | `exportTimeoutMillis must be greater than 0` | Excluded: Bundled OpenTelemetry SDK |
-| `extension ${…} can only be applied to message ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `externalHttp: ${…} is Anthropic-operated. Use firstPartyApi from src/services/http/firstParty — it enforces the 3P data-residency gate.` | Excluded: Developer assertion on constant URLs: externalHttp rejects Anthropic hosts and no user-set URL reaches it |
 | `extract pattern /${…}/ matched at offset ${…} but capture group 1 is undefined — group 1 must capture the credential value on every match.` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `failed to create computer-use lock: ${…}` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `failed to parse config file ${…}: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `failed to read ${…}: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `failed to read config file ${…}: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
-| `feature default for edition ${…} not found` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `feedback draft delete failed: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `feedback draft listing failed: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `fetchOutcomeBranches: hardenedGitUrl and governedAuth are mutually exclusive` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -5798,7 +5803,7 @@ Items: 4220.
 | `flat schema drift: discriminator "${…}" is also a canonical leaf` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `fleet view transcript tail read failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `fleet view transcript tail: stream not found` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `fleet-remote: no request left for the session list` | Excluded: Internal guard of the remote session list fetch: the request budget of the call is used up before the first page (`no request left for the session list`, chunk-64yygyen.js:50); no page states the text |
+| `fleet-remote: no request left for the session list` | Excluded: Internal guard of the remote session list fetch: the request budget of the call is used up before the first page (`no request left for the session list`, chunk-vfw28y4s.js:50); no page states the text |
 | `focus file ${…} changed while being read (vetted at ${…} bytes); try again` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `focus file ${…} does not exist` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `focus file ${…} does not exist (artifact publishing was not granted for this run, so nothing was published)` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -5901,8 +5906,8 @@ Items: 4220.
 | `home sidecar exceeds its byte bound` | Excluded: Validation of synced settings packs, sidecars, and item names |
 | `home sidecar is off its own schema` | Excluded: Validation of synced settings packs, sidecars, and item names |
 | `home/ or tmp/ is not a real directory` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `hooks.${…} must be an array of matchers` | Excluded: Value check of the hooks launch option of an embedding app (chunk-1ny13h2m.js:1201); no page states the text |
-| `hooks.${…}[${…}].hooks must be an array of callbacks` | Excluded: Value check of the hooks launch option of an embedding app (chunk-1ny13h2m.js:1207); no page states the text |
+| `hooks.${…} must be an array of matchers` | Excluded: Value check of the hooks launch option of an embedding app (chunk-ekmb99nb.js:1202); no page states the text |
+| `hooks.${…}[${…}].hooks must be an array of callbacks` | Excluded: Value check of the hooks launch option of an embedding app (chunk-ekmb99nb.js:1208); no page states the text |
 | `hooks.json declares ${…} at its top level, outside the "hooks" object — ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `hooks: must be an object mapping event names to matcher arrays — ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
 | `hooks: the array form is not yet supported in a marketplace entry (${…}). ${…}` | [/extend/plugins/loading#errors](/extend/plugins/loading#errors) |
@@ -5910,7 +5915,6 @@ Items: 4220.
 | `host-creds file re-read failed (missing/stale/expired)` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `host-creds refresh dropped the bearer key` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `host-creds refresh rejected: the file names an endpoint which the launch env holds blank` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
-| `hostMatchesAny: non-string pattern in list` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `http.fetch: ${…}` | [Clock, HTTP, Process, Env, and Settings](../extend/mod-api/calls/clock-http-process-env-settings.md) |
 | `iTerm2 image: RGBA bytes do not match the size` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
 | `iTerm2 image: a file or shm source is not sent` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
@@ -5921,14 +5925,11 @@ Items: 4220.
 | `id_token email is not verified` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | ``id_token missing email claim — configure your IdP to include `email` in the id_token, or set oidc.email_claim if it uses a different claim name`` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `ids of tool_result blocks and tool_use blocks from previous message do not match` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
-| `illegal tag: field no ${…} wire type ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `illegal tag: varint overflows uint32` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `illegal takes expressions` | Excluded: Bundled highlight.js syntax highlighter (grammar check or lookup) |
 | `import() is not available in workflow scripts.` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `import-conversations failed: ${…} ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `impossible change of scale: ${…}` | Excluded: Bundled OpenTelemetry SDK |
 | `in-place invalidation needs O_NOFOLLOW` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `incomplete data` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `incomplete float16 at end of buf.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `incomplete float32 at end of buf.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `incomplete float64 at end of buf.` | Excluded: Bundled AWS SDK and Smithy libraries |
@@ -5938,40 +5939,23 @@ Items: 4220.
 | `insertChild: child was created with a different Config` | Excluded: Terminal layout engine and Tree misuse assertions (Yoga config, Ink root, Tree nodes) |
 | `installed plugins registry read settled without an outcome for its key` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `installed plugins registry update settled without an outcome` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `int32 out of range` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
+| `installed_plugins.json was edited from inside another edit` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `internal event POST failed` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `internal event POST not sent` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `interrupt rejected` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
-| `invalid Any or ${…} not found in registry` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid addKeywords parameters` | Excluded: Bundled Ajv JSON Schema validator |
 | `invalid anchor "${…}"` | Excluded: Bundled Ajv JSON Schema validator |
-| `invalid base64 string` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid comprehension` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid config JSON on stdin: ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `invalid constant` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid encoding` | Excluded: Bundled protobufjs (base64 helper) |
-| `invalid end group tag` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid entry` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid feedback draft id` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
-| `invalid float32: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid hook matcher` | [Hook Configuration](../extend/hooks/configuration.md) |
-| `invalid int32: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid int64: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid key: "${…}"` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `invalid media type` | Excluded: Bundled content-type parser (inside the MCP SDK v2) |
-| `invalid optional index` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `invalid parameter format` | Excluded: Bundled content-type parser (inside the MCP SDK v2) |
 | `invalid paste-content hash` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `invalid poll event attribute: ${…}` | Excluded: Poll event envelope validation |
 | `invalid poll event child: <${…}> on kind ${…}` | Excluded: Poll event envelope validation |
 | `invalid poll event kind: ${…}` | Excluded: Poll event envelope validation |
-| `invalid select` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid select: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid state, fork stack empty` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid type url: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid uint32: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid uint64: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
-| `invalid varint` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `is over the size cap, or not a regular file, and was not read` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `` isInstance must be called on the class (e.g. `SdkError.isInstance(value)`); for callbacks use `v => SdkError.isInstance(v)` `` | Excluded: Bundled MCP SDK v2 (@modelcontextprotocol/client and server 2.4.0) |
 | `it answered about another hostname` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -5993,7 +5977,7 @@ Items: 4220.
 | `its ${…} is not a regular file of at most 32 MB` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `its ${…} is not valid JSON` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `its ${…} nests packages over ${…} folders deep; regenerate the lockfile` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
-| `its body or data field is not a string` | Excluded: TypeError in the CCR tunnel proto decoder (chunk-tmayd562.js:384); it reads frames from the service, not user input. |
+| `its body or data field is not a string` | Excluded: TypeError in the CCR tunnel proto decoder (chunk-49rd7rja.js:384); it reads frames from the service, not user input. |
 | `its bun.lock does not list the plugin as its only workspace` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `its bun.lock is in a format this version of Claude Code does not read` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `its bun.lock is not valid JSON` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
@@ -6033,7 +6017,7 @@ Items: 4220.
 | `link body climbs out of a directory it entered` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `link body is not valid UTF-8` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `link chain too long to vet` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
-| `link in the plugin cache` | Excluded: Thrown inside a scan of the plugin cache and caught at once, which falls back to no exclusions (`orphanedVersionGlobExclusions`, chunk-hg1yqkjk.js:105518 and chunk-hg1yqkjk.js:105530); no text is shown |
+| `link in the plugin cache` | Excluded: Thrown inside a scan of the plugin cache and caught at once, which falls back to no exclusions (`orphanedVersionGlobExclusions`, chunk-bzyb60p0.js:106639 and chunk-bzyb60p0.js:106651); no text is shown |
 | `list ${…}: 404 on page ${…} (cursor expired or store deleted mid-walk)` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | `list your Projects` | Excluded: Design projects list failure name; no page states the text |
 | `list your cloud environments` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
@@ -6057,7 +6041,7 @@ Items: 4220.
 | `manifest mismatch: ${…} Import completed with mismatches (IMPORT_MANIFEST_MISMATCH)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `manifest write failed: ${…}` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `mantle upstream: aws_access_key_id and aws_secret_access_key must be set together (and are required with aws_session_token)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
-| `mapSources: cannot extract repo slug from source URL '${…}' — not scp-form (user@host:path) and not a parseable URL` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `mapSources: cannot extract repo slug from source URL (source ${…} of ${…}) — not scp-form (user@host:path) and not a parseable URL` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `marker is not the single-named regular file seen` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `marker name is not a regular file` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `materializeWorkTree: with fetchesFrom, the arguments must be -c pairs if any, then fetch or ls-remote, then options, then --end-of-options, then that remote's name. Each option must carry its value af…` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
@@ -6072,7 +6056,7 @@ Items: 4220.
 | `memory head read carried no mtime` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `memory head read failed: ${…}` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `memory scan listing failed: ${…}` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `message field with implicit presence` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
+| `meta.json write failed: ${…}` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `methods/accessors not allowed in meta` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `metrics_enabled response missing metrics_logging_enabled` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `metrics_enabled unavailable: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -6137,12 +6121,13 @@ Items: 4220.
 | `network-spelled symlink hop` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `network-spelled symlink target` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `network.tlsTerminate and network.mitmProxy are mutually exclusive` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
-| `newlineIsToken may not be used with patch-generation functions, only with diffing functions` | Excluded: Bundled diff library |
 | `no JSON value on line` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
+| `no WorktreeCreate hook is enabled` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `no absolute python3 for a device hook template` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `no answer from the address of the file` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
-| `no check to run for the unchecked scripts` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
-| `no definition of the tool` | Excluded: Internal assertion that a tool has a definition in the tool list (chunk-hg1yqkjk.js:215050); no page states the text |
+| `no check to run for the unchecked scripts` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `no context named '${…}' in this session` | Excluded: REPL tool script limit or internal error; no page states the text |
+| `no definition of the tool` | Excluded: Internal assertion that a tool has a definition in the tool list (chunk-bzyb60p0.js:9456); no page states the text |
 | `no device hook templates in a diskless session` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `no enabled plugin with that id` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `no file at ${…} — write the page first, then preview it.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -6156,7 +6141,8 @@ Items: 4220.
 | `no private directory for a forwarded hook to start in on this machine` | Excluded: Hook copy directory checks for cloud sessions |
 | `no process group to signal` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `no schema with key or ref "${…}"` | Excluded: Bundled Ajv JSON Schema validator |
-| `no session token or worker epoch to post with` | Excluded: Internal assertion in the remote runner before it posts a worker event (`no session token or worker epoch to post with`, chunk-3kp5jwr6.js:10434); no user input reaches it. |
+| `no session token or worker epoch to post with` | Excluded: Internal assertion in the remote runner before it posts a worker event (`no session token or worker epoch to post with`, chunk-q0y1fm2x.js:10747); no user input reaches it. |
+| `no such stream is served here` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `no temp directory here lies outside what the session can write` | Excluded: Hook copy directory checks for cloud sessions |
 | `no tunnel can go through the proxy` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
 | `no unnamed file could be opened for it (${…})` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
@@ -6181,8 +6167,8 @@ Items: 4220.
 | `not in this runtime` | Excluded: Small shared guards and generic failure messages (type, date, UUID, abort, sanitization) |
 | `not opened no-follow for the head read` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `not read in a diskless session` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `not sent: no check stands over what a machine would answer` | Excluded: MCP connector request relay refusal (chunk-zzhrwga7.js:45); no page states the text |
-| `not sent: this session's machine sends no connector requests` | Excluded: MCP connector request relay refusal (chunk-w3gpg1a5.js:3432); no page states the text |
+| `not sent: no check stands over what a machine would answer` | Excluded: MCP connector request relay refusal (chunk-9r4r85pg.js:45); no page states the text |
+| `not sent: this session's machine sends no connector requests` | Excluded: MCP connector request relay refusal (chunk-54d1gdxa.js:3463); no page states the text |
 | `not the regular file at the name at read time` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `not unpadded base64url` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
 | `note: the installed service has not come up yet — a temporary background daemon (pid ${…}) is serving this session; check 'claude daemon status'.` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -6192,7 +6178,7 @@ Items: 4220.
 | `nothing to branch yet` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `nothing to branch yet. Send a message first` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `observer marker read-back failed` | Excluded: Internal observer marker check |
-| `offset must not be before one read from earlier, nor past the end of what was answered` | Excluded: MCP connector request relay refusal (chunk-xh2am3f6.js:338); no page states the text |
+| `offset must not be before one read from earlier, nor past the end of what was answered` | Excluded: MCP connector request relay refusal (chunk-mq2azyfv.js:339); no page states the text |
 | `oidc.ca_cert_pem has no usable certificate once those on the CLI's deny list are removed, so the gateway can't verify the identity provider. Set oidc.ca_cert_pem to the identity provider's intermediat…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `oidc.ca_cert_pem holds no PEM certificate the gateway can use (each needs a -----BEGIN CERTIFICATE----- line, base64 lines, and a -----END CERTIFICATE----- line of its own, with no stray markers or NU…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `oidc.google_groups: ${…} is not a Google service-account key (missing client_email or private_key)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -6235,6 +6221,7 @@ Items: 4220.
 | `outside the working folders and refused (${…}): ${…}` | Excluded: Browser file upload refusal for a path outside the working folders; no page states the text |
 | `over the size bound` | Excluded: Small shared guards and generic failure messages (type, date, UUID, abort, sanitization) |
 | `overage_spend_limit unavailable: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
+| `overlookingUnusableNamedProfile takes a synchronous read` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `packages/managed-config/src/desktop/generated/hybridServablePathLedger.json must be JSON with a "paths" list of strings. If it has merge-conflict markers, keep the paths from both sides and delete the…` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `pairing apiOrigin is not a URL: ${…}` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
 | `pairing apiOrigin must be a bare https origin: ${…}` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -6243,18 +6230,17 @@ Items: 4220.
 | `parent schema must have dependencies of ${…}: ${…}` | Excluded: Bundled Ajv JSON Schema validator |
 | `parent-segment spelling not allowed: ${…}` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `parseEpochTimestamp - numeric string invalid.` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `parser must be boolean\|regexp\|function` | Excluded: Bundled axios HTTP client |
 | `part does not follow the bytes already written` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | ``pass the type as `type` (its name) or `type_url` (its link) — exactly one`` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `path contains null bytes` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `path could not be vetted (symbolic link chain or unreadable component)` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `path escaped the configured origin` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `path escapes mount ${…}: ${…}` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `path lies below too many folders` | Excluded: Bundled ignore library (`path lies below too many folders`, chunk-32gs4rex.js:611) |
+| `path lies below too many folders` | Excluded: Bundled ignore library (`path lies below too many folders`, chunk-p1ewvgeh.js:612) |
 | `path must be absolute` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `path must be under the working sync dir` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
-| `path must not be empty` | Excluded: Bundled ignore library (`path must not be empty`, chunk-32gs4rex.js:602) |
-| ``path should be a `path.relative()`d string`` | Excluded: Bundled ignore library (chunk-32gs4rex.js:604) |
+| `path must not be empty` | Excluded: Bundled ignore library (`path must not be empty`, chunk-p1ewvgeh.js:603) |
+| ``path should be a `path.relative()`d string`` | Excluded: Bundled ignore library (chunk-p1ewvgeh.js:605) |
 | `path too long` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `payload exceeds the element serialization wall` | Excluded: Size and depth limits on payloads that cross the worker boundary |
 | `payload exceeds the serialization budget` | Excluded: Size and depth limits on payloads that cross the worker boundary |
@@ -6281,8 +6267,7 @@ Items: 4220.
 | `poll event: pass one of content, element, declared` | Excluded: Poll event envelope validation |
 | `poll stopped by caller` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `port must be a string` | Excluded: Bundled gRPC library (@grpc/grpc-js) |
-| `prefetch_attachments: files must be a list of at most 16 { file_uuid: UUID, file_size?: number }, issued_at a number (epoch milliseconds), and only_these, if present, a boolean` | Excluded: Value check of an internal prefetch_attachments request (chunk-yzbs7cc9.js:2770); no page states the text |
-| `premature EOF` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
+| `prefetch_attachments: files must be a list of at most 16 { file_uuid: UUID, file_size?: number }, issued_at a number (epoch milliseconds), and only_these, if present, a boolean` | Excluded: Value check of an internal prefetch_attachments request (chunk-nfz758rv.js:2789); no page states the text |
 | `prepaid/bundles unavailable: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `prepaid/commits status unavailable: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `prepaid/credits purchase unavailable: ${…}` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -6293,7 +6278,7 @@ Items: 4220.
 | `preview renders local files only; this path, or a link on the way to it, reaches a network share, or a directory or link on the way could not be examined.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `probe blob not read` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `probe blob not written` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `process 1 cannot tell its own children from orphans` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-kr748280.js:167); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
+| `process 1 cannot tell its own children from orphans` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-khpf2df1.js:167); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
 | `profile name "${…}" contains disallowed characters (allowed: letters, digits, '_', '.', '-')` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `profile name "${…}" is not allowed` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `profile name "${…}" must not contain path separators` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
@@ -6345,7 +6330,7 @@ Items: 4220.
 | `realpath would misread a backslash in the path` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `record aged out` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `recording name components must be plain segments` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `redirect refused` | Excluded: Internal refusal to follow a redirect in the HTTP requests of the session bridge (chunk-w0gdqabn.js:728 and chunk-w0gdqabn.js:785); no page states the text |
+| `redirect refused` | Excluded: Internal refusal to follow a redirect in the HTTP requests of the session bridge (chunk-k120jpb4.js:759 and chunk-k120jpb4.js:816); no page states the text |
 | `redirectUriOnly is set and the request names no redirectUri.` | [/extend/mcp/auth#errors](/extend/mcp/auth#errors) |
 | `redirectUrl is required for authorization_code flow` | Excluded: Bundled MCP SDK (@modelcontextprotocol/sdk) |
 | `refreshWorkSecret callback is not provided.` | [/extend/headless#errors](/extend/headless#errors) |
@@ -6384,6 +6369,7 @@ Items: 4220.
 | `register_repo_root: ${…} is already a registered working directory` | [/extend/headless#errors](/extend/headless#errors) |
 | `register_repo_root: target is a network path, an obfuscated spelling, or a path whose directories and symbolic links could not all be examined, which cannot be registered` | [/extend/headless#errors](/extend/headless#errors) |
 | `register_repo_root: target path could not be resolved` | [/extend/headless#errors](/extend/headless#errors) |
+| `releaseContext '${…}' refused — ${…}` | Excluded: REPL tool script limit or internal error; no page states the text |
 | `relocateConfigureGitArtifacts: artifact path is not under {baseDir}/.runner/` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `remote_control_work_secret names a session this host did not attach.` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `removeFromEveryLeg: the remove function added or changed a value. It may only delete keys. Nothing was written to this store.` | Excluded: Rescue and migration copy assertions (data directory, staging folder, snapshot) |
@@ -6442,7 +6428,7 @@ Items: 4220.
 | `seal: no envelope produced` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
 | `sealSyncGlobalsInVM: the context lacks one of log, phase, setTimeout, clearTimeout, console, budget — call it only on a context built by createWorkflowContext or createChildRealm` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `sealed channel torn down` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
-| `searchTools: pass the words to look for, e.g. searchTools('slack message')` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-mjpt6p5c.js:81); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
+| `searchTools: pass the words to look for, e.g. searchTools('slack message')` | Excluded: REPL tool text. Code Mode needs an interactive terminal and an account gate (search "for now it only works in the interactive terminal" finds chunk-qwcebyxc.js:103); print runs with CLAUDE_CODE_EXPERIMENTAL_CODE_MODE unset, 1, on, and bogus listed no REPL tool (case print.env319a.code-mode.*). |
 | `seccompConfig.argv0 requires seccompConfig.applyPath` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `seed transcript stream not found` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `seed-admin is no longer the directory that was checked` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
@@ -6465,7 +6451,7 @@ Items: 4220.
 | `setHoldStaleReauthEntryForTest is test-only` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `setInitializationVector can only be called once` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `setKeyManagementParameters can only be called once` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
-| `setMcpReauthDecisionSinkForTest is test-only` | Excluded: A guard for a test hook (chunk-w3gpg1a5.js:7403); no user path calls it |
+| `setMcpReauthDecisionSinkForTest is test-only` | Excluded: A guard for a test hook (chunk-54d1gdxa.js:7368); no user path calls it |
 | `setModeRow: schema rejected a designed setMode update` | Excluded: Display-intake validation of consent rows and updates |
 | `setNotificationHandler: handler is required` | Excluded: Bundled MCP SDK v2 (@modelcontextprotocol/client and server 2.4.0) |
 | `setProtectedHeader can only be called once` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
@@ -6479,8 +6465,8 @@ Items: 4220.
 | `setStdioProbeTimeoutMsForTest is test-only` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `setUnprotectedHeader can only be called once` | Excluded: Bundled jose library (JWT, JWS, JWE, JWK) |
 | `setWizardOperatorToolsEnabled(false) is test-only: the wizard latch is one-way in production` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
-| `set_attached_project: project_uuid must be a UUID or null` | Excluded: Host-side control request of a remote session (chunk-yzbs7cc9.js:2820); claude.ai sends it, a user types nothing for it. |
-| `set_attached_project: this session does not read its Project through the service that hosts it` | Excluded: Host-side control request of a remote session (chunk-yzbs7cc9.js:2824); claude.ai sends it, a user types nothing for it. |
+| `set_attached_project: project_uuid must be a UUID or null` | Excluded: Host-side control request of a remote session (chunk-nfz758rv.js:2839); claude.ai sends it, a user types nothing for it. |
+| `set_attached_project: this session does not read its Project through the service that hosts it` | Excluded: Host-side control request of a remote session (chunk-nfz758rv.js:2843); claude.ai sends it, a user types nothing for it. |
 | `set_mcp_permission_mode_override: serverName must be a string` | [/extend/headless#errors](/extend/headless#errors) |
 | `settings document has too many objects to copy` | Excluded: Internal file and store guard (file type, size, owner or mode, write result); no page states the text |
 | `settings fetch: a proxy now applies to the gateway, so the request was not sent again` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
@@ -6493,7 +6479,9 @@ Items: 4220.
 | `shortWordSlugFromSeed needs at least 8 seed bytes` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `signed header "${…}" is missing from the request` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `simpleCluster: no flatKey on .${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
+| `skills/get not sent: this connection is not known to use MCP protocol version 2026-07-28 or later, or its server does not declare the skills extension` | Excluded: Internal consistency and refusal messages (bundled text, tool pairing, import size cap, host checks) |
 | `snapshot copy failed: ${…}${…}` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
+| `socketPath must be a string` | Excluded: Bundled axios HTTP client |
 | `something that is not a directory is already named info there` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `sound may hold at most 1500 values, counting every field and list entry` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
 | `sound needs an ambience or at least one cue` | [/extend/mod-api/ui#sound-values](/extend/mod-api/ui#sound-values) |
@@ -6508,6 +6496,9 @@ Items: 4220.
 | `spawn-runner hook at ${…} is not a regular file` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `spawn-runner hook at ${…} is not executable (chmod +x ${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `spawn-runner hook not found at ${…} — the orchestrator cannot start without it (${…})` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `spawnContext '${…}' refused — ${…}` | Excluded: REPL tool script limit or internal error; no page states the text |
+| `spawnContext: ${…}` | Excluded: REPL tool script limit or internal error; no page states the text |
+| `spawnContext: initialPrompt must be 1-${…} chars` | Excluded: REPL tool script limit or internal error; no page states the text |
 | `spawnSandboxed() needs an initialized windows.backend 'mxc' session; other backends use wrapWithSandboxArgv().` | Excluded: Windows MXC sandbox backend refusal or internal assertion; no page states the text |
 | `spawnSandboxedOnWindows: this sandbox-runtime has no spawnSandboxed()` | Excluded: Windows MXC sandbox backend refusal or internal assertion; no page states the text |
 | `spawnSandboxedOnWindows: this session runs on the sandbox account backend, which wraps commands with wrapWithSandboxArgv` | Excluded: Windows MXC sandbox backend refusal or internal assertion; no page states the text |
@@ -6530,8 +6521,6 @@ Items: 4220.
 | `store: this build cannot tell which sslmode store.postgres_url asks for, so it cannot tell how to verify the database. This is a fault in the build, not in the configuration: use another release of Cl…` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `streamUpload: unsupported request body type` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
 | `strict JSON: ${…} at ${…}` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
-| `string ${…} doesn't end with suffix ${…}; this is a bug` | Excluded: Bundled diff library |
-| `string ${…} doesn't start with prefix ${…}; this is a bug` | Excluded: Bundled diff library |
 | `string len ${…} greater than remaining buf len.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `stub preview cannot render a parameter whose display would drop code points` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `stub preview cannot render all parameters completely` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
@@ -6543,7 +6532,6 @@ Items: 4220.
 | `submit the setup proposal` | [/extend/skills-and-commands/slash-commands#errors](/extend/skills-and-commands/slash-commands#errors) |
 | `submodule state unreadable — cannot verify worktree is clean` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `supportedDialogKinds requires an onUserDialog callback -- declaring dialog kinds without a handler would park dialogs nothing can answer. Provide onUserDialog, or omit supportedDialogKinds.` | [/extend/headless#errors](/extend/headless#errors) |
-| `surrogate code points are not allowed` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `surrounding whitespace` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `suspicious path spelling: ${…}` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `symlink target goes through too many symlinks in a row, or through a link whose target the operating system may resolve to a different folder than the one Claude Code checked` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
@@ -6569,7 +6557,7 @@ Items: 4220.
 | `text is empty or visually blank after permission or hook rewrites — a reply no approval surface could display is not posted` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `the ${…} header value contains a control character` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `the ${…}header cannot be set through this session's GitHub proxy; headers that can: ${…}` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
-| `the API address is neither an https address nor an http address on this machine, or has a query, a fragment, a user name or a password` | Excluded: Self-hosted runner nested model proxy check of the API address (chunk-3kp5jwr6.js:3178); the address is the api_base_url of the session that the server assigns (chunk-3kp5jwr6.js:10559), not a value a user sets |
+| `the API address is neither an https address nor an http address on this machine, or has a query, a fragment, a user name or a password` | Excluded: Self-hosted runner nested model proxy check of the API address (chunk-q0y1fm2x.js:3227); the address is the api_base_url of the session that the server assigns (chunk-q0y1fm2x.js:10872), not a value a user sets |
 | `the Anthropic profile configs directory (ANTHROPIC_CONFIG_DIR/configs) could not be read (${…}), so the Bash sandbox cannot exclude its credential files — a Bash-granting evaluation cannot run here` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `the JSON array contains an empty element — remove it, or fill in the value it was a placeholder for` | Excluded: Argument-list setting parser errors (JSON form and quoting) |
 | `the MCP server has not connected yet` | Excluded: Remote-session MCP relay refusals on the computer side (connection state, approved list, announced tools) |
@@ -6580,8 +6568,8 @@ Items: 4220.
 | `the WorktreeCreate hook emitted a path with dot segments (${…}) — the symlink screen cannot verify a dotted spelling; have the hook emit a normalized (dot-free) absolute path` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `the WorktreeCreate hook's worktree path component ${…} ${…} — a repository-committed symlink below the checkout root could redirect the worktree outside the repository` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | ``the `--paginate` option is not supported for non-GET requests; with fields the method is POST unless `-X GET` sends them as query parameters`` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
-| `the agent transcript cannot be read` | Excluded: Internal read failure of a stored agent transcript, thrown for the caller to handle (chunk-nxwpaxwj.js:7649); no page states the text |
-| `the agent transcript is too large to read` | Excluded: Internal read failure of a stored agent transcript, thrown for the caller to handle (chunk-nxwpaxwj.js:7657); no page states the text |
+| `the agent transcript cannot be read` | Excluded: Internal read failure of a stored agent transcript, thrown for the caller to handle (chunk-s3qtr6en.js:7910); no page states the text |
+| `the agent transcript is too large to read` | Excluded: Internal read failure of a stored agent transcript, thrown for the caller to handle (chunk-s3qtr6en.js:7918); no page states the text |
 | `the answer had no inputTokens` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | ``the answer holds a `then` that is not fixed`` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `the bridge socket belongs to a different account, or nobody is signed in` | [/configure/cli/flags#errors](/configure/cli/flags#errors) |
@@ -6596,7 +6584,7 @@ Items: 4220.
 | `the connect deadline fired as the response arrived` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `the context breakdown isn't available over this remote connection` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `the create was cancelled` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `the desktop app had no connection` | Excluded: Internal failure text of the desktop app bridge (chunk-ghzdma7c.js:594); no page states the text |
+| `the desktop app had no connection` | Excluded: Internal failure text of the desktop app bridge (chunk-szpzqs89.js:594); no page states the text |
 | `the destination no longer matches the one this read was approved for — nothing was fetched; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `the directory cannot be opened` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the directory for verified hook copies is no longer the one this process made` | Excluded: Hook copy directory checks for cloud sessions |
@@ -6610,7 +6598,7 @@ Items: 4220.
 | `the file at this path could not be vouched for` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the file at this path is not the one approved` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the file became shorter while it was being uploaded` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `the file does not hold a valid id` | Excluded: Internal assertion on the session disk-mark file that the program writes (chunk-3kp5jwr6.js:5677); no user input reaches it. |
+| `the file does not hold a valid id` | Excluded: Internal assertion on the session disk-mark file that the program writes (chunk-q0y1fm2x.js:5871); no user input reaches it. |
 | `the file is one of Claude's own files, or its name has text-direction characters` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `the file is over the size limit` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the file is too large to send back as text` | [/reference/tools/files#errors](/reference/tools/files#errors) |
@@ -6619,14 +6607,15 @@ Items: 4220.
 | `the files have moved since the page before` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the files map no longer names the copies that were approved (each destination with its source) — nothing was published; retry so the publish is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `the files together are larger than one call places` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
-| `the folder for hook transcripts is a symbolic link or not a directory owned by this user, so nothing was written` | Excluded: Hook transcript folder checks (a tmpfs folder owned by the user, chunk-2yx88hvf.js:261); no page states the text |
-| `the folder for hook transcripts is not a tmpfs, so nothing was written` | Excluded: Hook transcript folder checks (a tmpfs folder owned by the user, chunk-2yx88hvf.js:265); no page states the text |
+| `the folder for hook transcripts is a symbolic link or not a directory owned by this user, so nothing was written` | Excluded: Hook transcript folder checks (a tmpfs folder owned by the user, chunk-am74sq47.js:266); no page states the text |
+| `the folder for hook transcripts is not a tmpfs, so nothing was written` | Excluded: Hook transcript folder checks (a tmpfs folder owned by the user, chunk-am74sq47.js:270); no page states the text |
 | `the folder is a link or a file, or cannot be made` | [/configure/cli/self-hosted-runner#folder-and-worktree-messages](/configure/cli/self-hosted-runner#folder-and-worktree-messages) |
+| `the folder is not where it was made` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `the frontmatter is refused or does not parse` | Excluded: Build-time schema, model catalog, and field-coverage drift assertions |
 | `the grammar does not move on through the text` | Excluded: Bundled highlight.js syntax highlighter (grammar check or lookup) |
 | `the groups of a match do not spell its text` | Excluded: Bundled highlight.js syntax highlighter (grammar check or lookup) |
 | `the harness is running as root, which a directory mode does not bind` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `the held copy is shared` | Excluded: Internal assertion on a held settings copy (`the held copy is shared`, chunk-kgzzwvwc.js:210); it fires on a program bug, not on user input. |
+| `the held copy is shared` | Excluded: Internal assertion on a held settings copy (`the held copy is shared`, chunk-f9x2f6cx.js:215); it fires on a program bug, not on user input. |
 | `the home, Claude config, temp, plugin-parent or case-parent directory on this machine has a glob character (* ? [ ]) in its path (as written or where it really points), so the Bash sandbox cannot excl…` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
 | `the hook has no filesystem lists` | Excluded: Hook copy directory checks for cloud sessions |
 | `the host catalog's skill has no folder on this machine` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
@@ -6652,7 +6641,7 @@ Items: 4220.
 | `the package manager finished but wrote no node_modules` | [/extend/plugins/marketplace#errors](/extend/plugins/marketplace#errors) |
 | `the page did not load in the preview frame` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `the page reloaded or rewrote itself during the checks` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `the pass over /proc ran out of time` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-kr748280.js:80); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
+| `the pass over /proc ran out of time` | Excluded: Internal /proc sampler that the program runs on its own child processes (chunk-khpf2df1.js:80); no setting or input reaches it (search "process 1 cannot tell its own children from orphans"). |
 | `the path could not be checked for links to a network location: a folder or link on the way could not be read` | [Self-Hosted Runner](../configure/cli/self-hosted-runner.md) |
 | `the path in the tool's input could not be made absolute for the hook` | [Hook Configuration](../extend/hooks/configuration.md) |
 | `the path is taken again, or could not be checked` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
@@ -6668,6 +6657,7 @@ Items: 4220.
 | `the probe file was replaced while the probe ran` | [/configure/memory-and-rules#errors](/configure/memory-and-rules#errors) |
 | `the record of attached computers gave no list` | [/extend/mcp/cli#errors](/extend/mcp/cli#errors) |
 | `the remote sent a context breakdown this version can't read` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
+| `the reply has no boolean "stuck", so it may have come from a proxy and not the server` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the repo declares no such hook for that event now` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `the rows owed make no client row` | Excluded: Reached only in a cloud session (hosted worker); this site leaves out cloud sessions. |
 | `the run created ${…}/ in its working directory — that name is reserved for the run's artifact publishes, so its file evidence cannot be trusted` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -6679,7 +6669,7 @@ Items: 4220.
 | `the sandbox has not started` | Excluded: An internal check whose caller catches the error; it does not reach the user. |
 | `the scratch directory is no longer the one this pass created` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `the sealed directory mode did not take` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
-| `the second server/discover does not offer ${…}` | Excluded: The program stores this text in `_anthropicRediscoverError` and throws the first error (chunk-gpm60stp.js:16020). It goes only to the MCP debug log, through the mcpDebug message, never to the user. |
+| `the second server/discover does not offer ${…}` | Excluded: The program stores this text in `_anthropicRediscoverError` and throws the first error (chunk-racn22qq.js:16020). It goes only to the MCP debug log, through the mcpDebug message, never to the user. |
 | `the session came without a readable tag list` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `the session history could not be read` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `the session is ending, or no main-loop context is saved` | [/extend/headless#errors](/extend/headless#errors) |
@@ -6696,6 +6686,7 @@ Items: 4220.
 | `the staged file is not the one this write began` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the staged file was replaced before it was placed` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `the staging folder is not a real directory` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
+| `the stand-in did not run` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `the stash's copy of the index was shorter than expected` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `the stop action is missing` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `the stored copy is not a regular file` | [/configure/settings/enterprise#approval-of-server-managed-settings](/configure/settings/enterprise#approval-of-server-managed-settings) |
@@ -6703,16 +6694,16 @@ Items: 4220.
 | `the sub-command was killed or did not exit with 0` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `the tool.list hooks answered no entry that could be read` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
 | `the tool.list hooks answered no list` | Excluded: Mod engine load and registration assertions (plugin module shape, hook results) |
-| `the transcript changed size while it was read` | Excluded: Internal read failure of a session transcript, thrown for the caller to handle (chunk-hg1yqkjk.js:42762); no page states the text |
-| `the transcript could not be read` | Excluded: Internal read failure of a session transcript, thrown for the caller to handle (chunk-hg1yqkjk.js:42761); no page states the text |
+| `the transcript changed size while it was read` | Excluded: Internal read failure of a session transcript, thrown for the caller to handle (chunk-bzyb60p0.js:43526); no page states the text |
+| `the transcript could not be read` | Excluded: Internal read failure of a session transcript, thrown for the caller to handle (chunk-bzyb60p0.js:43525); no page states the text |
 | `the transcript path is not a regular file with one link` | Excluded: Internal file and store guard (file type, size, owner or mode, write result); no page states the text |
 | `the tunnel would show a client certificate` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
 | `the ui.resolve answer is a Proxy or a vm context; a table of elements is a plain object` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `the upstream proxy URL must be http:// or https://` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | ``the value contains an empty `""` token — remove it, or fill in the value it was a placeholder for`` | Excluded: Argument-list setting parser errors (JSON form and quoting) |
 | ``the value contains an unquoted shell metacharacter (one of ; \| & $ ( ) ` < >) — it is an argv list, not a shell command`` | Excluded: Argument-list setting parser errors (JSON form and quoting) |
-| `the write made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-ghzdma7c.js:1087 and chunk-ghzdma7c.js:1148); the program loops the write, no user input reaches it. |
-| `the write of a resume head made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-hg1yqkjk.js:25200); the program loops the write, no user input reaches it. |
+| `the write made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-szpzqs89.js:1087 and chunk-szpzqs89.js:1148); the program loops the write, no user input reaches it. |
+| `the write of a resume head made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-bzyb60p0.js:25916); the program loops the write, no user input reaches it. |
 | `this approval was already used by an earlier attempt — nothing was created now; retry so it is asked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this batch no longer lists the writes that were approved (entries were added or removed) — nothing was read or sent; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this batch no longer lists the writes that were approved (entries were added, removed, or it was approved as a single write) — nothing was read or sent; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -6720,9 +6711,10 @@ Items: 4220.
 | `this computer serves this session nothing now` | Excluded: Remote-session MCP relay refusals on the computer side (connection state, approved list, announced tools) |
 | `this computer's MCP connections are being set up or rebuilt` | Excluded: Remote-session MCP relay refusals on the computer side (connection state, approved list, announced tools) |
 | `this computer's announced MCP tools changed while this request was being checked` | Excluded: Remote-session MCP relay refusals on the computer side (connection state, approved list, announced tools) |
-| `this connector request has ended` | Excluded: MCP connector request relay refusal (chunk-xh2am3f6.js:376); no page states the text |
+| `this connector request has ended` | Excluded: MCP connector request relay refusal (chunk-mq2azyfv.js:377); no page states the text |
 | `this drawing was unmounted` | Excluded: Plugin test kit and render-surface assertions (Client drawing, mounted tree, timers) |
-| `this file cannot be written in parts` | Excluded: Internal assertion that a file object can write in parts, in two file writers (`this file cannot be written in parts`, chunk-ghzdma7c.js:1145 and chunk-hg1yqkjk.js:93503); no user input reaches it. |
+| `this file cannot be written in parts` | Excluded: Internal assertion that a file object can write in parts, in two file writers (`this file cannot be written in parts`, chunk-szpzqs89.js:1145 and chunk-bzyb60p0.js:94864); no user input reaches it. |
+| `this folder may not be read` | [/extend/mod-api/calls/vcs#members](/extend/mod-api/calls/vcs#members) |
 | `this input was approved as a create from an Artifact type and no longer names one — nothing was published; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this machine could not judge the hook's condition` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `this machine could not judge the hook's matcher` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
@@ -6733,16 +6725,17 @@ Items: 4220.
 | `this machine keeps the repo's hooks off` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `this machine's settings hold account plugins for now` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
 | `this machine's settings keep a skill's hooks off` | [/extend/hooks/configuration#errors](/extend/hooks/configuration#errors) |
+| `this mod may not run Git here` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `this platform cannot open a file without following it` | [Marketplaces](../extend/plugins/marketplace.md) |
 | `this process writes nothing to disk` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `this read was approved as a lookup of people's names, and it now asks for documents instead — nothing was fetched; retry so it is checked as a database read` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this read was approved to save documents under out_dir, and it now asks for names instead — nothing was fetched; retry so it is checked again` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this read was approved to save documents under out_dir, and out_dir was removed afterwards — nothing was fetched, so no document entered the conversation; retry so the read is checked as an inline rea…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `this read was approved without out_dir, and one was added afterwards — nothing was fetched; retry so the destination is checked` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `this runtime has no Bun.FetchSession` | Excluded: Runtime check: the program needs a Bun build that has the API it calls (chunk-aq3ms068.js:51859) |
+| `this runtime has no Bun.FetchSession` | Excluded: Runtime check: the program needs a Bun build that has the API it calls (chunk-865at33z.js:52530) |
 | `this runtime, Bun 1.3 or earlier, trusts its own store beside the one root given` | [/configure/settings/auth#errors](/configure/settings/auth#errors) |
-| `this server sends no connector requests` | Excluded: MCP connector request relay refusal (chunk-xh2am3f6.js:374); no page states the text |
-| `this server's plugin was loaded before the session moved into its folder, so it stays off until the session's plugins are reloaded` | Excluded: Control request refusal for an MCP server of a plugin loaded before the session moved folders (chunk-614w915w.js:28371); no page states the text |
+| `this server sends no connector requests` | Excluded: MCP connector request relay refusal (chunk-mq2azyfv.js:375); no page states the text |
+| `this server's plugin was loaded before the session moved into its folder, so it stays off until the session's plugins are reloaded` | Excluded: Control request refusal for an MCP server of a plugin loaded before the session moved folders (chunk-a0tz781a.js:29182); no page states the text |
 | `this session cannot send files to other sessions on this machine` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `this session connects no MCP servers yet` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `this session has no first-party credential to authorize` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
@@ -6758,15 +6751,14 @@ Items: 4220.
 | `thread_id must be a thread id from action "comments" (a lowercase UUID)` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `timeout of ${…}ms exceeded` | Excluded: The event-logging exporter: its retry and status logic handles the error, and no message reaches the user. |
 | `timeout: no answer from the cloud worker in time` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
-| `timestamp out of range` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `title must be non-empty` | [/extend/headless#errors](/extend/headless#errors) |
 | `tlsTerminate needs Node, or Bun 1.4 or later (this is ${…})` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `tlsTerminate: CA PEM pair: ${…}` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `tlsTerminate: CA at ${…}: ${…}` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `tlsTerminate: caCertPath and caKeyPath must be provided together` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
 | `tmux passthrough: expected exactly one iTerm2 File= sequence ending in BEL` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
-| `too many connector requests are open` | Excluded: MCP connector request relay refusal (chunk-xh2am3f6.js:380); no page states the text |
-| `too many entries` | Excluded: Internal directory-listing cap (`too many entries`, chunk-qmjpkv5w.js:478); its caller catches it and treats the folder as unreadable. |
+| `too many connector requests are open` | Excluded: MCP connector request relay refusal (chunk-mq2azyfv.js:381); no page states the text |
+| `too many entries` | Excluded: Internal directory-listing cap (`too many entries`, chunk-5qkc3ebx.js:536); its caller catches it and treats the folder as unreadable. |
 | `too many stream-base spellings` | [/reference/tools/files#errors](/reference/tools/files#errors) |
 | `tool host helper: the session id is not usable` | Excluded: Internal tool host check |
 | `tool-results file refused: this session keeps no files on this machine` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
@@ -6783,11 +6775,9 @@ Items: 4220.
 | `transcript stream replace failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `tree anchor is closed` | Excluded: Internal validation refusals with no sentence of their own (path vetting, task lookup, mount path, shape and encoding checks) |
 | `tryAppend: short write to ${…} stalled with ${…} bytes remaining` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
-| `type cannot be converted ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `type must be JSONType or JSONType[]: ${…}` | Excluded: Bundled Ajv JSON Schema validator |
 | `type: null contradicts nullable: false` | Excluded: Bundled Ajv JSON Schema validator |
 | `u64be: not a non-negative safe integer` | Excluded: Canonical JSON and base64url encoding checks of the browser pairing channel |
-| `uint32 out of range` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `undefined env var in config: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `unexpected argument '${…}' — this command takes no positional arguments` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `unexpected asset response (${…})` | Excluded: Plugin asset download checks (status, size cap, pinned checksum) |
@@ -6797,7 +6787,6 @@ Items: 4220.
 | `unexpected major type ${…} for map key.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `unexpected major type ${…} in indefinite string.` | Excluded: Bundled AWS SDK and Smithy libraries |
 | `unexpected minor value ${…}.` | Excluded: Bundled AWS SDK and Smithy libraries |
-| `unimplemented: ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `unionCluster: no selector discriminates "${…}"` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `unknown flag ${…}` | [/how-it-works/sessions-and-storage#errors](/how-it-works/sessions-and-storage#errors) |
 | `unknown form field: ${…}` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
@@ -6813,7 +6802,6 @@ Items: 4220.
 | `unsupported Unicode single-quote in command line` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `unsupported asset type "${…}": upload_asset takes ${…}` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `unsupported asset type: upload_asset takes ${…}` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
-| `unsupported input ${…}` | Excluded: Bundled protobuf and CEL libraries (@bufbuild/protobuf, cel-js) |
 | `unsupported key type in meta: ${…}` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `unsupported method; use GET, HEAD, POST, PUT, PATCH or DELETE` | [/reference/tools/shell-and-web#errors](/reference/tools/shell-and-web#errors) |
 | `unsupported scheme or empty host` | Excluded: Address and URL vetting for outbound connections (private range, scheme, host) |
@@ -6854,9 +6842,9 @@ Items: 4220.
 | `verified (kid=${…}, ${…})` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `verify is not available in this session.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `verifySignedJwtWithCerts is removed, please use verifySignedJwtWithCertsAsync instead.` | Excluded: Bundled Google auth library (google-auth-library) |
+| `version is longer than 256 characters` | Excluded: Bundled semver library |
 | `version is not available in this build` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `versionNegotiation: { pin: '${…}' } is not a modern protocol revision — pinning is for 2026-07-28 and later; omit versionNegotiation (or use mode: 'legacy') for 2025-era servers.` | Excluded: Bundled MCP SDK v2 (@modelcontextprotocol/client and server 2.4.0) |
-| `visitor must be a function` | Excluded: Bundled axios HTTP client |
 | `warning: --bg manages the session id; ignoring --session-id (use --resume <id> to continue an existing session)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `warning: --exec ignores ${…} (only --name composes)` | [/configure/cli/subcommands#errors](/configure/cli/subcommands#errors) |
 | `warning: --json result withheld because it failed schema validation` | [/extend/plugins/cli#errors](/extend/plugins/cli#errors) |
@@ -6883,12 +6871,13 @@ Items: 4220.
 | ``worktree "${…}" already exists at ${…} but cannot be reused (${…}). Remove that directory (with `git worktree remove` if it's a registered worktree, or by deleting it if it's a stray directory) or pas…`` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `worktree probe timed out` | [/reference/tools/agents-and-tasks#errors](/reference/tools/agents-and-tasks#errors) |
 | `wrapWithSandbox() returns a shell string and is not supported on Windows. Use SandboxManager.wrapWithSandboxArgv() and spawn the result with {shell: false}.` | [/configure/permissions/sandbox#errors](/configure/permissions/sandbox#errors) |
-| `write made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-pxy9yt8m.js:596 and chunk-pxy9yt8m.js:639); the program loops the write, no user input reaches it. |
+| `write made no progress` | Excluded: Internal short-write assertion in a file writer (chunk-2yx6c1y2.js:606 and chunk-2yx6c1y2.js:649); the program loops the write, no user input reaches it. |
 | `write returned 0 bytes with data remaining` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `writeFileAndFlush: heldDirectory cannot be combined with allowSymlink, stagingDir or createOnly` | Excluded: Coding-error guards: a provider, delegate, or controller used before it is bound, and test-only setters |
 | `writeRemoteAgentMetadata: storage write failed` | Excluded: Storage, journal, and sidecar read and write assertions (short write, failed stat or delete, cursor did not advance, diskless session) |
 | `writeRunMocks: agent responders need the agent service` | [/extend/mod-api/calls/testing#errors](/extend/mod-api/calls/testing#errors) |
 | `write_files with localPath requires a plan finalized with localDir. Re-run finalize_plan with the bundle directory.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
+| `write_files: "${…}" would replace "${…}", which an earlier call under this plan uploaded from another file: claude.ai/design stores both as "${…}". If they are two files, give one of them another path…` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `write_files: ${…} has both data and localPath` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `write_files: ${…} has neither data nor localPath` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
 | `write_files: file at localPath exceeds the ${…} byte limit.` | [/reference/tools/gated-and-other#errors](/reference/tools/gated-and-other#errors) |
@@ -6920,7 +6909,7 @@ Items: 78.
 
 | Item | Where |
 | --- | --- |
-| `.cc-writes` | Excluded: The name `.cc-writes` of a staging folder under `.claude/` (chunk-dnaxttmk.js:206). The program creates these folders and writes a global gitignore rule for `.claude/` plus this name (chunk-f7fdz8jz.js:49331). No use that a user can act on was confirmed. |
+| `.cc-writes` | Excluded: The name `.cc-writes` of a staging folder under `.claude/` (chunk-q7qjcthc.js:206). The program creates these folders and writes a global gitignore rule for `.claude/` plus this name (chunk-ha393e1n.js:33202). No use that a user can act on was confirmed. |
 | `.config.json` | [Files on Disk](../start/files-on-disk.md) |
 | `.deep-link-register-failed` | [Files on Disk](../start/files-on-disk.md) |
 | `.last-cleanup` | [Files on Disk](../start/files-on-disk.md) |
@@ -6948,22 +6937,22 @@ Items: 78.
 | `dev-mods` | [Files on Disk](../start/files-on-disk.md) |
 | `device-unbound-creates.json` | Excluded: An internal state file (`state/`) that the cleanup code removes. Not a file that a user edits. |
 | `drafts` | [Files on Disk](../start/files-on-disk.md) |
-| `dump-prompts` | Excluded: The program has a writer for the `dump-prompts` folder, with files `<id>.jsonl` (chunk-gcy4yqjm.js:68). The call to it runs only when `isAnt` is true (chunk-wm04tzdx.js:14564), and the session gates set `isAnt` to false (chunk-wm04tzdx.js:12074), so no user can turn it on. |
+| `dump-prompts` | Excluded: The program has a writer for the `dump-prompts` folder, with files `<id>.jsonl` (chunk-fpk6xk4r.js:68). The call to it runs only when `isAnt` is true (chunk-k5r71ad2.js:15055), and the session gates set `isAnt` to false (chunk-k5r71ad2.js:12467), so no user can turn it on. |
 | `feedback-bundles` | [Files on Disk](../start/files-on-disk.md) |
-| `file-transfers` | Excluded: A spool folder `file-transfers` for peer file transfer: the program copies a file into it and removes old files (chunk-chgk10xd.js:355). The folder name is fixed (chunk-chgk10xd.js:258). No use that a user can act on was confirmed. |
+| `file-transfers` | Excluded: A spool folder `file-transfers` for peer file transfer: the program copies a file into it and removes old files (chunk-qanr9g0g.js:364). The folder name is fixed (chunk-qanr9g0g.js:267). No use that a user can act on was confirmed. |
 | `fork-seeds` | Excluded: An internal folder (`remote-control/fork-seeds/`) of `.json` files that the cleanup code removes. Not a file that a user edits. |
 | `gh-pr-status-cache.json` | [Files on Disk](../start/files-on-disk.md) |
 | `hfi-auth.json` | Excluded: An internal auth file that the cleanup code removes. Not a file that a user edits. |
 | `history.jsonl` | [Files on Disk](../start/files-on-disk.md) |
-| `image-cache` | Excluded: A folder that only the program's cleanup code reads: it removes the entries of old sessions from `image-cache` (chunk-2xccqdyk.js:298). No code that writes it was found, and its content was not confirmed. |
+| `image-cache` | Excluded: A folder that only the program's cleanup code reads: it removes the entries of old sessions from `image-cache` (chunk-zemejbd8.js:277). No code that writes it was found, and its content was not confirmed. |
 | `jobs` | [Files on Disk](../start/files-on-disk.md) |
 | `keybindings.json` | [Files on Disk](../start/files-on-disk.md) |
 | `local` | [Files on Disk](../start/files-on-disk.md) |
 | `loop.md` | [Files on Disk](../start/files-on-disk.md) |
 | `mcp-discover-verdicts.json` | Excluded: An internal state file (`state/`) that the cleanup code removes. Not a file that a user edits. |
-| `mcp-discovery-cache` | Excluded: A cache of discovery results from MCP servers. The program writes `.json` entries to it (chunk-njk3nrhp.js:712) and deletes old ones (chunk-2xccqdyk.js:1548). The folder name is fixed (chunk-njk3nrhp.js:500). No use that a user can act on was confirmed. |
+| `mcp-discovery-cache` | Excluded: A cache of discovery results from MCP servers. The program writes `.json` entries to it (chunk-yrpmp1hk.js:712) and deletes old ones (chunk-zemejbd8.js:1538). The folder name is fixed (chunk-yrpmp1hk.js:500). No use that a user can act on was confirmed. |
 | `mcp-needs-auth-cache.json` | [Files on Disk](../start/files-on-disk.md) |
-| `mcp-skill-archives` | Excluded: Only the name `mcp-skill-archives` in the program's lists of config-folder entries (chunk-2xccqdyk.js:225) and its cleanup code, which lists the folder with `readdir` and removes old folders (chunk-2xccqdyk.js:1953). No code that writes it was found, and its content was not confirmed. |
+| `mcp-skill-archives` | Excluded: Only the name `mcp-skill-archives` in the program's lists of config-folder entries (chunk-fp3vnecp.js:66) and its cleanup code, which lists the folder with `readdir` and removes old folders (chunk-zemejbd8.js:1963). No code that writes it was found, and its content was not confirmed. |
 | `model-access.json` | Excluded: An internal cache file (`cache/`). Not a file that a user edits. |
 | `model-catalog` | [Files on Disk](../start/files-on-disk.md) |
 | `my-closed-issues.json` | [Files on Disk](../start/files-on-disk.md) |
@@ -6983,7 +6972,7 @@ Items: 78.
 | `seed-admin` | [Files on Disk](../start/files-on-disk.md) |
 | `sessions` | [Files on Disk](../start/files-on-disk.md) |
 | `settings.json` | [Files on Disk](../start/files-on-disk.md) |
-| `shares` | Excluded: Only a name in the program's lists of config-folder entries and its cleanup code, which removes `.zip` files (chunk-2xccqdyk.js:2077). No code that writes it was found, and its content was not confirmed. |
+| `shares` | Excluded: Only a name in the program's lists of config-folder entries and its cleanup code, which removes `.zip` files (chunk-zemejbd8.js:2087). No code that writes it was found, and its content was not confirmed. |
 | `shell-snapshots` | [Files on Disk](../start/files-on-disk.md) |
 | `skills` | [Files on Disk](../start/files-on-disk.md) |
 | `startup-perf` | [Files on Disk](../start/files-on-disk.md) |
@@ -6994,14 +6983,14 @@ Items: 78.
 | `teams` | [Files on Disk](../start/files-on-disk.md) |
 | `telemetry` | Excluded: An internal folder (`telemetry/`) of the telemetry code. Not a file that a user edits. |
 | `themes` | Excluded: A folder name that plugins use. A user folder of this name in the config folder was not confirmed. |
-| `traces` | Excluded: Only a name in the program's lists of config-folder entries and its cleanup code, which removes `.json` files (chunk-2xccqdyk.js:2442). No code that writes it was found, and its content was not confirmed. |
+| `traces` | Excluded: Only a name in the program's lists of config-folder entries and its cleanup code, which removes `.json` files (chunk-zemejbd8.js:2453). No code that writes it was found, and its content was not confirmed. |
 | `uploads` | [Files on Disk](../start/files-on-disk.md) |
 | `usage-data` | [Files on Disk](../start/files-on-disk.md) |
 | `workflows` | [Files on Disk](../start/files-on-disk.md) |
 
 ## CLI Flags
 
-Items: 430.
+Items: 431.
 
 | Item | Where |
 | --- | --- |
@@ -7390,6 +7379,7 @@ Items: 430.
 | `self-hosted-runner --server-auto-mode-lists` | [/configure/cli/self-hosted-runner#runtime-options](/configure/cli/self-hosted-runner#runtime-options) |
 | `self-hosted-runner --session-stop-grace-sec` | [/configure/cli/self-hosted-runner#runtime-options](/configure/cli/self-hosted-runner#runtime-options) |
 | `self-hosted-runner --sigkill-timeout-sec` | [/configure/cli/self-hosted-runner#runtime-options](/configure/cli/self-hosted-runner#runtime-options) |
+| `self-hosted-runner --start-dir` | [/configure/cli/self-hosted-runner#runtime-options](/configure/cli/self-hosted-runner#runtime-options) |
 | `self-hosted-runner --startup-timeout-min` | [/configure/cli/self-hosted-runner#per-session-watchdog-options](/configure/cli/self-hosted-runner#per-session-watchdog-options) |
 | `self-hosted-runner --trust-workspace` | [/configure/cli/self-hosted-runner#runtime-options](/configure/cli/self-hosted-runner#runtime-options) |
 | `self-hosted-runner --use-anthropic-gh` | [/configure/cli/self-hosted-runner#runtime-options](/configure/cli/self-hosted-runner#runtime-options) |
@@ -7438,7 +7428,7 @@ Items: 430.
 
 ## Gates
 
-Items: 1819.
+Items: 1834.
 
 | Item | Where |
 | --- | --- |
@@ -7484,6 +7474,7 @@ Items: 1819.
 | `tengu_ambling_tortoise` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_anchored_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ancient_axolotl` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_ancient_backus` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ancient_pond` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ancient_pudding` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ancient_thompson` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7520,6 +7511,7 @@ Items: 1819.
 | `tengu_bg_worker_ctty` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_binary_lollipop` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_binary_music` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_binary_reef` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_birch_kettle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_birch_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bracken_sluice` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7569,6 +7561,7 @@ Items: 1819.
 | `tengu_bridge_subagent_frames` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bridge_subagent_text` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bridge_unarchive_on_resume` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_bright_clover` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bright_kettle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bright_lake` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bright_sparkle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7581,7 +7574,6 @@ Items: 1819.
 | `tengu_brisk_meadow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_brisk_otter` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_brisk_pebble` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_bubbly_fountain` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bubbly_gadget` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bubbly_harbor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_bubbly_meteor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7712,6 +7704,7 @@ Items: 1819.
 | `tengu_compact_cache_prefix` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_compiled_acorn` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_compiled_harp` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_compiled_spindle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_compiled_sprout` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_composed_hare` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_composed_kite` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7731,6 +7724,7 @@ Items: 1819.
 | `tengu_copper_kite` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_copper_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_copper_sluice` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_copper_sundial` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_copper_thistle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_copper_trellis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_coral_anchor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7742,6 +7736,7 @@ Items: 1819.
 | `tengu_cowork_auto_mode_include_allowed_write_mcp` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cowork_chrome_automode_default` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cozy_axolotl` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_cozy_babbage` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cozy_balloon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cozy_dusk` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cozy_eagle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7754,11 +7749,13 @@ Items: 1819.
 | `tengu_cozy_teapot` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cozy_willow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_crimson_vector` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_crispy_crayon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_crispy_flame` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_crispy_glade` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_crispy_thunder` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cryptic_horizon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cryptic_sprout` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_cuddly_swing` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_cuddly_willow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_curious_canyon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_curious_lake` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7790,13 +7787,13 @@ Items: 1819.
 | `tengu_dazzling_garden` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_declarative_frog` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_declarative_glacier` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_declarative_hippo` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_acorn` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_feather` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_flask` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_lemur` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_locket` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_plum` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_deep_shore` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deep_twilight` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_defer_cap_ms` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_deferred_stub_tool` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7860,6 +7857,7 @@ Items: 1819.
 | `tengu_encapsulated_dusk` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_encapsulated_honey` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_encapsulated_pebble` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_encapsulated_sphinx` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_enchanted_island` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_enchanted_kite` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_enchanted_leaf` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7898,6 +7896,7 @@ Items: 1819.
 | `tengu_fizzy_adleman` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fizzy_bonbon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fizzy_grove` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_fizzy_panda` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fizzy_petal` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fizzy_treasure` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fizzy_widget` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7925,7 +7924,6 @@ Items: 1819.
 | `tengu_fluttering_rose` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fluttering_scone` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fluttering_starlight` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_fluttering_sutherland` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_foamy_heron` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_foamy_pelican` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_foamy_rabbit` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7941,7 +7939,10 @@ Items: 1819.
 | `tengu_functional_island` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_functional_llama` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fuzzy_corbato` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_fuzzy_crayon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_fuzzy_oasis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_fuzzy_pond` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_fuzzy_quilt` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gb_eval_authed_enable` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gb_refresh_interval_minutes` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_generic_ember` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7951,6 +7952,7 @@ Items: 1819.
 | `tengu_gentle_anchor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_badger` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_brooks` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_gentle_comet` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_cupcake` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_frost` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_grove` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7960,15 +7962,16 @@ Items: 1819.
 | `tengu_gentle_ocean` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_orchard` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_pumice` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_gentle_sky` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gentle_sphinx` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_giggly_dragonfly` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_giggly_oasis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_creek` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_cupcake` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_fair_reuse` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_pony` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_pumpkin` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_ripple` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_gleaming_spring` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gleaming_wren` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glimmering_firefly` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glimmering_glacier` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7979,13 +7982,13 @@ Items: 1819.
 | `tengu_glittery_finch` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glittery_frost` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glittery_mitten` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_glittery_puppy` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glittery_tide` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glittery_tower_killswitch` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glowing_lark` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glowing_nygaard` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glowing_orbit` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glowing_pancake` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_glowing_tulip` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_glowing_wave` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_golden_canyon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_golden_dove` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -7996,6 +7999,7 @@ Items: 1819.
 | `tengu_golden_wirth` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_good_survey_transcript_ask_config` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_goofy_jellyfish` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_goofy_moonbeam` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_goofy_sunbeam` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gorse_fathom` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_gorse_pylon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8043,6 +8047,7 @@ Items: 1819.
 | `tengu_hazel_trellis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hazy_boole` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hazy_cosmos` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_hazy_elephant` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hazy_hamster` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hazy_horizon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hazy_noodle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8068,19 +8073,20 @@ Items: 1819.
 | `tengu_humble_flurry` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humble_hammock` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humble_hartmanis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_humble_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humble_petal` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humble_tide` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humble_wand` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humble_zephyr` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_duckling` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_locket` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_humming_moth` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_mountain` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_noodle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_quail` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_squirrel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_star` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_sundae` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_humming_tiger` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_humming_waterfall` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hushed_almanac` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_hushed_caraway` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8105,7 +8111,6 @@ Items: 1819.
 | `tengu_indexed_pearl` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_indexed_salamander` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_inherited_gosling` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_inherited_raven` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_inked_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_iridescent_boot` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_iridescent_coral` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8124,7 +8129,6 @@ Items: 1819.
 | `tengu_jaunty_breeze` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_jaunty_charm` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_jaunty_ember` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_jaunty_hare` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_jaunty_honey` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_jaunty_nebula` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_jaunty_salamander` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8220,6 +8224,7 @@ Items: 1819.
 | `tengu_linked_clover` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_linked_cocoa` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_linked_rose` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_linked_shore` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_linked_wreath` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lively_avalanche` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lively_beacon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8249,6 +8254,7 @@ Items: 1819.
 | `tengu_lucky_brooks` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lucky_crane` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lucky_finch` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_lucky_lemur` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lucky_nebula` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lucky_quill` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_lucky_tarjan` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8326,6 +8332,7 @@ Items: 1819.
 | `tengu_mellow_rainbow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mellow_sphinx` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mellow_sunset` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_mellow_thimble` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mellow_thistle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mellow_valley` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_melodic_ember` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8400,6 +8407,7 @@ Items: 1819.
 | `tengu_mossy_karp` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mossy_kepler` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mossy_knuth` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_mossy_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mossy_lathe` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mossy_melody` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mossy_satchel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8410,7 +8418,6 @@ Items: 1819.
 | `tengu_moth_copse` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mutable_flask` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mutable_goblet` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_mutable_knuth` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_mutable_phoenix_killswitch` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_nankeen_kestrel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_native_cursor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8429,6 +8436,7 @@ Items: 1819.
 | `tengu_nifty_quasar` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_nifty_ripple` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_nifty_squirrel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_nifty_teapot` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_nimble_doorbell` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_nimble_doorstop` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_nimble_quarry` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8458,6 +8466,7 @@ Items: 1819.
 | `tengu_optimized_candy` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_optimized_puzzle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_orderly_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_orderly_quail` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_orderly_wren` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_orford_ness` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_org_config_required` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8490,7 +8499,6 @@ Items: 1819.
 | `tengu_peaceful_leaf` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_peaceful_valiant` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_peaceful_wigderson` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_pebble_harbor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_pencil_farmer` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_penguins_off` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_peppy_cerf` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8501,6 +8509,7 @@ Items: 1819.
 | `tengu_peppy_pony` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_peppy_spindle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_peppy_squirrel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_peppy_starfish` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_peppy_starlight` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_pewter_avocet` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_pewter_brook` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8549,6 +8558,7 @@ Items: 1819.
 | `tengu_polished_quill_killswitch` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_polished_salamander` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_polished_tulip` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_polymorphic_spring` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_post_compact_survey` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_prancy_charm` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_prancy_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8573,6 +8583,7 @@ Items: 1819.
 | `tengu_propose_goal` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_proud_book` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_proud_clover` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_proud_cosmos` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_proud_glade` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_proud_honey` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_proud_pearl` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8677,7 +8688,6 @@ Items: 1819.
 | `tengu_rosy_llama` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_rosy_quail` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_rosy_rocket` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_russet_abacus` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_russet_envelope` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_russet_hawthorn` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_russet_whimbrel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8711,7 +8721,6 @@ Items: 1819.
 | `tengu_send_user_file` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sepia_cormorant` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sepia_moth` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_sequential_acorn` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sequential_cloud` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sequential_puffin` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sequential_summit` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8737,6 +8746,7 @@ Items: 1819.
 | `tengu_shimmering_clock` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_shimmering_firefly` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_shimmering_glade` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_shimmying_grove` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_shimmying_sparkle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_shimmying_stardust` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_shining_fractals` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8783,7 +8793,6 @@ Items: 1819.
 | `tengu_snappy_tower` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_snazzy_graham` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_snazzy_hare` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_snazzy_octopus` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_snazzy_prism` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_snoopy_creek` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_snoopy_thimble` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8821,17 +8830,19 @@ Items: 1819.
 | `tengu_sorted_metcalfe` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sorted_otter` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sorted_plum` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_sorted_summit` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sorted_sunrise` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sorted_tide` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sorted_truffle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_sorted_waterfall` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sorted_zebra` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_spare_attic` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sparkling_charm` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_sparkling_hanrahan` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_spicy_blossom` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_spicy_oboe` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_spicy_origami` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_splendid_horizon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_splendid_locket` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_splendid_sutton` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_splendid_zephyr` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_sprightly_anchor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8861,6 +8872,7 @@ Items: 1819.
 | `tengu_startup_notice` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_stateful_mitten` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_stateful_petal` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_stateless_lagoon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_stateless_raven` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_stateless_treasure` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_stateless_wind` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8879,7 +8891,6 @@ Items: 1819.
 | `tengu_steady_puppy` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_steady_quail` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_steady_quill` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_steady_scroll` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_steady_sunbeam` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_steady_treehouse` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_steady_wren` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8931,7 +8942,6 @@ Items: 1819.
 | `tengu_temporal_nautilus` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_temporal_raven` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tender_frog` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_tender_mitten` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tender_quill` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tender_raven` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tender_rivest` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8943,21 +8953,20 @@ Items: 1819.
 | `tengu_tethered_buoy` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_thinking_block_resumption` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_thistle_grebe` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_thorough_heron` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_thrifty_sonic` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ticklish_fern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_ticklish_moon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ticklish_pnueli` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_ticklish_whisper` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidal_kestrel` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidal_sparrow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_abacus` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_tidy_acorn` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_burrow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_cloud` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_tidy_crab` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_crayon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_eclipse` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_fern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_tidy_frost` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_lake` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_lantern` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tidy_panda` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -8973,6 +8982,7 @@ Items: 1819.
 | `tengu_tingly_grove` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tingly_pearl` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tingly_petal` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_tingly_wall` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tips_mod` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_toasty_beacon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_toasty_breeze` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9005,7 +9015,6 @@ Items: 1819.
 | `tengu_tranquil_gadget` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tranquil_locket` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tranquil_peach` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_tranquil_starfish` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_tranquil_starlight` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_transcript_local_gc` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_trim_dunnock` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9048,7 +9057,6 @@ Items: 1819.
 | `tengu_usage_overage_included_models` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_valiant_crayon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_valiant_crescent` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_valiant_finch` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_valiant_honey` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_valiant_rain` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_valiant_reef` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9067,7 +9075,6 @@ Items: 1819.
 | `tengu_vast_treehouse` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vast_tulip` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vast_wave` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_vectorized_aho` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vectorized_mitten` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vectorized_wall` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vellum_anchor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9076,7 +9083,6 @@ Items: 1819.
 | `tengu_velvet_cairn` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_velvet_codd` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_velvet_crab` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_velvet_gannet` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_velvet_harbor_owl` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_velvet_heron` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_velvet_ibis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9153,10 +9159,12 @@ Items: 1819.
 | `tengu_virtual_pine` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_virtual_quiche` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_virtual_toast` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_virtual_tulip` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vivid_alpaca` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vivid_crayon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vivid_crown` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vivid_peach` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_vivid_tarjan` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vivid_treehouse` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vivid_wreath` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_vscode_card_message_approval` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9183,8 +9191,8 @@ Items: 1819.
 | `tengu_whimsical_kahan` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_whimsical_otter` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_whimsical_trinket` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_wif_user_oauth_refresh_race_resolved` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_wif_user_oauth_refresh_token_cleared` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
+| `tengu_wiggly_crystal` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_wiggly_dove` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_wiggly_gray` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_wiggly_lemur` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9247,7 +9255,6 @@ Items: 1819.
 | `tengu_zany_book` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zany_flask` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zany_oasis` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_zesty_beacon` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zesty_feather` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zesty_horizon_wait` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zesty_muffin` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
@@ -9256,10 +9263,8 @@ Items: 1819.
 | `tengu_zinc_harbor` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zippy_avalanche` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zippy_cocoa` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_zippy_goose` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zippy_gosling` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zippy_piglet` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
-| `tengu_zippy_sparrow` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 | `tengu_zippy_spindle` | Excluded: A server-side GrowthBook feature flag or config value; users cannot set it, and DISABLE_GROWTHBOOK only turns the fetch off. The pages name a gate in the row where it changes a documented behavior. |
 
 ## Hook Events
@@ -9518,7 +9523,7 @@ Items: 207.
 
 ## Mod API
 
-Items: 257.
+Items: 269.
 
 | Item | Where |
 | --- | --- |
@@ -9617,6 +9622,12 @@ Items: 257.
 | `$.ui.status` | [UI Methods](../extend/mod-api/ui/ui.md) |
 | `$.ui.toast` | [Files, Nouns, and Gates](../extend/mod-api/nouns-and-gates.md) |
 | `$.ui.view` | [UI Methods](../extend/mod-api/ui/ui.md) |
+| `$.vcs.detect` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `$.vcs.diff` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `$.vcs.isolate` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `$.vcs.list` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `$.vcs.release` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `$.vcs.status` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `$.wasm.compile` | [Clock, HTTP, Process, Env, and Settings](../extend/mod-api/calls/clock-http-process-env-settings.md) |
 | `agent.call` | [Agent](../extend/mod-api/calls/agent.md) |
 | `agent.limits` | [Agent](../extend/mod-api/calls/agent.md) |
@@ -9778,6 +9789,12 @@ Items: 257.
 | `ui.status` | [UI Events](../extend/mod-api/ui/ui-events.md) |
 | `ui.toast` | [UI Events](../extend/mod-api/ui/ui-events.md) |
 | `ui.view` | [UI Events](../extend/mod-api/ui/ui-events.md) |
+| `vcs.detect` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `vcs.diff` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `vcs.isolate` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `vcs.list` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `vcs.release` | [Version Control](../extend/mod-api/calls/vcs.md) |
+| `vcs.status` | [Version Control](../extend/mod-api/calls/vcs.md) |
 | `wasm.compile` | [Clock, HTTP, Process, Env, and Settings](../extend/mod-api/calls/clock-http-process-env-settings.md) |
 
 ## Models
@@ -10026,7 +10043,7 @@ Items: 205.
 | `includeGitInstructions` | [Core Settings](../configure/settings/core.md) |
 | `inputNeededNotifEnabled` | [Agents and Remote Settings](../configure/settings/agents-and-remote.md) |
 | `isolatePeerMachines` | [Agents and Remote Settings](../configure/settings/agents-and-remote.md) |
-| `keybindingFlavor` | Excluded: Deprecated: the program says it no longer has any effect (chunk-t39fw2cy.js:9500). Listed under Left Out on Purpose in docs/configure/settings/index.md. |
+| `keybindingFlavor` | Excluded: Deprecated: the program says it no longer has any effect (chunk-xcgcdx61.js:9535). Listed under Left Out on Purpose in docs/configure/settings/index.md. |
 | `language` | [Core Settings](../configure/settings/core.md) |
 | `managedMcpServers` | [MCP and Channels Settings](../configure/settings/mcp-and-channels.md) |
 | `managedSourcesBehavior` | [Enterprise Settings](../configure/settings/enterprise.md) |
@@ -10069,7 +10086,7 @@ Items: 205.
 | `requiredMinimumVersion` | [Enterprise Settings](../configure/settings/enterprise.md) |
 | `respectGitignore` | [Core Settings](../configure/settings/core.md) |
 | `respondToBashCommands` | [Core Settings](../configure/settings/core.md) |
-| `responseComparisonEnabled` | Excluded: Marked `@internal` and hidden from the public types until an external launch. The program lists it as a settings key, but no code reads it, so no effect that a user can use or change is shown (the program) (chunk-t39fw2cy.js:9177). |
+| `responseComparisonEnabled` | Excluded: Marked `@internal` and hidden from the public types until an external launch. The program lists it as a settings key, but no code reads it, so no effect that a user can use or change is shown (the program) (chunk-xcgcdx61.js:9212). |
 | `sandbox` | [Core Settings](../configure/settings/core.md) |
 | `showClearContextOnPlanAccept` | [Interface Settings](../configure/settings/ui.md) |
 | `showMessageTimestamps` | [Interface Settings](../configure/settings/ui.md) |
@@ -10097,7 +10114,7 @@ Items: 205.
 | `syncClaudeAiPlugins` | [Hooks, Plugins, and Skills Settings](../configure/settings/hooks-and-plugins.md) |
 | `syncClaudeAiSkills` | [Hooks, Plugins, and Skills Settings](../configure/settings/hooks-and-plugins.md) |
 | `syntaxHighlightingDisabled` | [Interface Settings](../configure/settings/ui.md) |
-| `taskOutputMaxChars` | Excluded: Deprecated: the program says it no longer has any effect, because the TaskOutput tool was removed (chunk-t39fw2cy.js:8679). Listed under Left Out on Purpose in docs/configure/settings/index.md. |
+| `taskOutputMaxChars` | Excluded: Deprecated: the program says it no longer has any effect, because the TaskOutput tool was removed (chunk-xcgcdx61.js:8714). Listed under Left Out on Purpose in docs/configure/settings/index.md. |
 | `teammateMode` | [Agents and Remote Settings](../configure/settings/agents-and-remote.md) |
 | `terminalProgressBarEnabled` | [Interface Settings](../configure/settings/ui.md) |
 | `terminalTitleFromRename` | [Interface Settings](../configure/settings/ui.md) |
@@ -10335,13 +10352,14 @@ Items: 203.
 
 ## Slash Commands
 
-Items: 139.
+Items: 140.
 
 | Item | Where |
 | --- | --- |
+| `/access` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/add-dir` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/advisor` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
-| `/agents` | Excluded: Hidden, and its own description starts with "(removed)" (the program) (chunk-hg1yqkjk.js:188609). |
+| `/agents` | Excluded: Hidden, and its own description starts with "(removed)" (the program) (chunk-bzyb60p0.js:191025). |
 | `/artifact-capabilities` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
 | `/artifact-design` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
 | `/artifact-diagramming` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
@@ -10386,7 +10404,7 @@ Items: 139.
 | `/exit` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/explain-usage` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
 | `/export` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
-| `/extra-usage` | Excluded: Hidden, and its own description says it was renamed to /usage-credits, which Slash Commands lists (the program) (chunk-hg1yqkjk.js:189209). |
+| `/extra-usage` | Excluded: Hidden, and its own description says it was renamed to /usage-credits, which Slash Commands lists (the program) (chunk-bzyb60p0.js:191632). |
 | `/fast` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/feedback` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/fewer-permission-prompts` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
@@ -10405,7 +10423,7 @@ Items: 139.
 | `/install-slack-app` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/keybindings` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/keybindings-help` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
-| `/limit-reset` | Excluded: Hidden (isHidden is true), and on only for a claude.ai login when the server-side flag tengu_nifty_lemur or tengu_cedar_ember is on (chunk-hg1yqkjk.js:189427, chunk-hg1yqkjk.js:189379, chunk-hg1yqkjk.js:189250). Its description is "Reset your 5-hour limit now and keep working; once a week, still counts toward your weekly limit" or "Use an available limit reset and keep working". A user cannot turn it on, so the site does not list it. |
+| `/limit-reset` | Excluded: Hidden (isHidden is true), and on only for a claude.ai login when the server-side flag tengu_nifty_lemur or tengu_cedar_ember is on (chunk-bzyb60p0.js:191850, chunk-bzyb60p0.js:191802, chunk-bzyb60p0.js:191673). Its description is "Reset your 5-hour limit now and keep working; once a week, still counts toward your weekly limit" or "Use an available limit reset and keep working". A user cannot turn it on, so the site does not list it. |
 | `/list-agents` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/login` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/logout` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
@@ -10417,7 +10435,7 @@ Items: 139.
 | `/model` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/output-style` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/passes` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
-| `/pause-memory` | Excluded: Its isEnabled always returns false (isEnabled:()=>!1), so no user can run it (the program) (chunk-hg1yqkjk.js:176361). |
+| `/pause-memory` | Excluded: Its isEnabled always returns false (isEnabled:()=>!1), so no user can run it (the program) (chunk-bzyb60p0.js:178672). |
 | `/permissions` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/plan` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/plugin` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
@@ -10471,10 +10489,10 @@ Items: 139.
 | `/usage-credits` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/use-case` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/verify` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
-| `/version` | Excluded: Its isEnabled always returns false (isEnabled:()=>!1), so no user can run it (the program) (chunk-hg1yqkjk.js:188714). |
+| `/version` | Excluded: Its isEnabled always returns false (isEnabled:()=>!1), so no user can run it (the program) (chunk-bzyb60p0.js:191130). |
 | `/voice` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/web-setup` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
-| `/wellbeing` | Excluded: Its isEnabled always returns false (isEnabled:()=>!1), so no user can run it (the program) (chunk-hg1yqkjk.js:189508). |
+| `/wellbeing` | Excluded: Its isEnabled always returns false (isEnabled:()=>!1), so no user can run it (the program) (chunk-bzyb60p0.js:191931). |
 | `/workflow-authoring` | [/extend/skills-and-commands/bundled-skills#skills](/extend/skills-and-commands/bundled-skills#skills) |
 | `/workflow-launch-exec` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
 | `/workflows` | [Slash Commands](../extend/skills-and-commands/slash-commands.md) |
@@ -10576,9 +10594,9 @@ Items: 98.
 | `Agent` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md) |
 | `AppifactRepl` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
 | `Artifact` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
-| `ArtifactCheck` | Excluded: Not a separate tool: the program maps the verify and preview actions of the Artifact tool to this name (chunk-avkdw0az.js:2437). The Artifact tool has a row. |
-| `ArtifactComments` | Excluded: Not a separate tool: the program maps the comment actions of the Artifact tool to this name (chunk-avkdw0az.js:2428). The Artifact tool has a row. |
-| `ArtifactData` | Excluded: Not a separate tool: the program maps the read_db and write_db actions of the Artifact tool to this name (chunk-avkdw0az.js:2435). The Artifact tool has a row. |
+| `ArtifactCheck` | Excluded: Not a separate tool: the program maps the verify and preview actions of the Artifact tool to this name (chunk-rmc00en4.js:85). The Artifact tool has a row. |
+| `ArtifactComments` | Excluded: Not a separate tool: the program maps the comment actions of the Artifact tool to this name (chunk-rmc00en4.js:76). The Artifact tool has a row. |
+| `ArtifactData` | Excluded: Not a separate tool: the program maps the read_db and write_db actions of the Artifact tool to this name (chunk-rmc00en4.js:83). The Artifact tool has a row. |
 | `AskUserQuestion` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md) |
 | `Bash` | [Shell, Web, and Background Tasks](tools/shell-and-web.md) |
 | `ClaudeDesign` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
@@ -10594,7 +10612,7 @@ Items: 98.
 | `ExitWorktree` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md) |
 | `FetchInboxMessage` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
 | `GetGoal` | [Agents, Tasks, and Planning](tools/agents-and-tasks.md) |
-| `GetTask` | Excluded: Always off: its isEnabled returns false (chunk-b2932m4d.js:5755) and the tool list keeps only enabled tools (chunk-b2932m4d.js:9442), so no setting turns it on. A call to `GetTask` gets the text "GetTask is not a tool you can call" (chunk-krh304mc.js:86, used at chunk-hg1yqkjk.js:206213). |
+| `GetTask` | Excluded: Always off: its isEnabled returns false (chunk-aw5nczax.js:5585) and the tool list keeps only enabled tools (chunk-aw5nczax.js:9438), so no setting turns it on. A call to `GetTask` gets the text "GetTask is not a tool you can call" (chunk-37zqqqnw.js:86, used at chunk-bzyb60p0.js:208864). |
 | `Glob` | [Files, Search, and Memory](tools/files.md) |
 | `Grep` | [Files, Search, and Memory](tools/files.md) |
 | `LSP` | [Files, Search, and Memory](tools/files.md) |
@@ -10613,7 +10631,7 @@ Items: 98.
 | `Projects` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
 | `PublishPlugin` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
 | `PushNotification` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
-| `REPL` | Excluded: The REPL tool (alias `Eval`). The program names it at chunk-gsktpex7.js:6 and maps `Eval` to it at chunk-d1scfh43.js:162. Same reason as the existing REPL text exclusions: Code Mode needs an interactive terminal and an account gate (chunk-mjpt6p5c.js:81). |
+| `REPL` | Excluded: The REPL tool (alias `Eval`). The program names it at chunk-h4t4qfaq.js:6 and maps `Eval` to it at chunk-qebpc5de.js:162. Same reason as the existing REPL text exclusions: Code Mode needs an interactive terminal and an account gate (chunk-qwcebyxc.js:103). |
 | `Read` | [Files, Search, and Memory](tools/files.md) |
 | `ReadMcpResourceDirTool` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |
 | `ReadMcpResourceTool` | [Gated and Surface-Specific Tools](tools/gated-and-other.md) |

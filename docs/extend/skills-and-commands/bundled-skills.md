@@ -64,7 +64,7 @@ This table holds the size of one line and the order of the `skillOverrides` valu
 | `/schedule` (alias `/routines`) | <Documented /> | Creates and manages scheduled remote agents. | A stub with a name, alias, and description. Needs claude.ai. |
 | `/keybindings-help` | <Undocumented /> | Helps you edit `~/.claude/keybindings.json`. | `userInvocable:false`, so only Claude runs it. Allowed tool: `Read`. |
 | `/claude-in-chrome` | <Gated note="Needs the Chrome extension, or a check passing." /> | Browser automation through the Chrome extension. | No allowed tools. |
-| `/design-sync` `[<project hint>]` | <Gated note="Policy allow_design_sync." /> | Pushes design-system components to claude.ai/design. | `disableModelInvocation`. |
+| `/design-sync` `[<project hint>]` | <Gated note="Policy allow_design_sync." /> | Syncs a React design system to Claude Design. It bundles the real component code, from Storybook or a bare package, and uploads it. | `disableModelInvocation`. |
 | `/commit` | <Undocumented /> <Gated note="An isEnabled check decides." /> | Creates a git commit. It gathers git context first. | A `prompt` command. |
 | `/pr` | <Undocumented /> <Gated note="An isEnabled check decides." /> | Creates a GitHub pull request. It gathers branch context first. | A `prompt` command. |
 | `/commit-push-pr` | <Undocumented /> | Makes a commit. Pushes it. Opens a pull request. | A `prompt` command. |
@@ -86,16 +86,16 @@ This table holds the size of one line and the order of the `skillOverrides` valu
 
 ## Sources
 
-[^switch]: The program, `chunk-nrkkfka0.js:15-16` (the env var `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS`, and the setting `disableBundledSkills` that must be `true`).
-[^switch-workflows]: The program, `chunk-gap58jsj.js:20-21`, which returns an empty list when the switch is on, before it reads `bundledWorkflows`. The text of `disableBundledSkills` in `chunk-t39fw2cy.js:8517-8521` says that bundled skills and workflows are removed.
-[^skill-switches]: The program, `chunk-z758pdbe.js:5634-5639` (the two `disabled` tests, `CLAUDE_CODE_DISABLE_CLAUDE_API_SKILL` and `CLAUDE_CODE_DISABLE_CLAUDE_CODE_SKILL`).
-[^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key, `chunk-3e1bpcdj.js:14` and `chunk-nrkkfka0.js:19`.
-[^listing]: The program, `chunk-hg1yqkjk.js:138989` (the `name-only` line and the full line), `chunk-hg1yqkjk.js:138885` (the cap `skillListingMaxDescChars`), and `chunk-hg1yqkjk.js:100121` (the order of the `skillOverrides` values).
-[^claude-api]: The program, `chunk-ktx9h89v.js:93` and `chunk-6v055cha.js:414` (the section "Deprecated or Retired Models in This Project"). The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`. The `api-version` text is in the skill file, `SKILL-b7341799.md.zst:9687`; the examples file `examples-27fba5c6.md.zst:394` sends `anthropic-version: 2026-10-21`.
-[^claude-api-311]: The program, `chunk-z758pdbe.js:5635` (startup registration, with `CLAUDE_CODE_DISABLE_CLAUDE_API_SKILL`) and `chunk-bgrrn57r.js:817` (definition).
-[^platform]: The program, `chunk-bgrrn57r.js:732` (the docs server), `chunk-bgrrn57r.js:732` (the checks), and `chunk-bgrrn57r.js:817` (the skill, enabled only when no bundled skill has its name).
-[^secure]: The program, `chunk-ktx9h89v.js:187` (the "Security Comparison Unavailable" text: Claude Code cannot check the `ant` commands of `managed-agents-secure`).
-[^verify]: The program, `chunk-z758pdbe.js:5536` (the description, "bootstraps this repo's project verify skill if none exists yet"), `chunk-z758pdbe.js:5542` (the short text "Try your change and report if it works"), and `chunk-32gs4rex.js:4358` (the rule for the path `.claude/skills/verify/SKILL.md`).
-[^security]: The program, `chunk-hg1yqkjk.js:178050` and `chunk-hg1yqkjk.js:178050`.
-[^v328-review]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, severity labels `chunk-z758pdbe.js:1619` (`pre_existing`), empty result text `chunk-z758pdbe.js:1654`, command text `chunk-z758pdbe.js:2831`, and `/simplify` text `chunk-z758pdbe.js:4866`.
-[^review-target]: The program, `chunk-z758pdbe.js:2599` (`gh pr diff`), `chunk-z758pdbe.js:2619` (the "was refused or failed" rule), and `chunk-z758pdbe.js:1554` (`git diff origin/HEAD...HEAD`).
+[^switch]: The program, `chunk-5nf47kr4.js:15-16` (the env var `CLAUDE_CODE_DISABLE_BUNDLED_SKILLS`, and the setting `disableBundledSkills` that must be `true`).
+[^switch-workflows]: The program, `chunk-ebvp3bg3.js:21-22`, which returns an empty list when the switch is on, before it reads `bundledWorkflows`. The text of `disableBundledSkills` in `chunk-xcgcdx61.js:8545-8549` says that bundled skills and workflows are removed.
+[^skill-switches]: The program, `chunk-424x9gf0.js:5646-5651` (the two `disabled` tests, `CLAUDE_CODE_DISABLE_CLAUDE_API_SKILL` and `CLAUDE_CODE_DISABLE_CLAUDE_CODE_SKILL`).
+[^allow-list]: The program, list of bundled skill names and the `allow_bundled_skills` key, `chunk-tkv5z5dk.js:14` and `chunk-5nf47kr4.js:19`.
+[^listing]: The program, `chunk-bzyb60p0.js:141162` (the `name-only` line and the full line), `chunk-bzyb60p0.js:141058` (the cap `skillListingMaxDescChars`), and `chunk-bzyb60p0.js:178147` (the order of the `skillOverrides` values).
+[^claude-api]: The program, `chunk-9ar7j7qe.js:93` and `chunk-s5hg1ank.js:413` (the section "Deprecated or Retired Models in This Project"). The flags are `tengu_cosmic_sketch` and `tengu_typed_trinket`. The `api-version` text is in the skill file, `SKILL-b7341799.md.zst:9687`; the examples file `examples-27fba5c6.md.zst:394` sends `anthropic-version: 2026-10-21`.
+[^claude-api-311]: The program, `chunk-424x9gf0.js:5647` (startup registration, with `CLAUDE_CODE_DISABLE_CLAUDE_API_SKILL`) and `chunk-txxzbf6t.js:842` (definition).
+[^platform]: The program, `chunk-txxzbf6t.js:757` (the docs server), `chunk-txxzbf6t.js:757` (the checks), and `chunk-txxzbf6t.js:842` (the skill, enabled only when no bundled skill has its name).
+[^secure]: The program, `chunk-9ar7j7qe.js:187` (the "Security Comparison Unavailable" text: Claude Code cannot check the `ant` commands of `managed-agents-secure`).
+[^verify]: The program, `chunk-424x9gf0.js:5540` (the description, "bootstraps this repo's project verify skill if none exists yet"), `chunk-424x9gf0.js:5546` (the short text "Try your change and report if it works"), and `chunk-p1ewvgeh.js:4388` (the rule for the path `.claude/skills/verify/SKILL.md`).
+[^security]: The program, `chunk-bzyb60p0.js:180362` and `chunk-bzyb60p0.js:180362`.
+[^v328-review]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, severity labels `chunk-424x9gf0.js:1622` (`pre_existing`), empty result text `chunk-424x9gf0.js:1657`, command text `chunk-424x9gf0.js:2834`, and `/simplify` text `chunk-424x9gf0.js:4870`.
+[^review-target]: The program, `chunk-424x9gf0.js:2602` (`gh pr diff`), `chunk-424x9gf0.js:2622` (the "was refused or failed" rule), and `chunk-424x9gf0.js:1557` (`git diff origin/HEAD...HEAD`).

@@ -71,8 +71,8 @@ on("engine.create", async ($, e, next) => {
 
 ## Sources
 
-[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `CoreEngineInterface`, `EngineCreateInput`, `EngineCreateResult`, `EngineInterface`, `EngineInterfaceBuilt`, `NoEngineInterface`, `INSTRUCTION_FILE_KINDS`, `InstructionFile`, `InstructionFileKind`, `PluginOptions`, `PluginRegisterInput`, `PluginProvides`, `PluginHookEntry`, `PluginRegisterResult`, `PluginRegisterUses`, `PluginStamp`, and `PluginState`.
-[^provides]: The program, `chunk-hg1yqkjk.js:212309` (the default `{ allow: !0 }`) and `chunk-hg1yqkjk.js:212483` (the `provides` a hook passes on, kept as `a4`).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `CoreEngineInterface`, `EngineCreateInput`, `EngineCreateResult`, `EngineInterface`, `EngineInterfaceBuilt`, `NoEngineInterface`, `INSTRUCTION_FILE_KINDS`, `InstructionFile`, `InstructionFileKind`, `PluginOptions`, `PluginRegisterInput`, `PluginProvides`, `PluginHookEntry`, `PluginRegisterResult`, `PluginRegisterUses`, `PluginStamp`, and `PluginState`.
+[^provides]: The program, `chunk-bzyb60p0.js:215130` (the default `{ allow: !0 }`) and `chunk-bzyb60p0.js:215304` (the `provides` a hook passes on, kept as `a4`).
 [^v323]: The Mod API type file, `schemas/claude-code.d.ts`, the text of `on("*", hook)` and of the `engine.create` entry.
-[^validate]: The program, `chunk-wae3ndpy.js:2477`.
-[^v2327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, the text of `PluginRegisterInput` and `Tier`.
+[^validate]: The program, `chunk-a0mfj0s8.js:2477`.
+[^v2327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, the text of `PluginRegisterInput` and `Tier`.

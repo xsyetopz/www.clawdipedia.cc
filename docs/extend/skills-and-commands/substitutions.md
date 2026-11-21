@@ -74,7 +74,7 @@ Type `/fix-issue 42`. Claude Code runs `gh issue view 42`. It inserts the output
 
 ## Sources
 
-[^size-cap]: The program, the strings quoted in this table, `chunk-hg1yqkjk.js:48629` (the error text) and `chunk-hg1yqkjk.js:48594` (the limit, `4000000`).
-[^commit-skills]: The program, the skill checks, `chunk-hg1yqkjk.js:107759` (`simplify`, from `skills` or `commands` files) and `chunk-hg1yqkjk.js:107768` (`includeCodeReviewSuggestion`), the text, `chunk-hg1yqkjk.js:107786` (`right before the` `commit` command), and the skill names, `chunk-dyvy28wy.js:14` (`verify`, `code-review`, and `simplify`).
+[^size-cap]: The program, the strings quoted in this table, `chunk-bzyb60p0.js:49264` (the error text) and `chunk-bzyb60p0.js:49229` (the limit, `4000000`).
+[^commit-skills]: The program, the skill checks, `chunk-bzyb60p0.js:108889` (`simplify`, from `skills` or `commands` files) and `chunk-bzyb60p0.js:108898` (`includeCodeReviewSuggestion`), the text, `chunk-bzyb60p0.js:108916` (`right before the` `commit` command), and the skill names, `chunk-nwk8fexj.js:14` (`verify`, `code-review`, and `simplify`).
 
 Official pages: [Extend Claude with Skills](https://code.claude.com/docs/en/skills) and [Settings Reference](https://code.claude.com/docs/en/settings-reference).

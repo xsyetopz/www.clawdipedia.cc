@@ -100,15 +100,15 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^add-json]: The program, `chunk-hg1yqkjk.js:202792-202812` (the messages for a bad entry: a bad `type`, a `url` with no `type`, the `mcpServers` wrapper, and the failing field paths).
-[^header-help]: The program, `chunk-br8k7pkh.js:655`.
-[^web]: The program, `chunk-244r6pmb.js:714` (the gate `tengu_twinkling_aurora`) and `chunk-244r6pmb.js:734` (the message).
-[^reconnect]: The program, `chunk-4g68nm9m.js:1643` (the "Reconnect" choice for a `needs-auth` server).
-[^connector-dl]: The program, `chunk-hg1yqkjk.js:201391`.
-[^bad-env]: The program, `chunk-8wtweva8.js:219`.
-[^serve-sandbox]: The program, `chunk-gv51qax6.js:833` (the `[serve-mode]` note, which names `dangerouslyDisableSandbox` and `sandbox.excludedCommands`).
-[^add-json-stdin]: The program, `chunk-33j4c5nh.js:1457-1463` for the stdin read (`stdin`), its 1 MiB limit, and the three errors, and `chunk-br8k7pkh.js:1180` for the command text "or - to read it from stdin".
-[^project-keys]: The program, `chunk-hg1yqkjk.js:202895` for add (`mcpServers` is written back with the other keys) and `chunk-hg1yqkjk.js:202977` for remove.
-[^project-stop]: The program, `chunk-hg1yqkjk.js:202882-202887` (the `mcpServers` check and the error).
-[^reconnect-all]: The program, `chunk-qh2bgkv7.js:682`.
-[^server-message]: The program, `chunk-4g68nm9m.js:1680` (the "Server message" row) and `chunk-w3gpg1a5.js:6626` (`serverMessage` from the error body).
+[^add-json]: The program, `chunk-bzyb60p0.js:205419-205439` (the messages for a bad entry: a bad `type`, a `url` with no `type`, the `mcpServers` wrapper, and the failing field paths).
+[^header-help]: The program, `chunk-42qayw53.js:680`.
+[^web]: The program, `chunk-50d0zv2r.js:754` (the gate `tengu_twinkling_aurora`) and `chunk-50d0zv2r.js:734` (the message).
+[^reconnect]: The program, `chunk-e1cgntxd.js:1658` (the "Reconnect" choice for a `needs-auth` server).
+[^connector-dl]: The program, `chunk-bzyb60p0.js:203974`.
+[^bad-env]: The program, `chunk-2gtmjt3y.js:219`.
+[^serve-sandbox]: The program, `chunk-d0dgyeq4.js:832` (the `[serve-mode]` note, which names `dangerouslyDisableSandbox` and `sandbox.excludedCommands`).
+[^add-json-stdin]: The program, `chunk-4m388t3c.js:1502-1508` for the stdin read (`stdin`), its 1 MiB limit, and the three errors, and `chunk-42qayw53.js:1205` for the command text "or - to read it from stdin".
+[^project-keys]: The program, `chunk-bzyb60p0.js:205522` for add (`mcpServers` is written back with the other keys) and `chunk-bzyb60p0.js:205604` for remove.
+[^project-stop]: The program, `chunk-bzyb60p0.js:205509-205514` (the `mcpServers` check and the error).
+[^reconnect-all]: The program, `chunk-z0m7bj6h.js:707`.
+[^server-message]: The program, `chunk-e1cgntxd.js:1695` (the "Server message" row) and `chunk-54d1gdxa.js:6581` (`serverMessage` from the error body).

@@ -79,8 +79,20 @@ export const tools = (raw: Record<string, unknown>): ToolsResult => {
 	}
 	const defs: Json = {};
 	const missing: string[] = [];
+	// The program can build one tool at more than one call site (2.1.330 builds SubagentHandback twice), so a
+	// repeat with the same schemas is the same tool. A repeat with other schemas is a real conflict.
+	const seen = new Map<string, string>();
 	for (const t of jsonList(list, "raw capture tools")) {
 		const name = String(t["name"]);
+		const shape = JSON.stringify(TOOL_SCHEMAS.map(([key]) => t[key] ?? null));
+		const first = seen.get(name);
+		if (first === shape) {
+			continue;
+		}
+		if (first !== undefined) {
+			throw new Error(`tool "${name}" is built twice with different schemas`);
+		}
+		seen.set(name, shape);
 		for (const [key, suffix] of TOOL_SCHEMAS) {
 			const schema = t[key];
 			if (usable(schema)) {

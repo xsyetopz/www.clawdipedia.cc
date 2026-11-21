@@ -8,7 +8,7 @@ These variables tell Claude Code who you are.
 They carry API keys, bearer tokens, OAuth data, and the commands that fetch credentials for you.
 Put secrets in your shell or a secrets manager, not in a file you commit.[^variable-names]
 
-This page lists 81 variables. `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` are the common ones. Run `/login` for a stored login. Project settings cannot set some of them before you trust the folder.
+This page lists 82 variables. `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` are the common ones. Run `/login` for a stored login. Project settings cannot set some of them before you trust the folder.
 
 ## Example
 
@@ -61,6 +61,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_ENABLE_XAA` | <Undocumented /> <Gated note="Turns XAA on when set to 1" /> | Turns on XAA for MCP OAuth and unlocks the `xaaIdp` setting. | On or off, off by default. Without it, MCP OAuth with `oauth.xaa` fails with `XAA is not enabled`. `1` turns it on. See [MCP Authentication](../../extend/mcp/auth.md#xaa) | MCP OAuth |
 | `CLAUDE_CODE_FEDERATION_CACHE_DIR` | <Undocumented /> | Sets the directory for the workload identity federation token cache. | Text. Default is a `credentials/federation` folder in the config dir | Federated auth, eval harness copies it |
 | `CLAUDE_CODE_FORCE_WINDOWS_CREDMAN` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces the Windows Credential Manager path on when set to `1`. | Text. Else the cached a feature flag decides | Windows |
+| `CLAUDE_CODE_FULL_SIGN_IN_LINK` | <Undocumented /> | Shows the full sign-in URL under `Browser didn't open? Use the URL below to sign in`. Without it, Claude Code shortens that URL to an `/oauth/authorize` link of the claude.ai origin.[^full-sign-in] | On or off, off by default. A local OAuth build always shows the full URL | Sign-in with `claude auth login` and `/login` |
 | `CLAUDE_CODE_GATEWAY_TOKEN_FILE_DESCRIPTOR` | <Undocumented /> | Reads the gateway token from this open file descriptor. Then it removes the var from the env. | A number. Claude Code ignores it with `CLAUDE_CODE_REMOTE` or an IPC channel | Hosts that spawn Claude Code |
 | `CLAUDE_CODE_HOST_AUTH_ENV_VAR` | <Undocumented /> | Names the env var that holds the credential a host app supplies. Its presence counts as host-managed auth. | Text. Claude Code skips reserved names. It removes the variable from some child envs | Host apps that embed Claude Code |
 | `CLAUDE_CODE_HOST_AUTH_REFRESH_TIMEOUT_MS` | <Undocumented /> | Passes a timeout to the request that asks the SDK host to refresh the auth token. | A number of milliseconds. Used only when `CLAUDE_CODE_SDK_HAS_HOST_AUTH_REFRESH` is set. An invalid value means no timeout | SDK host, stream-json print mode |
@@ -123,11 +124,12 @@ Claude Code sets some variables on this page for remote sessions and refreshes t
 
 ## Sources
 
-[^variable-names]: The program (variable names read in `chunk-aq3ms068.js:31490` (for example `CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`)) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^delegated-models]: The program, read and defaulted at `chunk-avkdw0az.js:1220` (`CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS`, the 600000 ms limit) and set at `chunk-3kp5jwr6.js:11767`.
-[^delegated-direct]: The program, read at `chunk-avkdw0az.js:1182` (`CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`), background check at `chunk-7kvz9y39.js:3673`, set at `chunk-3kp5jwr6.js:11749`.
-[^local-oauth]: The program, `chunk-3q5b9bqc.js:90`.
-[^use-local]: The program, `chunk-zyv1p0zv.js:685` and `chunk-4aw737ds.js:535`.
-[^use-staging]: The program, `chunk-zyv1p0zv.js:687`.
-[^key-and-profile]: The program, `chunk-h2e446cb.js:4884` and `chunk-h2e446cb.js:4884` (the notice and the steps) and `chunk-aq3ms068.js:26899` (the `/config` step text). The shorter `Both <A> and <B> set` notice shows for other pairs of sources, `chunk-h2e446cb.js:4884`.
-[^scopes]: The program, `chunk-rqs3939j.js:748`.
+[^variable-names]: The program (variable names read in `chunk-865at33z.js:31767` (for example `CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`)) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^delegated-models]: The program, read and defaulted at `chunk-vc58gmrj.js:1037` (`CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS`, the 600000 ms limit) and set at `chunk-q0y1fm2x.js:12093`.
+[^delegated-direct]: The program, read at `chunk-vc58gmrj.js:999` (`CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`), background check at `chunk-95amtstn.js:3714`, set at `chunk-q0y1fm2x.js:12073`.
+[^local-oauth]: The program, `chunk-ephf358x.js:90`.
+[^use-local]: The program, `chunk-72zr3jp8.js:710` and `chunk-p0p3s51g.js:538`.
+[^use-staging]: The program, `chunk-72zr3jp8.js:712`.
+[^key-and-profile]: The program, `chunk-w3q7cmdt.js:4896` and `chunk-w3q7cmdt.js:4896` (the notice and the steps) and `chunk-865at33z.js:27078` (the `/config` step text). The shorter `Both <A> and <B> set` notice shows for other pairs of sources, `chunk-w3q7cmdt.js:4896`.
+[^scopes]: The program, `chunk-gd77dyw4.js:748`.
+[^full-sign-in]: The program, `chunk-16b09bna.js:26-27` (`CLAUDE_CODE_FULL_SIGN_IN_LINK` and `-local-oauth`, which return the full URL) and `chunk-591g81xs.js:1975` (the text `Browser didn't open? Use the URL below to sign in`).

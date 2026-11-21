@@ -143,23 +143,23 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas, `chunk-hg1yqkjk.js:250722` (`Read`, `file_path`), `chunk-hg1yqkjk.js:104498` (`Write`), and `chunk-hg1yqkjk.js:282620` (`NotebookEdit`, `notebook_path`).
-[^memory-flags]: The program, `chunk-32gs4rex.js:2952` and `chunk-32gs4rex.js:13161`. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
-[^restricted-316]: The program, `chunk-skh8zgf0.js:128` and `chunk-z1czbrcf.js:814`.
-[^glob-grep]: The program, `chunk-hg1yqkjk.js:206314` (the notes for a tool that is not offered, `Glob` and `Grep`).
-[^size-flag]: The program, `chunk-hg1yqkjk.js:258521` (the size test and the rule for a managed file, `Managed`), `chunk-hg1yqkjk.js:12172` (the added line), and `chunk-hg1yqkjk.js:258548`. The server flag is `tengu_quizzical_mango`.
-[^partial-read]: The program, `chunk-hg1yqkjk.js:258550` (the nested file is marked as read in part, `markStartOnly`), `chunk-hg1yqkjk.js:104731` (the `Write` refusal, error code 19), and `chunk-740ssk9p.js:107` (the mark, `markStartOnly`).
-[^write-verify]: The program, `chunk-pxy9yt8m.js:928` (the size text) and `chunk-pxy9yt8m.js:928` (the bytes text, `Write verification failed: ... does not hold what was written`).
-[^read-blocked]: The program, `chunk-skh8zgf0.js:128`; `chunk-phb99ctz.js:337`.
-[^exit-worktree-stop]: The program, `chunk-b2932m4d.js:8234`.
-[^import-read]: The program, `chunk-3j2w55tq.js:294` and `chunk-3j2w55tq.js:113` (`IMPORT_MAX_FILE_BYTES`).
-[^notebook-checks]: The program, `chunk-hg1yqkjk.js:282845`, `chunk-hg1yqkjk.js:282857`, `chunk-hg1yqkjk.js:282900`, and `chunk-hg1yqkjk.js:282908`.
-[^notebook-size]: The program, `chunk-hg1yqkjk.js:282983`.
-[^grep-page]: The program, `chunk-zthba38p.js:136` (the changelog text).
-[^read-nb]: The program, `chunk-zthba38p.js:136` (the changelog text).
-[^nb-newline]: The program, `chunk-zthba38p.js:136` (the changelog text).
-[^read-size]: The program, `chunk-zthba38p.js:136` (the changelog text).
-[^at-100]: The program, `chunk-hg1yqkjk.js:256379` (`too_many_mentions`, the check on the count) and `chunk-hg1yqkjk.js:256285` (the limit of 100, `$241f52_16`).
-[^signin-files]: The program, `chunk-32gs4rex.js:11290` (the hard-link refusal, `$e93ff7`) and `chunk-32gs4rex.js:11308` (the refusals for the three files, `$771185`).
-[^device-files]: The program, `chunk-w03c3634.js:6399` (the `Read` refusals and the link refusal) and `chunk-g10jc9b1.js:576` (the `Grep` refusal).
-[^edit-compaction]: The program, `chunk-hg1yqkjk.js:46195` (the test, `unchangedSinceReadBeforeCompaction`) and `chunk-zthba38p.js:136` (the changelog text).
+[^tools-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Configure Permissions](https://code.claude.com/docs/en/permissions), and the program, the tool input schemas, `chunk-bzyb60p0.js:254174` (`Read`, `file_path`), `chunk-bzyb60p0.js:105616` (`Write`), and `chunk-bzyb60p0.js:285789` (`NotebookEdit`, `notebook_path`).
+[^memory-flags]: The program, `chunk-p1ewvgeh.js:2982` and `chunk-p1ewvgeh.js:13307`. The first server flag is `tengu_linen_orbit`. The second is `tengu_haze_glass`.
+[^restricted-316]: The program, `chunk-e1ww8aev.js:128` and `chunk-yt7wk02j.js:813`.
+[^glob-grep]: The program, `chunk-bzyb60p0.js:208965` (the notes for a tool that is not offered, `Glob` and `Grep`).
+[^size-flag]: The program, `chunk-bzyb60p0.js:261665` (the size test and the rule for a managed file, `Managed`), `chunk-bzyb60p0.js:12830` (the added line), and `chunk-bzyb60p0.js:261692`. The server flag is `tengu_quizzical_mango`.
+[^partial-read]: The program, `chunk-bzyb60p0.js:261694` (the nested file is marked as read in part, `markStartOnly`), `chunk-bzyb60p0.js:105849` (the `Write` refusal, error code 19), and `chunk-5sjwf92x.js:107` (the mark, `markStartOnly`).
+[^write-verify]: The program, `chunk-2yx6c1y2.js:938` (the size text) and `chunk-2yx6c1y2.js:938` (the bytes text, `Write verification failed: ... does not hold what was written`).
+[^read-blocked]: The program, `chunk-e1ww8aev.js:128`; `chunk-pbteexar.js:337`.
+[^exit-worktree-stop]: The program, `chunk-aw5nczax.js:8223`.
+[^import-read]: The program, `chunk-0cp7gxnn.js:294` and `chunk-0cp7gxnn.js:113` (`IMPORT_MAX_FILE_BYTES`).
+[^notebook-checks]: The program, `chunk-bzyb60p0.js:286014`, `chunk-bzyb60p0.js:286026`, `chunk-bzyb60p0.js:286069`, and `chunk-bzyb60p0.js:286077`.
+[^notebook-size]: The program, `chunk-bzyb60p0.js:286154`.
+[^grep-page]: The program, `chunk-zxxe6wr3.js:462` (the changelog text).
+[^read-nb]: The program, `chunk-zxxe6wr3.js:463` (the changelog text).
+[^nb-newline]: The program, `chunk-zxxe6wr3.js:464` (the changelog text).
+[^read-size]: The program, `chunk-zxxe6wr3.js:465` (the changelog text).
+[^at-100]: The program, `chunk-bzyb60p0.js:259500` (`too_many_mentions`, the check on the count) and `chunk-bzyb60p0.js:259410` (the limit of 100, `$241f52_16`).
+[^signin-files]: The program, `chunk-p1ewvgeh.js:11369` (the hard-link refusal, `$e93ff7`) and `chunk-p1ewvgeh.js:11384` (the refusals, each with the message "tools cannot write").
+[^device-files]: The program, `chunk-xfj2cwfv.js:6402` (the `Read` refusals and the link refusal) and `chunk-g03qj0bk.js:601` (the `Grep` refusal).
+[^edit-compaction]: The program, `chunk-bzyb60p0.js:47037` (the test, `unchangedSinceReadBeforeCompaction`) and `chunk-zxxe6wr3.js:461` (the changelog text).

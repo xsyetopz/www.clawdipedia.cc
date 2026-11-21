@@ -64,7 +64,7 @@ The table is sorted by name.[^names] See [Environment Variables](index.md#how-to
 | `CLAUDE_CODE_TOTAL_TOKENS_REMINDER_BUDGET` | <Undocumented /> | Sets the starting token budget for the `padded-countdown` reminder mode. | A number, `15000000` by default. Integer above 0. Env wins over settings and flag | All sessions |
 | `CLAUDE_COWORK_MEMORY_EXTRA_GUIDELINES` | <Undocumented /> | Adds extra guideline text to the auto memory and agent memory prompts. | Text. Claude Code ignores it when it is empty | Cowork hosts |
 | `CLAUDE_COWORK_MEMORY_GUIDELINES` | <Undocumented /> | Replaces the auto memory prompt with `# auto memory` plus this text. It also forces file-based memory. | Text. Needs auto memory on | Cowork hosts |
-| `CLAUDE_COWORK_MEMORY_INDEX_CONTENT` | <Undocumented /> | Supplies the memory index text instead of the file. An empty string turns the injection off. | Text | Cowork hosts |
+| `CLAUDE_COWORK_MEMORY_INDEX_CONTENT` | <Undocumented /> | Supplies the memory index text instead of the file. An empty string turns the injection off. | Text, kept as given. An empty value stays empty.[^cowork-index] | Cowork hosts |
 | `CLAUDE_COWORK_MEMORY_PATH_OVERRIDE` | <Undocumented /> | Sets the auto memory directory. It also keeps auto memory on in remote mode. | Text. Must be a valid absolute path. Claude Code ignores any other value | Cowork hosts |
 | `CLAUDE_MEMORY_STORES` | <Undocumented /> | Takes a JSON list of `{"name","path"}` objects. The memory section stays. Claude Code names each store as a shared `memory/team/<dir name>` folder with a 4 KB per-file note. A list of strings, `[]`, or non-JSON text changes nothing. | - | - |
 | `CLAUDE_PROJECT_UUID` | <Undocumented /> <Gated note="Works only behind a feature flag or server gate" /> | Names a Claude project. Claude Code fetches the project context block and the project memory index for it. | - | - |
@@ -91,9 +91,10 @@ Claude Code counts the tokens in the conversation. When the count passes a limit
 
 ## Sources
 
-[^names]: The program, `chunk-gvhwnc7g.js:808` (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^trinket]: The program, `chunk-hg1yqkjk.js:130330`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
-[^max-context]: The program, `chunk-aq3ms068.js:24133` and `chunk-aq3ms068.js:24263`.
-[^memory-push]: The program, `chunk-g4jweshk.js:6858` (the mode), `chunk-g4jweshk.js:6952` (the `recorded` check), and `chunk-g4jweshk.js:6952` (the id and hash match).
+[^names]: The program, `chunk-c203g5kd.js:815` (`CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`), and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^trinket]: The program, `chunk-bzyb60p0.js:132393`. Probe case `env319b.curried-trinket.set` (a stub answers the second model request with the 400 "prompt is too long"): the third request, the compact request, held the text. Probe cases `unset` and `no-summary-tag` held none.
+[^max-context]: The program, `chunk-865at33z.js:24232` and `chunk-865at33z.js:24362`.
+[^memory-push]: The program, `chunk-sjqze7qg.js:6882` (the mode), `chunk-sjqze7qg.js:6976` (the `recorded` check), and `chunk-sjqze7qg.js:6976` (the id and hash match).
 [^juniper]: [Probes](../../reference/probes.md).
-[^pct-put-back]: The program, `chunk-tsby2qjm.js:1934` (the debug text "put back to its startup value, or removed").
+[^pct-put-back]: The program, `chunk-5e3gtsn9.js:1947` (the debug text "put back to its startup value, or removed").
+[^cowork-index]: The program, `chunk-bzyb60p0.js:106326` (`CLAUDE_COWORK_MEMORY_INDEX_CONTENT`, tested with `!== ""`) and `chunk-c203g5kd.js:3186` (`rawStr`).

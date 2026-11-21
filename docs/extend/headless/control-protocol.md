@@ -178,17 +178,17 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-control-prot
 
 ## Sources
 
-[^subtypes]: The program, the bundled schema: `chunk-w03c3634.js:21964` for `ui_prompt_paint`, `chunk-w03c3634.js:21831` for the `ui_attach` list, `chunk-w03c3634.js:19588` for `turn_handoff`, `chunk-w03c3634.js:20776` for `oauth_token_refresh`, `chunk-w03c3634.js:20552` for `mcpMount`, `chunk-w03c3634.js:15614` for `background_color`, and `chunk-w03c3634.js:17944` for `get_cloud_session_transcript` and its note.
-[^initialize]: The program, `chunk-w03c3634.js:16918` and `chunk-w03c3634.js:16912-16919` for `auth_conflict` and `chunk-w03c3634.js:16957` for `other_hook_ask_outranks_host`.
-[^interrupt]: The program, `chunk-w03c3634.js:17133`.
-[^denied-tools]: The program, `denied_tools` at `chunk-w03c3634.js:19712`. The warning is at `chunk-614w915w.js:47233`.
-[^apply-flag]: The program, `chunk-6dccy31z.js:4595`.
-[^elicitation]: The program, `chunk-w03c3634.js:22570`.
-[^builders]: The program, the strings of the request and response builders, `set_model` at `chunk-w03c3634.js:17320`, `subtype` at `chunk-w03c3634.js:22536` (success), and `error_code` at `chunk-w03c3634.js:22552` (error). The `set_model` handler replies with `model` at `chunk-614w915w.js:45440`.
-[^validators]: The schema is made from the program's own validators, for example `request_id` at `chunk-w03c3634.js:22537`.
-[^v2326]: The program, `chunk-w03c3634.js:18379` for `oldestDesktopSdk`, `chunk-w03c3634.js:17944-17953` for `limit`, `chunk-w03c3634.js:20600-20606` for `withheld`, `chunk-w03c3634.js:20781-20797` for `refused_bearer_sha256` and `refused_call`, and `chunk-c30das3s.js:3252` and `chunk-c30das3s.js:3264` for where the CLI sends them.
-[^v2327-init]: The program, `chunk-w03c3634.js:16817` for `settings` and `disallowedTools`, `chunk-w03c3634.js:16980` for `settings_applied` and `disallowed_tools_applied`, `chunk-w03c3634.js:16670` for `contextOnly` and `replacedByFrame`, and `chunk-w03c3634.js:11974` for `requiredByOrganization`.
-[^v2327-rules]: The program, `chunk-w03c3634.js:17234` for `rule_usually_offered`, `chunk-w03c3634.js:18547` for `loadRaise`, `chunk-w03c3634.js:18750` for the `rootId` of the `read_file` anchor, `chunk-w03c3634.js:18979` for the `rootId` of the reply, and `chunk-w03c3634.js:20824` for `token_state`.
-[^v2327-cloud]: The program, `chunk-w03c3634.js:17936` for `list_cloud_sessions`, `chunk-w03c3634.js:17875` and `chunk-w03c3634.js:17936` for `get_cloud_session`, `chunk-w03c3634.js:17944` for `agent_id`, `chunk-w03c3634.js:17988` for `update_cloud_session`, and `chunk-w03c3634.js:19972` for `reload_connectors`.
-[^v2327-fork]: The program, `chunk-w03c3634.js:19638` for the request and `chunk-w03c3634.js:19675` for the reply.
-[^get-usage-fields]: The program, `chunk-yzbs7cc9.js:2449` (`skip_behaviors`) and `chunk-yzbs7cc9.js:2451` (`detached`).
+[^subtypes]: The program, the bundled schema: `chunk-xfj2cwfv.js:22172` for `ui_prompt_paint`, `chunk-xfj2cwfv.js:22039` for the `ui_attach` list, `chunk-xfj2cwfv.js:19778` for `turn_handoff`, `chunk-xfj2cwfv.js:20966` for `oauth_token_refresh`, `chunk-xfj2cwfv.js:20742` for `mcpMount`, `chunk-xfj2cwfv.js:15654` for `background_color`, and `chunk-xfj2cwfv.js:18029` for `get_cloud_session_transcript` and its note.
+[^initialize]: The program, `chunk-xfj2cwfv.js:16968` and `chunk-xfj2cwfv.js:16962-16969` for `auth_conflict` and `chunk-xfj2cwfv.js:17007` for `other_hook_ask_outranks_host`.
+[^interrupt]: The program, `chunk-xfj2cwfv.js:17204`.
+[^denied-tools]: The program, `denied_tools` at `chunk-xfj2cwfv.js:19902`. The warning is at `chunk-a0tz781a.js:49287`.
+[^apply-flag]: The program, `chunk-d688kptq.js:4628`.
+[^elicitation]: The program, `chunk-xfj2cwfv.js:22789`.
+[^builders]: The program, the strings of the request and response builders, `set_model` at `chunk-xfj2cwfv.js:17405`, `subtype` at `chunk-xfj2cwfv.js:22755` (success), and `error_code` at `chunk-xfj2cwfv.js:22771` (error). The `set_model` handler replies with `model` at `chunk-a0tz781a.js:47378`.
+[^validators]: The schema is made from the program's own validators, for example `request_id` at `chunk-xfj2cwfv.js:22756`.
+[^v2326]: The program, `chunk-xfj2cwfv.js:18569` for `oldestDesktopSdk`, `chunk-xfj2cwfv.js:18029-18038` for `limit`, `chunk-xfj2cwfv.js:20790-20796` for `withheld`, `chunk-xfj2cwfv.js:20971-20987` for `refused_bearer_sha256` and `refused_call`, and `chunk-094mb179.js:3277` and `chunk-094mb179.js:3289` for where the CLI sends them.
+[^v2327-init]: The program, `chunk-xfj2cwfv.js:16867` for `settings` and `disallowedTools`, `chunk-xfj2cwfv.js:17030` for `settings_applied` and `disallowed_tools_applied`, `chunk-xfj2cwfv.js:16710` for `contextOnly` and `replacedByFrame`, and `chunk-xfj2cwfv.js:11987` for `requiredByOrganization`.
+[^v2327-rules]: The program, `chunk-xfj2cwfv.js:17309` for `rule_usually_offered`, `chunk-xfj2cwfv.js:18737` for `loadRaise`, `chunk-xfj2cwfv.js:18940` for the `rootId` of the `read_file` anchor, `chunk-xfj2cwfv.js:19169` for the `rootId` of the reply, and `chunk-xfj2cwfv.js:21014` for `token_state`.
+[^v2327-cloud]: The program, `chunk-xfj2cwfv.js:18021` for `list_cloud_sessions`, `chunk-xfj2cwfv.js:17960` and `chunk-xfj2cwfv.js:18021` for `get_cloud_session`, `chunk-xfj2cwfv.js:18029` for `agent_id`, `chunk-xfj2cwfv.js:18073` for `update_cloud_session`, and `chunk-xfj2cwfv.js:20162` for `reload_connectors`.
+[^v2327-fork]: The program, `chunk-xfj2cwfv.js:19828` for the request and `chunk-xfj2cwfv.js:19865` for the reply.
+[^get-usage-fields]: The program, `chunk-nfz758rv.js:2468` (`skip_behaviors`) and `chunk-nfz758rv.js:2470` (`detached`).

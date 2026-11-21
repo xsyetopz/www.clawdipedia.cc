@@ -167,4 +167,4 @@ What a hook on `wasm.compile` receives. It holds the bytes that are about to com
 
 ## Sources
 
-[^wasm-compile]: `schemas/claude-code.d.ts`, `WasmCompileInput`. The program, `chunk-hg1yqkjk.js:214917`.
+[^wasm-compile]: `schemas/claude-code.d.ts`, `WasmCompileInput`. The program, `chunk-bzyb60p0.js:218019`.

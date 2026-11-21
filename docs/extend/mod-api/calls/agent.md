@@ -171,13 +171,13 @@ A hook may rewrite the content keys of `AgentSpawnInput`. The type pins every ot
 
 ## Sources
 
-[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
-[^call-workflow]: The program, `chunk-hg1yqkjk.js:192073` (the refusal text for `Workflow`) and `chunk-kvgd8rb3.js:1295` (the plugin-facing hook).
-[^limits]: The program, `chunk-hg1yqkjk.js:194395` (`concurrent`, 20 unless `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` is set), `chunk-hg1yqkjk.js:194398` (the result with `depth` and `isBackgroundEnabled`), and `chunk-j9a179b2.js:10` (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`).
-[^offer-refuse]: The program, `chunk-qsd8sbe8.js:3171`.
-[^offer-check]: The program, `chunk-qsd8sbe8.js:9188`.
-[^kind]: The program, `chunk-hg1yqkjk.js:194494` (`local_agent` and `in_process_teammate`).
-[^parent-agent]: The program, `chunk-hg1yqkjk.js:210354` (the refusal, `{ deny }` for a parent the session cannot use) and `chunk-hg1yqkjk.js:210358` (the parent is stored on the spawn).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `AgentCallArgs`, `AgentCallOptions`, `AgentCallRecord`, `AgentInfo`, `AgentLimits`, `AgentLoop`, `AgentOfferInput`, `AgentOfferResult`, `AgentRequest`, `AgentSpawnArgs`, `AgentSpawnInput`, `AgentSpawnResult`, `AgentSpec`, `AgentStatus`, and `AgentTeammateRecord`.
+[^call-workflow]: The program, `chunk-bzyb60p0.js:194526` (the refusal text for `Workflow`) and `chunk-1ry577bp.js:1384` (the plugin-facing hook).
+[^limits]: The program, `chunk-bzyb60p0.js:196860` (`concurrent`, 20 unless `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` is set), `chunk-bzyb60p0.js:196863` (the result with `depth` and `isBackgroundEnabled`), and `chunk-7ds2xzy3.js:10` (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`).
+[^offer-refuse]: The program, `chunk-0w2wb7gk.js:3209`.
+[^offer-check]: The program, `chunk-0w2wb7gk.js:9291`.
+[^kind]: The program, `chunk-bzyb60p0.js:196959` (`local_agent` and `in_process_teammate`).
+[^parent-agent]: The program, `chunk-bzyb60p0.js:213176` (the refusal, `{ deny }` for a parent the session cannot use) and `chunk-bzyb60p0.js:213180` (the parent is stored on the spawn).
 [^v328-compact-window]: The type file `schemas/claude-code.d.ts`, `AgentSpec`.
 [^v328-offer-id]: The type file `schemas/claude-code.d.ts`, `agent.offer`.
-[^agent-report]: The program, `chunk-hg1yqkjk.js:304777` (`report` beside `offer` and `spawn`), `chunk-nxwpaxwj.js:6265` (the hook raise and "not delivered"), `chunk-qsd8sbe8.js:9211` (the checked fields), and `chunk-f00gew3e.js:11737` (`review` is `off`), `chunk-f00gew3e.js:11752` (`review` is `cleared`), and `chunk-f00gew3e.js:11791` (`review` is `none` or the kind with its `warning`).
+[^agent-report]: The program, `chunk-bzyb60p0.js:308169` (`report` beside `offer` and `spawn`), `chunk-s3qtr6en.js:6520` (the hook raise and "not delivered"), `chunk-0w2wb7gk.js:9314` (the checked fields), and `chunk-knp99ee7.js:7760` (`review` is `off`), `chunk-knp99ee7.js:7775` (`review` is `cleared`), and `chunk-knp99ee7.js:7814` (`review` is `none` or the kind with its `warning`).

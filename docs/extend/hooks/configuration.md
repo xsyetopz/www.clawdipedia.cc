@@ -52,7 +52,7 @@ The event decides what the matcher tests.
 | Target | Status | Values | Events |
 | --- | --- | --- | --- |
 | Tool name | <Documented /> | `Bash`, `Edit\|Write`, `mcp__.*`. Plugin MCP tools are `mcp__plugin_<plugin>_<server>__<tool>`. `Bash` also matches a `Monitor` call that has a `command`. Such a hook can block the call or ask, but a `permissionDecision` of `allow` is ignored and `updatedInput` is dropped. A `Monitor` call with `ws` is not covered.[^monitor] | `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied` |
-| Start source | <Documented /> | `startup`, `resume`, `clear`, `compact`, `fork`. The program lists these five (`chunk-w03c3634.js:11036`). | `SessionStart` |
+| Start source | <Documented /> | `startup`, `resume`, `clear`, `compact`, `fork`. The program lists these five (`chunk-xfj2cwfv.js:11049`). | `SessionStart` |
 | CLI flag | <Documented /> | `init`, `maintenance` | `Setup` |
 | End reason | <Documented /> | `clear`, `resume`, `logout`, `prompt_input_exit`, `other` | `SessionEnd` |
 | Notification type | <Documented /> | See [Events](session-events.md#notification). | `Notification` |
@@ -76,7 +76,7 @@ The event decides what the matcher tests.
 | --- | --- | --- | --- |
 | `if` | <Documented /> | Runs the handler only when the rule matches the tool call. | Only the five tool events read it. On any other event the hook never runs. You cannot use `&&` or a list. |
 | Bash patterns | <Documented /> | Checked on each subcommand. | Claude Code removes a leading `VAR=value`. It also checks `$()` and backticks. If it cannot parse the command, the hook runs. |
-| File patterns | <Documented /> | For example `Edit(src/**)`. | `Edit(path)` covers every file-writing tool, and `Read(path)` covers reads, as in permission rules (the program, `chunk-z758pdbe.js:5048`). |
+| File patterns | <Documented /> | For example `Edit(src/**)`. | `Edit(path)` covers every file-writing tool, and `Read(path)` covers reads, as in permission rules (the program, `chunk-424x9gf0.js:5052`). |
 
 ## Timeouts
 
@@ -87,7 +87,7 @@ If a hook reaches its timeout, Claude Code cancels it. Claude Code drops its out
 | --- | --- | --- | --- |
 | Default `timeout` | <Documented /> | 600 seconds for `command`, `http`, `mcp_tool`. 30 for `prompt`. 60 for `agent`. | These defaults come from the official docs. |
 | Lower defaults | <Documented /> | 30 seconds on `UserPromptSubmit`, `PreModelSwitch`, `PostModelSwitch`. 10 seconds on `MessageDisplay`. | For `command`, `http`, `mcp_tool`. |
-| `timeout` under 1 second | <Documented /> | On a `prompt` or `agent` hook, a `timeout` under 1 counts as 1 second. | Claude Code takes the larger of `timeout` and 1 (the program, `chunk-hg1yqkjk.js:75053`, for a `prompt` or `agent` hook at `chunk-hg1yqkjk.js:75050`). Other types are not changed. See [Handlers](handlers.md#prompt-and-agent-concurrency). |
+| `timeout` under 1 second | <Documented /> | On a `prompt` or `agent` hook, a `timeout` under 1 counts as 1 second. | Claude Code takes the larger of `timeout` and 1 (the program, `chunk-bzyb60p0.js:76071`, for a `prompt` or `agent` hook at `chunk-bzyb60p0.js:76068`). Other types are not changed. See [Handlers](handlers.md#prompt-and-agent-concurrency). |
 | `SessionEnd` budget | <Documented /> | 1.5 seconds shared by all hooks. | Claude Code raises it to the largest per-hook `timeout` in settings, up to 60 seconds. Plugin timeouts do not raise it. |
 | `PreModelSwitch` timeout | <Documented /> | A hook that reaches its timeout blocks the switch. | |
 | `PreToolUse` timeout | <Documented /> | A `command`, `http`, or `mcp_tool` hook that reaches its timeout does not block. | Use `onFailure: "block"` to block. An SDK callback that reaches its timeout does block. |
@@ -116,7 +116,7 @@ A hook fails when it cannot start or reaches its timeout. It also fails when it 
 | `CLAUDE_ENV_FILE` | <Documented /> | A file of `export` lines that later Bash commands load. | Append with `>>`. Claude Code sets it for `SessionStart`, `Setup`, `CwdChanged`, `FileChanged`. It does not set it for PowerShell hooks. |
 | `CLAUDE_EFFORT` | <Documented /> | The effort level of the turn. | Also visible in Bash. |
 | `CLAUDE_CODE_REMOTE` | <Documented /> | `"true"` in remote web environments. | Unset in the local CLI. |
-| `CLAUDE_CODE_BRIDGE_SESSION_ID` | <Documented /> | The Remote Control session ID. | Set while connected, and removed when no bridge session exists (the program, `chunk-waftm2y7.js:96`). |
+| `CLAUDE_CODE_BRIDGE_SESSION_ID` | <Documented /> | The Remote Control session ID. | Set while connected, and removed when no bridge session exists (the program, `chunk-r60bafc1.js:97`). |
 | Inherited environment | <Documented /> | The parent environment minus `OTEL_*`. | `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` strips more. HIPAA sessions drop Anthropic credentials. |
 | `CLAUDE_MODEL` | <Documented /> | Does not exist. | Use `PostModelSwitch` and `to_model`. |
 | `CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS` | <Documented /> | The `SessionEnd` budget. | See [Environment Variables](../../configure/env-vars/index.md). |
@@ -169,15 +169,15 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^hooks-reference]: [Hooks Reference](https://code.claude.com/docs/en/hooks) and the settings schema (`claude-code-settings.json`).
-[^monitor]: The program, `chunk-avkdw0az.js:2469-2470` (a `Monitor` call with a non-empty `command` gets the extra name `Bash`; `$7483c7` is "Monitor" in `chunk-z3bt43w4.js:5` and `$adb775` is "Bash" in `chunk-05v7tzw3.js:5`), `chunk-hg1yqkjk.js:266301-266305` (that name is added to the names a matcher tests), `chunk-hg1yqkjk.js:268038` (the matcher meets a `Monitor` call through `Bash`), `chunk-hg1yqkjk.js:270964` (`permissionDecision=allow ignored`, and `updatedInput` is dropped), and `chunk-3en7bpzn.js:567` (a `Monitor` call has exactly one of `command` or `ws`).
-[^onfailure]: The program, `chunk-hg1yqkjk.js:73762` (the `Stop`, `SubagentStop`, `TaskCompleted`, and `TeammateIdle` set) and the field text at `chunk-t39fw2cy.js:849`.
-[^mcp-onfailure]: The program, `chunk-hg1yqkjk.js:73668` (the handler types that block) and `chunk-hg1yqkjk.js:73911` (the error text for `mcp_tool`).
-[^restrict]: The program, `chunk-hg1yqkjk.js:73739` (`CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG`).
-[^same-thread]: The program, `chunk-hg1yqkjk.js:216922` (`CLAUDE_CODE_HOOKS_SAME_THREAD`, `same-thread`, `worker`).
+[^monitor]: The program, `chunk-rmc00en4.js:118` (a `Monitor` call with a non-empty `command` gets the extra name `Bash`; `$399700` is "Monitor" in `chunk-9xt9z453.js:5` and `$bf037e` is "Bash" in `chunk-hn3cwwzt.js:5`), `chunk-bzyb60p0.js:269488-269492` (that name is added to the names a matcher tests), `chunk-bzyb60p0.js:271270` (the matcher meets a `Monitor` call through `Bash`), `chunk-bzyb60p0.js:274216` (`permissionDecision=allow ignored`, and `updatedInput` is dropped), and `chunk-18mwdpr8.js:567` (a `Monitor` call has exactly one of `command` or `ws`).
+[^onfailure]: The program, `chunk-bzyb60p0.js:74780` (the `Stop`, `SubagentStop`, `TaskCompleted`, and `TeammateIdle` set) and the field text at `chunk-xcgcdx61.js:849`.
+[^mcp-onfailure]: The program, `chunk-bzyb60p0.js:74686` (the handler types that block) and `chunk-bzyb60p0.js:74929` (the error text for `mcp_tool`).
+[^restrict]: The program, `chunk-bzyb60p0.js:74757` (`CLAUDE_CODE_RESTRICT_PERSONAL_CONFIG`).
+[^same-thread]: The program, `chunk-bzyb60p0.js:219872` (`CLAUDE_CODE_HOOKS_SAME_THREAD`, `same-thread`, `worker`).
 [^powershell]: Probe case `print.err319.hook-powershell` printed this text.
-[^gitbash]: The program checks `$52df0a() === "windows"` (`chunk-hg1yqkjk.js:265348`), a platform check (read site `chunk-hg1yqkjk.js:265604`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
-[^absolute]: The program, `chunk-xamdkmr7.js:1211` and `chunk-2yx88hvf.js:1048`.
-[^managed-lists]: The program, `chunk-t39fw2cy.js:8693` (the field text of both settings).
-[^transcript-colors]: The program, `chunk-x69e1gmt.js:9973-10122` (the `hook_blocking_error`, `hook_non_blocking_error`, `hook_cancelled`, and `hook_stopped_continuation` rows).
-[^trust-hooks-warning]: The program, `chunk-5tx611sw.js:1140` (the warning text).
-[^managed-hooks-unloaded]: The program, `chunk-6dccy31z.js:3683` (the warning text) and `chunk-6dccy31z.js:3667` (the `disableAllHooks` check).
+[^gitbash]: The program checks `$52df0a() === "windows"` (`chunk-bzyb60p0.js:268532`), a platform check (read site `chunk-bzyb60p0.js:268791`, search `requires bash but Git Bash was not found`). On this macOS build the platform is a baked-in `"darwin"` literal, and `CLAUDE_CODE_HOST_PLATFORM` only sets the telemetry `platform` field. Not run: hard limit on this host.
+[^absolute]: The program, `chunk-5bvdqegv.js:1264` and `chunk-am74sq47.js:1058`.
+[^managed-lists]: The program, `chunk-xcgcdx61.js:8728` (the field text of both settings).
+[^transcript-colors]: The program, `chunk-zprqxvft.js:9977-10126` (the `hook_blocking_error`, `hook_non_blocking_error`, `hook_cancelled`, and `hook_stopped_continuation` rows).
+[^trust-hooks-warning]: The program, `chunk-edbqt07b.js:1167` (the warning text).
+[^managed-hooks-unloaded]: The program, `chunk-d688kptq.js:3703` (the warning text) and `chunk-d688kptq.js:3687` (the `disableAllHooks` check).

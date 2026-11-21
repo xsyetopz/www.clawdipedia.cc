@@ -103,7 +103,7 @@ An elicitation is a question that an MCP server asks you. The matcher for both e
 | `mcp_server_name`, `message` | <Documented /> | `Elicitation`, input | The server and the prompt text. |
 | `mode`, `url`, `elicitation_id`, `requested_schema` | <Documented /> | `Elicitation`, input | `form` or `url` mode, the URL, the ID, and the form schema. Optional. |
 | `action`, `content` | <Documented /> | `Elicitation`, output | `accept`, `decline`, `cancel`, and the form values. Read only on exit 0. A hook answer skips `ElicitationResult` hooks. A decline beats an accept. |
-| `decision: "block"` | <Documented /> | `Elicitation`, output | Declines. Beats `action`. The program treats `decision: "block"` as a block (`chunk-hg1yqkjk.js:263031`), and an Elicitation block becomes a decline (`chunk-y8p84wjg.js:244`). |
+| `decision: "block"` | <Documented /> | `Elicitation`, output | Declines. Beats `action`. The program treats `decision: "block"` as a block (`chunk-bzyb60p0.js:266215`), and an Elicitation block becomes a decline (`chunk-4e90ethg.js:244`). |
 | `action`, `content`, `mode`, `elicitation_id` | <Documented /> | `ElicitationResult`, input | Your answer. `action` is `accept`, `decline`, or `cancel`. |
 | `action`, `content` | <Documented /> | `ElicitationResult`, output | Change or block the answer. `content` replaces the whole object. Claude Code ignores an output with no `action`. `cancel` still sends your values. |
 

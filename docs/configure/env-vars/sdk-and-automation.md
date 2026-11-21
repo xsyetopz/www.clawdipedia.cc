@@ -8,7 +8,7 @@ These variables help a program that runs Claude Code as a child process. They sa
 
 Most people never set them. Hosts such as the Agent SDK set them for you. To use one, set it in the environment of the child process before the process starts. Project `env` cannot set most of them before trust.
 
-This page lists 30 variables.
+This page lists 31 variables.
 
 ## Example
 
@@ -38,6 +38,7 @@ The table is sorted by name. See [Environment Variables](index.md#how-to-read-th
 | `CLAUDE_CODE_ENTRYPOINT_ON_REQUESTS` | <Undocumented /> | Sets the name that requests go out under in the `cc_entrypoint=` part of the billing header. Claude Code reads it only when `CLAUDE_CODE_ENTRYPOINT` is `claude-desktop-3p`. It ignores the value, with a debug message, when requests already go out under an entrypoint name. It unsets the variable after it reads it. | Text of 1 to 32 characters from `a-z`, `0-9`, `_`, and `-`. It must start with a letter, must not start with `sdk`, and must not be reserved (an entrypoint name, anything starting with `remote`, or `local_projects`).[^entrypoint-on-requests] | Claude Desktop third-party only |
 | `CLAUDE_CODE_GENTLE_PARASOL` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Overrides a feature flag experiment, which applies a secondary reminder to model requests. | Text. Logs `secondary_reminder` when applied | API requests |
 | `CLAUDE_CODE_HOOK_HEARTBEAT_INTERVAL_MS` | <Undocumented /> <Gated note="A feature flag, on by default, turns the heartbeat on" /> | Sets the interval of the hook heartbeat. While a hook runs, Claude Code sends `tool_progress` messages with `heartbeat: true` at this interval. See [Stream JSON](/extend/headless/stream-json).[^heartbeat] | Whole number of milliseconds, `100` to `30000`. Default `30000` | SDK and print mode |
+| `CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK` | <Undocumented /> | Lets an approval of a host app reset the count of auto mode blocks in a row. A block of the auto mode classifier then sends the permission request of the next call with the reason code `denial_limit_host_reset`.[^host-streak] | `1` turns it on. Any other value, or no value, leaves it off. The host app sets it in the environment of the child | Host apps |
 | `CLAUDE_CODE_HUMBLE_HAMMOCK` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Forces the `echoWireToolInputs` behavior on or off ahead of the flag. In a probe, it adds `wire_tool_inputs` (raw `tool_use.input`) to the assistant event when a tool runs. See Probes. | On, off, or unset. Unset falls back to `echoWireToolInputs` and then to a feature flag | All sessions |
 | `CLAUDE_CODE_JIT_POLICY_AFTER_STARTUP` | <Undocumented /> | Sets the Bun JIT policy 10 seconds after start. Without it, Claude Code sets the policy to `1`. | On or off. Whole number `1` to `100`, digits only. A truthy value loads a module that applies the value | All sessions, Bun build |
 | `CLAUDE_CODE_LARCH_CISTERN` | <Undocumented /> <Gated note="A feature flag or server gate decides by default. This variable overrides it" /> | Overrides the `larch_cistern` experiment value for the model. In a probe, it adds a "Corrections" section to the system prompt (avoid excessive self-correction). See Probes. | On or off. A false value counts as unset. It goes to the same per-model helper as `CLAUDE_CODE_AMBER_ASTROLABE` | All sessions |
@@ -70,7 +71,8 @@ A host starts `claude` with its own environment. When `CLAUDE_CODE_ENTRYPOINT` i
 
 The program and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
 
-[^entrypoint-on-requests]: The program strings only, `chunk-aq3ms068.js:46996` (the read, `CLAUDE_CODE_ENTRYPOINT_ON_REQUESTS`). Not run.
+[^entrypoint-on-requests]: The program strings only, `chunk-865at33z.js:47661` (the read, `CLAUDE_CODE_ENTRYPOINT_ON_REQUESTS`). Not run.
 [^heartbeat]: The `tengu_mellow_pulse` feature flag turns the heartbeat on.
 [^reply-gate]: Probe cases `env319b.reply-gate.unset`, `valid`, and `invalid`.
-[^no-subscriber]: The program, `chunk-c30das3s.js:614`. Probe cases `env319b.stream-hold.spaced-false-0` (8 lines), `spaced-false-3000` (2 lines, the deltas joined), `spaced-true-3000`, `spaced-null-3000`, and `spaced-untold-3000` (8 lines each).
+[^no-subscriber]: The program, `chunk-094mb179.js:612`. Probe cases `env319b.stream-hold.spaced-false-0` (8 lines), `spaced-false-3000` (2 lines, the deltas joined), `spaced-true-3000`, `spaced-null-3000`, and `spaced-untold-3000` (8 lines each).
+[^host-streak]: The program, `chunk-bzyb60p0.js:51100` (`CLAUDE_CODE_HOST_ALLOW_RESETS_DENIAL_STREAK`) and `chunk-52tptcsk.js:1556` (`denial_limit_host_reset`).

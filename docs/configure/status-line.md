@@ -95,7 +95,7 @@ Always read optional fields with a default, for example `jq -r '.vim.mode // emp
 | `prompt_id` | <Documented /> | UUID of the prompt in work | May be absent before the first input | Status line |
 | `transcript_path` | <Documented /> | Transcript file path | String | Status line |
 | `cwd` | <Documented /> | Working directory | Same value as `workspace.current_dir` | Status line |
-| `version` | <Documented /> | Claude Code version | The version string of the running build, `2.1.329` in this release.[^version-field] | Status line |
+| `version` | <Documented /> | Claude Code version | The version string of the running build, `2.1.330` in this release.[^version-field] | Status line |
 | `model.id`, `model.display_name` | <Documented /> | Model id and name | Strings | Status line |
 | `output_style.name` | <Documented /> | Active style name | `default` when none. See [Output Styles](output-styles.md) | Status line |
 | `fast_mode` | <Documented /> | Fast mode on | Boolean | Status line |
@@ -181,12 +181,12 @@ The exact fields are in `https://clawdipedia.cc/schemas/claude-code-status-line.
 
 ## Sources
 
-[^extra-triggers]: The program, `chunk-hg1yqkjk.js:98402` (the list `$28ee81`), watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
-[^sub-schema]: The program, `chunk-t39fw2cy.js:8782` (`subagentStatusLine`). Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The program runs the command in `chunk-zs9k1w9q.js:56469-56566` (`subagentStatusLine`).
-[^sub-source]: The program, `chunk-zs9k1w9q.js:56431-56433` (`policySettings`, `subagentStatusLine`) and `chunk-zs9k1w9q.js:56448` (`plugin`).
-[^sub-trust]: The program, `chunk-zs9k1w9q.js:56440` (`Skipping subagentStatusLine execution - workspace trust not accepted`).
-[^sub-input]: The program, `chunk-zs9k1w9q.js:56480-56497` (`columns`, `tasks`).
-[^sub-output]: The program, `chunk-zs9k1w9q.js:56562` (`content`, kept after the non-JSON and schema checks at lines 56545-56559), and `chunk-zs9k1w9q.js:56424` (`5000`, the timeout).
-[^sub-deprecation]: The program, `chunk-mf7vnf0k.js:155` (the log line text), `chunk-zs9k1w9q.js:120968` (the notice, `subagent-status-line-deprecated`), and `chunk-hg1yqkjk.js:241785` (the plugin warning, `plugin-subagent-status-line-deprecated`).
-[^schema-origin]: The program, `chunk-hg1yqkjk.js:98256` (`$e3225d`), builds this payload in code, not with a validator, so the schema comes from that code.
-[^version-field]: The program, `chunk-hg1yqkjk.js:98347` (`version`, `VERSION: "2.1.329"`).
+[^extra-triggers]: The program, `chunk-bzyb60p0.js:99908` (the list `$28ee81`), watches `mainLoopModel`, `fastMode`, `effortValue`, `thinkingEnabled`, and `prStatus`.
+[^sub-schema]: The program, `chunk-xcgcdx61.js:8817` (`subagentStatusLine`). Schema text: "Deprecated: still works, and will stop working in a future release. Custom per-subagent status line shown in the agent panel; receives row context as JSON on stdin". The program runs the command in `chunk-3pqaw3hv.js:57542-57639` (`subagentStatusLine`).
+[^sub-source]: The program, `chunk-3pqaw3hv.js:57504-57506` (`policySettings`, `subagentStatusLine`) and `chunk-3pqaw3hv.js:57521` (`plugin`).
+[^sub-trust]: The program, `chunk-3pqaw3hv.js:57513` (`Skipping subagentStatusLine execution - workspace trust not accepted`).
+[^sub-input]: The program, `chunk-3pqaw3hv.js:57553-57570` (`columns`, `tasks`).
+[^sub-output]: The program, `chunk-3pqaw3hv.js:57635` (`content`, kept after the non-JSON and schema checks at lines 56545-56559), and `chunk-3pqaw3hv.js:57497` (`5000`, the timeout).
+[^sub-deprecation]: The program, `chunk-mgntjepj.js:155` (the log line text), `chunk-3pqaw3hv.js:123200` (the notice, `subagent-status-line-deprecated`), and `chunk-bzyb60p0.js:244884` (the plugin warning, `plugin-subagent-status-line-deprecated`).
+[^schema-origin]: The program, `chunk-bzyb60p0.js:99762` (`$e2272e`), builds this payload in code, not with a validator, so the schema comes from that code.
+[^version-field]: The program, `chunk-bzyb60p0.js:99853` (`version`, `VERSION: "2.1.330"`).

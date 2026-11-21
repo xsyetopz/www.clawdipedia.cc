@@ -160,6 +160,6 @@ So an `mcp_tool` hook cannot run in them. See the [Hooks Reference](https://code
 
 ## Sources
 
-[^entrypoint]: The program, `chunk-0v6g5ynk.js:775` (the entry point setup, `CLAUDE_CODE_ENTRYPOINT`) and `chunk-0v6g5ynk.js:758` (a value that the host set is kept).
-[^startup]: The program, `chunk-541wtx57.js:45` (the names of the startup phases in order, such as `preAction_after_init`) and `chunk-txash88y.js:2921` (the `preAction` hook).
-[^flags]: The program, `chunk-aq3ms068.js:34882` (the `GrowthBook` flag client).
+[^entrypoint]: The program, `chunk-3t7ve0wy.js:786` (the entry point setup, `CLAUDE_CODE_ENTRYPOINT`) and `chunk-3t7ve0wy.js:769` (a value that the host set is kept).
+[^startup]: The program, `chunk-k5jn5rx9.js:45` (the names of the startup phases in order, such as `preAction_after_init`) and `chunk-rckksdmd.js:2929` (the `preAction` hook).
+[^flags]: The program, `chunk-865at33z.js:35180` (the `GrowthBook` flag client).

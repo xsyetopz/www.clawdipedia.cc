@@ -203,4 +203,4 @@ What `$.session.version()` answers: the version of the engine that the session r
 ## Sources
 
 [^verified]: The type file `schemas/claude-code.d.ts`.
-[^session-stop]: `schemas/claude-code.d.ts`, `SessionStopInput`. The program, `chunk-qsd8sbe8.js:9096` (the `session.stop` input holds `isTurnRunning`) and `chunk-hg1yqkjk.js:8519` (the `session.stop` result `(a1) => a1`, an echo).
+[^session-stop]: `schemas/claude-code.d.ts`, `SessionStopInput`. The program, `chunk-0w2wb7gk.js:9199` (the `session.stop` input holds `isTurnRunning`) and `chunk-bzyb60p0.js:8701` (the `session.stop` result `(a1) => a1`, an echo).

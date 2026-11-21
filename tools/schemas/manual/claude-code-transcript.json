@@ -1788,7 +1788,7 @@
 				"subtype:\"local_command\",content:«»,level:\"info\",timestamp:new Date().toISOString(),uuid:«»(),isMeta:!1,...«»?.contextUsage!==void 0&&{contextUsage:«».contextUsage},...«»?.usageReport!==void 0&&{usageReport:«».usageReport},...«»?.commandRun!==void 0&&{commandRun:«».commandRun},...«»?.commandOutcome!==void 0&&{commandOutcome:«».commandOutcome},...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly},...«»?.submitUuid&&{submitUuid:«».submitUuid}",
 				"subtype:\"permission_retry\",content:`${«»(«»)} ${«».join(\", \")}. ${«»(«».length)}`"
 			],
-			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. content is a string at every site: the caller's text (informational, local_command), a template string (permission_retry, bridge_status), the literal 'Conversation compacted', or the content string of a stream frame. Read at chunk-4ch99na2.js:10 and chunk-hg1yqkjk.js:6045723 and chunk-hg1yqkjk.js:6043647."
+			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. content is a string at every site: the caller's text (informational, local_command), a template string (permission_retry, bridge_status), the literal 'Conversation compacted', or the content string of a stream frame. Read at chunk-yta0vzjp.js:10 and chunk-bzyb60p0.js:6109798 and chunk-bzyb60p0.js:6107722."
 		},
 		"system.timestamp": {
 			"schema": {
@@ -1798,7 +1798,7 @@
 				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"{type:\"system\",subtype:\"local_command\",content:«».local_command_source,level:\"info\",timestamp:«».timestamp??new Date().toISOString(),uuid:«».uuid??«»(),isMeta:!1"
 			],
-			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. timestamp is new Date().toISOString(), a clock-function string of the same form, or the timestamp string of the source message. Read at chunk-4ch99na2.js:12 and chunk-f00gew3e.js:45933."
+			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. timestamp is new Date().toISOString(), a clock-function string of the same form, or the timestamp string of the source message. Read at chunk-yta0vzjp.js:12 and chunk-knp99ee7.js:45933."
 		},
 		"system.uuid": {
 			"schema": {
@@ -1808,7 +1808,7 @@
 				"subtype:\"informational\",content:«»,isMeta:!1,timestamp:new Date().toISOString(),uuid:«»(),level:«»",
 				"{type:\"system\",subtype:\"local_command\",content:«».local_command_source,level:\"info\",timestamp:«».timestamp??new Date().toISOString(),uuid:«».uuid??«»(),isMeta:!1"
 			],
-			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. uuid is crypto.randomUUID() (imported as h_ and _io), or the uuid string of the frame the line is rebuilt from. Read at chunk-4ch99na2.js:13 and chunk-f00gew3e.js:45933."
+			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. uuid is crypto.randomUUID() (imported as h_ and _io), or the uuid string of the frame the line is rebuilt from. Read at chunk-yta0vzjp.js:13 and chunk-knp99ee7.js:45933."
 		},
 		"system.level": {
 			"schema": {
@@ -1820,7 +1820,7 @@
 				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"subtype:\"cloud_session_status\",content:«»,entry:«»,url:«»,level:\"notice\""
 			],
-			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. Literals 'info', 'warning', 'notice' ('suggestion' for stop_hook_summary), 'error' for api_error, and the caller's level for informational lines (callers of createSystemMessage pass 'notice', 'warning' or 'suggestion'; the stream-json schema lists info|notice|suggestion|warning). Read at chunk-4ch99na2.js:14 and chunk-hg1yqkjk.js:6062088 and chunk-wm04tzdx.js:133082 and chunk-hg1yqkjk.js:6044074."
+			"note": "The program builds system lines in the message constructors of the session code (createSystemMessage and the other subtype builders), and the remote-session path rebuilds some from stream-json frames. Literals 'info', 'warning', 'notice' ('suggestion' for stop_hook_summary), 'error' for api_error, and the caller's level for informational lines (callers of createSystemMessage pass 'notice', 'warning' or 'suggestion'; the stream-json schema lists info|notice|suggestion|warning). Read at chunk-yta0vzjp.js:14 and chunk-bzyb60p0.js:6126163 and chunk-k5r71ad2.js:138541 and chunk-bzyb60p0.js:6108149."
 		},
 		"system.scope": {
 			"schema": {
@@ -1843,7 +1843,7 @@
 				"subtype:\"model_refusal_fallback\",direction:\"retry\",scope:«»?\"session\":\"local\"",
 				"subtype:\"model_refusal_fallback\",direction:\"retry\",scope:«»,content:«»===\"local\"?(«».retainedText?.length??0)>0?«»(«».fromModel,«».toModel,«».apiRefusalCategory):«»(«».fromModel,«».toModel,«».apiRefusalCategory):«».reason===\"refusal\"?«»(«».fromModel,«».toModel,«».apiRefusalCategory):«»(«».fromModel,«».toModel,«».apiRefusalCategory)"
 			],
-			"note": "model_refusal_fallback lines: the literal 'retry' where the program makes the line, and the direction of a remote frame, whose stream-json schema is the enum retry|revert|sticky. Read at chunk-f00gew3e.js:51135 and chunk-f00gew3e.js:51168 and chunk-wm04tzdx.js:249868 and chunk-wm04tzdx.js:272496 and chunk-hg1yqkjk.js:2794233."
+			"note": "model_refusal_fallback lines: the literal 'retry' where the program makes the line, and the direction of a remote frame, whose stream-json schema is the enum retry|revert|sticky. Read at chunk-knp99ee7.js:51135 and chunk-knp99ee7.js:51168 and chunk-k5r71ad2.js:258219 and chunk-k5r71ad2.js:280926 and chunk-bzyb60p0.js:2835963."
 		},
 		"system.trigger": {
 			"schema": {
@@ -2443,7 +2443,7 @@
 				"retryWaitMs:«».deadline.retryWindowMs",
 				"{...«»,isCloudCredentialError:!0}"
 			],
-			"note": "api_error: error is the plain-data snapshot of the API error that the program builds from an APIError (chunk-aq3ms068.js:14274, message, status, requestId, formatted, connection, isNetworkDown, rateLimits, noResponse) or, for a non-API error, from the fallback literal in chunk-hg1yqkjk.js:160298 (message, status and requestId undefined, formatted, connection null, isNetworkDown false, rateLimits null, noResponse null). isCloudCredentialError:true is spread in when the error is a cloud credential error. The generator reads this value as one open node because the writer takes the error as a parameter."
+			"note": "api_error: error is the plain-data snapshot of the API error that the program builds from an APIError (chunk-865at33z.js:14342, message, status, requestId, formatted, connection, isNetworkDown, rateLimits, noResponse) or, for a non-API error, from the fallback literal in chunk-bzyb60p0.js:162571 (message, status and requestId undefined, formatted, connection null, isNetworkDown false, rateLimits null, noResponse null). isCloudCredentialError:true is spread in when the error is a cloud credential error. The generator reads this value as one open node because the writer takes the error as a parameter."
 		},
 		"system.retryAttempt": {
 			"schema": {
@@ -2575,7 +2575,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.id: string (the synthetic message uses a randomUUID). Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.id: string (the synthetic message uses a randomUUID). Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.model": {
 			"schema": {
@@ -2584,7 +2584,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.model: string model id (Model in the SDK is a string union plus string). Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.model: string model id (Model in the SDK is a string union plus string). Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.role": {
 			"schema": {
@@ -2593,7 +2593,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.role is the literal 'assistant'. Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.role is the literal 'assistant'. Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.type": {
 			"schema": {
@@ -2602,7 +2602,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.type is the literal 'message'. Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaMessage.type is the literal 'message'. Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.stop_reason": {
 			"schema": {
@@ -2627,7 +2627,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaStopReason | null. null while streaming; the synthetic factory writes 'stop_sequence'. Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaStopReason | null. null while streaming; the synthetic factory writes 'stop_sequence'. Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.stop_sequence": {
 			"schema": {
@@ -2643,7 +2643,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). string | null (the synthetic factory writes ''). Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). string | null (the synthetic factory writes ''). Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.stop_details": {
 			"schema": {
@@ -2720,7 +2720,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaRefusalStopDetails | null; the synthetic messages write null. Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaRefusalStopDetails | null; the synthetic messages write null. Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.container": {
 			"schema": {
@@ -2757,7 +2757,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaContainer | null. Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaContainer | null. Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.context_management": {
 			"schema": {
@@ -2782,7 +2782,7 @@
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null",
 				"context_management:«».message.context_management??null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaContextManagementResponse | null. Read at chunk-hg1yqkjk.js:5864178 and chunk-hg1yqkjk.js:5892057."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaContextManagementResponse | null. Read at chunk-bzyb60p0.js:5925654 and chunk-bzyb60p0.js:5953758."
 		},
 		"assistant.message.diagnostics": {
 			"schema": {
@@ -2825,7 +2825,7 @@
 			"anchors": [
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaDiagnostics | null; BetaDiagnostics.cache_miss_reason is one of the BetaCacheMiss* objects (the 'type' enum lists their discriminators) or null. Read at chunk-hg1yqkjk.js:5864178."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). BetaDiagnostics | null; BetaDiagnostics.cache_miss_reason is one of the BetaCacheMiss* objects (the 'type' enum lists their discriminators) or null. Read at chunk-bzyb60p0.js:5925654."
 		},
 		"assistant.message.content": {
 			"schema": {
@@ -2838,7 +2838,7 @@
 				"diagnostics:null,id:«»(),container:null,model:«»,role:\"assistant\",stop_details:null,stop_reason:\"stop_sequence\",stop_sequence:\"\",type:\"message\",usage:«»,content:«»,context_management:null",
 				"message:{...«»,content:«»,usage:«»,...«»&&«».context_management&&{context_management:"
 			],
-			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). Array<BetaContentBlock>: text, thinking, redacted_thinking, tool_use, server_tool_use, mcp_tool_use, the *_tool_result blocks and others; each block is an object, not typed per block here. Read at chunk-hg1yqkjk.js:5864178 and chunk-hg1yqkjk.js:3244046."
+			"note": "The line carries the Anthropic API message as returned by the API (the program spreads the streamed message, {...Gr, content, usage:cve(ym, Gr.usage)}) or the synthetic message built by the message factory in the same module. Types follow BetaMessage in @anthropic-ai/sdk (the program bundles 0.128.0; read in 0.129.0, resources/beta/messages/messages.d.ts). Array<BetaContentBlock>: text, thinking, redacted_thinking, tool_use, server_tool_use, mcp_tool_use, the *_tool_result blocks and others; each block is an object, not typed per block here. Read at chunk-bzyb60p0.js:5925654 and chunk-bzyb60p0.js:3288089."
 		},
 		"assistant.message.usage.input_tokens": {
 			"schema": {
@@ -3348,7 +3348,7 @@
 				"type": "string"
 			},
 			"anchors": ["...«»!==void 0&&{thinkingDisplay:«»}"],
-			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; thinkingDisplay is the display mode string of the thinking config (the program reads 'summarized' or 'omitted' elsewhere); written only when defined. Read at chunk-hg1yqkjk.js:3444140."
+			"note": "assistant top-level fields come from the object literals of the stream path, the error-message factory Ws/r7n and the stream-json rebuild; thinkingDisplay is the display mode string of the thinking config (the program reads 'summarized' or 'omitted' elsewhere); written only when defined. Read at chunk-bzyb60p0.js:3488784."
 		},
 		"assistant.serverClassifierRequest": {
 			"schema": {
@@ -3735,7 +3735,7 @@
 				"{promptShellHandOff:{agentId:«»,commands:«»}}",
 				"{command:«».trim(),tool:«».name}"
 			],
-			"note": "The user line is built by the function Me({content, isMeta, ...}) (chunk-hg1yqkjk.js:5868661). It puts promptShellHandOff in the returned literal (chunk-hg1yqkjk.js:5869823). The turn code passes {agentId, commands} when the list is not empty (chunk-hg1yqkjk.js:2595872). The list is created at chunk-hg1yqkjk.js:2594003. Other callers are at chunk-f00gew3e.js:144847 and chunk-6tydfzhc.js:51026. agentId is a string or null (agentId ?? null). Each item of commands is {command, tool}. The inline-command expansion gWe() (chunk-hg1yqkjk.js:3872255) builds {command: the shell command text trimmed, tool: the name of the tool that would run it} at chunk-hg1yqkjk.js:3874677. It pushes the items at chunk-hg1yqkjk.js:5562372. The reader Rvs() (chunk-hg1yqkjk.js:5538389) uses both as strings."
+			"note": "The user line is built by the function Me({content, isMeta, ...}) (chunk-bzyb60p0.js:5930328). It puts promptShellHandOff in the returned literal (chunk-bzyb60p0.js:5931490). The turn code passes {agentId, commands} when the list is not empty (chunk-bzyb60p0.js:2636677). The list is created at chunk-bzyb60p0.js:2634808. Other callers are at chunk-knp99ee7.js:68977 and chunk-6appcq3a.js:51692. agentId is a string or null (agentId ?? null). Each item of commands is {command, tool}. The inline-command expansion gWe() (chunk-bzyb60p0.js:3921495) builds {command: the shell command text trimmed, tool: the name of the tool that would run it} at chunk-bzyb60p0.js:3874677. It pushes the items at chunk-bzyb60p0.js:5622018. The reader Rvs() (chunk-bzyb60p0.js:5598122) uses both as strings."
 		},
 		"user.mcpSkill": {
 			"schema": {
@@ -3935,7 +3935,7 @@
 				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"fileName:«»(),bytesDone:«»(),bytesTotal:«»(),connectorName:«»(),place:«»().optional(),savedAs:«»().optional(),fileIndex:«»().int().positive(),fileCount:«»().int().positive(),groupedFiles:«»().int().min(2).optional()"
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module, and by the stream-json rebuild sites. connectorFileLines lists the files a connector (an MCP server that delivers files) fetched or sent in the tool call. The reader checks each item with a zod object (chunk-41vf3dk5.js:42608) and drops items that fail: direction is fetching or sending; state is done, stopped, stopped-maybe-saved, or {refused, leftBehind?}. New in 2.1.321."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module, and by the stream-json rebuild sites. connectorFileLines lists the files a connector (an MCP server that delivers files) fetched or sent in the tool call. The reader checks each item with a zod object (chunk-n6v2whwr.js:42701) and drops items that fail: direction is fetching or sending; state is done, stopped, stopped-maybe-saved, or {refused, leftBehind?}. New in 2.1.321."
 		},
 		"user.toolEndsTurn": {
 			"schema": {
@@ -3976,7 +3976,7 @@
 				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"imagePasteIds:«».length>0?«»:void 0,permissionMode:«»"
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. imagePasteIds is an array of paste ids (numbers) of images pasted in the prompt. The prompt write site drops the key when the list is empty (imagePasteIds:o.length>0?o:void 0 at chunk-abjbjs57.js:41384 and chunk-6tydfzhc.js:18738)."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. imagePasteIds is an array of paste ids (numbers) of images pasted in the prompt. The prompt write site drops the key when the list is empty (imagePasteIds:o.length>0?o:void 0 at chunk-08bv0y93.js:41504 and chunk-6appcq3a.js:18902)."
 		},
 		"user.sourceToolAssistantUUID": {
 			"schema": {
@@ -4003,7 +4003,7 @@
 				"toolDenialKind:«»,toolDenialEndsTurn:«»,...«»&&{toolDenialMonitorBlocked:«»},toolDenialUnanswered:«»,...«»&&{toolDenialAfterRun:«»},...«»&&{toolDenialBeforeRun:«»},...«»&&{toolDenialFromHost:«»},userFeedback:«»,toolResultRemedy:«»,...«»&&{toolResultTypedCommand:«»},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{sandboxViolations:«»},...«»!==void 0&&{sandboxed:«»},...«»!==void 0&&{connectorFileLines:«»},mcpMeta:«»,toolEndsTurn:«»,...«»!==void 0&&{mcpCallNotReadOnly:«»},...«»&&{holdsPersonsWords:«»},imagePasteIds:«»,sourceToolAssistantUUID:«»,permissionMode:«»,origin:«»,promptSource:«»,...«»!==void 0&&{promptId:«»},interruptedMessageId:«»,...«»!==void 0&&{refusedMessageId:«»},interruptedByShutdown:«»",
 				"«»=[\"acceptEdits\",\"auto\",\"bypassPermissions\",\"default\",\"dontAsk\",\"plan\"]"
 			],
-			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. permissionMode is a permission mode string; the program's list of modes is acceptEdits, auto, bypassPermissions, default, dontAsk, plan, and the reader drops other values. Read at chunk-hg1yqkjk.js:5887471 and chunk-phb99ctz.js:1317."
+			"note": "The user line is built by the createUserMessage function Pe({content, isMeta, ...}) in the session module (about 345 call sites; the key/values below come from reading each call's object literal), and by the stream-json rebuild sites. permissionMode is a permission mode string; the program's list of modes is acceptEdits, auto, bypassPermissions, default, dontAsk, plan, and the reader drops other values. Read at chunk-bzyb60p0.js:5949137 and chunk-pbteexar.js:1317."
 		},
 		"user.origin": {
 			"schema": {
@@ -4085,7 +4085,7 @@
 				"case\"scheduled-task\":return\"scheduled\";case\"sleep-auto-resume\":case\"quit-auto-resume\":case\"remote-restart-auto-resume\":case\"ci-monitor\":return\"auto_continuation\";case\"dispatch\":return\"peer\";case\"side-session-brief\":case\"side-session-start\":case\"side-session-wake\":case\"other\":return\"host_synthetic\"",
 				"«»=[\"human\",\"sdk\",\"scheduled\",\"task_notification\",\"auto_continuation\",\"peer\",\"host_synthetic\",\"system\",\"unknown\"]"
 			],
-			"note": "The only new value is written by the turn-start code. When the last user message has no turnOrigin, it sets turnOrigin = rda({origin, isMeta, wakeupSource, promptSource, hostInitiator}) (chunk-abjbjs57.js:48147). rda() (chunk-hg1yqkjk.js:414101) returns only string literals: scheduled, human, auto_continuation, peer, task_notification, host_synthetic, system, sdk, unknown, or the result of Wye(hostInitiator) (chunk-hg1yqkjk.js:413364). Wye() maps to scheduled, auto_continuation, peer or host_synthetic, or to undefined, which falls through to the other returns. The other write, pNi() (chunk-hg1yqkjk.js:5866838), copies turnOrigin from an earlier user message into messages that lack it. It adds no new value. The loader keeps a turnOrigin only if it is in the set built from the 9-value list Z7t (list at chunk-hg1yqkjk.js:412945, set at chunk-hg1yqkjk.js:2418131). It deletes any other value (chunk-hg1yqkjk.js:2418348). The list equals the set that rda() can return. The values are a closed set of 9 literals. Not every path writes every value, but all 9 are producible."
+			"note": "The only new value is written by the turn-start code. When the last user message has no turnOrigin, it sets turnOrigin = rda({origin, isMeta, wakeupSource, promptSource, hostInitiator}) (chunk-08bv0y93.js:48266). rda() (chunk-bzyb60p0.js:426059) returns only string literals: scheduled, human, auto_continuation, peer, task_notification, host_synthetic, system, sdk, unknown, or the result of Wye(hostInitiator) (chunk-bzyb60p0.js:425322). Wye() maps to scheduled, auto_continuation, peer or host_synthetic, or to undefined, which falls through to the other returns. The other write, pNi() (chunk-bzyb60p0.js:5928505), copies turnOrigin from an earlier user message into messages that lack it. It adds no new value. The loader keeps a turnOrigin only if it is in the set built from the 9-value list Z7t (list at chunk-bzyb60p0.js:424903, set at chunk-bzyb60p0.js:2456013). It deletes any other value (chunk-bzyb60p0.js:2456230). The list equals the set that rda() can return. The values are a closed set of 9 literals. Not every path writes every value, but all 9 are producible."
 		},
 		"user.toolUseResult.type": {
 			"schema": {
@@ -4156,7 +4156,7 @@
 				"structuredPatch:[]",
 				"structuredPatch:«»(«»()).describe(\"Diff patch showing the changes\")"
 			],
-			"note": "toolUseResult on a user line is a tool's output data (object), an error string ('Error: ...', 'InputValidationError: ...'), or an array (user.toolUseResult takes type object|string|array). These keys belong to the file-edit and file-write tool results: structuredPatch is an array of diff hunks {oldStart, oldLines, newStart, newLines, lines} (the program's own schema for the tool output declares C($Q()), and the stream-json hunk schema lists these five integer and string-array keys); [] when nothing changed. Read at chunk-gq6gxhzd.js:43080 and chunk-hg1yqkjk.js:1940367 and chunk-hg1yqkjk.js:1930839."
+			"note": "toolUseResult on a user line is a tool's output data (object), an error string ('Error: ...', 'InputValidationError: ...'), or an array (user.toolUseResult takes type object|string|array). These keys belong to the file-edit and file-write tool results: structuredPatch is an array of diff hunks {oldStart, oldLines, newStart, newLines, lines} (the program's own schema for the tool output declares C($Q()), and the stream-json hunk schema lists these five integer and string-array keys); [] when nothing changed. Read at chunk-0kge9n63.js:44699 and chunk-bzyb60p0.js:1963571 and chunk-bzyb60p0.js:1954043."
 		},
 		"user.toolUseResult.originalFile": {
 			"schema": {
@@ -4559,7 +4559,7 @@
 			"anchors": [
 				"context_management:«».message.context_management??null},isMeta:«».isMeta,isVirtual:«».isVirtual"
 			],
-			"note": "No assistant message literal sets isMeta. All type:\"assistant\" literals were checked. Only the normalizer yNi() (chunk-hg1yqkjk.js:5874885) has isMeta:e.isMeta on an assistant (chunk-hg1yqkjk.js:5875005). It copies a value that is undefined. The program never writes it, so no value is valid."
+			"note": "No assistant message literal sets isMeta. All type:\"assistant\" literals were checked. Only the normalizer yNi() (chunk-bzyb60p0.js:5936551) has isMeta:e.isMeta on an assistant (chunk-bzyb60p0.js:5936671). It copies a value that is undefined. The program never writes it, so no value is valid."
 		},
 		"assistant.perTurnTiming": {
 			"schema": {
@@ -4580,7 +4580,7 @@
 				"{return{serverClassifierRequest:«».key,serverClassifierResults:«»}}",
 				"isVoidedByAnotherCall(«»){for(let[«»,«»]of this.#«»)if(«»===void 0||«»!==«»&&!«».has(«»))return!0;return!1}settledUnchanged(){return this.#«».size>0?void 0:this.#«»}toJSON(){return}}"
 			],
-			"note": "Written in memory only: the factory returns {serverClassifierRequest:e.key,serverClassifierResults:e}, where e is the server-classifier handle (chunk-hg1yqkjk.js:1376255). The handle is an instance of class be (chunk-hg1yqkjk.js:1372481), which ends in toJSON(){return} (chunk-hg1yqkjk.js:1373783), so JSON.stringify drops the key. The input-rewrite path also destructures both keys out before it rebuilds the line (`{serverClassifierRequest:D,serverClassifierResults:j,...P}`, chunk-hg1yqkjk.js:1384041). So the transcript never holds it, and no value is valid."
+			"note": "Written in memory only: the factory returns {serverClassifierRequest:e.key,serverClassifierResults:e}, where e is the server-classifier handle (chunk-bzyb60p0.js:1392454). The handle is an instance of class be (chunk-bzyb60p0.js:1372481), which ends in toJSON(){return} (chunk-bzyb60p0.js:1389982), so JSON.stringify drops the key. The input-rewrite path also destructures both keys out before it rebuilds the line (`{serverClassifierRequest:D,serverClassifierResults:j,...P}`, chunk-bzyb60p0.js:1384041). So the transcript never holds it, and no value is valid."
 		},
 		"attachment.attachment.forwardedIntent.lineage": {
 			"schema": {
@@ -4592,7 +4592,7 @@
 				"default:return[{text:«»,timestamp:«»,lineage:«».uuid,source:«»}]",
 				"lineage:«».id,source:«»?\"owner\":\"unattributed\",projectsRow:!0"
 			],
-			"note": "There is one write site. The function that builds queued_command attachments from forwarded turns (chunk-aq3ms068.js:635102) sets forwardedIntent:{lineage:x.lineage,source:x.source}, where x is an entry {text, timestamp, lineage, source}. The entry builder is at chunk-aq3ms068.js:627271. Entries get lineage from four places. One is the message uuid (e.uuid, chunk-aq3ms068.js:627589). One is `${e.uuid}:${index}` for poll_events provenance rows (chunk-aq3ms068.js:627156). One is the row id v.id of a hearth relay row (chunk-aq3ms068.js:625851). The row id is a string that matches ^cmsg_[A-Za-z0-9_-]{1,128}$ (chunk-aq3ms068.js:606470). The last is the lineage of an already forwarded intent. Ycr() (chunk-w03c3634.js:206594) parses that intent with a schema where lineage is a string with min(1) (chunk-w03c3634.js:206537). So lineage is always a non-empty string."
+			"note": "There is one write site. The function that builds queued_command attachments from forwarded turns (chunk-865at33z.js:640801) sets forwardedIntent:{lineage:x.lineage,source:x.source}, where x is an entry {text, timestamp, lineage, source}. The entry builder is at chunk-865at33z.js:632963. Entries get lineage from four places. One is the message uuid (e.uuid, chunk-865at33z.js:633281). One is `${e.uuid}:${index}` for poll_events provenance rows (chunk-865at33z.js:632847). One is the row id v.id of a hearth relay row (chunk-865at33z.js:631541). The row id is a string that matches ^cmsg_[A-Za-z0-9_-]{1,128}$ (chunk-865at33z.js:612144). The last is the lineage of an already forwarded intent. Ycr() (chunk-xfj2cwfv.js:203133) parses that intent with a schema where lineage is a string with min(1) (chunk-xfj2cwfv.js:203076). So lineage is always a non-empty string."
 		},
 		"attachment.attachment.forwardedIntent.source": {
 			"schema": {
@@ -4632,7 +4632,7 @@
 				"not": {}
 			},
 			"anchors": ["uuid:«»(),level:«»,...«»&&{highlight:«»}}"],
-			"note": "Only writer is Qv(e,n,r) (informational, ...r&&{highlight:r}) in chunk-4ch99na2.js:6. Parsed every Qv( call in all importing modules plus the $t wrapper: all pass 2 args (message, level). Other informational literals (qs9rj311, qw7c6vka, etc.) have no highlight. Never written. The program never writes it, so no value is valid. Read at chunk-4ch99na2.js:15."
+			"note": "Only writer is Qv(e,n,r) (informational, ...r&&{highlight:r}) in chunk-yta0vzjp.js:6. Parsed every Qv( call in all importing modules plus the $t wrapper: all pass 2 args (message, level). Other informational literals (qs9rj311, qw7c6vka, etc.) have no highlight. Never written. The program never writes it, so no value is valid. Read at chunk-yta0vzjp.js:15."
 		},
 		"system.hookLabel": {
 			"schema": {
@@ -4642,7 +4642,7 @@
 				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"toolUseID:«»,hookLabel:«»,totalDurationMs:«»}"
 			],
-			"note": "The only writer is uSa() (chunk-hg1yqkjk.js:6044659). It takes hookLabel and totalDurationMs as parameters. The single caller is yield uSa(..., \"suggestion\", ro, void 0, void 0, io, bt) (chunk-wm04tzdx.js:133082). It passes void 0 for both. No other module calls uSa(). The load repair z2e() (chunk-hg1yqkjk.js:464756) keeps an existing hookLabel only if it is a string of length 1 or more (yat() at chunk-hg1yqkjk.js:465829). The program never writes it, so no value is valid. Readers: Gxi() (chunk-hg1yqkjk.js:5638711) tests hookLabel === \"PreToolUse\". Other readers are at chunk-hg1yqkjk.js:5682592 and chunk-x69e1gmt.js:54405."
+			"note": "The only writer is uSa() (chunk-bzyb60p0.js:6108734). It takes hookLabel and totalDurationMs as parameters. The single caller is yield uSa(..., \"suggestion\", ro, void 0, void 0, io, bt) (chunk-k5r71ad2.js:138541). It passes void 0 for both. No other module calls uSa(). The load repair z2e() (chunk-bzyb60p0.js:477451) keeps an existing hookLabel only if it is a string of length 1 or more (yat() at chunk-bzyb60p0.js:478524). The program never writes it, so no value is valid. Readers: Gxi() (chunk-bzyb60p0.js:5698510) tests hookLabel === \"PreToolUse\". Other readers are at chunk-bzyb60p0.js:5742573 and chunk-zprqxvft.js:54673."
 		},
 		"system.totalDurationMs": {
 			"schema": {
@@ -4652,7 +4652,7 @@
 				"yield «»(«»,«»,«»,«»,«»,«»,\"suggestion\",«»,void 0,void 0,«»,«»)",
 				"toolUseID:«»,hookLabel:«»,totalDurationMs:«»}"
 			],
-			"note": "Same as hookLabel: c0s argument q is void 0 at the only call site. The pndhv0fp merge that computes Math.max(totalDurationMs) runs only when hookLabel is defined (cS), which is never. Never written. The program never writes it, so no value is valid. Read at chunk-wm04tzdx.js:133082 and chunk-hg1yqkjk.js:6044934."
+			"note": "Same as hookLabel: c0s argument q is void 0 at the only call site. The pndhv0fp merge that computes Math.max(totalDurationMs) runs only when hookLabel is defined (cS), which is never. Never written. The program never writes it, so no value is valid. Read at chunk-k5r71ad2.js:138541 and chunk-bzyb60p0.js:6109009."
 		},
 		"user.classifierMetaLines": {
 			"schema": {
@@ -4664,7 +4664,7 @@
 				"if(«».length>0&&«»!==void 0&&«».type===\"tool_use\"&&«».id!==void 0)«»(«».id,«».join(\"\"));",
 				"{navigation:{from:«»(«»),to:«»(«»)}});«»(«»,«»)}"
 			],
-			"note": "Me() (chunk-hg1yqkjk.js:5885795) sets classifierMetaLines:io (chunk-hg1yqkjk.js:5870222) only when content is an array with exactly one tool_result. It reads io = Fse(tool_use_id) (chunk-hg1yqkjk.js:5869601). Fse() reads a Map (class j6t, chunk-hg1yqkjk.js:193065) that D9e(id, text) fills (chunk-hg1yqkjk.js:248512). D9e() has two callers. One passes the joined array of strings, $n.join(\"\") (chunk-hg1yqkjk.js:3624913). The other is jeo() (chunk-hg1yqkjk.js:3455757). It passes Pvt({navigation}), which returns a string that ends with a newline (chunk-hg1yqkjk.js:3397198). Map.get on a missing id gives undefined, which JSON drops. The value is never null. A reader checks typeof === \"string\" (chunk-hg1yqkjk.js:3403768)."
+			"note": "Me() (chunk-bzyb60p0.js:5947461) sets classifierMetaLines:io (chunk-bzyb60p0.js:5931889) only when content is an array with exactly one tool_result. It reads io = Fse(tool_use_id) (chunk-bzyb60p0.js:5931268). Fse() reads a Map (class j6t, chunk-bzyb60p0.js:195518) that D9e(id, text) fills (chunk-bzyb60p0.js:251894). D9e() has two callers. One passes the joined array of strings, $n.join(\"\") (chunk-bzyb60p0.js:3669842). The other is jeo() (chunk-bzyb60p0.js:3500401). It passes Pvt({navigation}), which returns a string that ends with a newline (chunk-bzyb60p0.js:3441838). Map.get on a missing id gives undefined, which JSON drops. The value is never null. A reader checks typeof === \"string\" (chunk-bzyb60p0.js:3448412)."
 		},
 		"user.hostClassifierContext": {
 			"schema": {
@@ -4675,14 +4675,14 @@
 				"«»=«»!==void 0?«»(«»,«»):void 0;if(«»!==void 0)if(«».length<«».length)",
 				"«»=«»(«»[0].tool_use_id),«»=«»}return{type:\"user\""
 			],
-			"note": "The only Me() caller that passes hostClassifierContext is the user-prompt code (chunk-hg1yqkjk.js:4158381). The value is Py = oy !== void 0 ? Z(oy, Yq) : void 0 (chunk-hg1yqkjk.js:4158233). oy is the join of the host classifier context entries. Yq is 2000 (chunk-hg1yqkjk.js:1335601). Z() (chunk-m55722gg.js:702) cuts the text to the limit and returns a string. It returns \"\" when the limit is 0 or less. The value is undefined when there are no entries. Me() copies the value into the message only when content is an array with exactly one tool_result (chunk-hg1yqkjk.js:5869564). Otherwise it is dropped. Readers check typeof === \"string\" (chunk-hg1yqkjk.js:2368000, chunk-hg1yqkjk.js:3403768)."
+			"note": "The only Me() caller that passes hostClassifierContext is the user-prompt code (chunk-bzyb60p0.js:4212224). The value is Py = oy !== void 0 ? Z(oy, Yq) : void 0 (chunk-bzyb60p0.js:4212076). oy is the join of the host classifier context entries. Yq is 2000 (chunk-bzyb60p0.js:1354521). Z() (chunk-7cfjrnwy.js:702) cuts the text to the limit and returns a string. It returns \"\" when the limit is 0 or less. The value is undefined when there are no entries. Me() copies the value into the message only when content is an array with exactly one tool_result (chunk-bzyb60p0.js:5931231). Otherwise it is dropped. Readers check typeof === \"string\" (chunk-bzyb60p0.js:2405760, chunk-bzyb60p0.js:3448412)."
 		},
 		"user.modelOnlyText": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["return{content:«»,...«»!==void 0&&{modelOnlyText:«»}}}"],
-			"note": "Me() writes it with ...Ee !== void 0 && {modelOnlyText: Ee} (chunk-hg1yqkjk.js:5870093). The source is rge() (chunk-hg1yqkjk.js:2469726), the compact summary builder. It returns ...u !== void 0 && {modelOnlyText: u} (chunk-hg1yqkjk.js:2471080). In 2.1.327 the local u is assigned: u = v (chunk-hg1yqkjk.js:2470825). v is the REPL-state note from replStateNote() (chunk-f1979074.js:980). The assignment runs only when the REPL flag function (chunk-ex299d27.js:10, which returns accepted) is true and replBindingsKept is defined (chunk-hg1yqkjk.js:129975). The value is a string. Callers spread ...rge(...) into Me({..., isCompactSummary: !0}) (chunk-hg1yqkjk.js:2481373, chunk-hg1yqkjk.js:2808754, chunk-hg1yqkjk.js:2816370). Other Me() callers do not pass it. Readers include chunk-x69e1gmt.js:42329."
+			"note": "Me() writes it with ...Ee !== void 0 && {modelOnlyText: Ee} (chunk-bzyb60p0.js:5931760). The source is rge() (chunk-bzyb60p0.js:2508180), the compact summary builder. It returns ...u !== void 0 && {modelOnlyText: u} (chunk-bzyb60p0.js:2509534). In 2.1.327 the local u is assigned: u = v (chunk-bzyb60p0.js:2509279). v is the REPL-state note from replStateNote() (chunk-s21rfs5b.js:980). The assignment runs only when the REPL flag function (chunk-r3kja8v6.js:10, which returns accepted) is true and replBindingsKept is defined (chunk-bzyb60p0.js:131995). The value is a string. Callers spread ...rge(...) into Me({..., isCompactSummary: !0}) (chunk-bzyb60p0.js:2520616, chunk-bzyb60p0.js:2850699, chunk-bzyb60p0.js:2858318). Other Me() callers do not pass it. Readers include chunk-zprqxvft.js:42596."
 		},
 		"user.permissionDecision": {
 			"schema": {
@@ -4850,7 +4850,7 @@
 				"«»=new Set([...«»,...«»,...«»,...«»]);function «»(«»){return «»!==void 0&&«».has(«»)?",
 				":«»?.recorded?.grantScope??(«»?.outcome.behavior===\"allow\"?«».outcome.grantScope:void 0)"
 			],
-			"note": "s9r(messages,toolUseId,record) assigns the record built by PU(decision,source,ctx), stored by EY. Callers: PU('cancelled','server_fallback_tombstone'|'user_abort'), PU('reject','invalid_input'|'permission_updated_input_invalid'), LOn (reject, source from Rst), Cst (decision/source from the recorded tool decision or IOn). source: Rst/IOn give user_temporary, user_permanent, user_reject, hook, config, user_abort; the recorded tool decision source (aYr) gives classifier, hook, user_permanent, user_temporary, user_abort, user_reject, unknown, or config. reasonType: decisionReason.type; the program's exhaustive switch (bIe) lists these 11 types. grantScope: 'once' or 'session' (the helper Mut returns always/session/once, and 'always' is filtered out both for the recorded scope and the outcome scope). circuitBreaker: a key of the safety-check table (checked with Object.hasOwn), 9 keys. classifierCategory: only for classifier reasons, and only if the category is in the closed set the filter XL tests, the union of four name lists (KJs+T4r+JBo+_7n in 2.1.323, 92 names). reasonCode: string built by zne (e.g. 'rule:<source>', 'mode:<mode>', 'hook:<name>', 'classifier:auto-mode', 'subcommands:a+b', 'unknown', 'subcommandResults'), open set. ruleSource: a permission rule source string (e.g. userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, session, command, toolsNarrowing); the full set is not closed in the code I read, so it is typed string. Keys other than decision and source are omitted when undefined. Matches the observed object. Read at chunk-hg1yqkjk.js:5887737 and chunk-hg1yqkjk.js:4891925 and chunk-hg1yqkjk.js:3941580 and chunk-hg1yqkjk.js:3880594 and chunk-hg1yqkjk.js:1685648 and chunk-hg1yqkjk.js:3941272."
+			"note": "s9r(messages,toolUseId,record) assigns the record built by PU(decision,source,ctx), stored by EY. Callers: PU('cancelled','server_fallback_tombstone'|'user_abort'), PU('reject','invalid_input'|'permission_updated_input_invalid'), LOn (reject, source from Rst), Cst (decision/source from the recorded tool decision or IOn). source: Rst/IOn give user_temporary, user_permanent, user_reject, hook, config, user_abort; the recorded tool decision source (aYr) gives classifier, hook, user_permanent, user_temporary, user_abort, user_reject, unknown, or config. reasonType: decisionReason.type; the program's exhaustive switch (bIe) lists these 11 types. grantScope: 'once' or 'session' (the helper Mut returns always/session/once, and 'always' is filtered out both for the recorded scope and the outcome scope). circuitBreaker: a key of the safety-check table (checked with Object.hasOwn), 9 keys. classifierCategory: only for classifier reasons, and only if the category is in the closed set the filter XL tests, the union of four name lists (KJs+T4r+JBo+_7n in 2.1.323, 92 names). reasonCode: string built by zne (e.g. 'rule:<source>', 'mode:<mode>', 'hook:<name>', 'classifier:auto-mode', 'subcommands:a+b', 'unknown', 'subcommandResults'), open set. ruleSource: a permission rule source string (e.g. userSettings, projectSettings, localSettings, flagSettings, policySettings, cliArg, session, command, toolsNarrowing); the full set is not closed in the code I read, so it is typed string. Keys other than decision and source are omitted when undefined. Matches the observed object. Read at chunk-bzyb60p0.js:5887737 and chunk-bzyb60p0.js:4891925 and chunk-bzyb60p0.js:3993041 and chunk-bzyb60p0.js:3929864 and chunk-bzyb60p0.js:1712537 and chunk-bzyb60p0.js:3992733."
 		},
 		"user.refusedMessageId": {
 			"schema": {
@@ -4889,7 +4889,7 @@
 			"anchors": [
 				"usageLimitNote:«»,replacesSpan:«»,isVisibleInTranscriptOnly:«»"
 			],
-			"note": "Me() (chunk-hg1yqkjk.js:5868661) is the only writer. It takes replacesSpan as a parameter and puts it in the returned literal (chunk-hg1yqkjk.js:5869900). No Me() call site passes it, so the program never writes it. Readers test === !0 (chunk-aq3ms068.js:609894, chunk-aq3ms068.js:615841, chunk-aq3ms068.js:617707). A boolean is implied only by the readers and is unconfirmed. The program never writes it, so no value is valid."
+			"note": "Me() (chunk-bzyb60p0.js:5930328) is the only writer. It takes replacesSpan as a parameter and puts it in the returned literal (chunk-bzyb60p0.js:5931567). No Me() call site passes it, so the program never writes it. Readers test === !0 (chunk-865at33z.js:615569, chunk-865at33z.js:621516, chunk-865at33z.js:623382). A boolean is implied only by the readers and is unconfirmed. The program never writes it, so no value is valid."
 		},
 		"user.serverClassifierContext": {
 			"schema": {
@@ -5189,7 +5189,7 @@
 				"kind:\"tool-mark-address\",cuts:",
 				"cut:{kind:\"laptop-account-memory\",cuts:"
 			],
-			"note": "Non-negative integer count. The tool-mark-address cut (chunk-hg1yqkjk.js:293926) passes the count from the mark-address cutter (chunk-g4jweshk.js:432902), which counts with t+=+!!n(r) (chunk-b8e2yqms.js:248). The laptop-account-memory cut (chunk-zs9k1w9q.js:1623555) passes the hits counter, which grows by m.length-1 (chunk-nfgxf4fp.js:3817)."
+			"note": "Non-negative integer count. The tool-mark-address cut (chunk-bzyb60p0.js:305762) passes the count from the mark-address cutter (chunk-sjqze7qg.js:438000), which counts with t+=+!!n(r) (chunk-4smdap7r.js:248). The laptop-account-memory cut (chunk-3pqaw3hv.js:1655605) passes the hits counter, which grows by m.length-1 (chunk-p90h0hwy.js:3817)."
 		},
 		"api-request.cut.placeholders": {
 			"schema": {
@@ -5200,7 +5200,7 @@
 				"cuts:«»,placeholders:«»,messages:",
 				"cut:{kind:\"laptop-account-memory\",cuts:"
 			],
-			"note": "Non-negative integer count. chunk-hg1yqkjk.js:293951 reuses the cut count; chunk-zs9k1w9q.js:1623555 passes a counter that only grows with placeholders++ (chunk-zs9k1w9q.js:1624604)."
+			"note": "Non-negative integer count. chunk-bzyb60p0.js:305787 reuses the cut count; chunk-3pqaw3hv.js:1655605 passes a counter that only grows with placeholders++ (chunk-3pqaw3hv.js:1656654)."
 		},
 		"api-request.cut.messages": {
 			"schema": {
@@ -5214,7 +5214,7 @@
 				"messages:«»?.messages??[]}:void 0",
 				"messages:«».flatMap((«»,«»)=>«»>0?[«»]:[])"
 			],
-			"note": "Message indices. chunk-hg1yqkjk.js:293975 uses the cutter messages or []; the cutter builds them with flatMap((u,h)=>u>0?[h]:[]) (chunk-g4jweshk.js:403480), so each item is an array index. chunk-zs9k1w9q.js:1623555 collects row indices."
+			"note": "Message indices. chunk-bzyb60p0.js:305811 uses the cutter messages or []; the cutter builds them with flatMap((u,h)=>u>0?[h]:[]) (chunk-sjqze7qg.js:408487), so each item is an array index. chunk-3pqaw3hv.js:1655605 collects row indices."
 		},
 		"api-request.cut.markAddresses": {
 			"schema": {
@@ -5222,7 +5222,7 @@
 				"exclusiveMinimum": 0
 			},
 			"anchors": ["...«»>0&&{markAddresses:«»}"],
-			"note": "Integer count, written only when it is above 0 (chunk-hg1yqkjk.js:285493)."
+			"note": "Integer count, written only when it is above 0 (chunk-bzyb60p0.js:288664)."
 		},
 		"assistant.madeBy": {
 			"schema": {
@@ -5233,7 +5233,7 @@
 				"{...«»,madeBy:\"input\"}",
 				".madeBy=\"model\""
 			],
-			"note": "Three literal writers: model reply (chunk-dn6qb495.js:721), other (chunk-gq6gxhzd.js:44572), input for local_command rows (chunk-614w915w.js:209187). A pass-through copies an existing value."
+			"note": "Three literal writers: model reply (chunk-7f901c6t.js:721), other (chunk-0kge9n63.js:46191), input for local_command rows (chunk-a0tz781a.js:218811). A pass-through copies an existing value."
 		},
 		"assistant.apiErrorType": {
 			"schema": {
@@ -5244,14 +5244,14 @@
 				"if(«»!==void 0)«».apiErrorType=«»",
 				"let «»=«».error?.error?.type;return typeof «»===\"string\"&&«».test(«»)?«»:void 0}"
 			],
-			"note": "Set only at chunk-hg1yqkjk.js:2119973 from the helper at chunk-aq3ms068.js:239368, which returns e.error.error.type only if it is a string that matches /^[a-z][a-z0-9_]{0,63}$/."
+			"note": "Set only at chunk-bzyb60p0.js:2145775 from the helper at chunk-865at33z.js:240314, which returns e.error.error.type only if it is a string that matches /^[a-z][a-z0-9_]{0,63}$/."
 		},
 		"assistant.requestNotRecorded": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["return{requestRef:«»,requestNotRecorded:«»}"],
-			"note": "Built by chunk-76t3g1yn.js:297829 and spread at chunk-hg1yqkjk.js:3423845, @3339394, @3349496. The reason is the literal tool_mark_address_copy_failed or a string checked with typeof ...===\"string\"."
+			"note": "Built by chunk-gq1dr8pm.js:269571 and spread at chunk-bzyb60p0.js:3423845, @3339394, @3349496. The reason is the literal tool_mark_address_copy_failed or a string checked with typeof ...===\"string\"."
 		},
 		"assistant.requestHookChanged.what": {
 			"schema": {
@@ -5270,7 +5270,7 @@
 				"{requestHookChanged:{record:«»,what:[...«»].sort()}}",
 				".changes.add(\"answered\")"
 			],
-			"note": "Sorted set of change names. chunk-76t3g1yn.js:297266 adds body, beta-header, version-header, destination; chunk-76t3g1yn.js:345967 adds answered."
+			"note": "Sorted set of change names. chunk-gq1dr8pm.js:269008 adds body, beta-header, version-header, destination; chunk-gq1dr8pm.js:317673 adds answered."
 		},
 		"attachment.attachment.commandMode": {
 			"schema": {
@@ -5283,14 +5283,14 @@
 				]
 			},
 			"anchors": ["commandMode:«».mode,origin:"],
-			"note": "Writer chunk-hg1yqkjk.js:4103706 copies the queue mode; the queue accepts the five modes listed in A7o (chunk-dr4n033a.js:2292) and each has a literal enqueue site. The list is not proven exhaustive."
+			"note": "Writer chunk-bzyb60p0.js:4156731 copies the queue mode; the queue accepts the five modes listed in A7o (chunk-tjdnrbvx.js:2293) and each has a literal enqueue site. The list is not proven exhaustive."
 		},
 		"attachment.attachment.origin.name": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{kind:\"hook\",name:"],
-			"note": "Hook (event name, chunk-hg1yqkjk.js:4330676), plugin, skill and server origins all pass a string name."
+			"note": "Hook (event name, chunk-bzyb60p0.js:4330676), plugin, skill and server origins all pass a string name."
 		},
 		"attachment.attachment.plugin": {
 			"schema": {
@@ -5300,7 +5300,7 @@
 				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»",
 				"typeof «»===\"string\"&&{plugin:«»}"
 			],
-			"note": "plugin_note writers (chunk-aq3ms068.js:611474, chunk-1wtypf8m.js:768, @1510) spread plugin only when defined; the source keeps it only when typeof is string (chunk-aq3ms068.js:611232; chunk-5abn7kj4.js:707)."
+			"note": "plugin_note writers (chunk-865at33z.js:617149, chunk-r3y72ye0.js:767, @1510) spread plugin only when defined; the source keeps it only when typeof is string (chunk-865at33z.js:616907; chunk-1jsam4b3.js:751)."
 		},
 		"attachment.attachment.rowUuid": {
 			"schema": {
@@ -5310,14 +5310,14 @@
 				"type:\"plugin_note\",...«»!==void 0&&{plugin:«»},rowUuid:«»",
 				"{rowUuid:«».uuid,"
 			],
-			"note": "plugin_note writers (chunk-aq3ms068.js:611474, chunk-1wtypf8m.js:768, @1510) copy rowUuid, which is the user row uuid (chunk-5abn7kj4.js:3035)."
+			"note": "plugin_note writers (chunk-865at33z.js:617149, chunk-r3y72ye0.js:767, @1510) copy rowUuid, which is the user row uuid (chunk-1jsam4b3.js:3079)."
 		},
 		"attachment.attachment.content": {
 			"schema": {
 				"type": ["string", "null", "array", "object"]
 			},
 			"anchors": ["content:[...«»]"],
-			"note": "plugin_note writes array content (chunk-aq3ms068.js:611420); other attachment kinds could not all be enumerated with search, so the plain JSON union stays. Least certain entry."
+			"note": "plugin_note writes array content (chunk-865at33z.js:617095); other attachment kinds could not all be enumerated with search, so the plain JSON union stays. Least certain entry."
 		},
 		"cost-state.modelCallCostUSD": {
 			"schema": {
@@ -5328,7 +5328,7 @@
 				"...«»>0&&{modelCallCostUSD:«»}",
 				"recordModelCallCost(«»){if(Number.isFinite(«»)&&«»>=0)"
 			],
-			"note": "Written only when above 0 (chunk-hg1yqkjk.js:1293500); source is the finite non-negative sum from chunk-kgzzwvwc.js:34242."
+			"note": "Written only when above 0 (chunk-bzyb60p0.js:1312240); source is the finite non-negative sum from chunk-f9x2f6cx.js:34444."
 		},
 		"data-flow-incomplete.sessionId": {
 			"schema": {
@@ -5339,7 +5339,7 @@
 				"{type:\"data-flow-incomplete\",v:1,sessionId:«»,codes:«».lossCodes}",
 				"return{type:\"data-flow-incomplete\",v:1,sessionId:«»,codes:«»}"
 			],
-			"note": "Both writers (chunk-hg1yqkjk.js:37492 builder, which callers spread with agentId; chunk-rdeatvr4.js:71 snapshot) pass the session id string. Every record also carries codes, the loss codes."
+			"note": "Both writers (chunk-bzyb60p0.js:38261 builder, which callers spread with agentId; chunk-vs28jnx8.js:71 snapshot) pass the session id string. Every record also carries codes, the loss codes."
 		},
 		"data-flow-incomplete.codes": {
 			"schema": {
@@ -5356,7 +5356,7 @@
 				"?.lossCodes??[]]}",
 				"Number.isInteger(«»)&&«»>=1&&«»<=255?«»:1"
 			],
-			"note": "The loss codes of the data-flow gap (chunk-hg1yqkjk.js:37492 from lossCodes(agentId), chunk-rdeatvr4.js:71 from the snapshot's lossCodes). Each code is a numeric constant (chunk-kgzzwvwc.js:981: 9, 10, 11 and so on) that markIncomplete adds to a set; the line holds the set as an array. The saved-session replay (chunk-p8wkx145.js:161-163) passes the codes through a clamp that keeps only integers from 1 to 255 and replaces any other value with 1; an empty list becomes [1]."
+			"note": "The loss codes of the data-flow gap (chunk-bzyb60p0.js:38261 from lossCodes(agentId), chunk-vs28jnx8.js:71 from the snapshot's lossCodes). Each code is a numeric constant (chunk-f9x2f6cx.js:990: 9, 10, 11 and so on) that markIncomplete adds to a set; the line holds the set as an array. The saved-session replay (chunk-01eypw0a.js:161-163) passes the codes through a clamp that keeps only integers from 1 to 255 and replaces any other value with 1; an empty list becomes [1]."
 		},
 		"system.retryInMs": {
 			"schema": {
@@ -5365,7 +5365,7 @@
 			"anchors": [
 				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:«»"
 			],
-			"note": "The api_error writer takes the delay as a parameter (chunk-hg1yqkjk.js:116719, parameter a2)."
+			"note": "The api_error writer takes the delay as a parameter (chunk-bzyb60p0.js:117926, parameter a2)."
 		},
 		"system.source": {
 			"schema": {
@@ -5374,14 +5374,14 @@
 			"anchors": [
 				"subtype:\"api_error\",level:\"error\",error:«»,retryInMs:«»,retryAttempt:«»,maxRetries:«»,source:«»"
 			],
-			"note": "The api_error writer takes the source as a parameter (chunk-hg1yqkjk.js:116719, parameter a5). Callers pass \"request_retry\" (chunk-hg1yqkjk.js:159399, 159563, 160066) or \"connection_retry\" (chunk-hg1yqkjk.js:169701)."
+			"note": "The api_error writer takes the source as a parameter (chunk-bzyb60p0.js:117926, parameter a5). Callers pass \"request_retry\" (chunk-bzyb60p0.js:161672, 159563, 160066) or \"connection_retry\" (chunk-bzyb60p0.js:172003)."
 		},
 		"data-flow-incomplete.agentId": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{...«»(«»,«»),agentId:«»}", "...«»(«»,«»),...«»}"],
-			"note": "Two callers spread the builder record (chunk-hg1yqkjk.js:37492) and add the agent id: one writes agentId: c1 (chunk-hg1yqkjk.js:30964), the other spreads an object that carries it (chunk-hg1yqkjk.js:32743). The main-loop record has no agentId."
+			"note": "Two callers spread the builder record (chunk-bzyb60p0.js:38261) and add the agent id: one writes agentId: c1 (chunk-bzyb60p0.js:31737), the other spreads an object that carries it (chunk-bzyb60p0.js:33532). The main-loop record has no agentId."
 		},
 		"assistant.refusedToolUseIds": {
 			"schema": {
@@ -5393,7 +5393,7 @@
 			"anchors": [
 				"healsDistinctCarrier=!0,«»!==void 0)«».refusedToolUseIds=«»"
 			],
-			"note": "The tool use ids of the refused tool calls (chunk-hg1yqkjk.js:295028, built from toolUseIds at chunk-hg1yqkjk.js:167126). The program reads it back at chunk-hg1yqkjk.js:297336."
+			"note": "The tool use ids of the refused tool calls (chunk-bzyb60p0.js:298291, built from toolUseIds at chunk-bzyb60p0.js:169414). The program reads it back at chunk-bzyb60p0.js:300670."
 		},
 		"data-flow-records.sessionId": {
 			"schema": {
@@ -5406,7 +5406,7 @@
 				"[{type:\"data-flow-records\",v:1,sessionId:«»,records:«»}]",
 				"{type:\"data-flow-records\",v:1,sessionId:«»,records:[...«».records],snapshot:!0}"
 			],
-			"note": "Each of the five writers (chunk-hg1yqkjk.js:516381, @502640, @528791, @614417; chunk-rdeatvr4.js:1574) passes the session id string."
+			"note": "Each of the five writers (chunk-bzyb60p0.js:529272, @502640, @528791, @614417; chunk-vs28jnx8.js:1574) passes the session id string."
 		},
 		"data-flow-records.agentId": {
 			"schema": {
@@ -5418,7 +5418,7 @@
 				"if(«»!==\"\"&&(«».owed>0||«».lossCodes.size>0))",
 				"«»=«»===void 0?{}:{agentId:«»}"
 			],
-			"note": "Key from agentsOwing(), kept only when non-empty (chunk-kgzzwvwc.js:29346), or an id that passed o0's /^[\\w-]{1,128}$/ in g0t (chunk-f0jgxfa3.js:2180)."
+			"note": "Key from agentsOwing(), kept only when non-empty (chunk-f9x2f6cx.js:29485), or an id that passed o0's /^[\\w-]{1,128}$/ in g0t (chunk-hsqa3g9e.js:2180)."
 		},
 		"data-flow-records.records": {
 			"schema": {
@@ -5812,7 +5812,7 @@
 				"if(«».response_id!==void 0)return «»(«».response_id)?{response_id:",
 				"recordScriptCall(«»,«»,«»,«»={}){"
 			],
-			"note": "Each writer (chunk-hg1yqkjk.js:516381, @502640, @528791, @614417; chunk-rdeatvr4.js:1574) passes an array from takeRecordsForEntry (chunk-kgzzwvwc.js:27656). An item is a response marker {response_id, listed?, mark_sent_by?} (chunk-kgzzwvwc.js:27052) or a call record from recordCall, recordEvent, recordScriptCall, or recordTouch (chunk-kgzzwvwc.js:23943 to @25600). The reader Hsi (chunk-p8wkx145.js:791) keeps only these shapes: ids pass yce, a string of 1 to 256 characters with no control character (chunk-be81kym3.js:19131); response ids match /^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$/; inner_call_index is a safe integer from 0 below 2147483648; server passes Mls (chunk-be81kym3.js:18642) or is {type:\"unknown\"} (chunk-xpxp0jg6.js:19509); a call record has tool_use_id or event_id."
+			"note": "Each writer (chunk-bzyb60p0.js:529272, @502640, @528791, @614417; chunk-vs28jnx8.js:1574) passes an array from takeRecordsForEntry (chunk-f9x2f6cx.js:27790). An item is a response marker {response_id, listed?, mark_sent_by?} (chunk-f9x2f6cx.js:27186) or a call record from recordCall, recordEvent, recordScriptCall, or recordTouch (chunk-f9x2f6cx.js:24076 to @25600). The reader Hsi (chunk-01eypw0a.js:793) keeps only these shapes: ids pass yce, a string of 1 to 256 characters with no control character (chunk-px0hhsq7.js:19170); response ids match /^msg_(?:staging_|local_)?[A-Za-z0-9]{1,64}$/; inner_call_index is a safe integer from 0 below 2147483648; server passes Mls (chunk-px0hhsq7.js:18681) or is {type:\"unknown\"} (chunk-1ek4hhs6.js:19644); a call record has tool_use_id or event_id."
 		},
 		"derived-from.sessionId": {
 			"schema": {
@@ -5824,7 +5824,7 @@
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:«»(",
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\""
 			],
-			"note": "Each of the four writers (chunk-hg1yqkjk.js:523672, @528099; chunk-rdeatvr4.js:1829; chunk-gq6gxhzd.js:51124) passes the session id string."
+			"note": "Each of the four writers (chunk-bzyb60p0.js:536566, @528099; chunk-vs28jnx8.js:1829; chunk-0kge9n63.js:52743) passes the session id string."
 		},
 		"derived-from.sessions": {
 			"schema": {
@@ -5882,7 +5882,7 @@
 				"{type:\"derived-from\",v:1,sessionId:«»,sessions:[{type:\"unknown\"",
 				"let «»=«».find((«»)=>«»===«».type),«»=«».find((«»)=>«»===«».via);"
 			],
-			"note": "Array of source objects at each writer (chunk-hg1yqkjk.js:523672, @528099; chunk-rdeatvr4.js:1829), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-gq6gxhzd.js:51124). The reader F (chunk-p8wkx145.js:2212) keeps only an item whose type is in [\"claude_code_session\",\"unknown\"] and whose via is in the 12 values of gil (chunk-kgzzwvwc.js:22744); id is a yce string, or null for type unknown; started is an optional yce string. The writer helper _F builds {type:\"claude_code_session\",id,via}."
+			"note": "Array of source objects at each writer (chunk-bzyb60p0.js:536566, @528099; chunk-vs28jnx8.js:1829), for example {type:\"unknown\",id:null,via:\"import\"} (chunk-0kge9n63.js:52743). The reader F (chunk-01eypw0a.js:2214) keeps only an item whose type is in [\"claude_code_session\",\"unknown\"] and whose via is in the 12 values of gil (chunk-f9x2f6cx.js:22869); id is a yce string, or null for type unknown; started is an optional yce string. The writer helper _F builds {type:\"claude_code_session\",id,via}."
 		},
 		"last-prompt.explicit": {
 			"schema": {
@@ -5893,7 +5893,7 @@
 				"...«»&&{explicit:«»}",
 				"type:\"last-prompt\",sessionId:«»,leafUuid:«»,explicit:!0}"
 			],
-			"note": "Every writer passes explicit:!0 (chunk-hg1yqkjk.js:565651, @543980, @544000; chunk-zs9k1w9q.js:77479, @1622035)."
+			"note": "Every writer passes explicit:!0 (chunk-bzyb60p0.js:579097, @543980, @544000; chunk-3pqaw3hv.js:79316, @1622035)."
 		},
 		"observer-ref.observerTaskIds": {
 			"schema": {
@@ -5903,7 +5903,7 @@
 				}
 			},
 			"anchors": ["...«».size>1&&{observerTaskIds:Object.fromEntries(«»)}"],
-			"note": "Object.fromEntries of a map from observerAgentType to observerTaskId (chunk-gnvwad7j.js:18870)."
+			"note": "Object.fromEntries of a map from observerAgentType to observerTaskId (chunk-41appe38.js:18491)."
 		},
 		"resume-head-vouch.sessionId": {
 			"schema": {
@@ -5912,7 +5912,7 @@
 			"anchors": [
 				"{type:\"resume-head-vouch\",sessionId:«»(«»,\".jsonl\"),sum:«»}"
 			],
-			"note": "Basename of the transcript file without .jsonl (chunk-hg1yqkjk.js:670648)."
+			"note": "Basename of the transcript file without .jsonl (chunk-bzyb60p0.js:683728)."
 		},
 		"resume-head-vouch.sum": {
 			"schema": {
@@ -5922,28 +5922,28 @@
 				"{type:\"resume-head-vouch\",sessionId:«»(«»,\".jsonl\"),sum:«»}",
 				"typeof «».sum===\"string\""
 			],
-			"note": "The writer (chunk-hg1yqkjk.js:670648) passes the head sum, a 64-character latin1 string (chunk-hg1yqkjk.js:407732); the reader (chunk-hg1yqkjk.js:667043) only accepts typeof string."
+			"note": "The writer (chunk-bzyb60p0.js:683728) passes the head sum, a 64-character latin1 string (chunk-bzyb60p0.js:419690); the reader (chunk-bzyb60p0.js:680123) only accepts typeof string."
 		},
 		"session-owner.sessionId": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{type:\"session-owner\",...«»,sessionId:"],
-			"note": "Session id string (chunk-hg1yqkjk.js:522027, @621501)."
+			"note": "Session id string (chunk-bzyb60p0.js:534921, @621501)."
 		},
 		"session-owner.accountUuid": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{accountUuid:«»,organizationUuid:«»}"],
-			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-0v6g5ynk.js:1668 returns it only if both values are truthy strings."
+			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-3t7ve0wy.js:1668 returns it only if both values are truthy strings."
 		},
 		"session-owner.organizationUuid": {
 			"schema": {
 				"type": "string"
 			},
 			"anchors": ["{accountUuid:«»,organizationUuid:«»}"],
-			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-0v6g5ynk.js:1668 returns it only if both values are truthy strings."
+			"note": "Owner from the bridge owner env variables or the account profile; the function at chunk-3t7ve0wy.js:1668 returns it only if both values are truthy strings."
 		},
 		"system.apiRefusalCyberVerification": {
 			"schema": {
@@ -5965,7 +5965,7 @@
 				"...«»!==void 0&&{apiRefusalCyberVerification:«»}",
 				"cyber_verification:«»({type:«»(),tier:«»().optional(),reason:«»().optional()})"
 			],
-			"note": "Parsed from stop_details.cyber_verification by the zod object at chunk-hg1yqkjk.js:2898056 and written at @2933738, @3320655, @3354602."
+			"note": "Parsed from stop_details.cyber_verification by the zod object at chunk-bzyb60p0.js:2940621 and written at @2933738, @3320655, @3354602."
 		},
 		"system.isDisplayOnly": {
 			"schema": {
@@ -5975,7 +5975,7 @@
 				"...«»?.isDisplayOnly!==void 0&&{isDisplayOnly:«».isDisplayOnly}",
 				"isDisplayOnly:«»?.display===\"displayOnly\"?!0:void 0"
 			],
-			"note": "Literal true. The builder copies it when defined (chunk-hg1yqkjk.js:6046058); the sources set !0 or undefined (chunk-6tydfzhc.js:33259, chunk-zs9k1w9q.js:1813854)."
+			"note": "Literal true. The builder copies it when defined (chunk-bzyb60p0.js:6110133); the sources set !0 or undefined (chunk-6appcq3a.js:33259, chunk-3pqaw3hv.js:1846599)."
 		},
 		"tools-used.tools": {
 			"schema": {
@@ -5994,7 +5994,7 @@
 				"var «»=/^[A-Za-z0-9_.:-]{1,256}$/,",
 				"function «»(«»){return «».test(«»)?«»:«»}"
 			],
-			"note": "Each writer (chunk-hg1yqkjk.js:523131, @527575; chunk-rdeatvr4.js:5387, @7780; chunk-gq6gxhzd.js:51247) passes tool names. xO (chunk-kgzzwvwc.js:21857) keeps a name only if it matches /^[A-Za-z0-9_.:-]{1,256}$/, else it uses a fixed non-empty constant."
+			"note": "Each writer (chunk-bzyb60p0.js:536025, @527575; chunk-vs28jnx8.js:5387, @7780; chunk-0kge9n63.js:52866) passes tool names. xO (chunk-f9x2f6cx.js:21981) keeps a name only if it matches /^[A-Za-z0-9_.:-]{1,256}$/, else it uses a fixed non-empty constant."
 		},
 		"tools-used.sessionId": {
 			"schema": {
@@ -6007,7 +6007,7 @@
 				"{type:\"tools-used\",sessionId:«»,tools:[...«».toolsUsedAtEntry]}",
 				"{type:\"tools-used\",tools:«»(«»),sessionId:«»}"
 			],
-			"note": "Each of the five writers (chunk-hg1yqkjk.js:523131, @527575; chunk-rdeatvr4.js:5387, @7780; chunk-gq6gxhzd.js:51247) passes the session id string."
+			"note": "Each of the five writers (chunk-bzyb60p0.js:536025, @527575; chunk-vs28jnx8.js:5387, @7780; chunk-0kge9n63.js:52866) passes the session id string."
 		},
 		"worktree-state.worktreeSession.extensionRoot": {
 			"schema": {
@@ -6018,7 +6018,7 @@
 				"if(«»&&«»)«».extensionRoot=«»;",
 				"{originalCwd:«»(«»),projectRoot:«»(«»),cwd:«»(«»)}"
 			],
-			"note": "Copied from the worktree session (chunk-hg1yqkjk.js:648044). Set at chunk-b2932m4d.js:161110 from Wo(), which returns a projectRoot (chunk-kgzzwvwc.js:106145). Each projectRoot is built with yn(r) (chunk-kgzzwvwc.js:72032), and yn returns t.normalize(\"NFC\"), a string (chunk-ca90c7br.js:3657)."
+			"note": "Copied from the worktree session (chunk-bzyb60p0.js:661124). Set at chunk-aw5nczax.js:158341 from Wo(), which returns a projectRoot (chunk-f9x2f6cx.js:100582). Each projectRoot is built with yn(r) (chunk-f9x2f6cx.js:66158), and yn returns t.normalize(\"NFC\"), a string (chunk-z6pfqf6e.js:3657)."
 		},
 		"user.invokedSkill": {
 			"schema": {
@@ -6037,7 +6037,7 @@
 				"...«»!==void 0&&{invokedSkill:«»}",
 				"invokedSkill:{name:«».name,path:"
 			],
-			"note": "Writer chunk-6tydfzhc.js:50642; path is source:name or name. Builder spread at chunk-hg1yqkjk.js:5886212."
+			"note": "Writer chunk-6appcq3a.js:50642; path is source:name or name. Builder spread at chunk-bzyb60p0.js:5886212."
 		},
 		"user.toolDenialAfterRun": {
 			"schema": {
@@ -6047,21 +6047,21 @@
 				".toolDenialAfterRun=!0",
 				"toolDenialAfterRun:«».toolDenialKind!==void 0?«».executed:void 0"
 			],
-			"note": "Literal true. chunk-hg1yqkjk.js:3919923 sets .toolDenialAfterRun=!0; chunk-xgav7f9x.js:248940 copies executed, which the program only sets to !0."
+			"note": "Literal true. chunk-bzyb60p0.js:3971056 sets .toolDenialAfterRun=!0; chunk-v7j43e2p.js:255844 copies executed, which the program only sets to !0."
 		},
 		"user.toolDenialBeforeRun": {
 			"schema": {
 				"const": true
 			},
 			"anchors": ["toolDenialBeforeRun:«»?!0:void 0"],
-			"note": "Literal true or undefined (chunk-wm04tzdx.js:85948)."
+			"note": "Literal true or undefined (chunk-k5r71ad2.js:91411)."
 		},
 		"user.toolDenialFromHost": {
 			"schema": {
 				"const": true
 			},
 			"anchors": ["toolDenialFromHost:«»!==void 0?!0:void 0"],
-			"note": "Literal true or undefined (chunk-nn6g94rm.js:118999)."
+			"note": "Literal true or undefined (chunk-cxmtqdes.js:120129)."
 		},
 		"user.toolResultTypedCommand": {
 			"schema": {
@@ -6071,7 +6071,7 @@
 				"toolResultTypedCommand:«».typedCommand",
 				"...«»&&{toolResultTypedCommand:«»}"
 			],
-			"note": "typedCommand is a string or undefined (chunk-hg1yqkjk.js:4134312); the builder spreads it only when truthy (chunk-hg1yqkjk.js:5887702)."
+			"note": "typedCommand is a string or undefined (chunk-bzyb60p0.js:4187735); the builder spreads it only when truthy (chunk-bzyb60p0.js:5887702)."
 		},
 		"user.mcpCallNotReadOnly": {
 			"schema": {
@@ -6081,7 +6081,7 @@
 				"readOnlyHint===!1?\"declared\":\"no_hint\"",
 				"...«»!==void 0&&{mcpCallNotReadOnly:«»}"
 			],
-			"note": "The writer returns undefined or one of the two literals (chunk-bxxahqqj.js:19441); the builder spreads it only when defined (chunk-hg1yqkjk.js:5887914)."
+			"note": "The writer returns undefined or one of the two literals (chunk-4vsz8a99.js:19377); the builder spreads it only when defined (chunk-bzyb60p0.js:5887914)."
 		},
 		"user.holdsPersonsWords": {
 			"schema": {
@@ -6092,7 +6092,7 @@
 				"holdsPersonsWords:«»(«»,«»)!==void 0?!0:void 0",
 				"...«»&&{holdsPersonsWords:«»}"
 			],
-			"note": "Literal true or undefined at every writer (chunk-hg1yqkjk.js:4867224, @4778103, @4787064; chunk-f00gew3e.js:92165); the builder spreads it only when truthy (chunk-hg1yqkjk.js:5887954)."
+			"note": "Literal true or undefined at every writer (chunk-bzyb60p0.js:4927383, @4778103, @4787064; chunk-knp99ee7.js:92165); the builder spreads it only when truthy (chunk-bzyb60p0.js:5887954)."
 		},
 		"api-request.withheld": {
 			"schema": {
@@ -6105,7 +6105,7 @@
 				"...«».length>0&&{withheld:«»}",
 				"if(«»!==\"system\"&&«»!==\"tools\"&&«»!==\"messages\"&&«»(Reflect.get(«».params,«»))===«»(«»)){«».push(«»);continue}"
 			],
-			"note": "The request recorder bXt() (chunk-hg1yqkjk.js:291445) writes withheld only when its list has items (chunk-hg1yqkjk.js:294195). The loop over Object.entries(e.readInjectedBody()) is at chunk-hg1yqkjk.js:292440. It pushes a key (chunk-hg1yqkjk.js:284295) when the key is not in the set DEe (chunk-hg1yqkjk.js:298104), is not system, tools or messages, and the request parameter equals the injected value. The injected body comes from CLAUDE_CODE_EXTRA_BODY. The recorder removes the pushed keys from the recorded parameters. Each item is a parameter name string."
+			"note": "The request recorder bXt() (chunk-bzyb60p0.js:291445) writes withheld only when its list has items (chunk-bzyb60p0.js:297459). The loop over Object.entries(e.readInjectedBody()) is at chunk-bzyb60p0.js:304276. It pushes a key (chunk-bzyb60p0.js:287466) when the key is not in the set DEe (chunk-bzyb60p0.js:301467), is not system, tools or messages, and the request parameter equals the injected value. The injected body comes from CLAUDE_CODE_EXTRA_BODY. The recorder removes the pushed keys from the recorded parameters. Each item is a parameter name string."
 		},
 		"api-request.cacheControl": {
 			"schema": {
@@ -6136,7 +6136,7 @@
 				"cacheControl:«»,...«»===void 0?{requestDigest:«»}",
 				"if(«»===\"cache_control\")«».push({path:«»,value:«»})"
 			],
-			"note": "The recorder bXt() (chunk-hg1yqkjk.js:283144) writes cacheControl:Ee (chunk-hg1yqkjk.js:286003). It fills the list with zse(node, path, list) for the system prompt (chunk-hg1yqkjk.js:285103), for the tools, and for each message that has a cache_control marker. zse() (chunk-hg1yqkjk.js:295001) pushes {path, value} for each key named cache_control. It does not look inside that value. The path starts with \"system\", \"tools\" or \"messages\". It holds object keys (strings) and array indexes (integers). The value is the cache_control value as the request holds it, so its type is not narrowed."
+			"note": "The recorder bXt() (chunk-bzyb60p0.js:286315) writes cacheControl:Ee (chunk-bzyb60p0.js:289186). It fills the list with zse(node, path, list) for the system prompt (chunk-bzyb60p0.js:288274), for the tools, and for each message that has a cache_control marker. zse() (chunk-bzyb60p0.js:306837) pushes {path, value} for each key named cache_control. It does not look inside that value. The path starts with \"system\", \"tools\" or \"messages\". It holds object keys (strings) and array indexes (integers). The value is the cache_control value as the request holds it, so its type is not narrowed."
 		},
 		"attachment.rendered": {
 			"schema": {
@@ -6178,7 +6178,7 @@
 				"function «»(«»){return «».length>0&&«».every(«»)?«».map((«»)=>({content:«».message.content})):void 0}",
 				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}"
 			],
-			"note": "I_n(attachment) (chunk-hg1yqkjk.js:6016381) builds the rendered fields from the messages that the attachment turns into. gjt() (chunk-hg1yqkjk.js:6000691) keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. rendered is gjt(DAe(attachment)) (DAe() at chunk-hg1yqkjk.js:6020930). I_n() is called at chunk-hg1yqkjk.js:5204834, chunk-hg1yqkjk.js:6000979, chunk-hg1yqkjk.js:6001153 and chunk-c12hjxnt.js:28580."
+			"note": "I_n(attachment) (chunk-bzyb60p0.js:6016381) builds the rendered fields from the messages that the attachment turns into. gjt() (chunk-bzyb60p0.js:6064714) keeps them only when every message content is a string or an array of text blocks, and writes each as {content: message.content}. gjt() returns nothing for an empty list, so an array has at least one item. rendered is gjt(DAe(attachment)) (DAe() at chunk-bzyb60p0.js:6084953). I_n() is called at chunk-bzyb60p0.js:5264292, chunk-bzyb60p0.js:6065002, chunk-bzyb60p0.js:6065176 and chunk-1sac4rm7.js:29555."
 		},
 		"attachment.renderedWithdrawn": {
 			"schema": {
@@ -6221,7 +6221,7 @@
 				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}",
 				"{rendered:«»,renderedWithdrawn:«»(«»(«»(«»))),renderedRole:«»}"
 			],
-			"note": "I_n(attachment) (chunk-hg1yqkjk.js:5999861) builds the rendered fields. gjt() (chunk-hg1yqkjk.js:6000691) keeps them only when every message content is a string or an array of text blocks. It writes each as {content: message.content}. It returns nothing for an empty list, so an array has at least one item. renderedWithdrawn is written only for a file attachment with overTokenLimit true: return {rendered: u, renderedWithdrawn: gjt(DAe(TKo(e))), ...} (chunk-hg1yqkjk.js:6000322). In 2.1.327 no write reaches it. The one literal that sets overTokenLimit is ...st && {overTokenLimit: !0} (chunk-hg1yqkjk.js:5177792) in zdo() (chunk-hg1yqkjk.js:5176312). It needs a context budget, and the caller passes the budget only for a prefetched file buffer in the jlo session set (chunk-hg1yqkjk.js:5174210). jlo is created at chunk-hg1yqkjk.js:5123168 and is read only with peek(). peek() (chunk-gn0dtfqq.js:24) never creates the set, and nothing calls jlo.of(). So no buffer is ever in the set."
+			"note": "I_n(attachment) (chunk-bzyb60p0.js:6063884) builds the rendered fields. gjt() (chunk-bzyb60p0.js:6064714) keeps them only when every message content is a string or an array of text blocks. It writes each as {content: message.content}. It returns nothing for an empty list, so an array has at least one item. renderedWithdrawn is written only for a file attachment with overTokenLimit true: return {rendered: u, renderedWithdrawn: gjt(DAe(TKo(e))), ...} (chunk-bzyb60p0.js:6064345). In 2.1.327 no write reaches it. The one literal that sets overTokenLimit is ...st && {overTokenLimit: !0} (chunk-bzyb60p0.js:5236870) in zdo() (chunk-bzyb60p0.js:5235390). It needs a context budget, and the caller passes the budget only for a prefetched file buffer in the jlo session set (chunk-bzyb60p0.js:5233288). jlo is created at chunk-bzyb60p0.js:5181642 and is read only with peek(). peek() (chunk-pzzqg6s3.js:24) never creates the set, and nothing calls jlo.of(). So no buffer is ever in the set."
 		},
 		"attachment.renderedInHumanTurn": {
 			"schema": {
@@ -6264,7 +6264,7 @@
 				"function «»(«»){let «»=«».message.content;return typeof «»===\"string\"||«».every((«»)=>«».type===\"text\")}",
 				"{rendered:«»,renderedInHumanTurn:«»,renderedRole:«»}"
 			],
-			"note": "I_n(attachment) (chunk-hg1yqkjk.js:6016381) builds the rendered fields. gjt() (chunk-hg1yqkjk.js:6000691) keeps them only when every message content is a string or an array of text blocks. It writes each as {content: message.content}. It returns nothing for an empty list, so an array has at least one item. renderedInHumanTurn is gjt(DAe(e, {inHumanTurn: !0})) (chunk-hg1yqkjk.js:6000525). It is written only for a queued_command attachment whose human-turn rendering differs from rendered."
+			"note": "I_n(attachment) (chunk-bzyb60p0.js:6016381) builds the rendered fields. gjt() (chunk-bzyb60p0.js:6064714) keeps them only when every message content is a string or an array of text blocks. It writes each as {content: message.content}. It returns nothing for an empty list, so an array has at least one item. renderedInHumanTurn is gjt(DAe(e, {inHumanTurn: !0})) (chunk-bzyb60p0.js:6064548). It is written only for a queued_command attachment whose human-turn rendering differs from rendered."
 		},
 		"system.snapshotFiles": {
 			"schema": {
@@ -6292,7 +6292,7 @@
 				"«».push({key:\"plan\",path:«»()?\"\":«»(),content:«»})",
 				"subtype:\"file_snapshot\",content:\"File snapshot\",level:\"info\",isMeta:!0,timestamp:new Date().toISOString(),uuid:«»(),snapshotFiles:«»}"
 			],
-			"note": "file_snapshot: b3r() (chunk-hg1yqkjk.js:2027388) starts with an empty list. It pushes one item {key: \"plan\", path, content} for the plan file (chunk-hg1yqkjk.js:2027548). It returns before the write when the list is empty. The literal that holds snapshotFiles is at chunk-hg1yqkjk.js:2027619. The content is the plan text. The function skips it when it is longer than 2000000 characters (ZXr, chunk-32gs4rex.js:178868). An empty plan is not pushed. path is the plan file path, or an empty string."
+			"note": "file_snapshot: b3r() (chunk-bzyb60p0.js:2051151) starts with an empty list. It pushes one item {key: \"plan\", path, content} for the plan file (chunk-bzyb60p0.js:2051311). It returns before the write when the list is empty. The literal that holds snapshotFiles is at chunk-bzyb60p0.js:2051382. The content is the plan text. The function skips it when it is longer than 2000000 characters (ZXr, chunk-p1ewvgeh.js:179209). An empty plan is not pushed. path is the plan file path, or an empty string."
 		},
 		"system.foldedUuids": {
 			"schema": {
@@ -6306,7 +6306,7 @@
 				"...«».foldedUuids?.length&&{foldedUuids:«».foldedUuids}",
 				"foldedUuids:«»}),«»(«»)]}function"
 			],
-			"note": "scheduled_task_fire: RWr() (chunk-hg1yqkjk.js:6044212) writes foldedUuids only when it has items (chunk-hg1yqkjk.js:6044604). The caller builds it as n.slice(e.fireIdx).map((T)=>T.uuid) (chunk-b4n47eq4.js:26175). It passes it to RWr() at chunk-b4n47eq4.js:26331. The items are the uuid strings of the messages that a no-op loop tick folds. The load repair rX(e, \"foldedUuids\", \"optional\") (chunk-hg1yqkjk.js:470889) keeps only strings. A reader is at chunk-h2e446cb.js:95666."
+			"note": "scheduled_task_fire: RWr() (chunk-bzyb60p0.js:6108287) writes foldedUuids only when it has items (chunk-bzyb60p0.js:6108679). The caller builds it as n.slice(e.fireIdx).map((T)=>T.uuid) (chunk-cge9tx41.js:27150). It passes it to RWr() at chunk-cge9tx41.js:27306. The items are the uuid strings of the messages that a no-op loop tick folds. The load repair rX(e, \"foldedUuids\", \"optional\") (chunk-bzyb60p0.js:483584) keeps only strings. A reader is at chunk-w3q7cmdt.js:96284."
 		},
 		"system.hookInfos": {
 			"schema": {
@@ -6332,7 +6332,7 @@
 				"let «»=«»(«».hookInfos,«»()),",
 				"«».push({command:«».command,promptText:«».promptText})"
 			],
-			"note": "stop_hook_summary: uSa() (chunk-hg1yqkjk.js:6044659) writes the line. z2e() (chunk-hg1yqkjk.js:464756) repairs it on load and keeps only valid items. Each item is {command, promptText?, durationMs?} (schema Vir, chunk-hg1yqkjk.js:464574). The Stop-hook collector pushes {command, promptText} from each hook progress message (chunk-wm04tzdx.js:129844). It never writes durationMs. When durationMs is present, the schema accepts a number."
+			"note": "stop_hook_summary: uSa() (chunk-bzyb60p0.js:6108734) writes the line. z2e() (chunk-bzyb60p0.js:477451) repairs it on load and keeps only valid items. Each item is {command, promptText?, durationMs?} (schema Vir, chunk-bzyb60p0.js:477269). The Stop-hook collector pushes {command, promptText} from each hook progress message (chunk-k5r71ad2.js:135303). It never writes durationMs. When durationMs is present, the schema accepts a number."
 		},
 		"system.hookErrors": {
 			"schema": {
@@ -6345,7 +6345,7 @@
 				"«»=«»(()=>«»()),«»=«»(()=>«»().min(1))",
 				"hookErrors:«»(«».hookErrors,«»())"
 			],
-			"note": "stop_hook_summary: uSa() (chunk-hg1yqkjk.js:6044659) writes the line. z2e() (chunk-hg1yqkjk.js:478680) repairs it on load and keeps only valid items. Each item is a string (schema Vve, chunk-hg1yqkjk.js:464654). The Stop-hook collector pushes the stderr text or an \"Exit code\" text (chunk-wm04tzdx.js:130239), the content of an error message (chunk-wm04tzdx.js:130359), or a blocking error (chunk-wm04tzdx.js:132243)."
+			"note": "stop_hook_summary: uSa() (chunk-bzyb60p0.js:6108734) writes the line. z2e() (chunk-bzyb60p0.js:491375) repairs it on load and keeps only valid items. Each item is a string (schema Vve, chunk-bzyb60p0.js:477349). The Stop-hook collector pushes the stderr text or an \"Exit code\" text (chunk-k5r71ad2.js:135698), the content of an error message (chunk-k5r71ad2.js:135818), or a blocking error (chunk-k5r71ad2.js:137702)."
 		},
 		"system.failedHookErrorIndexes": {
 			"schema": {
@@ -6359,7 +6359,7 @@
 				"«»=«»(()=>«»().int().nonnegative())",
 				"...Array.isArray(«».failedHookErrorIndexes)&&{failedHookErrorIndexes:«»(«».failedHookErrorIndexes,«»())}"
 			],
-			"note": "stop_hook_summary: uSa() (chunk-hg1yqkjk.js:6044659) writes the line. z2e() (chunk-hg1yqkjk.js:464756) repairs it on load and keeps only valid items. Each item is a non-negative integer (schema qJt, chunk-hg1yqkjk.js:464691). It is the index of an item in hookErrors. The collector pushes the current length of the error list (chunk-wm04tzdx.js:130220, chunk-wm04tzdx.js:130340)."
+			"note": "stop_hook_summary: uSa() (chunk-bzyb60p0.js:6108734) writes the line. z2e() (chunk-bzyb60p0.js:477451) repairs it on load and keeps only valid items. Each item is a non-negative integer (schema qJt, chunk-bzyb60p0.js:477386). It is the index of an item in hookErrors. The collector pushes the current length of the error list (chunk-k5r71ad2.js:135679, chunk-k5r71ad2.js:135799)."
 		},
 		"system.hookAdditionalContext": {
 			"schema": {
@@ -6372,7 +6372,7 @@
 				"«»=«»(()=>«»()),«»=«»(()=>«»().min(1))",
 				"...Array.isArray(«».hookAdditionalContext)&&{hookAdditionalContext:«»(«».hookAdditionalContext,«»())}"
 			],
-			"note": "stop_hook_summary: uSa() (chunk-hg1yqkjk.js:6044659) writes the line. z2e() (chunk-hg1yqkjk.js:478680) repairs it on load and keeps only valid items. Each item is a string (schema Vve, chunk-hg1yqkjk.js:464654). The collector pushes the additionalContexts of each hook result (chunk-wm04tzdx.js:132533)."
+			"note": "stop_hook_summary: uSa() (chunk-bzyb60p0.js:6108734) writes the line. z2e() (chunk-bzyb60p0.js:491375) repairs it on load and keeps only valid items. Each item is a string (schema Vve, chunk-bzyb60p0.js:477349). The collector pushes the additionalContexts of each hook result (chunk-k5r71ad2.js:137992)."
 		},
 		"system.compactMetadata.preCompactDiscoveredTools": {
 			"schema": {
@@ -6385,7 +6385,7 @@
 				"«».compactMetadata.preCompactDiscoveredTools=[...«»].sort()",
 				"let «»=«».compactMetadata?.preCompactDiscoveredTools;if(«»){for(let «» of «»)«».add(«»)"
 			],
-			"note": "compact_boundary: the compaction code writes the sorted list of a Set: compactMetadata.preCompactDiscoveredTools = [...set].sort() (chunk-hg1yqkjk.js:2509116, chunk-hg1yqkjk.js:2808671, chunk-hg1yqkjk.js:2815999, chunk-614w915w.js:658344). The set comes from yge() (chunk-hg1yqkjk.js:3044074), which calls zG() (chunk-hg1yqkjk.js:2778500). zG() collects names from three places: the preCompactDiscoveredTools of earlier boundaries, the surfacedNames of deferred_tools_delta attachments, and the toolName of tool_reference blocks in user messages (read with gti(), imported from chunk-0xx7r96b.js:1299). Each item is a tool name string. The load repair rX(n, \"preCompactDiscoveredTools\", \"optional\") (chunk-hg1yqkjk.js:472264) keeps only strings."
+			"note": "compact_boundary: the compaction code writes the sorted list of a Set: compactMetadata.preCompactDiscoveredTools = [...set].sort() (chunk-bzyb60p0.js:2548549, chunk-bzyb60p0.js:2850616, chunk-bzyb60p0.js:2857947, chunk-a0tz781a.js:691798). The set comes from yge() (chunk-bzyb60p0.js:3044074), which calls zG() (chunk-bzyb60p0.js:2820185). zG() collects names from three places: the preCompactDiscoveredTools of earlier boundaries, the surfacedNames of deferred_tools_delta attachments, and the toolName of tool_reference blocks in user messages (read with gti(), imported from chunk-yn71faep.js:1299). Each item is a tool name string. The load repair rX(n, \"preCompactDiscoveredTools\", \"optional\") (chunk-bzyb60p0.js:484959) keeps only strings."
 		},
 		"system.compactMetadata.preCompactArtifactReadVersions": {
 			"schema": {
@@ -6409,7 +6409,7 @@
 				"«».push({slug:«»,ver:«»})",
 				"=256;function «»(«»){let «»=«».artifactReadVersions;"
 			],
-			"note": "compact_boundary: Zpe() (chunk-hg1yqkjk.js:2347416) stores the result of Qos() (chunk-hg1yqkjk.js:2347126) with compactMetadata.preCompactArtifactReadVersions = u (chunk-hg1yqkjk.js:2347510). It does this only when agentId is undefined and emt() is true. Qos() collects {slug, ver} for each read artifact, then reverses the list and keeps at most Z_t = 256 items (chunk-hg1yqkjk.js:2347118). slug is an artifact slug and ver is its version. The readers mrs() (chunk-hg1yqkjk.js:2359825) and hrs() (chunk-hg1yqkjk.js:2360101) read both back as strings only."
+			"note": "compact_boundary: Zpe() (chunk-bzyb60p0.js:2385176) stores the result of Qos() (chunk-bzyb60p0.js:2384886) with compactMetadata.preCompactArtifactReadVersions = u (chunk-bzyb60p0.js:2385270). It does this only when agentId is undefined and emt() is true. Qos() collects {slug, ver} for each read artifact, then reverses the list and keeps at most Z_t = 256 items (chunk-bzyb60p0.js:2384878). slug is an artifact slug and ver is its version. The readers mrs() (chunk-bzyb60p0.js:2397585) and hrs() (chunk-bzyb60p0.js:2397861) read both back as strings only."
 		},
 		"system.compactMetadata.preservedMessages.uuids": {
 			"schema": {
@@ -6422,7 +6422,7 @@
 				"preservedMessages:{anchorUuid:«»,uuids:«»,allUuids:«»}",
 				"function «»(«»){return Array.isArray(«»)?«».filter((«»)=>typeof «»===\"string\"):[]}"
 			],
-			"note": "compact_boundary: U2r() (chunk-hg1yqkjk.js:2803969) writes preservedMessages:{anchorUuid, uuids, allUuids} (chunk-hg1yqkjk.js:2804183). uuids is eYn(DYe([...o], u)). DYe() (chunk-hg1yqkjk.js:734879) filters the messages with Uw() (chunk-hg1yqkjk.js:721288) and Ydr() (chunk-hg1yqkjk.js:721871). eYn() (chunk-hg1yqkjk.js:2803835) keeps the uuid of each message, in order, with the last repeat only. U2r() is called at chunk-hg1yqkjk.js:2509592, chunk-hg1yqkjk.js:3033251 and chunk-614w915w.js:658274. Trimmers at chunk-b79bvzj7.js:6749 and chunk-6dccy31z.js:72083 cut the list. Each item is a message uuid string. The reader ekt() (chunk-hg1yqkjk.js:2348888) and the load repair keep only strings."
+			"note": "compact_boundary: U2r() (chunk-bzyb60p0.js:2845700) writes preservedMessages:{anchorUuid, uuids, allUuids} (chunk-bzyb60p0.js:2845914). uuids is eYn(DYe([...o], u)). DYe() (chunk-bzyb60p0.js:747896) filters the messages with Uw() (chunk-bzyb60p0.js:733914) and Ydr() (chunk-bzyb60p0.js:734497). eYn() (chunk-bzyb60p0.js:2845566) keeps the uuid of each message, in order, with the last repeat only. U2r() is called at chunk-bzyb60p0.js:2549025, chunk-bzyb60p0.js:3076751 and chunk-a0tz781a.js:691728. Trimmers at chunk-c44qd7ec.js:6781 and chunk-d688kptq.js:72741 cut the list. Each item is a message uuid string. The reader ekt() (chunk-bzyb60p0.js:2386648) and the load repair keep only strings."
 		},
 		"system.compactMetadata.preservedMessages.allUuids": {
 			"schema": {
@@ -6435,7 +6435,7 @@
 				"preservedMessages:{anchorUuid:«»,uuids:«»,allUuids:«»}",
 				"function «»(«»){return Array.isArray(«»)?«».filter((«»)=>typeof «»===\"string\"):[]}"
 			],
-			"note": "compact_boundary: U2r() (chunk-hg1yqkjk.js:2803969) writes preservedMessages:{anchorUuid, uuids, allUuids} (chunk-hg1yqkjk.js:2804183). allUuids is eYn(messages) with h = eYn(o). eYn() (chunk-hg1yqkjk.js:2803835) keeps the uuid of each message, in order, with the last repeat only. U2r() is called at chunk-hg1yqkjk.js:2509592, chunk-hg1yqkjk.js:3033251 and chunk-614w915w.js:658274. Each item is a message uuid string. The reader ekt() (chunk-hg1yqkjk.js:2348888) and the load repair rX(u, \"allUuids\", \"optional\") keep only strings."
+			"note": "compact_boundary: U2r() (chunk-bzyb60p0.js:2845700) writes preservedMessages:{anchorUuid, uuids, allUuids} (chunk-bzyb60p0.js:2845914). allUuids is eYn(messages) with h = eYn(o). eYn() (chunk-bzyb60p0.js:2845566) keeps the uuid of each message, in order, with the last repeat only. U2r() is called at chunk-bzyb60p0.js:2549025, chunk-bzyb60p0.js:3076751 and chunk-a0tz781a.js:691728. Each item is a message uuid string. The reader ekt() (chunk-bzyb60p0.js:2386648) and the load repair rX(u, \"allUuids\", \"optional\") keep only strings."
 		}
 	},
 	"unsent": {
@@ -6446,9 +6446,9 @@
 			"anchors": [
 				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
 				"searchTools:(«»,«»)=>«»(\"searchTools\",{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}",
-				"=(«»)=>typeof «»===\"string\"?«».slice(0,«»):`<non-string ${typeof «»}>`"
+				"=(«»)=>typeof «»===\"string\"?«».slice(0,«»):`<non-string ${«».typeOf}>`"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with toolInput set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:105652). The script helper searchTools(query, max) sets toolInput {query: h(query)}; h() returns the string cut to its limit, or the string `<non-string TYPE>` (chunk-xgav7f9x.js:105652)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with toolInput set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:117085). The script helper searchTools(query, max) sets toolInput {query: h(query)}; h() returns the string cut to its limit, or the string `<non-string TYPE>` (chunk-v7j43e2p.js:117085)."
 		},
 		"progress.data.toolInput.max": {
 			"schema": {
@@ -6458,7 +6458,7 @@
 				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
 				"searchTools:(«»,«»)=>«»(\"searchTools\",{query:«»(«»),...typeof «»===\"number\"&&{max:«»}}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with toolInput set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:105652). The script helper searchTools sets max only when `typeof max===\"number\"` (chunk-xgav7f9x.js:105652)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with toolInput set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:117085). The script helper searchTools sets max only when `typeof max===\"number\"` (chunk-v7j43e2p.js:117085)."
 		},
 		"progress.data.toolInput.name": {
 			"schema": {
@@ -6467,9 +6467,9 @@
 			"anchors": [
 				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
 				"describeTool:(«»)=>«»(\"describeTool\",{name:«»(«»)}",
-				"=(«»)=>typeof «»===\"string\"?«».slice(0,«»):`<non-string ${typeof «»}>`"
+				"=(«»)=>typeof «»===\"string\"?«».slice(0,«»):`<non-string ${«».typeOf}>`"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with toolInput set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:105652). The script helper describeTool(name) sets toolInput {name: h(name)}; h() always returns a string (chunk-xgav7f9x.js:105652)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with toolInput set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:117085). The script helper describeTool(name) sets toolInput {name: h(name)}; h() always returns a string (chunk-v7j43e2p.js:117085)."
 		},
 		"progress.data.toolUseId": {
 			"schema": {
@@ -6477,32 +6477,32 @@
 			},
 			"anchors": [
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,",
-				"=«»?.toolUseID??`${«»}${«»()}`"
+				"=«»?.toolUseID??«»?.toolUseID??«»()"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with toolUseId set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:105652, 118003, 118629, 118819, 119436, 120748, 124604, 134267). toolUseId is V = the call's toolUseID or a template string with a generated suffix (chunk-xgav7f9x.js:143850); the script helper passes its own toolUseID string (chunk-xgav7f9x.js:105652)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with toolUseId set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:117085, 118003, 118629, 118819, 119436, 120748, 124604, 134267). toolUseId is the helper's toolUseID, else the call's toolUseID, else a generated id: a template string with a generated suffix, which drops the dashes from the suffix when a gate check passes (the program, 2.1.330); the script helper passes its own toolUseID string (chunk-v7j43e2p.js:117085)."
 		},
 		"progress.data.phase": {
 			"schema": {
 				"enum": ["start", "executing", "complete", "error"]
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\"}}",
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"start\",...«»()&&(«».pending||«»()||«».startsNoMoreCalls()||«»()||«».abortController.signal.aborted)&&{afterStop:!0}}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
 				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}",
 				"«»(\"start\");try{let «»=await «»();return «»(\"complete\",{result:«»}),«»}catch(«»){throw «»(\"error\","
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with phase set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:105652, 118003, 118629, 118819, 119436, 120748, 124604, 134267). Each emit site sets phase to a literal: \"start\", \"executing\", \"complete\" or \"error\"; the script helper passes the same three of them (helper chunk-xgav7f9x.js:105741, 78935, 78977; start chunk-xgav7f9x.js:146248; executing chunk-xgav7f9x.js:145441, chunk-xgav7f9x.js:145631; complete chunk-xgav7f9x.js:147817, chunk-xgav7f9x.js:152494; error chunk-xgav7f9x.js:144813, chunk-xgav7f9x.js:163096)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with phase set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:117085, 118003, 118629, 118819, 119436, 120748, 124604, 134267). Each emit site sets phase to a literal: \"start\", \"executing\", \"complete\" or \"error\"; the script helper passes the same three of them (helper chunk-v7j43e2p.js:117174, 78935, 78977; start chunk-v7j43e2p.js:145016; executing chunk-v7j43e2p.js:144202, chunk-v7j43e2p.js:144392; complete chunk-v7j43e2p.js:146694, chunk-v7j43e2p.js:151478; error chunk-v7j43e2p.js:143570, chunk-v7j43e2p.js:162938)."
 		},
 		"progress.data.result": {
 			"schema": {},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"phase:\"complete\",executed:!0,result:«».value,",
 				"return «»(\"complete\",{result:«»}),«»"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with result set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817, 124604). Any JSON value: the tool's output data (the value the tool returned, or the joined text of an MCP text result) at chunk-xgav7f9x.js:147817 and 124604, or the script helper's return value (chunk-xgav7f9x.js:105652). The code puts no type on it."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with result set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694, 124604). Any JSON value: the tool's output data (the value the tool returned, or the joined text of an MCP text result) at chunk-v7j43e2p.js:146694 and 124604, or the script helper's return value (chunk-v7j43e2p.js:117085). The code puts no type on it."
 		},
 		"progress.data.scriptHelper": {
 			"schema": {
@@ -6511,7 +6511,7 @@
 			"anchors": [
 				"data:{type:\"repl_tool_call\",toolName:«»,toolInput:«»,toolUseId:«»,phase:«»,...«»,scriptHelper:!0}}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with scriptHelper set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:105652). Set only as the literal `scriptHelper:!0` (chunk-xgav7f9x.js:105652)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with scriptHelper set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:117085). Set only as the literal `scriptHelper:!0` (chunk-v7j43e2p.js:117085)."
 		},
 		"progress.data.declined": {
 			"schema": {
@@ -6520,7 +6520,7 @@
 			"anchors": [
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with declined set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:144813). Set only as `...Ne&&{declined:!0}` (chunk-xgav7f9x.js:144813)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with declined set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:143570). Set only as `...Ne&&{declined:!0}` (chunk-v7j43e2p.js:143570)."
 		},
 		"progress.data.permissionDecision": {
 			"schema": {
@@ -6573,7 +6573,7 @@
 				"return{decision:«»,source:«»,...«»!==void 0&&!«»&&{reasonType:«».type},...«»?.type===\"classifier\"&&«».autoModeRule!==void 0&&!«»&&{autoModeRule:«».autoModeRule},...«»!==void 0&&{ruleSource:«»},...«»!==void 0&&{grantScope:«»},",
 				"return «».length>0?{list:«».list,name:«»}:void 0}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with permissionDecision set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:144813, 120748, 134267). The permission record from the authorize step (chunk-xgav7f9x.js:155782): SCt() builds {decision, source, reasonType?, autoModeRule?, ruleSource?, grantScope?, reasonCode?, circuitBreaker?, classifierCategory?, pluginApproval?} (chunk-hg1yqkjk.js:3940913). autoModeRule is {list:\"allow\"|\"soft_deny\", name} (chunk-hg1yqkjk.js:1373893); pluginApproval is \"applied\" or \"refused\" (chunk-hg1yqkjk.js:3941949). The user line's permissionDecision has the same source."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with permissionDecision set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:143570, 120748, 134267). The permission record from the authorize step (chunk-v7j43e2p.js:155291): SCt() builds {decision, source, reasonType?, autoModeRule?, ruleSource?, grantScope?, reasonCode?, circuitBreaker?, classifierCategory?, pluginApproval?} (chunk-bzyb60p0.js:3992374). autoModeRule is {list:\"allow\"|\"soft_deny\", name} (chunk-bzyb60p0.js:1390092); pluginApproval is \"applied\" or \"refused\" (chunk-bzyb60p0.js:3993410). The user line's permissionDecision has the same source."
 		},
 		"progress.data.toolDenialKind": {
 			"schema": {
@@ -6591,7 +6591,7 @@
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
 				"[\"user-rejected\",\"permission-rule\",\"automode-blocked\",\"automode-unavailable\",\"automode-parsing-error\",\"interrupted\",\"cancelled\"]"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with toolDenialKind set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:144813, 134267). The denial kind of the refused call: the literal \"user-rejected\" (chunk-xgav7f9x.js:145071, 126168) or a kind from dSe() and the permission step, which are members of the program's kind list (chunk-w03c3634.js:220978)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with toolDenialKind set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:143570, 134267). The denial kind of the refused call: the literal \"user-rejected\" (chunk-v7j43e2p.js:143830, 126168) or a kind from dSe() and the permission step, which are members of the program's kind list (chunk-xfj2cwfv.js:220978)."
 		},
 		"progress.data.userFeedback": {
 			"schema": {
@@ -6601,7 +6601,7 @@
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"error\",error:«»,...«»&&{declined:!0},...«»!==void 0&&{permissionDecision:«»},...«»!==void 0&&{toolDenialKind:«»},...«»!==void 0&&{userFeedback:«»}}",
 				"=«».toolDenialKind,«»=«».userFeedback,"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with userFeedback set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:144813). The text the user typed when rejecting the call: nt.userFeedback of the authorize result (chunk-xgav7f9x.js:155866), which the permission step sets from Re.userFeedback of an ask (chunk-xgav7f9x.js:142176)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with userFeedback set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:143570). The text the user typed when rejecting the call: nt.userFeedback of the authorize result (chunk-v7j43e2p.js:155474), which the permission step sets from Re.userFeedback of an ask (chunk-v7j43e2p.js:140592)."
 		},
 		"progress.data.nativeTimeoutMs": {
 			"schema": {
@@ -6611,7 +6611,7 @@
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
 				"return «»!==void 0?Math.min(«»(«»,«»()),«»):Math.min(«»(«»,«»()),«»());if(«»()&&(«».name===«»||«».name===«»))return;if(«».has(«».name))return 1e4;return}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with nativeTimeoutMs set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:145441). Qr() returns Math.min(...) for Bash and PowerShell, 1e4 for some tools, or undefined (chunk-xgav7f9x.js:98086); the emit site at chunk-xgav7f9x.js:145441 passes it."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with nativeTimeoutMs set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:144202). Qr() returns Math.min(...) for Bash and PowerShell, 1e4 for some tools, or undefined (chunk-v7j43e2p.js:100778); the emit site at chunk-v7j43e2p.js:144202 passes it."
 		},
 		"progress.data.executed": {
 			"schema": {
@@ -6621,7 +6621,7 @@
 				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"executing\",nativeTimeoutMs:«»,...«»&&{executed:!0}}",
 				"phase:\"complete\",executed:!0,result:«».value,"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with executed set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:145441, 124604). Set only as the literal `executed:!0` (chunk-xgav7f9x.js:145441, 124604)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with executed set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:144202, 124604). Set only as the literal `executed:!0` (chunk-v7j43e2p.js:144202, 124604)."
 		},
 		"progress.data.shellProgress": {
 			"schema": {
@@ -6660,17 +6660,17 @@
 				"data:{type:\"powershell_progress\",output:«».output,fullOutput:«».fullOutput,elapsedTimeSeconds:«».elapsedTimeSeconds,totalLines:«».totalLines,totalBytes:«».totalBytes,timeoutMs:«».timeoutMs,taskId:«».taskId}",
 				"fullOutput:«»,output:«»,elapsedTimeSeconds:«»,totalLines:«»,totalBytes:«»,taskId:«».taskOutput.taskId,"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with shellProgress set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:145631). In 2.1.328 the value is the whole data object of the last bash_progress or powershell_progress line (the REPL tool keeps nt.data of the progress callback), not only two numbers as in 2.1.327: type, output, fullOutput (strings), elapsedTimeSeconds, totalLines, totalBytes (numbers), taskId (string), and timeoutMs (number, set when the call has a timeout). The Bash and PowerShell progress emitters build it."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with shellProgress set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:144392). In 2.1.328 the value is the whole data object of the last bash_progress or powershell_progress line (the REPL tool keeps nt.data of the progress callback), not only two numbers as in 2.1.327: type, output, fullOutput (strings), elapsedTimeSeconds, totalLines, totalBytes (numbers), taskId (string), and timeoutMs (number, set when the call has a timeout). The Bash and PowerShell progress emitters build it."
 		},
 		"progress.data.mcpContent": {
 			"schema": {
 				"type": "boolean"
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"=«».isMcp===!0,"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with mcpContent set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817). mcpContent is `tt&&Array.isArray(ne)&&ie===ne` with tt = `e.isMcp===!0`, so a boolean (chunk-xgav7f9x.js:144443, 120748)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with mcpContent set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694). mcpContent is `tt&&Array.isArray(ne)&&ie===ne` with tt = `e.isMcp===!0`, so a boolean (chunk-v7j43e2p.js:143198, 120748)."
 		},
 		"progress.data.delegatedToolNames": {
 			"schema": {
@@ -6680,10 +6680,10 @@
 				}
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"if(«»!==void 0)return «».filter((«»)=>typeof «»===\"string\").map(«»);"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with delegatedToolNames set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817). Ge = Oii(result).filter(...): Oii() returns the string entries of toolsUsed, or the names split from toolsUsedLine (chunk-mrqsfzc0.js:7929); set only when not empty."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with delegatedToolNames set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694). Ge = Oii(result).filter(...): Oii() returns the string entries of toolsUsed, or the names split from toolsUsedLine (chunk-g9n176jp.js:8159); set only when not empty."
 		},
 		"progress.data.carriedMarkers": {
 			"schema": {
@@ -6696,20 +6696,20 @@
 				}
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				",«»=[«»,«»];function «»(«»){return «».filter((«»)=>«».includes(«»))}",
 				"=\"<artifact-content-authored-by-others/>\","
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with carriedMarkers set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817). Ye = hs(...) = H4e(content), which filters the marker list ih = [ff, nE] (chunk-8t7qe51h.js:478, 152573). ff is \"<artifact-content-authored-by-others/>\" (chunk-ht6e56zb.js:520) and nE is \"<remote-control-device-report/>\" (chunk-8t7qe51h.js:422)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with carriedMarkers set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694). Ye = hs(...) = H4e(content), which filters the marker list ih = [ff, nE] (chunk-trwykz8a.js:478, 152573). ff is \"<artifact-content-authored-by-others/>\" (chunk-k449cc64.js:520) and nE is \"<remote-control-device-report/>\" (chunk-trwykz8a.js:422)."
 		},
 		"progress.data.movedToBackground": {
 			"schema": {
 				"type": "boolean"
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}"
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}"
 			],
-			"note": "A repl_tool_call progress record adds movedToBackground: true when the tool result says the call moved to the background (chunk-xgav7f9x.js:6799)."
+			"note": "A repl_tool_call progress record adds movedToBackground: true when the tool result says the call moved to the background (chunk-v7j43e2p.js:6833)."
 		},
 		"progress.data.notes": {
 			"schema": {
@@ -6719,10 +6719,10 @@
 				}
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"«»={joined:«»,notes:«»._notes}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with notes set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817). nt.notes is the _notes list: the MCP text parts (strings) that did not parse as the one JSON object (_notes at chunk-xgav7f9x.js:147319, nt at chunk-xgav7f9x.js:147449)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with notes set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694). nt.notes is the _notes list: the MCP text parts (strings) that did not parse as the one JSON object (_notes at chunk-v7j43e2p.js:146195, nt at chunk-v7j43e2p.js:146325)."
 		},
 		"progress.data.sandboxViolations": {
 			"schema": {
@@ -6760,21 +6760,21 @@
 				}
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"sandboxViolations:«»,sandboxed:«»,connectorFileLines:«»,",
 				"let «»=[],«»=new Set;for(let{line:«»}of «»){let «»=«»(«»),«»=«».kind===\"network\"?`n ${«».host} ${«».port}`:\"o\";"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with sandboxViolations set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817, 134267). The violations of the shell call: DNo() returns hxs(...), a list of {kind:\"network\", host, port?} or {kind:\"other\"} with no repeats, cut at 20 (chunk-hg1yqkjk.js:5540221); the ShellError class carries the same list (chunk-avbzeyf3.js:2910). The user line's sandboxViolations has the same type."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with sandboxViolations set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694, 134267). The violations of the shell call: DNo() returns hxs(...), a list of {kind:\"network\", host, port?} or {kind:\"other\"} with no repeats, cut at 20 (chunk-bzyb60p0.js:5599854); the ShellError class carries the same list (chunk-jv7av99m.js:2910). The user line's sandboxViolations has the same type."
 		},
 		"progress.data.sandboxed": {
 			"schema": {
 				"type": "boolean"
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}",
 				"sandboxViolations:«»,sandboxed:«»,connectorFileLines:«»,"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with sandboxed set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817, 134267). sandboxed is yo = jn = Fm(...), which returns true or false (chunk-hg1yqkjk.js:1182987, 5727048)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with sandboxed set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694, 134267). sandboxed is yo = jn = Fm(...), which returns true or false (chunk-bzyb60p0.js:1201705, 5727048)."
 		},
 		"progress.data.resultBeforeReadBack": {
 			"schema": {
@@ -6788,9 +6788,9 @@
 				]
 			},
 			"anchors": [
-				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}"
+				"{type:\"progress\",toolUseID:«»,data:{type:\"repl_tool_call\",toolName:«».name,toolInput:«»,toolUseId:«»,phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:«»===void 0?«»:«».joined,...«».length>0&&{delegatedToolNames:«»},...«».length>0&&{carriedMarkers:«»},...«»!==void 0&&{notes:«»},...«»!==void 0&&{permissionDecision:«»},...«»?.sandboxViolations!==void 0&&{sandboxViolations:«».sandboxViolations},...«»?.sandboxed!==void 0&&{sandboxed:«».sandboxed},...«»?.movedToBackground&&{movedToBackground:!0},...«»!==void 0&&(«».name===«»||«».name===«»)&&{resultBeforeReadBack:«»}}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with resultBeforeReadBack set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:147817). De is the tool's own output data (Ot.data or je.data, chunk-xgav7f9x.js:154779, 133754), kept only when it differs from the read-back value (De=ie!==ne?ne:void 0, chunk-xgav7f9x.js:146513), and set only when e.name is Ae or gt. Ae is \"Bash\" (chunk-05v7tzw3.js:5) and gt is \"PowerShell\" (chunk-5ghdkswv.js:9045), so the value is the Bash tool's result or the PowerShell tool's result: BashResult or PowerShellResult in claude-code-tools.json."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with resultBeforeReadBack set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:146694). De is the tool's own output data (Ot.data or je.data, chunk-v7j43e2p.js:154174, 133754), kept only when it differs from the read-back value (De=ie!==ne?ne:void 0, chunk-v7j43e2p.js:145388), and set only when e.name is Ae or gt. Ae is \"Bash\" (chunk-hn3cwwzt.js:5) and gt is \"PowerShell\" (chunk-rb36kwbn.js:9095), so the value is the Bash tool's result or the PowerShell tool's result: BashResult or PowerShellResult in claude-code-tools.json."
 		},
 		"progress.data.servedText": {
 			"schema": {
@@ -6800,7 +6800,7 @@
 				"phase:\"complete\",executed:!0,result:«».value,...«»!==void 0&&{servedText:«»}}",
 				"return «»!==null&&typeof «»===\"object\"&&\"result\"in «»&&typeof «».result===\"string\"?«».result:void 0}"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The REPL tool emits the line, with servedText set, as progress data of type `repl_tool_call` (chunk-xgav7f9x.js:152494). Qe = BOs(name, value), which returns value.result only when it is a string (chunk-pywwjbqn.js:1730)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with servedText set, as progress data of type `repl_tool_call` (chunk-v7j43e2p.js:151478). Qe = BOs(name, value), which returns value.result only when it is a string (chunk-rwtf0my6.js:1732)."
 		},
 		"progress.data.scriptStartedAt": {
 			"schema": {
@@ -6810,7 +6810,7 @@
 				"=({startedAt:«»,tick:«»})=>«»({type:\"progress\",toolUseID:«».toolUseId,data:{...«»,scriptStartedAt:«»}})",
 				".startedAt=Date.now(),"
 			],
-			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-hg1yqkjk.js:721296). The tick replay emits a running script's tick as progress data of type `repl_tool_call` and adds this field. The tick replay sets scriptStartedAt to the eval's startedAt (chunk-g1dp74dh.js:4583), which is Date.now() in milliseconds (chunk-201k1m75.js:4748)."
+			"note": "Never written in 2.1.327: the transcript writer drops each `progress` line (chunk-bzyb60p0.js:733922). The tick replay emits a running script's tick as progress data of type `repl_tool_call` and adds this field. The tick replay sets scriptStartedAt to the eval's startedAt (chunk-cfwbanw2.js:4626), which is Date.now() in milliseconds (chunk-yaw6xb6n.js:4754)."
 		},
 		"system.plugin": {
 			"schema": {
@@ -6820,7 +6820,7 @@
 				"=(«»,«»)=>({type:\"system\",subtype:\"placed\",plugin:«»,id:«».id,content:\"\",persist:!1,",
 				"let «»=«»(«»,«».plugin);return «».keep([«»])"
 			],
-			"note": "Never written in 2.1.327: the `placed` system line has `persist:!1`, and the transcript writer drops each line with persist false (chunk-hg1yqkjk.js:721296). ibo() builds it (chunk-hg1yqkjk.js:4223989). plugin is the calling plugin's name, the string o.plugin of the ui.place call context (chunk-hg1yqkjk.js:4224557, 4874193)."
+			"note": "Never written in 2.1.327: the `placed` system line has `persist:!1`, and the transcript writer drops each line with persist false (chunk-bzyb60p0.js:733922). ibo() builds it (chunk-bzyb60p0.js:4279610). plugin is the calling plugin's name, the string o.plugin of the ui.place call context (chunk-bzyb60p0.js:4280178, 4874193)."
 		},
 		"system.id": {
 			"schema": {
@@ -6834,7 +6834,30 @@
 				"\"ui.place\":{check:(«»)=>«»(«»?.id),run:(«»,«»)=>«»(«»,«»,«»())}",
 				"=64;function «»(«»){return typeof «»===\"string\"&&«».length<=«»&&/^[A-Za-z0-9_-]+$/.test(«»)?void 0:"
 			],
-			"note": "Never written in 2.1.327: the `placed` system line has `persist:!1`, and the transcript writer drops each line with persist false (chunk-hg1yqkjk.js:721296). ibo() builds it (chunk-hg1yqkjk.js:4223989). id is the ui.place argument's id, which the call check QQe() accepts only as a string of 1 to 64 letters, digits, _ or - (chunk-qsd8sbe8.js:188738, chunk-hg1yqkjk.js:4258847)."
+			"note": "Never written in 2.1.327: the `placed` system line has `persist:!1`, and the transcript writer drops each line with persist false (chunk-bzyb60p0.js:733922). ibo() builds it (chunk-bzyb60p0.js:4279610). id is the ui.place argument's id, which the call check QQe() accepts only as a string of 1 to 64 letters, digits, _ or - (chunk-0w2wb7gk.js:190925, chunk-bzyb60p0.js:4319057)."
+		},
+		"progress.data.afterStop": {
+			"schema": {
+				"const": true
+			},
+			"anchors": [
+				"phase:\"start\",...«»()&&(«».pending||«»()||«».startsNoMoreCalls()||«»()||«».abortController.signal.aborted)&&{afterStop:!0}}}"
+			],
+			"note": "Never written in 2.1.330: no code in this build writes a `progress` line to the transcript (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with afterStop set, as progress data of type `repl_tool_call` with phase \"start\", only when a gate check passes and the call starts after a stop: a pending stop, an aborted signal, or a turn that starts no more calls. Set only as the literal `afterStop:!0` (chunk-v7j43e2p.js:6713)."
+		},
+		"progress.data.mcpResult": {
+			"schema": {
+				"type": "object",
+				"properties": {
+					"data": {},
+					"structuredContent": {}
+				},
+				"required": ["data"]
+			},
+			"anchors": [
+				"phase:\"complete\",mcpContent:«»,...«»&&«»()&&{mcpResult:{data:«»,structuredContent:«»?.mcpMeta?.structuredContent}},result:"
+			],
+			"note": "Never written in 2.1.330: no code in this build writes a `progress` line to the transcript (chunk-bzyb60p0.js:733922). The REPL tool emits the line, with mcpResult set, as progress data of type `repl_tool_call` with phase \"complete\", only for an MCP tool call when a gate check passes. data is the raw result of the call and structuredContent is the MCP structured content, which can be absent (chunk-v7j43e2p.js:6819)."
 		}
 	}
 }

@@ -111,6 +111,7 @@ Each line is a separate command. The text after the name is the argument.
 | `/upgrade` | <Gated note="Availability claude-ai, env var DISABLE_UPGRADE_COMMAND not set, plan is not enterprise." /> | Upgrades your plan for higher rate limits and more Opus. | Panel. The command is on only when a server flag is off, `DISABLE_UPGRADE_COMMAND` is not set, and the plan is not enterprise. When an API key signs the session in, it says `/upgrade needs a Claude subscription.` and names the source of the sign-in. See [When a Command Is Off](#when-a-command-is-off). In a real login the typed `/upg` listed only `/rate-limit-options`, so that account does not get `/upgrade` and no run shows its description.[^upgrade] |
 | `/project` `[Project ID or claude.ai address] [--save] \| clear [--save]` | <Undocumented /> <Gated note="Needs a claude.ai login and the server flag tengu_gentle_cupcake." /> | Sets the claude.ai Project that this session names in usage reports. It takes a Project ID or an address such as `https://claude.ai/project/<ID>`. `--save` keeps it for the folder in `attributionProject`. `clear` removes it. The variable `CLAUDE_CODE_ATTRIBUTION_PROJECT` wins over it, and managed settings can stop it. A one-shot `claude -p` run ends before a request uses it.[^project] | Text command. |
 | `/use-case` `[use case]` | <Undocumented /> <Gated note="Needs a claude.ai login, a workspace, and the server flag tengu_federated_possum. Hidden when the program has no use case to list." /> | Chooses the Life Sciences use case that applies to your requests. It ties to the variables `CLAUDE_CODE_PROGRAM_USE_CASE_ID` and `CLAUDE_CODE_PROGRAM_USE_CASE_STAMPED` and to the beta `program-use-case-ids`.[^use-case] | Panel. |
+| `/access` | <Undocumented /> <Gated note="Availability claude-ai, the server flag tengu_gentle_sky, and not a remote session." /> | Shows the verification programs that your account is in. | Panel with the title "Your programs". It says "No programs to show" when the account is in none, and "Couldn't check your programs" when the check fails.[^access] |
 | `/pro-trial-expired` | <Undocumented /> | Options shown when the Pro plan trial ends. | Hidden. The UI shows it. You do not type it. |
 | `/rate-limit-options` | <Gated note="claude.ai sign-in." /> | Manages usage limits and upgrade options. | Panel. |
 | `/passes` | <Gated note="Hidden unless the account is eligible." /> | Shares a free week of Claude Code with friends. | Panel. |
@@ -252,62 +253,63 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-hg1yqkjk.js:100523` (local-jsx), `chunk-hg1yqkjk.js:100501` (local), and `chunk-hg1yqkjk.js:99417` (prompt).
-[^rewind]: The program, `chunk-zs9k1w9q.js:24446` and `chunk-zs9k1w9q.js:24446`.
-[^memory]: The program, `chunk-tfr8jd6e.js:2213`.
-[^tui]: The program, `chunk-zs9k1w9q.js:123516`.
-[^terminal-setup]: The program, `chunk-qqbf4af6.js:490` (Windows Terminal "1.25" text), `chunk-qqbf4af6.js:808` (the Terminal.app version test), and `chunk-qqbf4af6.js:859` ("Turned on").
-[^login-privacy]: The program, `chunk-3q5b9bqc.js:33`.
-[^login]: The program, `chunk-xn4my045.js:9`.
-[^diff]: The program, `chunk-d69x2ckn.js:1505`.
-[^more-models]: The program, `chunk-zs9k1w9q.js:46698`.
-[^fast-vertex]: The program, `chunk-aq3ms068.js:17821`.
-[^fast-notice]: The program, `chunk-1kc5sfs8.js:216`.
-[^fast-labels]: The program, `chunk-aq3ms068.js:17862` (`$12abfe`: your model if it supports fast mode, else the default model), `chunk-zs9k1w9q.js:47044` (the label in the `/fast` hint), and `chunk-1yfzbet8.js:1144` (the `Fast mode` row in `/config`).
-[^terminal-note]: The program, `chunk-qqbf4af6.js:760` (the note text "Use Option as Meta key").
-[^auto-setup]: The program, `chunk-hg1yqkjk.js:175849` (text form) and `chunk-hg1yqkjk.js:175849` (panel).
-[^help]: The program, `chunk-hg1yqkjk.js:176383` and `chunk-zs9k1w9q.js:113024`.
-[^upgrade]: The program, `chunk-76t3g1yn.js:11065` (`DISABLE_UPGRADE_COMMAND` and the `enterprise` test) and `chunk-42vkrmcg.js:171` (`/upgrade needs a Claude subscription.`). The flag is `tengu_idle_amber_finch`, `chunk-76t3g1yn.js:11061`.
-[^project]: The program, `chunk-hg1yqkjk.js:175913`.
-[^use-case]: The program, `chunk-hg1yqkjk.js:189140`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-w03c3634.js:8890`.
-[^remote-bang]: The program, `chunk-614w915w.js:13284`.
-[^spawn-mode]: The program, `chunk-2kt0fcxt.js:6769`.
-[^stickers]: The program, `chunk-hg1yqkjk.js:188785`. The output is in `chunk-bn9t79jx.js:37`.
-[^name-rule]: The program, `chunk-hg1yqkjk.js:48542`, `chunk-hg1yqkjk.js:48546`, and `chunk-hg1yqkjk.js:48553` (the `[names]` log line; `chunk-hg1yqkjk.js:280101` calls it with `is not offered`).
-[^name-type]: The program, `chunk-hg1yqkjk.js:75831`.
-[^file-errors]: The program, `chunk-hg1yqkjk.js:280788`.
-[^delete]: The program, the `/artifacts` panel: `chunk-1f8gh9zn.js:77` (the `DELETE` request with `/api/frame/`), `chunk-1f8gh9zn.js:88` (the retry on `409`, `429`, or `503`), and `chunk-p2schvsw.js:1761` (`Artifact deleted`). The confirmation is at `chunk-p2schvsw.js:2079` (`confirm-delete`), the `d` key at `chunk-p2schvsw.js:2413` (`case "d"`), and the owner and remote check at `chunk-p2schvsw.js:1446` (`canDelete`).
-[^fix-lines]: The program, the `/usage` fix lines: `chunk-34g06jj5.js:454` (`Start fresh when you switch tasks`), `chunk-34g06jj5.js:470` (`Run fewer sessions at once`), `chunk-34g06jj5.js:470` (`Turn off MCP servers you don't use`), and `chunk-hg1yqkjk.js:255613`.
-[^fix-hours]: The program, `chunk-34g06jj5.js:470`.
-[^fix-subagent]: The program, `chunk-34g06jj5.js:470`.
-[^usage-scopes]: The program, the `/usage` panel: `chunk-vxkg9ahh.js:2964` and `chunk-vxkg9ahh.js:2964`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`$c2ce40`, `chunk-aq3ms068.js:29698`, scope test at `chunk-3q5b9bqc.js:40`) and also has `user:profile` (`$cbe556`, `chunk-aq3ms068.js:29727`): `chunk-d3rc7j4x.js:232` (`$663fdf() && $0a9155()`). Without `user:profile` the report has the status `no_profile_scope` (`chunk-d3rc7j4x.js:169`) and uses the rate-limit headers. The `CLAUDE_CODE_OAUTH_TOKEN` login gets the scopes `user:inference`, `user:ccr_inference`, and `user:file_upload` unless `CLAUDE_CODE_OAUTH_SCOPES` is set (`chunk-aq3ms068.js:28438-28445`). The rows `Current session` and `Current week (all models)` are at `chunk-vxkg9ahh.js:3964` and `chunk-vxkg9ahh.js:3970`, and `Scanning local sessions…` is at `chunk-vxkg9ahh.js:2750`. The breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-rz82e4b4.js:56`), and its title is `What's contributing to your usage?` (`chunk-vxkg9ahh.js:2964`).
-[^usage-resets]: The program, `chunk-vxkg9ahh.js:3282` (the `Resets` line), `chunk-vxkg9ahh.js:3972` (the `alwaysShowDateInReset` flag of the week row: weekly rows always show the date), and `chunk-r3zpj4t6.js:1126` (`$b79071`: a date past 24 hours or for weekly rows, and no minutes on the hour).
-[^usage-hold-text]: The program, `chunk-vxkg9ahh.js:3742` (`$ecf601`: the time, rounded up to the minute, or `requests temporarily limited — try again in a moment` with no end time).
-[^usage-texts]: The program, `chunk-vxkg9ahh.js:3830` (the cache form, `Showing last-known usage`), `chunk-vxkg9ahh.js:3832` (the forms with bars, `Partial usage data` and `Per-model breakdown unavailable`), `chunk-vxkg9ahh.js:3847` (the forms with no data, `The usage page is`), `chunk-vxkg9ahh.js:3740` (`$ecf601`: `rate limited until` and `requests temporarily limited`), and `chunk-nchg3ttk.js:1479` (`$a260d5`: the test for a per-model weekly limit).
-[^usage-fail]: The program, `chunk-vxkg9ahh.js:3735` (`Couldn't load usage data`) and `chunk-vxkg9ahh.js:3833` (`(couldn't refresh)` and `Couldn't refresh usage data`).
-[^usage-hold]: The program, `chunk-nchg3ttk.js:1720` (`Vn`: the status codes, the 5-minute default, and the 1-hour cap), `chunk-nchg3ttk.js:1218` (the rejected-login test), `chunk-nchg3ttk.js:1218` (`Retry-After`), and `chunk-nchg3ttk.js:1520` (the in-memory store for each token).
-[^usage-fresh]: The program, `chunk-nchg3ttk.js:2493` (`$6091bb = 60000`).
-[^channel-api]: The program, `chunk-m086wc89.js:41`.
-[^cd-taller]: The program, `chunk-za64d5aq.js:392`.
-[^rewind-skip]: The program, `chunk-zs9k1w9q.js:23572`.
-[^status-features]: The program, `chunk-42vkrmcg.js:124` (`some aren't available while ... is set` for the `Features` row) and `chunk-42vkrmcg.js:112` (the provider form).
-[^off-commands]: The program, `chunk-42vkrmcg.js:140` (`isn't available with`, the provider form), `chunk-42vkrmcg.js:146` (`isn't available while` and `Your admin set it.`), and `chunk-42vkrmcg.js:171` (`needs a Claude subscription.`), each shown instead of `Unknown command`.
-[^skills-exit]: The program, `chunk-qrgrs867.js:539` (`Press <key> again to close`).
-[^export]: The program, `chunk-bvd3mmvh.js:911`.
-[^plugin-cmd]: The program, `chunk-4g68nm9m.js:7506` (the `Remove marketplace` question) and `chunk-4g68nm9m.js:7524` (`settings and saved data`).
-[^tui-classic]: The program, `chunk-zs9k1w9q.js:13970` (`/tui <classic|fullscreen>`).
-[^gh-app]: The program, `chunk-kh1heyzv.js:1513` (the confirm button "Yes, make these changes").
-[^usage-error-mark]: The program, `chunk-vxkg9ahh.js:3918` for the call that passes the text, `chunk-3gfnp70y.js:38` for the line that shows it with `status: "error"`, and `chunk-sg4b5ghb.js:31-45` for the mark and its `failed:` label.
-[^artifacts-gate]: The program, `chunk-hg1yqkjk.js:175868-175872` for the `isEnabled` check of the command and `chunk-2nvq6he9.js:822` for the artifact policy check, which holds the `adminAllowed` answer.
-[^resend-hint]: The program, `chunk-zs9k1w9q.js:37007` (the hint text).
-[^config-theme]: The program, `chunk-vxkg9ahh.js:1351`.
-[^artifacts-list]: The program, `chunk-p2schvsw.js:2041` (the warning), `chunk-p2schvsw.js:2041` (the empty text), `chunk-p2schvsw.js:926` (the delays `[1000, 5000]`), `chunk-p2schvsw.js:1121` (the retry loop over `$c95db6`), `chunk-0jd48asd.js:1780` (the status codes: `500` or higher, `429`, and `408`), and `chunk-jsbj869z.js:9` (each delay varies by up to a quarter, `ratio: 0.25`).
-[^v328-list-agents]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-etkss5a5.js:17` (the note to Claude, `/list-agents`), `chunk-614w915w.js:11027` (the display check, `list-agents`), and `chunk-etkss5a5.js:9` (the flag `bot_protected_tengu_virtual_quilt`).
-[^v328-chrome]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-pjv8v536.js:1272`.
-[^tasks-panel]: The program, `chunk-hg1yqkjk.js:177501` (the description "View and manage this session's background work"), `chunk-zs9k1w9q.js:52281` ("Stop this scheduled task?", "Stop the goal?", "Stop this fork?"), `chunk-jhjdqtx5.js:80` (the "scheduled" count text), `chunk-zs9k1w9q.js:117129` ("Exit and stop tasks"), and `chunk-zs9k1w9q.js:117057` ("Background work is running"), `chunk-zs9k1w9q.js:57310` (the footer text `${a2} bg`), and `chunk-q0chk9t9.js:104` (`$533f3d`: tasks, remote background tasks, and scheduled tasks added into one number).
-[^clear-loops]: The program, `chunk-hg1yqkjk.js:175946` (the description "loops carry over, and the old one stays in /resume").
-[^config-notice]: The program, `chunk-vxkg9ahh.js:1344` (each changed row is added to the notice, then `Config dialog dismissed` at line 1351), `chunk-vxkg9ahh.js:2378` (`Set ${a3} to`), and `chunk-vxkg9ahh.js:1351` ("Config dialog dismissed").
-[^status-plan-model]: The program, `chunk-fn9dv1zs.js:843` ("in plan mode") and `chunk-aq3ms068.js:22416` (`opusplan` and `haiku`).
-[^teleport-new]: The program, `chunk-hg1yqkjk.js:178033` (the description "Resume a cloud session here"), `chunk-bjya12sm.js:94` (`clearConversation` before the pull), and `chunk-bjya12sm.js:316` (the picker text).
-[^terminal-27]: The program, `chunk-qqbf4af6.js:808` (the version test), `chunk-qqbf4af6.js:811` ("No Terminal.app changes needed."), `chunk-qqbf4af6.js:870` ("Shift+Return will now enter a newline."), and `chunk-rvqem0xc.js:2818` (the test for a version below 27).
-[^terminal-27-tip]: The program, `chunk-hqhjcxtn.js:1304` ("Press Option+Enter to send a multi-line message").
+[^kinds]: The program calls a panel command `local-jsx`, a text command `local`, and a prompt command `prompt`, for example in `chunk-bzyb60p0.js:101560` (local-jsx), `chunk-bzyb60p0.js:101538` (local), and `chunk-bzyb60p0.js:100807` (prompt).
+[^rewind]: The program, `chunk-3pqaw3hv.js:25218` and `chunk-3pqaw3hv.js:25218`.
+[^memory]: The program, `chunk-mqg5p2kf.js:2240`.
+[^tui]: The program, `chunk-3pqaw3hv.js:125801`.
+[^terminal-setup]: The program, `chunk-gd8mknr6.js:459` (Windows Terminal "1.25" text), `chunk-gd8mknr6.js:777` (the Terminal.app version test), and `chunk-gd8mknr6.js:828` ("Turned on").
+[^login-privacy]: The program, `chunk-ephf358x.js:33`.
+[^login]: The program, `chunk-mqqq0hpm.js:9`.
+[^diff]: The program, `chunk-pkha3h9k.js:1646`.
+[^more-models]: The program, `chunk-3pqaw3hv.js:47741`.
+[^fast-vertex]: The program, `chunk-865at33z.js:17895`.
+[^fast-notice]: The program, `chunk-0r3gejp7.js:216`.
+[^fast-labels]: The program, `chunk-865at33z.js:17936` (`$12abfe`: your model if it supports fast mode, else the default model), `chunk-3pqaw3hv.js:48087` (the label in the `/fast` hint), and `chunk-s56g10ck.js:1148` (the `Fast mode` row in `/config`).
+[^terminal-note]: The program, `chunk-gd8mknr6.js:729` (the note text "Use Option as Meta key").
+[^auto-setup]: The program, `chunk-bzyb60p0.js:178160` (text form) and `chunk-bzyb60p0.js:178160` (panel).
+[^help]: The program, `chunk-bzyb60p0.js:178694` and `chunk-3pqaw3hv.js:115115`.
+[^upgrade]: The program, `chunk-gq1dr8pm.js:10857` (`DISABLE_UPGRADE_COMMAND` and the `enterprise` test) and `chunk-hkbgb7sm.js:172` (`/upgrade needs a Claude subscription.`). The flag is `tengu_idle_amber_finch`, `chunk-gq1dr8pm.js:10853`.
+[^project]: The program, `chunk-bzyb60p0.js:178224`.
+[^use-case]: The program, `chunk-bzyb60p0.js:191555`, the command table: `isEnabled:()=>n1()&&!Et()`. The flag is `tengu_federated_possum`, `chunk-xfj2cwfv.js:8823`.
+[^access]: The program, `chunk-bzyb60p0.js:191568` (the command and its gate `isEnabled:()=>$165450("tengu_gentle_sky",!1)===!0&&!$2508f2()`), and `chunk-4c3sbrwa.js:788` (the panel texts).
+[^remote-bang]: The program, `chunk-a0tz781a.js:13983`.
+[^spawn-mode]: The program, `chunk-jy29ybqd.js:6769`.
+[^stickers]: The program, `chunk-bzyb60p0.js:191201`. The output is in `chunk-zcq6tps1.js:37`.
+[^name-rule]: The program, `chunk-bzyb60p0.js:49177`, `chunk-bzyb60p0.js:49181`, and `chunk-bzyb60p0.js:49188` (the `[names]` log line; `chunk-bzyb60p0.js:283270` calls it with `is not offered`).
+[^name-type]: The program, `chunk-jnrh77bs.js:218`.
+[^file-errors]: The program, `chunk-bzyb60p0.js:283957`.
+[^delete]: The program, the `/artifacts` panel: `chunk-hpwa54j5.js:77` (the `DELETE` request with `/api/frame/`), `chunk-hpwa54j5.js:88` (the retry on `409`, `429`, or `503`), and `chunk-jcdmtwzp.js:1788` (`Artifact deleted`). The confirmation is at `chunk-jcdmtwzp.js:2106` (`confirm-delete`), the `d` key at `chunk-jcdmtwzp.js:2440` (`case "d"`), and the owner and remote check at `chunk-jcdmtwzp.js:1473` (`canDelete`).
+[^fix-lines]: The program, the `/usage` fix lines: `chunk-ga36k9j5.js:454` (`Start fresh when you switch tasks`), `chunk-ga36k9j5.js:470` (`Run fewer sessions at once`), `chunk-ga36k9j5.js:470` (`Turn off MCP servers you don't use`), and `chunk-bzyb60p0.js:258740`.
+[^fix-hours]: The program, `chunk-ga36k9j5.js:470`.
+[^fix-subagent]: The program, `chunk-ga36k9j5.js:470`.
+[^usage-scopes]: The program, the `/usage` panel: `chunk-9z1q8yk5.js:2978` and `chunk-9z1q8yk5.js:2978`. The usage report calls the usage endpoint only when the login is a claude.ai login with `user:inference` (`$e86070`, `chunk-865at33z.js:29879`, scope test at `chunk-ephf358x.js:40`) and also has `user:profile` (`$2cf58d`, `chunk-865at33z.js:29908`): `chunk-rz37yzbd.js:232` (`$e1b606() && $0a9155()`). Without `user:profile` the report has the status `no_profile_scope` (`chunk-rz37yzbd.js:169`) and uses the rate-limit headers. The `CLAUDE_CODE_OAUTH_TOKEN` login gets the scopes `user:inference`, `user:ccr_inference`, and `user:file_upload` unless `CLAUDE_CODE_OAUTH_SCOPES` is set (`chunk-865at33z.js:28617-28624`). The rows `Current session` and `Current week (all models)` are at `chunk-9z1q8yk5.js:3978` and `chunk-9z1q8yk5.js:3984`, and `Scanning local sessions…` is at `chunk-9z1q8yk5.js:2764`. The breakdown also needs the organization policy `allow_usage_transcript_scan` (`chunk-9ehfvk1q.js:56`), and its title is `What's contributing to your usage?` (`chunk-9z1q8yk5.js:2978`).
+[^usage-resets]: The program, `chunk-9z1q8yk5.js:3296` (the `Resets` line), `chunk-9z1q8yk5.js:3986` (the `alwaysShowDateInReset` flag of the week row: weekly rows always show the date), and `chunk-f64qna2j.js:1126` (`$9ebafd`: a date past 24 hours or for weekly rows, and no minutes on the hour).
+[^usage-hold-text]: The program, `chunk-9z1q8yk5.js:3756` (`$ecf601`: the time, rounded up to the minute, or `requests temporarily limited — try again in a moment` with no end time).
+[^usage-texts]: The program, `chunk-9z1q8yk5.js:3844` (the cache form, `Showing last-known usage`), `chunk-9z1q8yk5.js:3846` (the forms with bars, `Partial usage data` and `Per-model breakdown unavailable`), `chunk-9z1q8yk5.js:3861` (the forms with no data, `The usage page is`), `chunk-9z1q8yk5.js:3754` (`$ecf601`: `rate limited until` and `requests temporarily limited`), and `chunk-cy0ck7w2.js:1478` (`$a260d5`: the test for a per-model weekly limit).
+[^usage-fail]: The program, `chunk-9z1q8yk5.js:3749` (`Couldn't load usage data`) and `chunk-9z1q8yk5.js:3847` (`(couldn't refresh)` and `Couldn't refresh usage data`).
+[^usage-hold]: The program, `chunk-cy0ck7w2.js:1719` (`Vn`: the status codes, the 5-minute default, and the 1-hour cap), `chunk-cy0ck7w2.js:1217` (the rejected-login test), `chunk-cy0ck7w2.js:1217` (`Retry-After`), and `chunk-cy0ck7w2.js:1519` (the in-memory store for each token).
+[^usage-fresh]: The program, `chunk-cy0ck7w2.js:2489` (`$6091bb = 60000`).
+[^channel-api]: The program, `chunk-3nqvc94p.js:41`.
+[^cd-taller]: The program, `chunk-zr4j0m9s.js:396`.
+[^rewind-skip]: The program, `chunk-3pqaw3hv.js:24344`.
+[^status-features]: The program, `chunk-hkbgb7sm.js:125` (`some aren't available while ... is set` for the `Features` row) and `chunk-hkbgb7sm.js:113` (the provider form).
+[^off-commands]: The program, `chunk-hkbgb7sm.js:141` (`isn't available with`, the provider form), `chunk-hkbgb7sm.js:147` (`isn't available while` and `Your admin set it.`), and `chunk-hkbgb7sm.js:172` (`needs a Claude subscription.`), each shown instead of `Unknown command`.
+[^skills-exit]: The program, `chunk-jczdrj4v.js:539` (`Press <key> again to close`).
+[^export]: The program, `chunk-h3n8vb2x.js:946`.
+[^plugin-cmd]: The program, `chunk-e1cgntxd.js:7641` (the `Remove marketplace` question) and `chunk-e1cgntxd.js:7659` (`settings and saved data`).
+[^tui-classic]: The program, `chunk-3pqaw3hv.js:14723` (`/tui <classic|fullscreen>`).
+[^gh-app]: The program, `chunk-591g81xs.js:1541` (the confirm button "Yes, make these changes").
+[^usage-error-mark]: The program, `chunk-9z1q8yk5.js:3932` for the call that passes the text, `chunk-dw56fm8m.js:43` for the line that shows it with `status: "error"`, and `chunk-5h92z04c.js:31-45` for the mark and its `failed:` label.
+[^artifacts-gate]: The program, `chunk-bzyb60p0.js:178179-178183` for the `isEnabled` check of the command and `chunk-z1z1qsrb.js:822` for the artifact policy check, which holds the `adminAllowed` answer.
+[^resend-hint]: The program, `chunk-3pqaw3hv.js:38048` (the hint text).
+[^config-theme]: The program, `chunk-9z1q8yk5.js:1363`.
+[^artifacts-list]: The program, `chunk-jcdmtwzp.js:2068` (the warning), `chunk-jcdmtwzp.js:2068` (the empty text), `chunk-jcdmtwzp.js:953` (the delays `[1000, 5000]`), `chunk-jcdmtwzp.js:1148` (the retry loop over `$c95db6`), `chunk-mha8pjbc.js:1780` (the status codes: `500` or higher, `429`, and `408`), and `chunk-4pgkmw1e.js:9` (each delay varies by up to a quarter, `ratio: 0.25`).
+[^v328-list-agents]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-rfp4xgxg.js:17` (the note to Claude, `/list-agents`), `chunk-a0tz781a.js:11407` (the display check, `list-agents`), and `chunk-rfp4xgxg.js:9` (the flag `bot_protected_tengu_virtual_quilt`).
+[^v328-chrome]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-90f72fg1.js:1299`.
+[^tasks-panel]: The program, `chunk-bzyb60p0.js:179813` (the description "View and manage this session's background work"), `chunk-3pqaw3hv.js:53329` ("Stop this scheduled task?", "Stop the goal?", "Stop this fork?"), `chunk-d6e25tyr.js:80` (the "scheduled" count text), `chunk-3pqaw3hv.js:119225` ("Exit and stop tasks"), and `chunk-3pqaw3hv.js:119153` ("Background work is running"), `chunk-3pqaw3hv.js:58383` (the footer text `${a2} bg`), and `chunk-75ftbgzx.js:104` (`$ea8a28`: tasks, remote background tasks, and scheduled tasks added into one number).
+[^clear-loops]: The program, `chunk-bzyb60p0.js:178257` (the description "loops carry over, and the old one stays in /resume").
+[^config-notice]: The program, `chunk-9z1q8yk5.js:1356` (each changed row is added to the notice, then `Config dialog dismissed` at line 1351), `chunk-9z1q8yk5.js:2390` (`Set ${a3} to`), and `chunk-9z1q8yk5.js:1363` ("Config dialog dismissed").
+[^status-plan-model]: The program, `chunk-m568ebwc.js:848` ("in plan mode") and `chunk-865at33z.js:22508` (`opusplan` and `haiku`).
+[^teleport-new]: The program, `chunk-bzyb60p0.js:180345` (the description "Resume a cloud session here"), `chunk-j3zwemps.js:94` (`clearConversation` before the pull), and `chunk-j3zwemps.js:316` (the picker text).
+[^terminal-27]: The program, `chunk-gd8mknr6.js:777` (the version test), `chunk-gd8mknr6.js:780` ("No Terminal.app changes needed."), `chunk-gd8mknr6.js:839` ("Shift+Return will now enter a newline."), and `chunk-bq31aqv6.js:2820` (the test for a version below 27).
+[^terminal-27-tip]: The program, `chunk-p1hs700s.js:1329` ("Press Option+Enter to send a multi-line message").

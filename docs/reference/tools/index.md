@@ -147,7 +147,7 @@ It lists every field of this release. Build on the fields it names. Look each on
 
 ## Sources
 
-[^definitions]: The program, the tool definitions, `chunk-b2932m4d.js:756-766` (`backgrounding`, `maxResultSizeChars`, and `isEnabled`) and `chunk-b2932m4d.js:4123-4125` (`strict` and `maxResultSizeChars` of `ReportFindings`).
-[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-tqa6k1p7.js:268` (the query `select:Read,Edit,Grep`).
-[^custom-base-url]: The program, `chunk-y61sx1j8.js:214-225`: with the variable unset, the mode function returns `tst` (deferred).
-[^bfs-ugrep]: The program, `chunk-hg1yqkjk.js:246593` (the shell snapshot comment `Shadow find/grep with embedded bfs/ugrep`) and `chunk-hg1yqkjk.js:246296` (`ugrep`).
+[^definitions]: The program, the tool definitions, `chunk-aw5nczax.js:757-767` (`backgrounding`, `maxResultSizeChars`, and `isEnabled`) and `chunk-aw5nczax.js:3953-3955` (`strict` and `maxResultSizeChars` of `ReportFindings`).
+[^toolsearch-sources]: [Tools Reference](https://code.claude.com/docs/en/tools-reference), [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents), and the program, `chunk-179jgyn9.js:268` (the query `select:Read,Edit,Grep`).
+[^custom-base-url]: The program, `chunk-p44m8w7d.js:214-225`: with the variable unset, the mode function returns `tst` (deferred).
+[^bfs-ugrep]: The program, `chunk-bzyb60p0.js:249839` (the shell snapshot comment `Shadow find/grep with embedded bfs/ugrep`) and `chunk-bzyb60p0.js:249536` (`ugrep`).

@@ -264,4 +264,4 @@ One styled run that a surface paints over the prompt draft: `[start, end)` of a 
 
 ## Sources
 
-[^managed-label]: The program, `chunk-qsd8sbe8.js:7115` (a `managed` file that a mod added is flagged, `isUnverified`) and `chunk-qsd8sbe8.js:7143` (the label text and the quoted body).
+[^managed-label]: The program, `chunk-0w2wb7gk.js:7218` (a `managed` file that a mod added is flagged, `isUnverified`) and `chunk-0w2wb7gk.js:7246` (the label text and the quoted body).

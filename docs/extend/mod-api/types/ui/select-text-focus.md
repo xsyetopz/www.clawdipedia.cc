@@ -231,6 +231,6 @@ What a `ui.focus` hook returns, what `next(e)` resolves to, and what `$.ui.focus
 ## Sources
 
 [^focus-input]: The Mod API type file, `schemas/claude-code.d.ts`, `UiFocusInput`.
-[^maxlines]: The program, `chunk-qsd8sbe8.js:3666` (the value sets), `chunk-qsd8sbe8.js:3777` (the check of `maxLines`), and `chunk-qsd8sbe8.js:5153` (the rewrite).
+[^maxlines]: The program, `chunk-0w2wb7gk.js:3710` (the value sets), `chunk-0w2wb7gk.js:3821` (the check of `maxLines`), and `chunk-0w2wb7gk.js:5256` (the rewrite).
 [^scope-site]: The Mod API type file, `schemas/claude-code.d.ts`, `TextHoverProps` (`scope`: "in any site but a `Backdrop`").
-[^copy-unanswered]: The program, `chunk-hg1yqkjk.js:212985` (`"unanswered"` becomes the `reason`). The Mod API type file, `schemas/claude-code.d.ts`, `UiCopyResult`.
+[^copy-unanswered]: The program, `chunk-bzyb60p0.js:215806` (`"unanswered"` becomes the `reason`). The Mod API type file, `schemas/claude-code.d.ts`, `UiCopyResult`.

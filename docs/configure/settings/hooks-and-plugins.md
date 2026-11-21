@@ -73,10 +73,10 @@ Official page: [Settings Reference](https://code.claude.com/docs/en/settings-ref
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, for example `chunk-t39fw2cy.js:8693` (the entry for `allowedHttpHookUrls`).
-[^v305]: The program, `chunk-t39fw2cy.js:8705` (`allowManagedPermissionRulesOnly`) and `chunk-t39fw2cy.js:8710` (`allowed-tools`).
-[^plugin-versions]: The program, `chunk-mf7vnf0k.js:563`.
-[^takeover]: The program, `chunk-kx248ng6.js:1191` and `chunk-kx248ng6.js:1203`.
-[^suggest]: The program, `chunk-t39fw2cy.js:8850` and `chunk-hqhjcxtn.js:867`.
-[^strict]: The program, `chunk-t39fw2cy.js:10345` (the unknown-entry warning for `strictPluginOnlyCustomization`) and `chunk-t39fw2cy.js:10356` (an invalid value acts as `true`).
-[^managed-lists]: The program, `chunk-t39fw2cy.js:8693` (`allowedHttpHookUrls`) and `chunk-t39fw2cy.js:8699`.
+[^schema]: The program, its bundled settings schema, for example `chunk-xcgcdx61.js:8728` (the entry for `allowedHttpHookUrls`).
+[^v305]: The program, `chunk-xcgcdx61.js:8740` (`allowManagedPermissionRulesOnly`) and `chunk-xcgcdx61.js:8745` (`allowed-tools`).
+[^plugin-versions]: The program, `chunk-mgntjepj.js:576`.
+[^takeover]: The program, `chunk-y45hgb0m.js:1191` and `chunk-y45hgb0m.js:1203`.
+[^suggest]: The program, `chunk-xcgcdx61.js:8885` and `chunk-p1hs700s.js:892`.
+[^strict]: The program, `chunk-xcgcdx61.js:10380` (the unknown-entry warning for `strictPluginOnlyCustomization`) and `chunk-xcgcdx61.js:10391` (an invalid value acts as `true`).
+[^managed-lists]: The program, `chunk-xcgcdx61.js:8728` (`allowedHttpHookUrls`) and `chunk-xcgcdx61.js:8734`.

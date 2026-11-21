@@ -172,6 +172,7 @@ Each row is a family of messages. The backticked text is the start that every me
 | `Plugin source command` | <Undocumented /> | A plugin source command did not give a plugin directory. | The command could not start, reached its timeout, was killed, or exited with an error code. It printed nothing, printed more than one line, printed too much, or printed a path that is not absolute. The path was a network location, the working directory or a parent of it, or a directory with no plugin content. |
 | `Plugin archive` | <Undocumented /> | Claude Code did not install a plugin archive. | The archive held no plugin files or no plugin content at its root. It lacked the component paths its entry declares, or declared unsafe ones. The sha256 check failed. A redirect left the allowed URLs. The archive was too large. |
 | `${…} changed while it was read`, `${…} is not UTF-8`, `${…} is over the size a folder may hold`, `a name under ${…} is not UTF-8`, `it holds more than ${…} bytes`, `it holds more than ${…} files`, `this platform cannot open a file without following it`, `a plugin was placed with no declaration` | <Undocumented /> | Claude Code could not read the folder of an organization-tier plugin to compute its digest, or could not place its tier. | A file changed during the read, is over 32 MiB, or is not UTF-8 where Claude Code reads its text. A name is not UTF-8. The folder holds more than 4096 files or more than 32 MiB. The platform cannot open a file without following links. The plugin has no declaration for its tier. See [Plugin Digests](#plugin-digests). |
+| `Unsupported git URL protocol` | <Undocumented /> | A git source URL was refused. | The URL is not `https`, `http`, `ssh`, or `user@host:path`.[^git-url] |
 | `Plugin directory` | <Undocumented /> | A plugin directory was not loaded or installed. | The directory does not exist, was removed or replaced while it loaded, has too many entries, or is too large. |
 | `Marketplace` | <Undocumented /> | A marketplace was refused, not found, or not refreshed. | Enterprise policy blocks it. It was registered from an untrusted source. It has a corrupted `installLocation`, or has a name that is not a plain directory name. A seed-managed marketplace does not auto-update. A name that is not registered gets a list of the available marketplaces. |
 | `The plugin archive` | <Undocumented /> | A plugin archive from claude.ai was not installed. | The archive has no plugin content at its root, carries a git repository layout, or is not a safe, well-formed zip. This claude.ai login has no plugin access yet. |
@@ -198,24 +199,25 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^reserved]: The program, `claude-plugins-official` (`chunk-t39fw2cy.js:2159`), `skills-dir` and `claude-plugin-test` (`chunk-t39fw2cy.js:2287`), and `claudeai-` (`chunk-t39fw2cy.js:4245`).
-[^renames]: The program, `chunk-t39fw2cy.js:3898`.
-[^pin]: The program, `chunk-t39fw2cy.js:3316` (the `ref` text: "A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit"; the same text is at `chunk-t39fw2cy.js:3340`).
-[^npm-wild]: The program, `chunk-t39fw2cy.js:3363`.
-[^npm-opts]: The program, `chunk-t39fw2cy.js:3375`, its bundled settings schema.
-[^digest-tier]: The program, `chunk-t39fw2cy.js:7667` for the schema text (`pluginDigests`) and `chunk-hg1yqkjk.js:89010` for the record check ("its install record holds no hash").
-[^digest-warn]: The program, `chunk-hg1yqkjk.js:89010` ("its install record holds no hash") and `chunk-hg1yqkjk.js:89015` ("its folder is not the copy its install record holds").
-[^digest-schema]: The program, `chunk-t39fw2cy.js:7667` (`pluginDigests` and its schema text), its bundled settings schema. The generated `schemas/claude-code-settings.json` and `schemas/claude-code-managed-settings.json` both hold the field.
-[^digest-limits]: The program, `chunk-hg1yqkjk.js:88828` and `chunk-hg1yqkjk.js:88862` for the limits (`node_modules`), `chunk-hg1yqkjk.js:88830` for the folder walk, `chunk-hg1yqkjk.js:85989` for the root names (`.git`, `.mcpb-cache`), and `chunk-hg1yqkjk.js:88846` for the `.git` check.
-[^digest-refuse]: The program, `chunk-hg1yqkjk.js:89051` ("is not treated as the organization's, and does not load").
-[^digest-line]: The program, `chunk-t39fw2cy.js:11540` for the key (`listedMods`) and `chunk-t39fw2cy.js:12341` for the line ("code from your organization will run"). The marketplaces come from `chunk-t39fw2cy.js:11539`.
-[^settings-schema]: The program, its bundled settings schema, `chunk-t39fw2cy.js:7657` (`installLocation`).
-[^copy]: The program, `chunk-dnaxttmk.js:92` (`Refusing to copy ${…}: it is no longer a regular file (swapped during the copy).`), `chunk-3j2w55tq.js:437` (`a write made no progress; copy stopped`), and `chunk-3j2w55tq.js:704` (the `/import` skill copy adds "A partial copy may remain at" and "remove that directory and run the import again" to the error).
-[^withdraw]: The program, `chunk-hg1yqkjk.js:223624`.
-[^take-back]: The program, `chunk-hg1yqkjk.js:228719`.
-[^list-unread]: The program, `chunk-hg1yqkjk.js:228724` and `chunk-hg1yqkjk.js:232318`.
-[^copy-proof]: The program, `chunk-hg1yqkjk.js:84306`.
-[^submodule]: The program, `chunk-hg1yqkjk.js:224201`. The gate is the server-side flag `tengu_tidal_kestrel`.
-[^run-code-add]: The program, `chunk-4g68nm9m.js:4190`.
-[^run-code-install]: The program, `chunk-4g68nm9m.js:2760` (install warning), `chunk-4g68nm9m.js:7473`, and `chunk-zs9k1w9q.js:78051` (recommendation prompt).
-[^status-mkt-autoupdate]: The program, `chunk-tfqdysxa.js:170` (the "Marketplace auto-update" row label) and `chunk-tfqdysxa.js:132` (the four reasons).
+[^reserved]: The program, `claude-plugins-official` (`chunk-xcgcdx61.js:2183`), `skills-dir` and `claude-plugin-test` (`chunk-xcgcdx61.js:2311`), and `claudeai-` (`chunk-xcgcdx61.js:4269`).
+[^renames]: The program, `chunk-xcgcdx61.js:3922`.
+[^pin]: The program, `chunk-xcgcdx61.js:3340` (the `ref` text: "A full commit id (40 or 64 lowercase hex digits) holds the marketplace at that commit"; the same text is at `chunk-xcgcdx61.js:3364`).
+[^npm-wild]: The program, `chunk-xcgcdx61.js:3387`.
+[^npm-opts]: The program, `chunk-xcgcdx61.js:3399`, its bundled settings schema.
+[^digest-tier]: The program, `chunk-xcgcdx61.js:7695` for the schema text (`pluginDigests`) and `chunk-bzyb60p0.js:90147` for the record check ("its install record holds no hash").
+[^digest-warn]: The program, `chunk-bzyb60p0.js:90147` ("its install record holds no hash") and `chunk-bzyb60p0.js:90152` ("its folder is not the copy its install record holds").
+[^digest-schema]: The program, `chunk-xcgcdx61.js:7695` (`pluginDigests` and its schema text), its bundled settings schema. The generated `schemas/claude-code-settings.json` and `schemas/claude-code-managed-settings.json` both hold the field.
+[^digest-limits]: The program, `chunk-bzyb60p0.js:89965` and `chunk-bzyb60p0.js:89999` for the limits (`node_modules`), `chunk-bzyb60p0.js:89967` for the folder walk, `chunk-bzyb60p0.js:87105` for the root names (`.git`, `.mcpb-cache`), and `chunk-bzyb60p0.js:89983` for the `.git` check.
+[^digest-refuse]: The program, `chunk-bzyb60p0.js:90188` ("is not treated as the organization's, and does not load").
+[^digest-line]: The program, `chunk-xcgcdx61.js:11575` for the key (`listedMods`) and `chunk-xcgcdx61.js:12376` for the line ("code from your organization will run"). The marketplaces come from `chunk-xcgcdx61.js:11574`.
+[^settings-schema]: The program, its bundled settings schema, `chunk-xcgcdx61.js:7685` (`installLocation`).
+[^copy]: The program, `chunk-q7qjcthc.js:92` (`Refusing to copy ${…}: it is no longer a regular file (swapped during the copy).`), `chunk-0cp7gxnn.js:437` (`a write made no progress; copy stopped`), and `chunk-0cp7gxnn.js:704` (the `/import` skill copy adds "A partial copy may remain at" and "remove that directory and run the import again" to the error).
+[^withdraw]: The program, `chunk-bzyb60p0.js:226621`.
+[^take-back]: The program, `chunk-bzyb60p0.js:231716`.
+[^list-unread]: The program, `chunk-bzyb60p0.js:231721` and `chunk-bzyb60p0.js:235336`.
+[^copy-proof]: The program, `chunk-bzyb60p0.js:85426`.
+[^submodule]: The program, `chunk-bzyb60p0.js:227198`. The gate is the server-side flag `tengu_tidal_kestrel`.
+[^run-code-add]: The program, `chunk-e1cgntxd.js:4318`.
+[^run-code-install]: The program, `chunk-e1cgntxd.js:2888` (install warning), `chunk-e1cgntxd.js:7608`, and `chunk-3pqaw3hv.js:79844` (recommendation prompt).
+[^status-mkt-autoupdate]: The program, `chunk-t39e3ysj.js:170` (the "Marketplace auto-update" row label) and `chunk-t39e3ysj.js:132` (the four reasons).
+[^git-url]: The program, `chunk-hf9rvn87.js:2050`.

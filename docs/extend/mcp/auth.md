@@ -133,12 +133,12 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^auth-rows]: The program, `chunk-6gddh60b.js:1684` (`CLAUDE_CODE_ENABLE_XAA` and `oauth.xaa`) and `chunk-6gddh60b.js:2254` (`Using CIMD URL from env`), for the rows marked <Undocumented /> or <Gated />.
-[^cimd-env]: The program, `chunk-6gddh60b.js:2254` (`Using CIMD URL from env`; the variable `MCP_OAUTH_CLIENT_METADATA_URL` is read at `chunk-6gddh60b.js:1103`).
-[^xaa-gate]: The program, `chunk-6gddh60b.js:1684` (`Remove 'oauth.xaa'`).
-[^xaa-changed]: The program, `chunk-6gddh60b.js:694`.
-[^list-timeout]: The program, `chunk-g4jweshk.js:25749` (the text when the wait for the list times out) and `chunk-g4jweshk.js:25740` (the wait for the list that failed gives another text).
-[^settings-check]: The program, `chunk-g4jweshk.js:25728` (the first form, which names the server) and `chunk-6gddh60b.js:202` (the second form). The flag is `require_connector_block_on_plugin_servers`, `chunk-6gddh60b.js:199`.
-[^many-hosts]: The program, `chunk-9jhe03x4.js:280`.
-[^helper-failed]: The program, `chunk-6gddh60b.js:312` (the helper does not run in an untrusted folder), `chunk-6gddh60b.js:329` (the helper fails), `chunk-6gddh60b.js:374` (`headersHelper` gives no headers, so the program calls the callback), `chunk-w3gpg1a5.js:7992` (the call to `$2046ba`, whose callback sets the flag), `chunk-w3gpg1a5.js:6604` (the flag `tengu_lazy_ladybug` and the `oauth.xaa` check; the cache write by `$a1721f` at `chunk-w3gpg1a5.js:6615` is skipped), and `chunk-hrrs5w99.js:479` (the `refreshToken` check).
-[^user-config-helper]: The program, `chunk-hg1yqkjk.js:200498`.
+[^auth-rows]: The program, `chunk-tgn73pvk.js:1684` (`CLAUDE_CODE_ENABLE_XAA` and `oauth.xaa`) and `chunk-tgn73pvk.js:2254` (`Using CIMD URL from env`), for the rows marked <Undocumented /> or <Gated />.
+[^cimd-env]: The program, `chunk-tgn73pvk.js:2254` (`Using CIMD URL from env`; the variable `MCP_OAUTH_CLIENT_METADATA_URL` is read at `chunk-tgn73pvk.js:1103`).
+[^xaa-gate]: The program, `chunk-tgn73pvk.js:1684` (`Remove 'oauth.xaa'`).
+[^xaa-changed]: The program, `chunk-tgn73pvk.js:694`.
+[^list-timeout]: The program, `chunk-sjqze7qg.js:25930` (the text when the wait for the list times out) and `chunk-sjqze7qg.js:25921` (the wait for the list that failed gives another text).
+[^settings-check]: The program, `chunk-sjqze7qg.js:25909` (the first form, which names the server) and `chunk-tgn73pvk.js:202` (the second form). The flag is `require_connector_block_on_plugin_servers`, `chunk-tgn73pvk.js:199`.
+[^many-hosts]: The program, `chunk-0zqda2sj.js:280`.
+[^helper-failed]: The program, `chunk-tgn73pvk.js:312` (the helper does not run in an untrusted folder), `chunk-tgn73pvk.js:329` (the helper fails), `chunk-tgn73pvk.js:374` (`headersHelper` gives no headers, so the program calls the callback), `chunk-54d1gdxa.js:7957` (the call to `$1e2aaa`, whose callback sets the flag), `chunk-54d1gdxa.js:6559` (the flag `tengu_lazy_ladybug` and the `oauth.xaa` check; the cache write by `$ba9656` at `chunk-54d1gdxa.js:6570` is skipped), and `chunk-yz5b8aaa.js:479` (the `refreshToken` check).
+[^user-config-helper]: The program, `chunk-bzyb60p0.js:203080`.

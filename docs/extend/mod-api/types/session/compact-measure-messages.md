@@ -269,6 +269,6 @@ A `$.session.messages({ as: "api" })` call that names no agent. It reads the mai
 
 ## Sources
 
-[^resume-loader]: The program, `chunk-hg1yqkjk.js:32334` (`sourceToolAssistantUUID` link followed on load) and `chunk-hg1yqkjk.js:24228` (`preservedMessages` and `uuids`).
-[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-hg1yqkjk.js:214509`.
-[^session-machine]: `schemas/claude-code.d.ts`, `SessionMachine`. The program, `chunk-hg1yqkjk.js:90308` (`$d3b301`, which answers `sysname`, `release`, `machine`, `packageManagers`, and `runtimes`).
+[^resume-loader]: The program, `chunk-bzyb60p0.js:33107` (`sourceToolAssistantUUID` link followed on load) and `chunk-bzyb60p0.js:24943` (`preservedMessages` and `uuids`).
+[^session-info]: `schemas/claude-code.d.ts`, `SessionInfo`. The program, `chunk-bzyb60p0.js:217586`.
+[^session-machine]: `schemas/claude-code.d.ts`, `SessionMachine`. The program, `chunk-bzyb60p0.js:91445` (`$d3b301`, which answers `sysname`, `release`, `machine`, `packageManagers`, and `runtimes`).

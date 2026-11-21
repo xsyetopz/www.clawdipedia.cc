@@ -1,6 +1,6 @@
 ---
 title: CLI Overview
-description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.329.
+description: How to start claude, what print mode does, and a map of the flags and subcommands of Claude Code 2.1.330.
 sidebar_position: 1
 ---
 
@@ -96,5 +96,5 @@ The flow matches the `claude --help` output.[^help]
 
 ## Sources
 
-[^help]: The program, `chunk-txash88y.js:3338` (the `claude` command and its description), `claude --help`, `2.1.329`.
-[^bg-key]: The program, `chunk-7kvz9y39.js:1116` (the check), `chunk-7kvz9y39.js:1116` (the service lacks the credential), and `chunk-f3w0nfx9.js:23` and `chunk-f3w0nfx9.js:23` (the two messages).
+[^help]: The program, `chunk-rckksdmd.js:3348` (the `claude` command and its description), `claude --help`, `2.1.329`.
+[^bg-key]: The program, `chunk-95amtstn.js:1118` (the check), `chunk-95amtstn.js:1118` (the service lacks the credential), and `chunk-t8x29mwc.js:23` and `chunk-t8x29mwc.js:23` (the two messages).

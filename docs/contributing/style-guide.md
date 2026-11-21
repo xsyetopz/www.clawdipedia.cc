@@ -260,7 +260,7 @@ Lines inside code fences are safe.
 Every fact needs a source.
 
 - Official docs: link to the page in the sentence or in a footnote.
-- The program: put the evidence in a footnote, not in the sentence. Write "The program," and the module citation, such as `chunk-t39fw2cy.js:5055` (the `backend` option of the Windows sandbox). Each citation names the chunk, a colon, and the place, such as `chunk-t39fw2cy.js:5055` for one place or `chunk-t39fw2cy.js:5055-5058` for a range. Do not write the place with `@`, do not write a line range in words, and write a range from the lower place to the higher one. `bun run check:citations` fails on a footnote or an exclusion that names the program but no chunk with its place, and on a range that ends before it starts.
+- The program: put the evidence in a footnote, not in the sentence. Write "The program," and the module citation, such as `chunk-xcgcdx61.js:5079` (the `backend` option of the Windows sandbox). Each citation names the chunk, a colon, and the place, such as `chunk-xcgcdx61.js:5079` for one place or `chunk-xcgcdx61.js:5079-5082` for a range. Do not write the place with `@`, do not write a line range in words, and write a range from the lower place to the higher one. `bun run check:citations` fails on a footnote or an exclusion that names the program but no chunk with its place, and on a range that ends before it starts.
 - Release notes: link the release page in a footnote, such as ``[`2.1.329` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.329)``.
 - Probe results: name the probe case in a footnote, or link to the Probes page.
 
@@ -271,7 +271,7 @@ Keep internal parts out of the sentence: module citations, minified names, serve
 
 ## Sources
 
-[^windows-backend]: The program, `chunk-t39fw2cy.js:5055`.
+[^windows-backend]: The program, `chunk-xcgcdx61.js:5079`.
 ```
 
 Leave out anything you could not check.

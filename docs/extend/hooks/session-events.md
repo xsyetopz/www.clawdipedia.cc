@@ -198,11 +198,11 @@ Fires instead of `Stop` when the turn ends on an API error. The matcher is `erro
 
 ## Sources
 
-[^notif-types]: The program, the type list at `chunk-0wbf18qr.js:28` and `chunk-0wbf18qr.js:28`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
-[^plugin-notif]: The program, `chunk-hg1yqkjk.js:213494`.
-[^agent-needs-input]: The program, `chunk-zs9k1w9q.js:26168` (the billing notice), `chunk-zs9k1w9q.js:26168` (the dialog), and `chunk-zs9k1w9q.js:26158` (the teammate setup question). Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
-[^worker-message]: The program, `chunk-zs9k1w9q.js:116222` and `chunk-zs9k1w9q.js:116404`.
-[^push]: A reading of the program, `chunk-fcpsf9hj.js:326` and `chunk-fcpsf9hj.js:326`.
-[^not-seen]: Readings of the program, `chunk-z9j6gvtc.js:1391` (the `auth_storage_failure` type and its message) and `chunk-6aw22znh.js:353` (the `computer_use_enter` type and its message), not live results.
-[^refusal]: A reading of the program, `chunk-0wbf18qr.js:29`, not a live result.
-[^bg-type]: The program, `chunk-496v3ed2.js:112` (the "monitor" label for a `local_bash` task of kind `monitor`) and `chunk-496v3ed2.js:97` (`local_bash: "shell"`).
+[^notif-types]: The program, the type list at `chunk-h4xqg980.js:28` and `chunk-h4xqg980.js:28`. It holds all three `quota_auto_resume_*` names and `plugin_notification`.
+[^plugin-notif]: The program, `chunk-bzyb60p0.js:216315`.
+[^agent-needs-input]: The program, `chunk-3pqaw3hv.js:26955` (the billing notice), `chunk-3pqaw3hv.js:26955` (the dialog), and `chunk-3pqaw3hv.js:26945` (the teammate setup question). Probe cases `pty.notifications.agent-needs-input` and `pty.notifications.agent-needs-input-refused`.
+[^worker-message]: The program, `chunk-3pqaw3hv.js:118318` and `chunk-3pqaw3hv.js:118500`.
+[^push]: A reading of the program, `chunk-gys72mpb.js:340` and `chunk-gys72mpb.js:340`.
+[^not-seen]: Readings of the program, `chunk-bxvzmae8.js:1414` (the `auth_storage_failure` type and its message) and `chunk-wfr5f7f3.js:358` (the `computer_use_enter` type and its message), not live results.
+[^refusal]: A reading of the program, `chunk-h4xqg980.js:29`, not a live result.
+[^bg-type]: The program, `chunk-z6hn62tj.js:112` (the "monitor" label for a `local_bash` task of kind `monitor`) and `chunk-z6hn62tj.js:97` (`local_bash: "shell"`).

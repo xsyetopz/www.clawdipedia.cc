@@ -183,7 +183,7 @@ export const NOTES: Record<string, string[]> = {
 		"A command file with the same name as a built-in command replaces its text. The `/init` text is gone and only your file body is sent."
 	],
 	"override-skill-simplify": [
-		"A skill folder with the same name as a built-in skill replaces its text, because the program lists skill files before bundled skills and uses the first name match (The program, `chunk-hg1yqkjk.js:190402` and `chunk-hg1yqkjk.js:190407`, the order of skill files and bundled skills, and `chunk-6d5r944q.js:115-119`, the lookup `$a25689` that returns the first `name` match). The program adds a `Base directory for this skill:` line before your file body (The program, `chunk-hg1yqkjk.js:99482`)."
+		"A skill folder with the same name as a built-in skill replaces its text, because the program lists skill files before bundled skills and uses the first name match (The program, `chunk-bzyb60p0.js:192826` and `chunk-bzyb60p0.js:192831`, the order of skill files and bundled skills, and `chunk-8704k7wd.js:23-27`, the lookup `$a25689` that returns the first `name` match). The program adds a `Base directory for this skill:` line before your file body (The program, `chunk-bzyb60p0.js:100872`)."
 	],
 	"hook-prompt": [
 		"A hook of `type: prompt` makes a request with no tools. The system text is fixed. Your `prompt` goes in the user message, with `$ARGUMENTS` filled with the hook input JSON.",

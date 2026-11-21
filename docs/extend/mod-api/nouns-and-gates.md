@@ -131,7 +131,7 @@ Claude Code registers up to 14 built-in plugins at start.[^registry] Each id is 
 
 The `cc-plugin-privacy` check is a `tool.check` hook, and it reads the account email with `session.identity`. It looks for `curl -A`, `wget -U`, a `--user-agent` or `-user` option, `user-agent`, `user_agent`, or `ua:` text, a `From` header, and text such as `set_identity`, `mailto=`, or `--identity`. It also tests the percent-encoded `%40` form of the address, and a `git config user.email` or `GIT_AUTHOR_EMAIL` text in a line that has such an identity. A `WebFetch` call is refused when its `url` holds the address. For a shell call, the hook reads up to 8 script files that the command names, in the working folder and without links, and checks their text the same way. The hook also answers `session.identity` for other mods: it denies a mod of the `user` tier, and it removes `contextEmail` from the answer for a mod of any tier but `builtin`. The plugin sets `defaultEnabled: true` and `enabledFromTrustedSettingsOnly`.[^privacy]
 
-"Normal run" means the entry point is not `local-agent` and does not start with `remote`. A plugin can also hide itself with its own `isAvailable` test. For example, `cc-plugin-easel` needs a feature flag that is off by default, Linux or macOS, no managed `managed-mcp.json` file, and no `hipaa` or `zdr` data policy.[^easel]
+"Normal run" means the entry point is not `local-agent` and does not start with `remote`. A plugin can also hide itself with its own `isAvailable` test. For example, `cc-plugin-easel` needs a feature flag that is off by default, Linux or macOS (a run that Claude Code has decided is not interactive skips the platform test), no managed `managed-mcp.json` file, and no `hipaa` or `zdr` data policy.[^easel]
 
 ### Enable Test
 
@@ -164,26 +164,26 @@ See [Hooks, Plugins, and Skills Settings](../../configure/settings/hooks-and-plu
 
 ## Sources
 
-[^modules-text]: The program, `chunk-t39fw2cy.js:2461`.
-[^validate]: The program, `chunk-wae3ndpy.js:2477`.
-[^validate-form]: The program, `chunk-hg1yqkjk.js:88143` (`adds to $`, `withholds from $`, `replaces on $`), `chunk-hg1yqkjk.js:88071` (`a second engine.create hook`), and `chunk-wae3ndpy.js:2186` (`this engine.create hook is outside its form`).
-[^types-dir]: The program, `chunk-hg1yqkjk.js:221497`.
-[^embed-mods-only]: The program, `chunk-t39fw2cy.js:6029` (the list of policy plugin options, `allowManagedModsOnly` and `forceHotReloadPrompt`) and `chunk-t39fw2cy.js:6029` (the copy of those options, when boolean, from the settings it is given into the policy plugin options).
-[^off-text]: The program, `chunk-egqddp29.js:169`.
-[^safe-mode-text]: The program, `chunk-hg1yqkjk.js:222557`.
-[^written-mods]: The program, `chunk-jfjg1q83.js:283`.
-[^prompt-edit]: The program, `chunk-qsd8sbe8.js:8505`.
-[^registry]: The program, `chunk-zmbxxdjn.js:15` (`$f1ef54`), the start function that calls the registry one plugin at a time. It lists 14 plugins.
-[^hipaa-default]: The program, `chunk-vhwr89hs.js:247-249` for the flags, `chunk-4r2j9y65.js:8` for `isAvailable` (`whenUnreadable`), and `chunk-dt01kn47.js:2016` for the missing-answer check (`verdictAbsentUnderHipaaRecord`).
-[^easel-worker]: The program, `chunk-zmbxxdjn.js:78`. The plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is `true` and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset (`$b5815f`, `chunk-92h2y9s9.js:39`), the entry point is `remote`, `remote_desktop`, or `remote_projects`, and `CLAUDE_CODE_REMOTE_SESSION_ID` is set. It also registers for a self-hosted runner child with one of these entry points. `chunk-hg1yqkjk.js:79372` holds the test (`$a68492`), and `chunk-0v6g5ynk.js:35-55` holds the entry points.
-[^platform-name]: The program, `chunk-bgrrn57r.js:764` (`var a="claude-platform"`). The program has no `cc-plugin-claude-test` registry call; `chunk-wxnsvrbv.js:135` only cleans an old data folder of it.
-[^rollout-gate]: The program, the gate `tengu_plugin_hooks_modules` at `chunk-aq3ms068.js:34650` and the message (`turned off remotely`) at `chunk-egqddp29.js:165`.
-[^tips-mermaid]: The program, `chunk-fx4qha4b.js:300` for the tips description and `chunk-01qrg2rf.js:207` for the Mermaid description. Each plugin sits behind a gate, `tengu_tips_mod` and `tengu_mermaid_mod`.
-[^privacy-gate]: The program, `chunk-0nydv2x4.js:215`. The gate is `tengu_wise_newt`.
-[^privacy-scope]: The program, `chunk-0nydv2x4.js:333` (the tool list and the script read). The program, `chunk-0nydv2x4.js:409`, lets a call through when `origin.hookOwner` is set (the MCP call of a settings hook).
-[^privacy]: The program, `chunk-0nydv2x4.js:328` for the match, the refusal text at `chunk-0nydv2x4.js:328`, the `tool.check` hook at `chunk-0nydv2x4.js:418`, and the `session.identity` hook at `chunk-0nydv2x4.js:418`.
-[^easel]: The program, `chunk-zmbxxdjn.js:72-77` (the normal run test), and `chunk-pbx0q5fj.js:211` (`isAvailable`: the flag from `chunk-pbx0q5fj.js:211`, `tengu_joyful_otter` with default `false`, the platform, the managed MCP file test that `chunk-hg1yqkjk.js:203924` (`$f9a79a.set`) sets and `chunk-hg1yqkjk.js:203674` runs, and the data policies).
-[^enable-order]: The program, `chunk-43hq1cm6.js:3730` (`enabledFromPolicyOnly`, `enabledFromTrustedSettingsOnly`, `enabledPlugins`, and `defaultEnabled`).
-[^enabled-plugins]: The program, `chunk-kvgd8rb3.js:1546-1548`, `chunk-0nydv2x4.js:468`, `chunk-vhwr89hs.js:247-249` (`cc-plugin-hipaa-default`, named at `chunk-4r2j9y65.js:10`), `chunk-43hq1cm6.js:3730`.
-[^responsive]: The program, `chunk-gbsks5fa.js:16` (`$fb17bf`, the gate `tengu_quiet_ember`), `chunk-0v6g5ynk.js:268` (`$33d3e2`, the `remote` entry test), and `chunk-zmbxxdjn.js:58-60` (the registration test).
+[^modules-text]: The program, `chunk-xcgcdx61.js:2485`.
+[^validate]: The program, `chunk-a0mfj0s8.js:2477`.
+[^validate-form]: The program, `chunk-bzyb60p0.js:89280` (`adds to $`, `withholds from $`, `replaces on $`), `chunk-bzyb60p0.js:89208` (`a second engine.create hook`), and `chunk-a0mfj0s8.js:2186` (`this engine.create hook is outside its form`).
+[^types-dir]: The program, `chunk-bzyb60p0.js:224485`.
+[^embed-mods-only]: The program, `chunk-xcgcdx61.js:6053` (the list of policy plugin options, `allowManagedModsOnly` and `forceHotReloadPrompt`) and `chunk-xcgcdx61.js:6053` (the copy of those options, when boolean, from the settings it is given into the policy plugin options).
+[^off-text]: The program, `chunk-25jvqwgs.js:169`.
+[^safe-mode-text]: The program, `chunk-bzyb60p0.js:225542`.
+[^written-mods]: The program, `chunk-mw5yr9eq.js:283`.
+[^prompt-edit]: The program, `chunk-0w2wb7gk.js:8608`.
+[^registry]: The program, `chunk-xb56zerw.js:15` (`$533e40`), the start function that calls the registry one plugin at a time. It lists 14 plugins.
+[^hipaa-default]: The program, `chunk-xddhqcfj.js:248-250` for the flags, `chunk-an3w1y1q.js:16` for `isAvailable` (`whenUnreadable`), and `chunk-2nv4wrez.js:2035` for the missing-answer check (`verdictAbsentUnderHipaaRecord`).
+[^easel-worker]: The program, `chunk-xb56zerw.js:78`. The plugin also registers when the session is a cloud worker: `CLAUDE_CODE_REMOTE` is `true` and `CLAUDE_CODE_ENVIRONMENT_KIND` is unset (`$b5815f`, `chunk-6e68m1dj.js:39`), the entry point is `remote`, `remote_desktop`, or `remote_projects`, and `CLAUDE_CODE_REMOTE_SESSION_ID` is set. It also registers for a self-hosted runner child with one of these entry points. `chunk-bzyb60p0.js:80492` holds the test (`$aa6ef3`), and `chunk-3t7ve0wy.js:35-55` holds the entry points.
+[^platform-name]: The program, `chunk-txxzbf6t.js:789` (`var a="claude-platform"`). The program has no `cc-plugin-claude-test` registry call; `chunk-4zhm4v7d.js:136` only cleans an old data folder of it.
+[^rollout-gate]: The program, the gate `tengu_plugin_hooks_modules` at `chunk-865at33z.js:34948` and the message (`turned off remotely`) at `chunk-25jvqwgs.js:165`.
+[^tips-mermaid]: The program, `chunk-hsa1vcdc.js:301` for the tips description and `chunk-8hmhqvz1.js:208` for the Mermaid description. Each plugin sits behind a gate, `tengu_tips_mod` and `tengu_mermaid_mod`.
+[^privacy-gate]: The program, `chunk-bbrpa310.js:216`. The gate is `tengu_wise_newt`.
+[^privacy-scope]: The program, `chunk-bbrpa310.js:334` (the tool list and the script read). The program, `chunk-bbrpa310.js:410`, lets a call through when `origin.hookOwner` is set (the MCP call of a settings hook).
+[^privacy]: The program, `chunk-bbrpa310.js:329` for the match, the refusal text at `chunk-bbrpa310.js:329`, the `tool.check` hook at `chunk-bbrpa310.js:419`, and the `session.identity` hook at `chunk-bbrpa310.js:419`.
+[^easel]: The program, `chunk-xb56zerw.js:72-77` (the normal run test), and `chunk-ndn128za.js:216` (`isAvailable`: the flag from `chunk-ndn128za.js:216`, `tengu_joyful_otter` with default `false`, the platform and the not interactive test (`chunk-ndn128za.js:232`, with the launch options `$914d89` at `chunk-f9x2f6cx.js:6906` and `$ef95d1` at `chunk-f9x2f6cx.js:7004`), the managed MCP file test that `chunk-bzyb60p0.js:206551` (`$f9a79a.set`) sets and `chunk-bzyb60p0.js:206301` runs, and the data policies).
+[^enable-order]: The program, `chunk-vfyns8ja.js:3737` (`enabledFromPolicyOnly`, `enabledFromTrustedSettingsOnly`, `enabledPlugins`, and `defaultEnabled`).
+[^enabled-plugins]: The program, `chunk-1ry577bp.js:1675-1677`, `chunk-bbrpa310.js:469`, `chunk-xddhqcfj.js:248-250` (`cc-plugin-hipaa-default`, named at `chunk-an3w1y1q.js:26`), `chunk-vfyns8ja.js:3737`.
+[^responsive]: The program, `chunk-w808xygp.js:16` (`$fb17bf`, the gate `tengu_quiet_ember`), `chunk-3t7ve0wy.js:268` (`$33d3e2`, the `remote` entry test), and `chunk-xb56zerw.js:58-60` (the registration test).
 [^v328-tier-calls]: The type file `schemas/claude-code.d.ts`, `EventCalls` and the text on the `$` calls (Tier).

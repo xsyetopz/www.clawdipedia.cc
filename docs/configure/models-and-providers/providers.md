@@ -128,4 +128,4 @@ A gateway that does not serve `claude-fable-5-1` rejects it, so the `fable` alia
 
 ## Sources
 
-[^keys]: The program, `chunk-cd3hqxcc.js:160` (the keys of a model entry).
+[^keys]: The program, `chunk-zhr7rpv7.js:160` (the keys of a model entry).

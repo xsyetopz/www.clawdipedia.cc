@@ -67,7 +67,7 @@ Everything that the answer of a classic hook event can carry, named as the JSON 
 | `updatedMCPToolOutput` | <Documented /> | `hookSpecificOutput.updatedMCPToolOutput` (PostToolUse, MCP tools only). | Type: `unknown`. Optional. |
 | `retry` | <Documented /> | `hookSpecificOutput.retry` (PermissionDenied). | Type: `true`. Optional. |
 | `displayContent` | <Documented /> | `hookSpecificOutput.displayContent` (MessageDisplay). | Type: `string`. Optional. |
-| `worktreePath` | <Documented /> | `hookSpecificOutput.worktreePath` (WorktreeCreate, a command hook prints it): the worktree that the hook created, absolute or relative to its cwd. | Type: `string`. Optional. If unset, the session creates its git worktree as it would unhooked. |
+| `worktreePath` | <Documented /> | `hookSpecificOutput.worktreePath` (WorktreeCreate, a command hook prints it): the worktree that the hook created, absolute or relative to its cwd. | Type: `string`. Optional. If unset, the session creates its git worktree as it would unhooked. Deprecated for a module: answer `vcs.isolate` instead. This field still works. |
 
 ### `ClassicResultFields`
 

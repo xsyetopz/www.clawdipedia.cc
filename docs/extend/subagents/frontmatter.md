@@ -86,11 +86,11 @@ They list every field of this release. Look up a field there before you rely on 
 
 ## Sources
 
-[^max-turns]: The program, the agent loop, `chunk-hg1yqkjk.js:128598`, and the frontmatter parser, `chunk-hg1yqkjk.js:140731` (`Must be a positive integer`).
-[^effort]: The program, the frontmatter schema, `chunk-hg1yqkjk.js:140244` (`effort`).
-[^isolation]: The program, the agent file parser, `chunk-hg1yqkjk.js:140717`. The Agent tool input schema and its description of both values, `chunk-2ry3tbza.js:1436`. The fallback, `chunk-2ry3tbza.js:478`. The cloud launch and its checks, `chunk-2ry3tbza.js:1353` (`isolation` and the cloud login and git root checks). The frontmatter schema description, `chunk-hg1yqkjk.js:46664` ("Filesystem isolation: `worktree` runs in a temporary git worktree."). The `--agents` parser, `chunk-hg1yqkjk.js:140255`. The plugin agent parser, `chunk-hg1yqkjk.js:139481`. Probes: see [Probes](../../reference/probes.md#subagents-and-hooks).
-[^observer]: The program, `chunk-gnvwad7j.js:58` (`CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS`) and `chunk-hg1yqkjk.js:140256` (`observer`), and [Probes](../../reference/probes.md#subagents-and-hooks).
-[^plugin-agent]: The program, the plugin agent loader, `chunk-hg1yqkjk.js:139418` (the two key lists) and `chunk-hg1yqkjk.js:139492` (the two messages).
-[^validators]: The program, the frontmatter schema, `chunk-hg1yqkjk.js:140248` (`maxTurns`), the frontmatter parser, `chunk-hg1yqkjk.js:140731` (`maxTurns`), and the `--agents` JSON schema, `chunk-w03c3634.js:11900` (`maxTurns`). Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).
-[^acw]: The program, `chunk-w03c3634.js:11907`.
-[^agents-file]: The program, `chunk-txash88y.js:3885`.
+[^max-turns]: The program, the agent loop, `chunk-bzyb60p0.js:130613`, and the frontmatter parser, `chunk-bzyb60p0.js:142920` (`Must be a positive integer`).
+[^effort]: The program, the frontmatter schema, `chunk-bzyb60p0.js:142421` (`effort`).
+[^isolation]: The program, the agent file parser, `chunk-bzyb60p0.js:142906`. The Agent tool input schema and its description of both values, `chunk-kb3nnh8q.js:1418`. The fallback, `chunk-kb3nnh8q.js:447`. The cloud launch and its checks, `chunk-kb3nnh8q.js:1335` (`isolation` and the cloud login and git root checks). The frontmatter schema description, `chunk-bzyb60p0.js:47506` ("Filesystem isolation: `worktree` runs in a temporary git worktree."). The `--agents` parser, `chunk-bzyb60p0.js:142432`. The plugin agent parser, `chunk-bzyb60p0.js:141654`. Probes: see [Probes](../../reference/probes.md#subagents-and-hooks).
+[^observer]: The program, `chunk-z3bdjzsf.js:10` (`CLAUDE_CODE_EXPERIMENTAL_OBSERVER_AGENTS`) and `chunk-bzyb60p0.js:142433` (`observer`), and [Probes](../../reference/probes.md#subagents-and-hooks).
+[^plugin-agent]: The program, the plugin agent loader, `chunk-bzyb60p0.js:141591` (the two key lists) and `chunk-bzyb60p0.js:141665` (the two messages).
+[^validators]: The program, the frontmatter schema, `chunk-bzyb60p0.js:142425` (`maxTurns`), the frontmatter parser, `chunk-bzyb60p0.js:142920` (`maxTurns`), and the `--agents` JSON schema, `chunk-xfj2cwfv.js:11913` (`maxTurns`). Official page: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents).
+[^acw]: The program, `chunk-xfj2cwfv.js:11920`.
+[^agents-file]: The program, `chunk-rckksdmd.js:3895`.

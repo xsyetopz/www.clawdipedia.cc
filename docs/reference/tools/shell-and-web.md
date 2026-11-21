@@ -112,32 +112,32 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^tools-source]: The program, `chunk-d1scfh43.js:54` (the tool names `TaskStop`, `WebFetch`, and `WebSearch` in the list of tool names).
-[^taskstop-trunc]: The program, `chunk-krh304mc.js:3588` (`$c2bb4a`: over 1000 characters, `500` first and `300` last).
-[^bash-schema]: The program, the `Bash` input schema, `chunk-hg1yqkjk.js:291945` (`command`, `timeout`, `description`, `run_in_background`).
-[^monitor-schema]: The program, the `Monitor` input schema, `chunk-3en7bpzn.js:513` (`description`, `timeout_ms`, `persistent`).
-[^disk-full]: The program, `chunk-hg1yqkjk.js:249046` (the text) and `chunk-hg1yqkjk.js:22062` (the volume path).
-[^edquot]: The program, `chunk-hg1yqkjk.js:249044` (`EDQUOT` and `the user's disk quota is used up`).
-[^monitor-flag]: The program, `chunk-3en7bpzn.js:941` (`isEnabled` calls the check) and `chunk-v16rzw0k.js:116` (the check `$4491e5`). The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag.
-[^monitor-stderr]: The program, `chunk-a4cww0eh.js:78` (`stderr, which isn't delivered as events and may mean it failed`).
-[^sleep]: The program, `chunk-hg1yqkjk.js:292213` (the `sleep` pattern), `chunk-hg1yqkjk.js:292220` (the limit, a constant with the value `25`), `chunk-hg1yqkjk.js:292668` (the refusal text with `sleep`), and `chunk-hg1yqkjk.js:108403` (the `Bash` prompt text that names `Monitor` and the until-loop).
-[^cap]: The program, `chunk-qe4gckzg.js:36` (the cap, where `subagentCapMs` of 0 or less means no cap and `2000` is the least timeout), `chunk-hg1yqkjk.js:293635` (`subagentCapApplied`), and `chunk-hg1yqkjk.js:249587` (the two notices, `Command was moved to the background (ID: ...) after running for Ns` and `Command did not complete within its Ns timeout`).
-[^bg-output]: The program, `chunk-hg1yqkjk.js:249588`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
-[^bash-hook]: The program, `chunk-avkdw0az.js:2469` (`Bash` is another name of `Monitor` for hook matchers, when the call has a `command`), `chunk-avkdw0az.js:2459` (the hook input is rewritten as a `Bash` call with `command` and `description`), and `chunk-hg1yqkjk.js:268038` (the skipped `if` condition). The same code is at `chunk-hg1yqkjk.js:266283-266290` (`tool_name` and `tool_input` are rewritten).
-[^fetch-long]: The program, `chunk-hg1yqkjk.js:134184` (`URL is longer than`) and the limit in `chunk-tz4tgxyb.js:23`.
-[^bash-diff]: The program, `chunk-73abjwvb.js:164`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
-[^ps-ask]: The program, `chunk-xzd0knvp.js:3517` (the prompt text), `chunk-xzd0knvp.js:4077` (the names `get-module`, `gmo`, and `module`, and the ask with `ruleProof`), `chunk-xzd0knvp.js:4642` (`ruleProof` gives no saved-rule suggestion), `chunk-xzd0knvp.js:4959` (the ask that a rule cannot override), and `chunk-g4ytdnfz.js:1073` (the server flag `bot_protected_tengu_sienna_grebe`).
-[^head-start]: The program, `chunk-hg1yqkjk.js:70428` (`CLAUDE_CODE_DISABLE_SHELL_HEAD_START`), `chunk-hg1yqkjk.js:247807`, `chunk-hg1yqkjk.js:247807`, `chunk-wm04tzdx.js:4812`.
-[^which]: The program, `chunk-hg1yqkjk.js:247072`. The flag is `tengu_swirling_koala`.
-[^git-grep]: The program, `chunk-hg1yqkjk.js:246183`.
-[^snapshot]: The program, `chunk-hg1yqkjk.js:246395` (`eval --` and `declare -f --` for a name that starts with `-` or `+`), `chunk-hg1yqkjk.js:246470`, `chunk-hg1yqkjk.js:246470` (the `set -o` step), and `chunk-hg1yqkjk.js:246484` (`\alias -p` and the `alias --` prefix).
-[^auto-bg]: The program, `chunk-rjy0ddvf.js:1103`.
-[^monitor-ws]: The program, `chunk-3en7bpzn.js:161` (`could not resolve <host>: <error>` for a `ws` URL, the text `could not resolve`).
-[^ps-quote]: The program, `chunk-ykw467c0.js:15` (the check and the message) and `chunk-hg1yqkjk.js:70793` (the temp-directory call).
-[^fetch-refused]: The program, `chunk-hg1yqkjk.js:134250`.
-[^fetch-empty]: The program, `chunk-hg1yqkjk.js:134078`.
-[^no-task]: The program, `chunk-b2932m4d.js:2268` for the list form and `chunk-b2932m4d.js:2322` for the short form.
-[^commit-secrets]: The program, `chunk-hg1yqkjk.js:108243` (the short git guidance of `Bash`, with `.env`) and `chunk-rbrxn03m.js:187` (the `PowerShell` text).
-[^ps-locate]: The program, `chunk-d1h5mdmm.js:163`.
-[^search-cut]: The program, `chunk-b2932m4d.js:3726` (no results) and `chunk-b2932m4d.js:3935` (the reply stopped after output began).
-[^fetch-no-text]: The program, `chunk-hg1yqkjk.js:133844` (the text "The fetch tool returned no text for this page." with the id `web-fetch-mcp-tool`).
+[^tools-source]: The program, `chunk-qebpc5de.js:54` (the tool names `TaskStop`, `WebFetch`, and `WebSearch` in the list of tool names).
+[^taskstop-trunc]: The program, `chunk-37zqqqnw.js:3588` (`$c2bb4a`: over 1000 characters, `500` first and `300` last).
+[^bash-schema]: The program, the `Bash` input schema, `chunk-bzyb60p0.js:295199` (`command`, `timeout`, `description`, `run_in_background`).
+[^monitor-schema]: The program, the `Monitor` input schema, `chunk-18mwdpr8.js:513` (`description`, `timeout_ms`, `persistent`).
+[^disk-full]: The program, `chunk-bzyb60p0.js:252485` (the text) and `chunk-bzyb60p0.js:22776` (the volume path).
+[^edquot]: The program, `chunk-bzyb60p0.js:252483` (`EDQUOT` and `the user's disk quota is used up`).
+[^monitor-flag]: The program, `chunk-18mwdpr8.js:967` (`isEnabled` calls the check) and `chunk-wwft95x8.js:116` (the check `$4491e5`). The check returns true off Windows. On Windows it returns false when the build withholds `Bash`, and else true only if Git Bash is found. It has no flag.
+[^monitor-stderr]: The program, `chunk-6dfy8crz.js:78` (`stderr, which isn't delivered as events and may mean it failed`).
+[^sleep]: The program, `chunk-bzyb60p0.js:295467` (the `sleep` pattern), `chunk-bzyb60p0.js:295474` (the limit, a constant with the value `25`), `chunk-bzyb60p0.js:295925` (the refusal text with `sleep`), and `chunk-bzyb60p0.js:109541` (the `Bash` prompt text that names `Monitor` and the until-loop).
+[^cap]: The program, `chunk-sk0gc06z.js:36` (the cap, where `subagentCapMs` of 0 or less means no cap and `2000` is the least timeout), `chunk-bzyb60p0.js:296899` (`subagentCapApplied`), and `chunk-bzyb60p0.js:253038` (the two notices, `Command was moved to the background (ID: ...) after running for Ns` and `Command did not complete within its Ns timeout`).
+[^bg-output]: The program, `chunk-bzyb60p0.js:253039`. The notice reads `Command did not complete within its Ns timeout and was moved to the background (ID: ...). Output is being written to: ...`.
+[^bash-hook]: The program, `chunk-rmc00en4.js:118` (`Bash` is another name of `Monitor` for hook matchers, when the call has a `command`), `chunk-rmc00en4.js:107` (the hook input is rewritten as a `Bash` call with `command` and `description`), and `chunk-bzyb60p0.js:271270` (the skipped `if` condition). The same code is at `chunk-bzyb60p0.js:269470-269477` (`tool_name` and `tool_input` are rewritten).
+[^fetch-long]: The program, `chunk-bzyb60p0.js:136290` (`URL is longer than`) and the limit in `chunk-tt4yhkc0.js:23`.
+[^bash-diff]: The program, `chunk-9nb5h4mq.js:164`. The diff view lists the changed files that it cannot show, and its text for files that did not get a diff reads `... changed (binary, mode only or too large to show)`, followed by the file names.
+[^ps-ask]: The program, `chunk-e5txm7fq.js:3550` (the prompt text), `chunk-e5txm7fq.js:4110` (the names `get-module`, `gmo`, and `module`, and the ask with `ruleProof`), `chunk-e5txm7fq.js:4714` (`ruleProof` gives no saved-rule suggestion), `chunk-e5txm7fq.js:5071` (the ask that a rule cannot override), and `chunk-x0nfhv1g.js:1073` (the server flag `bot_protected_tengu_sienna_grebe`).
+[^head-start]: The program, `chunk-bzyb60p0.js:71445` (`CLAUDE_CODE_DISABLE_SHELL_HEAD_START`), `chunk-bzyb60p0.js:251167`, `chunk-bzyb60p0.js:251167`, `chunk-k5r71ad2.js:5101`.
+[^which]: The program, `chunk-bzyb60p0.js:250407`. The flag is `tengu_swirling_koala`.
+[^git-grep]: The program, `chunk-bzyb60p0.js:249300`.
+[^snapshot]: The program, `chunk-bzyb60p0.js:249639` (`eval --` and `declare -f --` for a name that starts with `-` or `+`), `chunk-bzyb60p0.js:249714`, `chunk-bzyb60p0.js:249714` (the `set -o` step), and `chunk-bzyb60p0.js:249728` (`\alias -p` and the `alias --` prefix).
+[^auto-bg]: The program, `chunk-yegw2jm5.js:21`.
+[^monitor-ws]: The program, `chunk-18mwdpr8.js:161` (`could not resolve <host>: <error>` for a `ws` URL, the text `could not resolve`).
+[^ps-quote]: The program, `chunk-7p90qgrg.js:15` (the check and the message) and `chunk-bzyb60p0.js:71810` (the temp-directory call).
+[^fetch-refused]: The program, `chunk-bzyb60p0.js:136356`.
+[^fetch-empty]: The program, `chunk-bzyb60p0.js:136184`.
+[^no-task]: The program, `chunk-aw5nczax.js:2085` for the list form and `chunk-aw5nczax.js:2141` for the short form.
+[^commit-secrets]: The program, `chunk-bzyb60p0.js:109362` (the short git guidance of `Bash`, with `.env`) and `chunk-daz70crr.js:192` (the `PowerShell` text).
+[^ps-locate]: The program, `chunk-d775ds6c.js:163`.
+[^search-cut]: The program, `chunk-aw5nczax.js:3550` (no results) and `chunk-aw5nczax.js:3765` (the reply stopped after output began).
+[^fetch-no-text]: The program, `chunk-bzyb60p0.js:135943` (the text "The fetch tool returned no text for this page." with the id `web-fetch-mcp-tool`).

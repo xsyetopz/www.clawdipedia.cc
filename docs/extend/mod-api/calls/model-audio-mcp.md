@@ -62,7 +62,7 @@ For each call, a hook above the caller returns `next(e)`, `{ deny: reason }`, or
 
 ## Sources
 
-[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `ModelCompleteRequest`, `ModelCompleteResult`, `ModelForkRequest`, `ModelForkResult`, `ClassifyOptions`, `AudioClip`, `SpeakRequest`, `SpeakResult`, `McpToolResult`, `McpConnectResult`, and the `model.*`, `audio.*`, and `mcp.*` entries of `EventOf` and `ResultOf`.
-[^complete-cost]: The program, `chunk-hg1yqkjk.js:116256` (the `query_source` values `plugin_model_complete` and `plugin_model_classify`).
+[^types]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `ModelCompleteRequest`, `ModelCompleteResult`, `ModelForkRequest`, `ModelForkResult`, `ClassifyOptions`, `AudioClip`, `SpeakRequest`, `SpeakResult`, `McpToolResult`, `McpConnectResult`, and the `model.*`, `audio.*`, and `mcp.*` entries of `EventOf` and `ResultOf`.
+[^complete-cost]: The program, `chunk-bzyb60p0.js:117463` (the `query_source` values `plugin_model_complete` and `plugin_model_classify`).
 [^fork-diff]: `schemas/claude-code.d.ts`, `ModelForkRequest` and `ModelForkResult`.
-[^connect-event]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-hg1yqkjk.js:211104` (`xx("mcp.connect", ...)`, `server`) and `chunk-qsd8sbe8.js:8200`.
+[^connect-event]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-bzyb60p0.js:213926` (`xx("mcp.connect", ...)`, `server`) and `chunk-0w2wb7gk.js:8303`.

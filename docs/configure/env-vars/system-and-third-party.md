@@ -291,16 +291,16 @@ These cases show more detail.[^evalcreds-more]
 
 ## Sources
 
-[^jvm-probe]: The program, `chunk-ty48xb2f.js:9895` (`maven.repo.local` and `sbt.boot.directory` hide nothing), `chunk-ty48xb2f.js:9897` (`gradle.user.home`), `chunk-ty48xb2f.js:9904` (`user.home`), and `chunk-rjw4t165.js:1192` (the list of keys).
-[^krb5-probe]: The program, `chunk-ty48xb2f.js:9985` (the `FILE:`, `WRFILE:`, and `DIR:` forms, `WRFILE`) and `chunk-ty48xb2f.js:9990` (the relative path error, `isAbsolute`).
-[^kube-probe]: The program, `chunk-ty48xb2f.js:6463` (the value splits at the path delimiter, and a relative path stops the run).
-[^netrc-probe]: The program, `chunk-ty48xb2f.js:6283`.
-[^all-proxy]: The program, `chunk-akf14v62.js:1646` (the order `HTTPS_PROXY`, `https_proxy`, `ALL_PROXY`, `all_proxy`, and the `remote.origin.proxy` and `http.proxy` values passed to `git`) and `chunk-7vfh1k4y.js:3030` (`ALL_PROXY` does not load the settings of an organization).
-[^bash-env-gate]: The server gate is `tengu_golden_wirth`. The program, `chunk-hg1yqkjk.js:68432` (the gate) and `chunk-hg1yqkjk.js:68424` (the `pkill`, `pgrep`, and `pidwait` check).
-[^bash-env]: The program, `chunk-hg1yqkjk.js:68418` (the text that tells Claude to run the command again) and `chunk-hg1yqkjk.js:248210` (the check that `BASH_ENV` is unset).
-[^system-drive]: The program, `chunk-f7fdz8jz.js:41484` (read) and `chunk-pxy9yt8m.js:3272` (set).
-[^evalcreds]: The program, `chunk-ty48xb2f.js:6283` (`NETRC`), `chunk-ty48xb2f.js:6469` (`KUBECONFIG`), and `chunk-ty48xb2f.js:6199` (the pointer text).
-[^evalcreds-more]: The program, `chunk-ty48xb2f.js:9504` (the profile name error, `isAbsolute`), `chunk-ty48xb2f.js:10453` (`credential_process` and `credential_source`), `chunk-ty48xb2f.js:10457` (`web_identity_token_file`), `chunk-ty48xb2f.js:9820` (`ssh_config`), and `chunk-rjw4t165.js:798` (the user and password check of a URL, `username` and `password`).
+[^jvm-probe]: The program, `chunk-h1z4ha6e.js:9932` (`maven.repo.local` and `sbt.boot.directory` hide nothing), `chunk-h1z4ha6e.js:9934` (`gradle.user.home`), `chunk-h1z4ha6e.js:9941` (`user.home`), and `chunk-9zdrdv25.js:1191` (the list of keys).
+[^krb5-probe]: The program, `chunk-h1z4ha6e.js:10022` (the `FILE:`, `WRFILE:`, and `DIR:` forms, `WRFILE`) and `chunk-h1z4ha6e.js:10027` (the relative path error, `isAbsolute`).
+[^kube-probe]: The program, `chunk-h1z4ha6e.js:6500` (the value splits at the path delimiter, and a relative path stops the run).
+[^netrc-probe]: The program, `chunk-h1z4ha6e.js:6320`.
+[^all-proxy]: The program, `chunk-hf9rvn87.js:1710` (the order `HTTPS_PROXY`, `https_proxy`, `ALL_PROXY`, `all_proxy`, and the `remote.origin.proxy` and `http.proxy` values passed to `git`) and `chunk-w58msjm6.js:3042` (`ALL_PROXY` does not load the settings of an organization).
+[^bash-env-gate]: The server gate is `tengu_golden_wirth`. The program, `chunk-bzyb60p0.js:69441` (the gate) and `chunk-bzyb60p0.js:69433` (the `pkill`, `pgrep`, and `pidwait` check).
+[^bash-env]: The program, `chunk-bzyb60p0.js:69427` (the text that tells Claude to run the command again) and `chunk-bzyb60p0.js:251578` (the check that `BASH_ENV` is unset).
+[^system-drive]: The program, `chunk-ha393e1n.js:25315` (read) and `chunk-2yx6c1y2.js:3860` (set).
+[^evalcreds]: The program, `chunk-h1z4ha6e.js:6320` (`NETRC`), `chunk-h1z4ha6e.js:6506` (`KUBECONFIG`), and `chunk-h1z4ha6e.js:6236` (the pointer text).
+[^evalcreds-more]: The program, `chunk-h1z4ha6e.js:9541` (the profile name error, `isAbsolute`), `chunk-h1z4ha6e.js:10490` (`credential_process` and `credential_source`), `chunk-h1z4ha6e.js:10494` (`web_identity_token_file`), `chunk-h1z4ha6e.js:9857` (`ssh_config`), and `chunk-9zdrdv25.js:797` (the user and password check of a URL, `username` and `password`).
 [^variable-names]: Variable names found in the `2.1.329` binary, and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^ci-color]: The program, `chunk-2jhxnfds.js:2663-2678`.
-[^programfiles]: The program, `chunk-hg1yqkjk.js:70654` (the order) and `chunk-hg1yqkjk.js:53776` (the list of names).
+[^ci-color]: The program, `chunk-3jjr3wje.js:1339-1354`.
+[^programfiles]: The program, `chunk-bzyb60p0.js:71671` (the order) and `chunk-bzyb60p0.js:54610` (the list of names).

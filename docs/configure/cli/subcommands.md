@@ -1,6 +1,6 @@
 ---
 title: Subcommands
-description: Every claude subcommand in 2.1.329, including background sessions, auth, plugins, and the hidden commands.
+description: Every claude subcommand in 2.1.330, including background sessions, auth, plugins, and the hidden commands.
 sidebar_position: 3
 ---
 
@@ -32,7 +32,7 @@ Each command has its own help text.[^cmd-help]
 | `claude respawn <id>` or `--all` | <Documented /> | Restarts a background session, or all of them, so it uses the current Claude Code binary. |
 | `claude rm <id>` | <Documented /> | Removes a background session from the list, and deletes its worktree when that is safe. The conversation is kept, and `claude --resume` lists it.[^rm] Unlike `stop`, it works on a session that already exited. It takes `--discard-unpushed <commit>@<worktree-id>` (also discards the unpushed commits and uncommitted changes of the worktree while it is still at that commit) and `--force-remove-worktree <worktree-id>` (deletes the worktree folder when the `WorktreeRemove` hook or git could not; the repository must list it as a worktree, with no uncommitted changes to tracked files; the branch stays). For both, pass the value that an earlier `claude rm <id>` printed. `claude rm` removes a fully pushed session whose worktree has a file or folder named `HEAD` at the top level.[^head-file] |
 | `claude daemon [run\|status\|logs\|stop\|uninstall]` | <Documented /> | Controls the supervisor of background sessions, which the root help does not list. See [`daemon` Subcommands](#daemon-subcommands). |
-| `claude auth login\|logout\|status` | <Documented /> | Signs you in and out. `status` exits with 1 when you are not signed in. `login` takes `--claudeai` (the default), `--console` (API usage billing), `--email <email>` (fills in the login page), and `--sso`. `status` prints JSON by default (`--json`). With `--text`, it prints text. `login` also has a hidden option, `--gateway-json`, for a program that shows the Cloud gateway sign-in to a person. It writes its questions as JSON lines and reads the answers from stdin. It cannot be combined with `--console`, `--claudeai`, `--sso`, or `--email`. It reads the gateway from the settings of the machine. It checks in this order: a clash with the other login flags, a gateway in the settings, a terminal on stdin, and a Claude Code session. Each failure prints one line to standard error and exits with code 1. See the errors on [Auth Settings](../settings/auth.md#errors).[^gateway-json] The hidden `--organization-gateway` flag signs in to your organization's gateway through its identity provider. It cannot be combined with another sign-in option and needs a terminal.[^org-gateway] |
+| `claude auth login\|logout\|status` | <Documented /> | Signs you in and out. `status` exits with 1 when you are not signed in. `login` takes `--claudeai` (the default), `--console` (API usage billing), `--email <email>` (fills in the login page), and `--sso`. `status` prints JSON by default (`--json`). With `--text`, it prints text. `login` also has a hidden option, `--gateway-json`, for a program that shows the Cloud gateway sign-in to a person. It writes its questions as JSON lines and reads the answers from stdin. It cannot be combined with `--console`, `--claudeai`, `--sso`, or `--email`. It reads the gateway from the settings of the machine. It checks in this order: a clash with the other login flags, a gateway in the settings, a terminal on stdin, and a Claude Code session. Each failure prints one line to standard error and exits with code 1. See the errors on [Auth Settings](../settings/auth.md#errors).[^gateway-json] The hidden `--organization-gateway` flag signs in to your organization's gateway through its identity provider. It cannot be combined with another sign-in option and needs a terminal.[^org-gateway] You can also choose an organization that your administrators manage in Anthropic's Enterprise Admin Console. Claude Code then reads the settings of that organization. It does not save the sign-in when the sign-in gives no access to those settings, or when the organization has not turned on Claude Code sign-in.[^org-signin] |
 | `claude setup-token` | <Documented /> | Makes a long-lived token. It needs a subscription. |
 | `claude auto-mode config\|critique\|defaults\|reset` | <Documented /> | Shows or resets the rules of the auto mode classifier. `critique` takes `--model <model>`. `defaults` takes `--label <prefix>` to keep only rules whose label starts with the prefix. `reset` takes `-y/--yes` to skip the confirmation. |
 | `claude doctor` | <Documented /> | Checks your setup and changes nothing. |
@@ -213,46 +213,47 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^cmd-help]: The text of `claude <command> --help` in the installed program.
-[^rm]: The program, `chunk-7kvz9y39.js:3260`.
-[^gateway-json]: The program, `chunk-rwevfvv3.js:2118` and `chunk-f5q1yhhc.js:878`.
-[^purge]: The program, `chunk-vdba82q2.js:1664` (the plan text), with the same options in `claude purge --help`.
-[^trust-cmd]: The program, `chunk-rwevfvv3.js:1377`.
-[^worktree-hook]: The program, `chunk-8xd2189w.js:722` (the options and help text) and `chunk-8xd2189w.js:722` (the outcomes).
-[^eval-flags]: The program, the option definitions with `hideHelp()`, `chunk-rwevfvv3.js:2277`, the eval handler `ultrareviewEvalHandler` with the `error: unknown option` refusal, `chunk-jcfcwvjz.js:1407`, and the gate function, `chunk-g4jweshk.js:19906` (`eval_enabled`). The server-side config is `tengu_review_bughunter_config.eval_enabled`.
-[^review-md]: The program, `chunk-rwevfvv3.js:2280` and `chunk-jcfcwvjz.js:1405`.
-[^review-md-session]: The program, `chunk-71kv8x50.js:1325`.
-[^daemon-help]: The program, help text and argument parser, `chunk-r5a5pree.js:3785`.
-[^daemon-unknown]: The program, the subcommand set `chunk-r5a5pree.js:3859` (`install`) and the path test `chunk-r5a5pree.js:3891` (`[./\\~]`), and the refusal `chunk-r5a5pree.js:4750` (`unknown subcommand`).
-[^daemon-probe]: The program, the gated set (`list`, `scheduled`, `remote-control`, `hub`) at `chunk-r5a5pree.js:3806`, the gate checks at `chunk-r5a5pree.js:4096`, the install, start, and restart text at `chunk-r5a5pree.js:4288` and `chunk-r5a5pree.js:4392`, the gate check at `chunk-r5a5pree.js:4050`, and the exit in `chunk-wtmc4k02.js:78` (the always-off check `$19297d` is at `chunk-wtmc4k02.js:44`).
-[^daemon-remote]: The program, `chunk-r5a5pree.js:4096`.
-[^gw-roles]: The program, `chunk-d24x4t47.js:9039` (the `assume_role` schema), `chunk-d24x4t47.js:9711` (`identity_retention_days`), and `chunk-d24x4t47.js:6588` (the call to STS).
-[^sts-address]: The program, `chunk-d24x4t47.js:6589` (`sts-fips` and `AWS_USE_FIPS_ENDPOINT`) and `chunk-d24x4t47.js:6590` (the address).
-[^assume-run]: The program, `chunk-d24x4t47.js:6561` (the session name `claude-apps-gateway`), `chunk-d24x4t47.js:8976` (the `session_name` values `sub` and `email`), and `chunk-d24x4t47.js:7020` (the `assume_role` role and external ID).
-[^assume-fail]: The program, `chunk-d24x4t47.js:6680` (the `sts:AssumeRole` error text).
-[^assume-refuse]: The program, `chunk-d24x4t47.js:8968` (the role and external ID texts), `chunk-d24x4t47.js:8976` (the `session_name` enum), `chunk-d24x4t47.js:7015` (the `aws_bearer_token` check), `chunk-d24x4t47.js:9711` (`identity_retention_days`). The `Unrecognized key(s)`, `Invalid enum value`, and `Number must be greater than 0` texts are the messages of the schema library for these schemas.
-[^assume-mixed]: The program, `chunk-d24x4t47.js:15084` (the `assume_role.session_name` warning).
-[^retention-run]: The program, `chunk-d24x4t47.js:10801` (the deletes, with `identityRetentionDays`), the default `90` at `chunk-d24x4t47.js:9711` (`identity_retention_days`), and `chunk-d24x4t47.js:10667` (the first run and the interval).
-[^pooled-notes]: The program, `chunk-d24x4t47.js:9314` (`login_notice`) and `chunk-d24x4t47.js:9708` (`admin.blocked_message`, `admin.pooled_conflict_rule`, `admin.pooled_priority_order`), and `chunk-d24x4t47.js:15000` (the warning for an order without `priority_list`).
-[^pooled-reset]: The program, `chunk-d24x4t47.js:11984` (the text "This request exceeds your group's budget").
-[^pooled-order-code]: The program, `chunk-d24x4t47.js:12339` (`pooled_conflict_rule` and `pooled_priority_order`). The warning text for an ignored order is at `chunk-d24x4t47.js:15000`.
-[^pooled-run]: The program, `chunk-d24x4t47.js:9720` and `chunk-d24x4t47.js:9747` (the schema), and `chunk-d24x4t47.js:15000` (the warning). The order of payment is read from the code, `chunk-d24x4t47.js:12339`.
-[^notice-run]: The program, the response at `chunk-d24x4t47.js:14166` (`login_notice`), the page at `chunk-d24x4t47.js:6191` (`loginNotice`), the length limit at `chunk-d24x4t47.js:9316` (`$909f51`) and `chunk-3bmbcs0v.js:6` (`$27e3cd = 500`), and the warning for a missing `oidc` at `chunk-d24x4t47.js:15224`.
-[^notice-screen]: The program, the sign-in screen, `chunk-z9j6gvtc.js:734`.
-[^blocked-run]: The program, `chunk-d24x4t47.js:12437` (`blocked_message`).
-[^layered]: The program, `chunk-d24x4t47.js:9624` (`policy_mode`), `chunk-d24x4t47.js:10109` (`layered`), and `chunk-d24x4t47.js:10141` (the `match: {}` warning).
-[^base-url]: The program, `chunk-d24x4t47.js:15183` (`ANTHROPIC_BEDROCK_BASE_URL`, `ANTHROPIC_VERTEX_BASE_URL`, `ANTHROPIC_FOUNDRY_BASE_URL`, and the warning that follows).
-[^expiry-source]: The program: the key in `chunk-f5q1yhhc.js:1461` (`loginExpiresAt`), `chunk-fe58ty6c.js:39` (`credential_expires_at`), the texts and the 10 day limit in `chunk-fe58ty6c.js:35-70`, and the date checks in `chunk-e1bhc498.js:14` (the `firstParty` provider and the `refreshToken`).
-[^console-profile]: The program, `chunk-f5q1yhhc.js:1466` (the key is set next to `gatewaySignInOffered`) and `chunk-q427jmr7.js:56` (the checks: the first-party provider, no `forceLoginOrgUUID`, and a login method other than `claudeai`, plus other checks that this page does not describe).
-[^expiry-run]: The program, `chunk-fe58ty6c.js:49` (the text line) and `chunk-fe58ty6c.js:63` (the warning), and `chunk-fe58ty6c.js:35` (the window, `$4cbd60 = 7 + $ed8b84` with `$ed8b84 = 3`, in days).
-[^install-version]: The program, `chunk-ecns4dsm.js:2514`; the update text is at `chunk-jd0zjfgy.js:1138`.
-[^gw-bearer]: The program, `chunk-d24x4t47.js:9260` (`assume_role` with `aws_bearer_token`).
-[^logout]: The program, `chunk-f5q1yhhc.js:1511` (the check and the text prefix) and `chunk-kexhz84t.js:170` (the text).
-[^login-ended]: The program, `chunk-s8egyyte.js:61` for the text and `chunk-s8egyyte.js:41` for the check that the login ended (`login_ended`). Print mode starts the check at `chunk-txash88y.js:2041` only when the output format is not `json` or `stream-json`.
-[^stopping]: The program, `chunk-jcfcwvjz.js:1563` (the `SIGINT` and `SIGTERM` handlers with 130 and 143) and `chunk-jcfcwvjz.js:1674` (the text). The server-side config is `tengu_review_bughunter_config` (`enabled` and `eval_enabled`).
-[^secret-missing]: The program, `chunk-3kp5jwr6.js:16053`.
-[^logout-revoke]: The program, `chunk-kexhz84t.js:170-172` (the text), `chunk-kexhz84t.js:351-366` (the second request when the first answer is `retryable`, and the unconfirmed result), `chunk-kexhz84t.js:447` (`revoke_unconfirmed`: the text goes to stderr), and `chunk-aq3ms068.js:15191` (a server error or a network failure is `retryable`).
-[^purge-pipe]: The program, `chunk-vdba82q2.js:884` ("Claude Code can't show a prompt here").
-[^head-file]: The program, `chunk-hg1yqkjk.js:96426` (the check for `claude rm`), and `chunk-hg1yqkjk.js:96488`. These `git rev-list` calls end with `--`, so git reads `HEAD` as a revision and not as a path. The message text is at `chunk-7kvz9y39.js:660`.
-[^fg-guard]: The program, `chunk-0b3aev3g.js:15009` (`noteResumed`, the resume time) and `chunk-0b3aev3g.js:15137` (the `SIGCONT` handler that sets it) and `chunk-wz8vy3bj.js:23` (the `150` ms limit), and `chunk-4hvh0e00.js:804` (in a list prompt, the `escape` key calls `onCancel` at once) and `chunk-4hvh0e00.js:734` (the Enter key waits for `refusedWithin`, the `150` ms limit).
-[^org-gateway]: The program, `chunk-rwevfvv3.js:2116` (the hidden `--organization-gateway` option and help text) and `chunk-f5q1yhhc.js:836` (the text "can't be used with another sign-in option").
-[^gw-notice]: The program, `chunk-v9ek375d.js:48` (the notice "Keep it on your private network") and `chunk-d24x4t47.js:14944` (the `tls` and `managed` start-up call, printed at start-up).
+[^rm]: The program, `chunk-95amtstn.js:3292`.
+[^gateway-json]: The program, `chunk-agsb1bpm.js:2120` and `chunk-dmskq8gj.js:910`.
+[^purge]: The program, `chunk-zhp1wdxx.js:1696` (the plan text), with the same options in `claude purge --help`.
+[^trust-cmd]: The program, `chunk-agsb1bpm.js:1421`.
+[^worktree-hook]: The program, `chunk-4m3xfy89.js:788` (the options and help text) and `chunk-4m3xfy89.js:788` (the outcomes).
+[^eval-flags]: The program, the option definitions with `hideHelp()`, `chunk-agsb1bpm.js:2279`, the eval handler `ultrareviewEvalHandler` with the `error: unknown option` refusal, `chunk-9qasaf3h.js:1432`, and the gate function, `chunk-sjqze7qg.js:20050` (`eval_enabled`). The server-side config is `tengu_review_bughunter_config.eval_enabled`.
+[^review-md]: The program, `chunk-agsb1bpm.js:2282` and `chunk-9qasaf3h.js:1430`.
+[^review-md-session]: The program, `chunk-tb2czq5h.js:1359`.
+[^daemon-help]: The program, help text and argument parser, `chunk-8tt62cwh.js:3810`.
+[^daemon-unknown]: The program, the subcommand set `chunk-8tt62cwh.js:3884` (`install`) and the path test `chunk-8tt62cwh.js:3916` (`[./\\~]`), and the refusal `chunk-8tt62cwh.js:4775` (`unknown subcommand`).
+[^daemon-probe]: The program, the gated set (`list`, `scheduled`, `remote-control`, `hub`) at `chunk-8tt62cwh.js:3831`, the gate checks at `chunk-8tt62cwh.js:4121`, the install, start, and restart text at `chunk-8tt62cwh.js:4313` and `chunk-8tt62cwh.js:4417`, the gate check at `chunk-8tt62cwh.js:4075`, and the exit in `chunk-zwfq7wpn.js:78` (the always-off check `$19297d` is at `chunk-zwfq7wpn.js:44`).
+[^daemon-remote]: The program, `chunk-8tt62cwh.js:4121`.
+[^gw-roles]: The program, `chunk-xnzxknv5.js:8918` (the `assume_role` schema), `chunk-xnzxknv5.js:9549` (`identity_retention_days`), and `chunk-xnzxknv5.js:6590` (the call to STS).
+[^sts-address]: The program, `chunk-xnzxknv5.js:6591` (`sts-fips` and `AWS_USE_FIPS_ENDPOINT`) and `chunk-xnzxknv5.js:6592` (the address).
+[^assume-run]: The program, `chunk-xnzxknv5.js:6563` (the session name `claude-apps-gateway`), `chunk-xnzxknv5.js:8814` (the `session_name` values `sub` and `email`), and `chunk-xnzxknv5.js:7022` (the `assume_role` role and external ID).
+[^assume-fail]: The program, `chunk-xnzxknv5.js:6682` (the `sts:AssumeRole` error text).
+[^assume-refuse]: The program, `chunk-xnzxknv5.js:8806` (the role and external ID texts), `chunk-xnzxknv5.js:8814` (the `session_name` enum), `chunk-xnzxknv5.js:7017` (the `aws_bearer_token` check), `chunk-xnzxknv5.js:9549` (`identity_retention_days`). The `Unrecognized key(s)`, `Invalid enum value`, and `Number must be greater than 0` texts are the messages of the schema library for these schemas.
+[^assume-mixed]: The program, `chunk-xnzxknv5.js:15084` (the `assume_role.session_name` warning).
+[^retention-run]: The program, `chunk-xnzxknv5.js:10639` (the deletes, with `identityRetentionDays`), the default `90` at `chunk-xnzxknv5.js:9549` (`identity_retention_days`), and `chunk-xnzxknv5.js:10505` (the first run and the interval).
+[^pooled-notes]: The program, `chunk-xnzxknv5.js:9152` (`login_notice`) and `chunk-xnzxknv5.js:9546` (`admin.blocked_message`, `admin.pooled_conflict_rule`, `admin.pooled_priority_order`), and `chunk-xnzxknv5.js:15000` (the warning for an order without `priority_list`).
+[^pooled-reset]: The program, `chunk-xnzxknv5.js:11822` (the text "This request exceeds your group's budget").
+[^pooled-order-code]: The program, `chunk-xnzxknv5.js:12177` (`pooled_conflict_rule` and `pooled_priority_order`). The warning text for an ignored order is at `chunk-xnzxknv5.js:15000`.
+[^pooled-run]: The program, `chunk-xnzxknv5.js:9558` and `chunk-xnzxknv5.js:9585` (the schema), and `chunk-xnzxknv5.js:15000` (the warning). The order of payment is read from the code, `chunk-xnzxknv5.js:12177`.
+[^notice-run]: The program, the response at `chunk-xnzxknv5.js:14166` (`login_notice`), the page at `chunk-xnzxknv5.js:6193` (`loginNotice`), the length limit at `chunk-xnzxknv5.js:9154` (`$7eedef`) and `chunk-q3zwm6gk.js:6` (`$27e3cd = 500`), and the warning for a missing `oidc` at `chunk-xnzxknv5.js:15224`.
+[^notice-screen]: The program, the sign-in screen, `chunk-bxvzmae8.js:742`.
+[^blocked-run]: The program, `chunk-xnzxknv5.js:12275` (`blocked_message`).
+[^layered]: The program, `chunk-xnzxknv5.js:9462` (`policy_mode`), `chunk-xnzxknv5.js:9947` (`layered`), and `chunk-xnzxknv5.js:9979` (the `match: {}` warning).
+[^base-url]: The program, `chunk-xnzxknv5.js:15183` (`ANTHROPIC_BEDROCK_BASE_URL`, `ANTHROPIC_VERTEX_BASE_URL`, `ANTHROPIC_FOUNDRY_BASE_URL`, and the warning that follows).
+[^expiry-source]: The program: the key in `chunk-dmskq8gj.js:1511` (`loginExpiresAt`), `chunk-ac17md6m.js:39` (`credential_expires_at`), the texts and the 10 day limit in `chunk-ac17md6m.js:35-70`, and the date checks in `chunk-z7x7mexq.js:14` (the `firstParty` provider and the `refreshToken`).
+[^console-profile]: The program, `chunk-dmskq8gj.js:1516` (the key is set next to `gatewaySignInOffered`) and `chunk-6wwhjpth.js:56` (the checks: the first-party provider, no `forceLoginOrgUUID`, and a login method other than `claudeai`, plus other checks that this page does not describe).
+[^expiry-run]: The program, `chunk-ac17md6m.js:49` (the text line) and `chunk-ac17md6m.js:63` (the warning), and `chunk-ac17md6m.js:35` (the window, `$4cbd60 = 7 + $ed8b84` with `$ed8b84 = 3`, in days).
+[^install-version]: The program, `chunk-gqy9qzxq.js:2510`; the update text is at `chunk-7qq5wnp6.js:1163`.
+[^gw-bearer]: The program, `chunk-xnzxknv5.js:9098` (`assume_role` with `aws_bearer_token`).
+[^logout]: The program, `chunk-dmskq8gj.js:1561` (the check and the text prefix) and `chunk-14rwvvs9.js:171` (the text).
+[^login-ended]: The program, `chunk-gcpgg8e2.js:61` for the text and `chunk-gcpgg8e2.js:41` for the check that the login ended (`login_ended`). Print mode starts the check at `chunk-rckksdmd.js:2044` only when the output format is not `json` or `stream-json`.
+[^stopping]: The program, `chunk-9qasaf3h.js:1588` (the `SIGINT` and `SIGTERM` handlers with 130 and 143) and `chunk-9qasaf3h.js:1699` (the text). The server-side config is `tengu_review_bughunter_config` (`enabled` and `eval_enabled`).
+[^secret-missing]: The program, `chunk-q0y1fm2x.js:16464`.
+[^logout-revoke]: The program, `chunk-14rwvvs9.js:171-173` (the text), `chunk-14rwvvs9.js:354-369` (the second request when the first answer is `retryable`, and the unconfirmed result), `chunk-14rwvvs9.js:450` (`revoke_unconfirmed`: the text goes to stderr), and `chunk-865at33z.js:15261` (a server error or a network failure is `retryable`).
+[^purge-pipe]: The program, `chunk-zhp1wdxx.js:916` ("Claude Code can't show a prompt here").
+[^head-file]: The program, `chunk-bzyb60p0.js:97843` (the check for `claude rm`), and `chunk-bzyb60p0.js:97905`. These `git rev-list` calls end with `--`, so git reads `HEAD` as a revision and not as a path. The message text is at `chunk-95amtstn.js:662`.
+[^fg-guard]: The program, `chunk-8bkqeb5d.js:14328` (`noteResumed`, the resume time) and `chunk-8bkqeb5d.js:14600` (the `SIGCONT` handler that sets it) and `chunk-2t5dst6n.js:23` (the `150` ms limit), and `chunk-z8dyhx9v.js:747` (in a list prompt, the `escape` key calls `onCancel` at once) and `chunk-z8dyhx9v.js:677` (the Enter key waits for `refusedWithin`, the `150` ms limit).
+[^org-gateway]: The program, `chunk-agsb1bpm.js:2118` (the hidden `--organization-gateway` option and help text) and `chunk-dmskq8gj.js:868` (the text "can't be used with another sign-in option").
+[^gw-notice]: The program, `chunk-s95w59kf.js:48` (the notice "Keep it on your private network") and `chunk-xnzxknv5.js:14944` (the `tls` and `managed` start-up call, printed at start-up).
+[^org-signin]: The program, `chunk-jcwhbkjz.js:365` (the text `This sign-in didn't let Claude Code read your organization's settings`) and `chunk-jcwhbkjz.js:410` (the text `It has not turned on Claude Code sign-in for you`).

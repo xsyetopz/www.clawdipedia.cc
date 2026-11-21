@@ -245,5 +245,5 @@ What a hooks module exports: `register`, and nothing else that the loader reads.
 
 ## Sources
 
-[^tier-327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `Tier` and `TIERS`.
+[^tier-327]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `Tier` and `TIERS`.
 [^v328-next-origin]: The type file `schemas/claude-code.d.ts`, `NextOrigin`.

@@ -198,7 +198,7 @@ See [Request and Cache](request-and-cache.md).
 
 ## Sources
 
-[^method]: The probe case `live.context-budget` on `2.1.329`; see [Probes](../reference/probes.md#context-budget). When the count request fails (it did not in this run), `/context` logs `analyzeContext: count unavailable, estimating locally` and estimates from the text: the program, `chunk-hg1yqkjk.js:140954`.
+[^method]: The probe case `live.context-budget` on `2.1.329`; see [Probes](../reference/probes.md#context-budget). When the count request fails (it did not in this run), `/context` logs `analyzeContext: count unavailable, estimating locally` and estimates from the text: the program, `chunk-bzyb60p0.js:143143`.
 [^captures]: The probe captures, shown in [Tool Descriptions](../prompts/tools/tools.md).
 [^dsc]: Probe case `print.dsc.sizes`.
 [^ctx-count]: Probe case `print.misc.context-slash-command` on `2.1.329`. The case records the tools and message text of each count request.

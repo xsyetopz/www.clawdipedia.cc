@@ -135,13 +135,13 @@ The variables on this page override that guess.
 
 ## Sources
 
-[^source]: The program, `chunk-gvhwnc7g.js:301` (the variable names, for example `CLAUDE_CODE_DISABLE_EARLY_KEY_GUARD`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
-[^ax-env]: The program, `chunk-050v0fjh.js:264`.
-[^early-key]: The program, `chunk-0b3aev3g.js:26286-26291` (the default test), `chunk-0b3aev3g.js:27461` (it feeds the renderer's key timing as `timesPresses`), and `chunk-0b3aev3g.js:24003` (the timing check, `isTimingPresses`). The server gate is `tengu_nifty_lemon`. Its default is off.
+[^source]: The program, `chunk-c203g5kd.js:303` (the variable names, for example `CLAUDE_CODE_DISABLE_EARLY_KEY_GUARD`) and the [Environment Variables](https://code.claude.com/docs/en/env-vars) page of the official docs.
+[^ax-env]: The program, `chunk-qbrmmydq.js:264`.
+[^early-key]: The program, `chunk-8bkqeb5d.js:26414-26419` (the default test), `chunk-8bkqeb5d.js:27589` (it feeds the renderer's key timing as `timesPresses`), and `chunk-8bkqeb5d.js:24237` (the timing check, `isTimingPresses`). The server gate is `tengu_nifty_lemon`. Its default is off.
 [^probes]: [Probes](../../reference/probes.md).
-[^new-renderer]: The program, `chunk-0b3aev3g.js:26369` (the first gate, `tengu_robust_pine`). The `tengu_robust_pine` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-0b3aev3g.js:26379`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
-[^notif-host]: The program, read at `chunk-614w915w.js:42808` (`CLAUDE_CODE_NOTIFICATIONS_HOST`) and used at `chunk-614w915w.js:41533`.
-[^hidden-chars]: The program, `chunk-azzyxyps.js:318`. The gate is `tengu_bubbly_gadget`.
-[^tui-asked]: The program, `chunk-xh5mvvey.js:88`.
-[^ysk-send]: The program, value parsed at `chunk-v2byvq1b.js:2748` (`["1", "true", "yes", "on"]`) and read at `chunk-v2byvq1b.js:2790`.
-[^layout-check]: The program, `chunk-0b3aev3g.js:24206` (the variable turns the number check off), `chunk-0b3aev3g.js:9497-9501` and `chunk-0b3aev3g.js:10302-10303` (the `checksNumbers` test; a value that is not a whole number marks damage only while the number check is on), `chunk-0b3aev3g.js:20714-20717` (`onDamage`) and `chunk-0b3aev3g.js:20789` (`countDamagedLayout`; a damaged layout runs again), and `chunk-0b3aev3g.js:20807-20815` (`checksNumbers` set to false; the number check turns off by itself after repeated damage). The program holds this as a number check that is on by default.
+[^new-renderer]: The program, `chunk-8bkqeb5d.js:26497` (the first gate, `tengu_robust_pine`). The `tengu_robust_pine` value holds `add` and `remove` lists of terminal names. The second gate, `tengu_kind_puzzle`, has the same list shape. It decides whether the old renderer runs the cursor check (`chunk-8bkqeb5d.js:26507`). That check is on when the gate value is valid, `CLAUDE_CODE_NEW_RENDERER` is not off, the terminal is not in `remove` or Windows, and the session is not in tmux control mode. A value in `CLAUDE_CODE_NEW_RENDERER` wins over the first gate.
+[^notif-host]: The program, read at `chunk-a0tz781a.js:44678` (`CLAUDE_CODE_NOTIFICATIONS_HOST`) and used at `chunk-a0tz781a.js:43389`.
+[^hidden-chars]: The program, `chunk-pjgajh0r.js:296`. The gate is `tengu_bubbly_gadget`.
+[^tui-asked]: The program, `chunk-8c111j67.js:88`.
+[^ysk-send]: The program, value parsed at `chunk-d22spj7k.js:2749` (`["1", "true", "yes", "on"]`) and read at `chunk-d22spj7k.js:2791`.
+[^layout-check]: The program, `chunk-8bkqeb5d.js:24439` (the variable turns the number check off), `chunk-8bkqeb5d.js:9501-9505` and `chunk-8bkqeb5d.js:10306-10307` (the `checksNumbers` test; a value that is not a whole number marks damage only while the number check is on), `chunk-8bkqeb5d.js:20814-20817` (`onDamage`) and `chunk-8bkqeb5d.js:20889` (`countDamagedLayout`; a damaged layout runs again), and `chunk-8bkqeb5d.js:20907-20915` (`checksNumbers` set to false; the number check turns off by itself after repeated damage). The program holds this as a number check that is on by default.

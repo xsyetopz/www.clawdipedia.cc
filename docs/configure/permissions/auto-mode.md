@@ -202,43 +202,43 @@ It works in `-p` mode when `CLAUDE_CODE_REMOTE` is not set and a classifier mode
 
 ## Sources
 
-[^auto-sources]: The `autoMode` schema text, `chunk-t39fw2cy.js:6974`, and the program, `chunk-pxy9yt8m.js:7039`.
+[^auto-sources]: The `autoMode` schema text, `chunk-xcgcdx61.js:7002`, and the program, `chunk-2yx6c1y2.js:7651`.
 [^deny-kinds]: The `autoMode` schema text.
-[^auto-46]: The program, `chunk-aq3ms068.js:18482` (the model order, from `claude-opus-4-0` to `claude-fable-5-2`), `chunk-aq3ms068.js:24767` (a model before `claude-opus-4-6` in that order is refused), `chunk-aq3ms068.js:24770` (the Haiku rule), `chunk-aq3ms068.js:24759` (the provider check), `chunk-cd3hqxcc.js:1634` (the provider names, by `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_FOUNDRY`, `CLAUDE_CODE_USE_ANTHROPIC_AWS`, `CLAUDE_CODE_USE_ANTHROPIC_GOOGLE_CLOUD`, `CLAUDE_CODE_USE_MANTLE`, and `CLAUDE_CODE_USE_VERTEX`), `chunk-cd3hqxcc.js:1686` (`anthropicAws` and `anthropicGoogleCloud` pass), `chunk-cd3hqxcc.js:1717` (`ANTHROPIC_BASE_URL`), `chunk-cd3hqxcc.js:1711` (`_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL`, read through `$bf06c7` at `chunk-g9qwcm48.js:79`, which runs the read and returns its value), `chunk-hg1yqkjk.js:254945` (the "model" result calls that check), and `chunk-hg1yqkjk.js:254963` (`auto mode unavailable for this model`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^unavailable]: The program, `chunk-hg1yqkjk.js:174866` (`Classifier unavailable - blocking for safety`) and `chunk-phb99ctz.js:392` (the transcript text).
-[^server-lists]: The program, `chunk-t39fw2cy.js:6106-6214` (the lists `allow`, `environment`, and `soft_deny`), `chunk-4dm7dm4q.js:118-150` (the `auto_mode_environment` list of the bridge), and `chunk-4t09bv92.js:232-253` (the control check `$e9985d`, the invisible check `$a53ed2`, and the template check `$289413`).
-[^server-check]: The program, `chunk-hg1yqkjk.js:155293` (`dangerous_tool_use`) builds the `safeguards` status, `chunk-hg1yqkjk.js:155312` (`safeguard_results`) reads the verdict from the stream, and `chunk-hg1yqkjk.js:294563` (`server_no_result`) acts when there is none.
-[^gateway-guide]: The program, `chunk-d24x4t47.js:13052` (`safeguards`, `safeguard_results`, and `anthropic-beta`; the `400 invalid_request_error` answer is at `chunk-d24x4t47.js:13053`). The gateway guide in the program says this.
-[^stages]: The program, `chunk-hg1yqkjk.js:174486` (stage 1 `max_tokens` and `stop_sequences`) and `chunk-hg1yqkjk.js:174646` (stage 2 `max_tokens`). A probe captured the requests.
-[^stage-flag]: The program, `chunk-hg1yqkjk.js:175647` (`twoStageClassifier`). Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
-[^stage-defaults]: The program, `chunk-zxkydmws.js:17` (the built-in `severityByModel` values) and `chunk-hg1yqkjk.js:174214` (`$b91c5b_2` and `$dcdcbf_10` hold the fallback values `15` and `20`).
-[^stage-code]: The program, `chunk-hg1yqkjk.js:174181` (the `<block>` reply), `chunk-hg1yqkjk.js:175626` (`maxRetries`), `chunk-hg1yqkjk.js:174521` and `chunk-hg1yqkjk.js:174678` (`deadlineMs` of each stage), and `chunk-hg1yqkjk.js:174864-174866` (the error texts).
-[^stage-think]: The program, `chunk-aq3ms068.js:24560` (`$42b3af` returns `[void 0, 2048]` for a model in the list and `[!1, 0]` for the others; `"disabled"` is the thinking type at `chunk-aq3ms068.js:24552`).
-[^stage-probe]: The program, `chunk-hg1yqkjk.js:175514` (`CLAUDE_CODE_AUTO_MODE_TEMPERATURE`), and a probe that captured the classifier requests.
+[^auto-46]: The program, `chunk-865at33z.js:18556` (the model order, from `claude-opus-4-0` to `claude-fable-5-2`), `chunk-865at33z.js:24860` (a model before `claude-opus-4-6` in that order is refused), `chunk-865at33z.js:24863` (the Haiku rule), `chunk-865at33z.js:24852` (the provider check), `chunk-zhr7rpv7.js:1635` (the provider names, by `CLAUDE_CODE_USE_BEDROCK`, `CLAUDE_CODE_USE_FOUNDRY`, `CLAUDE_CODE_USE_ANTHROPIC_AWS`, `CLAUDE_CODE_USE_ANTHROPIC_GOOGLE_CLOUD`, `CLAUDE_CODE_USE_MANTLE`, and `CLAUDE_CODE_USE_VERTEX`), `chunk-zhr7rpv7.js:1710` (`anthropicAws` and `anthropicGoogleCloud` pass), `chunk-zhr7rpv7.js:1741` (`ANTHROPIC_BASE_URL`), `chunk-zhr7rpv7.js:1735` (`_CLAUDE_CODE_ASSUME_FIRST_PARTY_BASE_URL`, read through `$5d035e` at `chunk-nnk8tdzz.js:79`, which runs the read and returns its value), `chunk-bzyb60p0.js:258073` (the "model" result calls that check), and `chunk-bzyb60p0.js:258091` (`auto mode unavailable for this model`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^unavailable]: The program, `chunk-bzyb60p0.js:177168` (`Classifier unavailable - blocking for safety`) and `chunk-pbteexar.js:392` (the transcript text).
+[^server-lists]: The program, `chunk-xcgcdx61.js:6130-6238` (the lists `allow`, `environment`, and `soft_deny`), `chunk-gmhy7c1g.js:118-150` (the `auto_mode_environment` list of the bridge), and `chunk-khxw3ng0.js:232-253` (the control check `$e9985d`, the invisible check `$a53ed2`, and the template check `$289413`).
+[^server-check]: The program, `chunk-bzyb60p0.js:157559` (`dangerous_tool_use`) builds the `safeguards` status, `chunk-bzyb60p0.js:157578` (`safeguard_results`) reads the verdict from the stream, and `chunk-bzyb60p0.js:297827` (`server_no_result`) acts when there is none.
+[^gateway-guide]: The program, `chunk-xnzxknv5.js:13052` (`safeguards`, `safeguard_results`, and `anthropic-beta`; the `400 invalid_request_error` answer is at `chunk-xnzxknv5.js:13053`). The gateway guide in the program says this.
+[^stages]: The program, `chunk-bzyb60p0.js:176788` (stage 1 `max_tokens` and `stop_sequences`) and `chunk-bzyb60p0.js:176948` (stage 2 `max_tokens`). A probe captured the requests.
+[^stage-flag]: The program, `chunk-bzyb60p0.js:177949` (`twoStageClassifier`). Server config `tengu_auto_mode_config.twoStageClassifier` picks the mode.
+[^stage-defaults]: The program, `chunk-84n38n3t.js:17` (the built-in `severityByModel` values) and `chunk-bzyb60p0.js:176516` (`$b91c5b_2` and `$dcdcbf_10` hold the fallback values `15` and `20`).
+[^stage-code]: The program, `chunk-bzyb60p0.js:176483` (the `<block>` reply), `chunk-bzyb60p0.js:177928` (`maxRetries`), `chunk-bzyb60p0.js:176823` and `chunk-bzyb60p0.js:176980` (`deadlineMs` of each stage), and `chunk-bzyb60p0.js:177166-177168` (the error texts).
+[^stage-think]: The program, `chunk-865at33z.js:24653` (`$42b3af` returns `[void 0, 2048]` for a model in the list and `[!1, 0]` for the others; `"disabled"` is the thinking type at `chunk-865at33z.js:24645`).
+[^stage-probe]: The program, `chunk-bzyb60p0.js:177816` (`CLAUDE_CODE_AUTO_MODE_TEMPERATURE`), and a probe that captured the classifier requests.
 [^official-project]: [Auto Mode Configuration](https://code.claude.com/docs/en/auto-mode-config) in the official docs.
 [^official-broad]: [Permission Modes](https://code.claude.com/docs/en/permission-modes) in the official docs.
-[^broad-rules]: The program, `chunk-0cw29n2z.js:398` (the `Ignoring dangerous permission` log, `strippedDangerousRules`) and `chunk-0cw29n2z.js:471` (the restore on leaving auto mode).
-[^billing]: The program, `chunk-hg1yqkjk.js:100573-100576` (the title and the `However, this session isn't eligible.` text). The upcoming-release sentence is at `chunk-hg1yqkjk.js:100576`.
-[^billing-desktop]: The program, `chunk-hg1yqkjk.js:100552`.
-[^billing-flag]: The program, `chunk-hg1yqkjk.js:100583`. The flag is `tengu_velvet_heron`.
-[^classify-all]: The program, `chunk-pxy9yt8m.js:7098` (`classifyAllShell`) and `chunk-t39fw2cy.js:7008`.
-[^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program, `chunk-pxy9yt8m.js:7046`, logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
-[^strip-defaults]: The program, `chunk-pxy9yt8m.js:7089` and `chunk-pxy9yt8m.js:7087-7089` (`$957fb5` removes the defaults marker when the call comes from `autoMode` or `autoMode.allow`).
-[^classify-probe]: The program, `chunk-pxy9yt8m.js:7098` (`classifyAllShell`) (the setting is on when any source sets `classifyAllShell` to `true`).
+[^broad-rules]: The program, `chunk-awvk50qj.js:402` (the `Ignoring dangerous permission` log, `strippedDangerousRules`) and `chunk-awvk50qj.js:475` (the restore on leaving auto mode).
+[^billing]: The program, `chunk-bzyb60p0.js:101610-101613` (the title and the `However, this session isn't eligible.` text). The upcoming-release sentence is at `chunk-bzyb60p0.js:101613`.
+[^billing-desktop]: The program, `chunk-bzyb60p0.js:101589`.
+[^billing-flag]: The program, `chunk-bzyb60p0.js:101620`. The flag is `tengu_velvet_heron`.
+[^classify-all]: The program, `chunk-2yx6c1y2.js:7710` (`classifyAllShell`) and `chunk-xcgcdx61.js:7036`.
+[^sources-probe]: A probe ran `claude auto-mode config` with `autoMode.allow` set in each source. The program, `chunk-2yx6c1y2.js:7658`, logs `tengu_settings_auto_mode_rules_untrusted_source_ignored` for an ignored source. Its message says only policy, user, and flag settings may set the rules. The run did not check `classifyAllShell`, because it is not in the `auto-mode config` output.
+[^strip-defaults]: The program, `chunk-2yx6c1y2.js:7701` and `chunk-2yx6c1y2.js:7699-7701` (`$957fb5` removes the defaults marker when the call comes from `autoMode` or `autoMode.allow`).
+[^classify-probe]: The program, `chunk-2yx6c1y2.js:7710` (`classifyAllShell`) (the setting is on when any source sets `classifyAllShell` to `true`).
 [^defaults-probe]: A probe with the cc-inspect `code` action `cli`.
-[^setup-off]: The program, `chunk-hg1yqkjk.js:175860`. The notice text is at `chunk-zs9k1w9q.js:26334`, and the command description at `chunk-hg1yqkjk.js:100280-100284` (`skillOverrides` and `"off"` for `auto-mode-setup`).
-[^settings-order]: The program, `chunk-rwevfvv3.js:2317` (the `config` subcommand and its description, with no option) and `chunk-txash88y.js:3818` (`--settings` on the top-level command).
-[^critique]: The program, `chunk-j0acjxk3.js:899` (the `critique` prompt for clarity, completeness, and conflicts) and `chunk-j0acjxk3.js:932` (`cli_auto_mode_critique`).
-[^setup-form]: The program, `chunk-g6ehgwpm.js:613-614` (the `/auto-mode-setup` usage with `--apply-file`) and `chunk-hg1yqkjk.js:175846` (`supportsNonInteractive`).
-[^model-env]: The program, `chunk-hg1yqkjk.js:175536-175577` (`ignoring CLAUDE_CODE_AUTO_MODE_MODEL=`).
-[^summary-flag]: The program, `chunk-g3fe0enm.js:103`.
-[^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it, `chunk-gvhwnc7g.js:516`.
-[^chrome-flag]: The program, `chunk-0cw29n2z.js:867`. The flag is `tengu_cowork_chrome_automode_default`.
-[^bg-rules]: The program, `chunk-mjwpm8mh.js:1211` and `chunk-a5enk9gz.js:667`.
-[^auto-reresolve]: The program, `chunk-0cw29n2z.js:1329`.
-[^auto-fallback]: The program, `chunk-nw59frmc.js:126`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
-[^odd-word]: The program, `chunk-7b3h6etb.js:651` (the plain-character test `$57cd20`), `chunk-7b3h6etb.js:677-710` (the word scan `$86c7f7`), and `chunk-7b3h6etb.js:574-616` (the wrapper list `$7bc3b1`). It is used for `Bash` rules at `chunk-7b3h6etb.js:692-697` (`$7dbc59`). The rule applies to `Bash` only. Rules that fail the check, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay.
-[^runners-327]: The program, `chunk-7b3h6etb.js:536-573` (the lists `python`, `npx`, `bunx`, `npm run`, `bash`, `ssh`, `eval`, `xargs`, and `sudo`).
-[^ps-dot-slash]: The program, `chunk-7b3h6etb.js:653` (the `.\` pattern `$f05897`) and `chunk-7b3h6etb.js:787` (the backslash change).
-[^win-path]: The program, `chunk-7b3h6etb.js:651` (the character test `$57cd20`) and `chunk-7b3h6etb.js:677-710` (the word scan `$86c7f7`). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.
-[^setup-denials]: The program, `chunk-vxsgd0n6.js:2054` (the list "Recent auto-mode denial reasons"), `chunk-vxsgd0n6.js:1926` (the pattern that reads the reason after "denied by the Claude Code auto mode classifier"), and `chunk-a0ry03fg.js:443` (the prompt asks for "allow carve-outs").
+[^setup-off]: The program, `chunk-bzyb60p0.js:178171`. The notice text is at `chunk-3pqaw3hv.js:27123`, and the command description at `chunk-tfs0ssqe.js:511-515` (`skillOverrides` and `"off"` for `auto-mode-setup`).
+[^settings-order]: The program, `chunk-agsb1bpm.js:2319` (the `config` subcommand and its description, with no option) and `chunk-rckksdmd.js:3828` (`--settings` on the top-level command).
+[^critique]: The program, `chunk-4s39hpzt.js:926` (the `critique` prompt for clarity, completeness, and conflicts) and `chunk-4s39hpzt.js:959` (`cli_auto_mode_critique`).
+[^setup-form]: The program, `chunk-ykchjtmn.js:635-636` (the `/auto-mode-setup` usage with `--apply-file`) and `chunk-bzyb60p0.js:178157` (`supportsNonInteractive`).
+[^model-env]: The program, `chunk-bzyb60p0.js:177838-177879` (`ignoring CLAUDE_CODE_AUTO_MODE_MODEL=`).
+[^summary-flag]: The program, `chunk-d28sbgqz.js:103`.
+[^ignored-env]: The program lists the name in its environment table as a boolean, and no code reads it, `chunk-c203g5kd.js:523`.
+[^chrome-flag]: The program, `chunk-awvk50qj.js:873`. The flag is `tengu_cowork_chrome_automode_default`.
+[^bg-rules]: The program, `chunk-0rtj0bmp.js:1249` and `chunk-8j73rsm0.js:667`.
+[^auto-reresolve]: The program, `chunk-awvk50qj.js:1341`.
+[^auto-fallback]: The program, `chunk-g6s9cndm.js:127`, which logs `[auto-mode] the built-in auto default gave way to ... served settings failed`. The program skips the fallback when `CLAUDE_CODE_BRIDGE_CHILD_AUTO_DEFAULT` is set.
+[^odd-word]: The program, `chunk-bz1f2qnq.js:341` (the plain-character test `$57cd20`), `chunk-bz1f2qnq.js:361-394` (the word scan `$86c7f7`), and `chunk-bz1f2qnq.js:264-306` (the wrapper list `$7bc3b1`). It is used for `Bash` rules at `chunk-bz1f2qnq.js:382-387` (`$db6532`). The rule applies to `Bash` only. Rules that fail the check, such as `$HOME *`, `~/bin/x*`, and `FOO=1 *`, still go. Rules such as `git *`, `~/bin/x *`, and `/usr/bin/git *` stay.
+[^runners-327]: The program, `chunk-bz1f2qnq.js:226-263` (the lists `python`, `npx`, `bunx`, `npm run`, `bash`, `ssh`, `eval`, `xargs`, and `sudo`).
+[^ps-dot-slash]: The program, `chunk-bz1f2qnq.js:343` (the `.\` pattern `$f05897`) and `chunk-bz1f2qnq.js:477` (the backslash change).
+[^win-path]: The program, `chunk-bz1f2qnq.js:341` (the character test `$57cd20`) and `chunk-bz1f2qnq.js:361-394` (the word scan `$86c7f7`). A backslash is not in the set of plain characters, so the word is skipped and no program word is left.
+[^setup-denials]: The program, `chunk-gw165ba5.js:1698` (the list "Recent auto-mode denial reasons"), `chunk-gw165ba5.js:1574` (the pattern that reads the reason after "denied by the Claude Code auto mode classifier"), and `chunk-pzrhcp2k.js:443` (the prompt asks for "allow carve-outs").

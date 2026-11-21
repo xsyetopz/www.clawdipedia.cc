@@ -88,6 +88,6 @@ See [Subagent Runtime](runtime.md) for the details, and [Agent Loop](../../how-i
 
 ## Sources
 
-[^desc-cost]: The program, the startup warning, `chunk-h2e446cb.js:4936` ("Agent descriptions are over the" with the `large-agent-descriptions` check at `chunk-h2e446cb.js:4926`).
+[^desc-cost]: The program, the startup warning, `chunk-w3q7cmdt.js:4977` ("Agent descriptions are over the" with the `large-agent-descriptions` check at `chunk-w3q7cmdt.js:4967`).
 
 Official pages: [Create Custom Subagents](https://code.claude.com/docs/en/sub-agents) and [Environment Variables](https://code.claude.com/docs/en/env-vars).

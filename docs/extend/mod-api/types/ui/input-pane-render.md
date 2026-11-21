@@ -265,10 +265,10 @@ The size that a surface draws into, in character cells of the monospace metric o
 
 ## Sources
 
-[^notify-read]: The program, checks `chunk-hg1yqkjk.js:213442` (`kri`), call `chunk-qsd8sbe8.js:13908`, and the `ui_notify` message `chunk-w03c3634.js:15513`.
-[^dock]: The program, `chunk-zs9k1w9q.js:34558` (`$afb933`: the cap is the lesser of 45% of the columns and the columns minus 60, the floor is 24, and below `$f573b7` the dock is 0) and `chunk-zs9k1w9q.js:125687` (`"under_110"`, the 110 columns).
-[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-w03c3634.js:15631`.
-[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-qsd8sbe8.js:4313` (the props `label`, `value`, `max`, `valueText`, and `color`). Its table of the tags of each surface starts at `chunk-qsd8sbe8.js:1767` (`Progress`). A surface other than mobile gets a `Progress` as Box and Text, and mobile gets the `Progress` with its own `value`, at `chunk-qsd8sbe8.js:6220`.
-[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-87crjpw7.js:157` (`$204e86`: on `"mobile"`, a `Progress` stays whole when the client names it in `draws`, else it becomes the Box and Text of `$3624f1`; other surfaces get it unchanged).
-[^shader-props]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-dm9xqacz.js:6`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
-[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The program, `chunk-qsd8sbe8.js:7736`.
+[^notify-read]: The program, checks `chunk-bzyb60p0.js:216263` (`kri`), call `chunk-0w2wb7gk.js:14344`, and the `ui_notify` message `chunk-xfj2cwfv.js:15553`.
+[^dock]: The program, `chunk-3pqaw3hv.js:35356` (`$86c2ae`: the cap is the lesser of 45% of the columns and the columns minus 60, the floor is 24, and below `$83fca2` the dock is 0) and `chunk-3pqaw3hv.js:127974` (`"under_110"`, the 110 columns).
+[^placement]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-xfj2cwfv.js:15671`.
+[^progress-props]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-0w2wb7gk.js:4416` (the props `label`, `value`, `max`, `valueText`, and `color`). Its table of the tags of each surface starts at `chunk-0w2wb7gk.js:1793` (`Progress`). A surface other than mobile gets a `Progress` as Box and Text, and mobile gets the `Progress` with its own `value`, at `chunk-0w2wb7gk.js:6323`.
+[^progress-node]: The Mod API type file, `schemas/claude-code.d.ts`. The program, `chunk-1ea72zr6.js:163` (`$204e86`: on `"mobile"`, a `Progress` stays whole when the client names it in `draws`, else it becomes the Box and Text of `$3624f1`; other surfaces get it unchanged).
+[^shader-props]: The program, the Mod API type file `claude-code.d.ts`, bundled at `chunk-0yef3dc4.js:6`, published as `schemas/claude-code.d.ts`, `ShaderProps`.
+[^render-plugin]: The Mod API type file, `schemas/claude-code.d.ts`, `RenderInputOf`. The program, `chunk-0w2wb7gk.js:7839`.

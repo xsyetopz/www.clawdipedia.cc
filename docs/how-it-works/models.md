@@ -121,8 +121,8 @@ The loop also recovers from a stop at `max_tokens` and from a bad tool call. See
 
 ## Sources
 
-[^no-fallback]: The program, `chunk-wm04tzdx.js:9033`, a message that names the variable.
-[^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-hg1yqkjk.js:160380` (a `429` or `529` with `x-should-retry: false` is not retried) and `chunk-hg1yqkjk.js:158817` (`CLAUDE_CODE_RETRY_WATCHDOG` does not change that).
-[^no-retry]: The program, `chunk-76t3g1yn.js:10760` (the shared retry check) and `chunk-hg1yqkjk.js:160380` (the Claude Code check for the statuses `429` and `529`).
-[^reactive]: The program, `chunk-hg1yqkjk.js:119503` for the error text, `chunk-wm04tzdx.js:9495` (`$718cc2`) checks for that refusal against the standard window (`200000` at `chunk-aq3ms068.js:24061`), then the code at `chunk-hg1yqkjk.js:130448` (`$6f243c`) runs the reactive compaction.
-[^gateways]: The program, `chunk-nchg3ttk.js:245` for the phrases and `chunk-nchg3ttk.js:267` for the replies that do not count (`policy_blocked`, `dlp_request_denied`), and `chunk-hg1yqkjk.js:118378` for the statuses (`undefined`, `400`, `413`, `422`).
+[^no-fallback]: The program, `chunk-k5r71ad2.js:9321`, a message that names the variable.
+[^retry-rule]: The [Claude Code changelog](https://code.claude.com/docs/en/changelog). The program, `chunk-bzyb60p0.js:162653` (a `429` or `529` with `x-should-retry: false` is not retried) and `chunk-bzyb60p0.js:161090` (`CLAUDE_CODE_RETRY_WATCHDOG` does not change that).
+[^no-retry]: The program, `chunk-gq1dr8pm.js:10614` (the shared retry check) and `chunk-bzyb60p0.js:162653` (the Claude Code check for the statuses `429` and `529`).
+[^reactive]: The program, `chunk-bzyb60p0.js:120723` for the error text, `chunk-k5r71ad2.js:9783` (`$6bd4c8`) checks for that refusal against the standard window (`200000` at `chunk-865at33z.js:24160`), then the code at `chunk-bzyb60p0.js:132512` (`$57b4a1`) runs the reactive compaction.
+[^gateways]: The program, `chunk-cy0ck7w2.js:244` for the phrases and `chunk-cy0ck7w2.js:266` for the replies that do not count (`policy_blocked`, `dlp_request_denied`), and `chunk-bzyb60p0.js:119587` for the statuses (`undefined`, `400`, `413`, `422`).

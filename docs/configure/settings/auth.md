@@ -81,21 +81,21 @@ The [`oidc` table](https://code.claude.com/docs/en/claude-apps-gateway-config#oi
 
 ## Sources
 
-[^schema]: The program, its bundled settings schema, `chunk-t39fw2cy.js:8182` (`xaaIdp`, with `clientId` and `callbackPort`).
-[^providers]: The program, `chunk-t39fw2cy.js:8910` (`allowedProviders`), `chunk-fn9dv1zs.js:679` ("none (managed allowedProviders is empty)"), `chunk-614w915w.js:48252` (the login-blocked message, `allowedProviders`), `chunk-0a2wm2a2.js:3804` (the check: a provider name that is not in the list is refused with the reason `not_listed`), `chunk-0a2wm2a2.js:3574` (the machine list and the policy slot list are intersected), `chunk-0a2wm2a2.js:3926` (`$7583e0` throws its message before a request), and `chunk-76t3g1yn.js:18640` (the API client calls it).
-[^force-login]: The program, `chunk-t39fw2cy.js:8861`.
-[^nested-login]: The program, `chunk-t39fw2cy.js:8904` for the schema text (`allowNestedModelAccessUnderForceLogin`) and `chunk-aq3ms068.js:30903` for the check.
+[^schema]: The program, its bundled settings schema, `chunk-xcgcdx61.js:8210` (`xaaIdp`, with `clientId` and `callbackPort`).
+[^providers]: The program, `chunk-xcgcdx61.js:8945` (`allowedProviders`), `chunk-m568ebwc.js:684` ("none (managed allowedProviders is empty)"), `chunk-a0tz781a.js:50313` (the login-blocked message, `allowedProviders`), `chunk-tvttgr51.js:2826` (the check: a provider name that is not in the list is refused with the reason `not_listed`), `chunk-tvttgr51.js:2596` (the machine list and the policy slot list are intersected), `chunk-tvttgr51.js:2948` (`$5210c1` throws its message before a request), and `chunk-gq1dr8pm.js:17252` (the API client calls it).
+[^force-login]: The program, `chunk-xcgcdx61.js:8896`.
+[^nested-login]: The program, `chunk-xcgcdx61.js:8939` for the schema text (`allowNestedModelAccessUnderForceLogin`) and `chunk-865at33z.js:31131` for the check.
 [^console-login]: Run against a local stand-in server. Probe case `print.err319.console-login-no-key`.
 [^profile-dir]: Probe case `pty.cli319.login-console-profile-no-dir`.
-[^gateway-login]: The program, `chunk-f5q1yhhc.js:839` and `chunk-f5q1yhhc.js:878`.
-[^org-check]: The program, `chunk-f5q1yhhc.js:816`.
-[^provider-setup]: The program, `chunk-76t3g1yn.js:16978` (the project and region characters, `claude.googleapis.com`), `chunk-76t3g1yn.js:18777` (`ANTHROPIC_FOUNDRY_RESOURCE`, the Foundry resource name), and `chunk-0a2wm2a2.js:3885` (`allowedProviders`).
-[^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-aq3ms068.js:19530`.
-[^overlay]: The program, `chunk-d24x4t47.js:8657` (the refusal `invalid:`) and `chunk-d24x4t47.js:8581` (the warning `Sent to Claude Desktop as written.`). The `${…}` label is `managed.policies[N].desktop`, where `N` is the index of the policy in the gateway file (`chunk-d24x4t47.js:10016`, `c1.desktop`).
-[^delegated]: The program, `chunk-hg1yqkjk.js:171019` (the refusal text), `chunk-0a2wm2a2.js:3845` (`CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`), `chunk-avkdw0az.js:1220` (the default list), `chunk-avkdw0az.js:1224` (`CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS`), and `chunk-avkdw0az.js:1256` (the check for a model override and for `foundry`).
-[^oidc]: The program, `chunk-d24x4t47.js:9335` (`user_id_claim`, an optional non-empty string), `chunk-d24x4t47.js:13676` (the default `sub`), and `chunk-d24x4t47.js:13715` (`USER_ID_CLAIM_MISSING`).
-[^org-gw-read]: The program, `chunk-rw1hssmd.js:199` (the text "It could not read your saved sign-in to your organization's gateway") and `chunk-rw1hssmd.js:129` (the opening "Claude Code did not send this request.").
-[^org-gw-limits]: The program, `chunk-rw1hssmd.js:169` (the text "may not use the sign-ins that this computer keeps" and the advice to start `claude` in a terminal).
-[^org-gw-helper]: The program, `chunk-dphfewcj.js:386` (the text "credential helper didn't run, and the request wasn't sent").
-[^org-gw-methods]: The program, `chunk-z9j6gvtc.js:1190` (the text "The sign-in methods that this computer's policy allows have changed").
-[^org-gw-files]: The program, `chunk-22m075cp.js:261` (the text "Files API is unavailable at your organization's gateway").
+[^gateway-login]: The program, `chunk-dmskq8gj.js:871` and `chunk-dmskq8gj.js:910`.
+[^org-check]: The program, `chunk-dmskq8gj.js:848`.
+[^provider-setup]: The program, `chunk-gq1dr8pm.js:15601` (the project and region characters, `claude.googleapis.com`), `chunk-gq1dr8pm.js:17387` (`ANTHROPIC_FOUNDRY_RESOURCE`, the Foundry resource name), and `chunk-tvttgr51.js:2907` (`allowedProviders`).
+[^headers]: Probe case `print.err319.custom-headers-bad-authorization`. The program, `chunk-865at33z.js:19616`.
+[^overlay]: The program, `chunk-xnzxknv5.js:8696` (the refusal `invalid:`) and `chunk-xnzxknv5.js:8620` (the warning `Sent to Claude Desktop as written.`). The `${…}` label is `managed.policies[N].desktop`, where `N` is the index of the policy in the gateway file (`chunk-xnzxknv5.js:9854`, `c1.desktop`).
+[^delegated]: The program, `chunk-bzyb60p0.js:173321` (the refusal text), `chunk-tvttgr51.js:2867` (`CLAUDE_CODE_USER_DELEGATED_SESSION_DIRECT_API`), `chunk-vc58gmrj.js:1037` (the default list), `chunk-vc58gmrj.js:1041` (`CLAUDE_CODE_USER_DELEGATED_SESSION_ALLOWED_CHECK_MODELS`), and `chunk-vc58gmrj.js:1073` (the check for a model override and for `foundry`).
+[^oidc]: The program, `chunk-xnzxknv5.js:9173` (`user_id_claim`, an optional non-empty string), `chunk-xnzxknv5.js:13676` (the default `sub`), and `chunk-xnzxknv5.js:13715` (`USER_ID_CLAIM_MISSING`).
+[^org-gw-read]: The program, `chunk-hxqzwt88.js:197` (the text "It could not read your saved sign-in to your organization's gateway") and `chunk-hxqzwt88.js:127` (the opening "Claude Code did not send this request.").
+[^org-gw-limits]: The program, `chunk-hxqzwt88.js:167` (the text "may not use the sign-ins that this computer keeps" and the advice to start `claude` in a terminal).
+[^org-gw-helper]: The program, `chunk-mn0yw68p.js:384` (the text "credential helper didn't run, and the request wasn't sent").
+[^org-gw-methods]: The program, `chunk-bxvzmae8.js:1198` (the text "The sign-in methods that this computer's policy allows have changed").
+[^org-gw-files]: The program, `chunk-271f5kxt.js:232` (the text "Files API is unavailable at your organization's gateway").

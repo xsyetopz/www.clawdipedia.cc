@@ -29,7 +29,7 @@ Captured from a real interactive session of Claude Code 2.1.329 against a local 
 
 ## How to Override It
 
-A user agent file with the same name replaces it. Put the file in `.claude/agents/claude-code-guide.md`. The shared agent merge code applies to it, with `built-in`, `plugin`, `userSettings`, `projectSettings`, `flagSettings`, and `policySettings` sources (The program, `chunk-hg1yqkjk.js:140332`). See [Override a Prompt](../other/override.md).
+A user agent file with the same name replaces it. Put the file in `.claude/agents/claude-code-guide.md`. The shared agent merge code applies to it, with `built-in`, `plugin`, `userSettings`, `projectSettings`, `flagSettings`, and `policySettings` sources (The program, `chunk-bzyb60p0.js:142509`). See [Override a Prompt](../other/override.md).
 
 ## Full Text
 
@@ -189,5 +189,5 @@ Notes:
 
 ## Sources
 
-[^model]: The program, `chunk-hg1yqkjk.js:139860`.
-[^entry]: The program, `chunk-hg1yqkjk.js:140207`.
+[^model]: The program, `chunk-bzyb60p0.js:142024` (`model: "haiku"`, then `getSystemPrompt`, which builds the end of the prompt).
+[^entry]: The program, `chunk-bzyb60p0.js:142384`.

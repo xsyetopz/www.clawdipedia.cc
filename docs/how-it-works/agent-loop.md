@@ -217,10 +217,10 @@ stateDiagram-v2
 
 ## Sources
 
-[^stages]: The program, `chunk-hg1yqkjk.js:67509` (the `PreModelSwitch` hook) and `chunk-hg1yqkjk.js:9817` (the `prompt.attachment` mod event), for the stages that the official pages do not cover.
-[^cwd]: The program, `chunk-hg1yqkjk.js:248255` (`Working directory "<path>" is gone`), `chunk-hg1yqkjk.js:248285` (the agent in a removed worktree), and `chunk-hg1yqkjk.js:248309` (the pinned session).
-[^sub-limit]: The program, `chunk-e9fhcxkx.js:255` (the first nudge, "Your caller does not receive an answer in pieces") and `chunk-e9fhcxkx.js:259` (the second nudge, "Output token limit hit again").
-[^max-tokens]: The program, `chunk-hg1yqkjk.js:154443` (`lowerAfter` sets the cap to the 32000 value), and `chunk-hg1yqkjk.js:167204` (call site, which skips a 401 and a policy-blocked error).
-[^nudge-count]: The program, `chunk-wm04tzdx.js:9980` (the limit of 3, compared with `maxOutputTokensRecoveryCount`) and `chunk-wm04tzdx.js:9979-9981` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
-[^cut-limit]: The program, `chunk-aq3ms068.js:24330` (the 32,000 and 128,000 values, and the `claude-3` models before it at `chunk-aq3ms068.js:24327`), `chunk-aq3ms068.js:24315` (the condition for an unrecognized model, with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`), and `chunk-hg1yqkjk.js:154433` (`continuesCutReply`, the limit for a reply that continues a cut reply, used only for such a model).
-[^v307]: The program, `chunk-wm04tzdx.js:17084`.
+[^stages]: The program, `chunk-bzyb60p0.js:68525` (the `PreModelSwitch` hook) and `chunk-bzyb60p0.js:10391` (the `prompt.attachment` mod event), for the stages that the official pages do not cover.
+[^cwd]: The program, `chunk-bzyb60p0.js:251637` (`Working directory "<path>" is gone`), `chunk-bzyb60p0.js:248285` (the agent in a removed worktree), and `chunk-bzyb60p0.js:251691` (the pinned session).
+[^sub-limit]: The program, `chunk-0ha8wex8.js:198` (the first nudge, "Your caller does not receive an answer in pieces") and `chunk-0ha8wex8.js:202` (the second nudge, "Output token limit hit again").
+[^max-tokens]: The program, `chunk-bzyb60p0.js:156693` (`lowerAfter` sets the cap to the 32000 value), and `chunk-bzyb60p0.js:169492` (call site, which skips a 401 and a policy-blocked error).
+[^nudge-count]: The program, `chunk-k5r71ad2.js:10268` (the limit of 3, compared with `maxOutputTokensRecoveryCount`) and `chunk-k5r71ad2.js:10267-10269` (the counter `maxOutputTokensRecoveryCount` ends the retries after the third).
+[^cut-limit]: The program, `chunk-865at33z.js:24423` (the 32,000 and 128,000 values, and the `claude-3` models before it at `chunk-865at33z.js:24420`), `chunk-865at33z.js:24408` (the condition for an unrecognized model, with `CLAUDE_CODE_MAX_OUTPUT_TOKENS`), and `chunk-bzyb60p0.js:156683` (`continuesCutReply`, the limit for a reply that continues a cut reply, used only for such a model).
+[^v307]: The program, `chunk-k5r71ad2.js:17576`.

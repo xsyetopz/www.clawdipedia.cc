@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://clawdipedia.cc/schemas/claude-code-settings.json",
-	"title": "Claude Code settings.json (Claude Code 2.1.329)",
-	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.329 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
+	"title": "Claude Code settings.json (Claude Code 2.1.330)",
+	"$comment": "For settings.json (user, project, local). Generated from Claude Code 2.1.330 by calling the zod v4 toJSONSchema embedded in the binary on its own validator (method A, runtime export). Do not edit by hand: run \"bun run schemas\".",
 	"type": "object",
 	"properties": {
 		"$schema": {
@@ -674,6 +674,10 @@
 			"description": "Disable the skills and workflows that ship with Claude Code: bundled skills and workflows are removed entirely; built-in slash commands stay typable but are hidden from the model. Plugins, .claude/skills/, and .claude/commands/ are unaffected. Equivalent to CLAUDE_CODE_DISABLE_BUNDLED_SKILLS=1.",
 			"type": "boolean"
 		},
+		"disableDirectMcpSkills": {
+			"description": "When true in managed settings, Claude Code lists and loads no skill of an MCP server that it connects to directly, reads no listed file of a loaded one, and lists no directory of the server. On the Team and Enterprise plans these skills are off unless an administrator sets it to false. Connectors that Claude Code reaches through Anthropic keep their skills, and each server keeps its tools. In a user, project or local settings file it has no effect.",
+			"type": "boolean"
+		},
 		"managedMcpServers": {
 			"description": "MCP servers the organization provides to every user, keyed by server name, each with the .mcp.json entry shape; only \"http\" and \"sse\" servers are accepted (nothing that names a program to run, no ${VAR} references). Honored from managed settings only; users cannot remove them, deniedMcpServers still applies, and they need no allowedMcpServers entry. Not read in Claude Desktop's Code tab on a third-party deployment or in Cowork sessions, where Claude Desktop supplies and locks the session's MCP servers itself.",
 			"type": "object",
@@ -734,7 +738,7 @@
 						}
 					},
 					"serverUrl": {
-						"description": "URL pattern with wildcard support (e.g., \"https://*.example.com/*\") for blocked remote MCP servers",
+						"description": "URL pattern with wildcard support (e.g., \"https://*.example.com/*\") for blocked remote MCP servers. A pattern with no query also blocks the URL with any query, or with a trailing slash added or, if its path has no wildcard, removed.",
 						"type": "string"
 					}
 				}

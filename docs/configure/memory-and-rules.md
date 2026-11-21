@@ -180,20 +180,20 @@ Each row is a family of messages. The backticked text is the start that every me
 ## Sources
 
 [^managed-probe]: [Probes](../reference/probes.md#managed-folder-probe).
-[^cloud-memory]: The program, `chunk-73rzabst.js:360` (the `dynamic` scope test; the path pattern is at `chunk-73rzabst.js:355`) and `chunk-2gn6xd4c.js:1626`.
+[^cloud-memory]: The program, `chunk-2mwshd9r.js:360` (the `dynamic` scope test; the path pattern is at `chunk-2mwshd9r.js:355`) and `chunk-ar6xc1fx.js:1626`.
 [^post-turn-case]: Probe case `print.configmem.cowork-memory.post-turn`.
 [^post-turn-mounted]: Probe case `print.configmem.cowork-memory.post-turn-mounted`.
-[^cowork-run]: Cases `print.configmem.cowork-memory.*` on 2.1.329 (`guidelines`, `extra-guidelines`, `index-content`, `path-override`, `remote-path-override`), run in `-p`. The program, `chunk-hg1yqkjk.js:105205` (an empty `CLAUDE_COWORK_MEMORY_INDEX_CONTENT` skips the index read).
-[^labels]: The program, `chunk-qsd8sbe8.js:7121` (the labels, `$bc21c6`) and `chunk-qsd8sbe8.js:7150` (the line `Contents of`).
-[^label-print]: The program, `chunk-qsd8sbe8.js:7125` (the labels) and `chunk-qsd8sbe8.js:7147` (the quoted path and the greater-than prefix of an unverified file; the label text is at `chunk-qsd8sbe8.js:7143`).
-[^cond-mod]: The program, `chunk-qsd8sbe8.js:7115` (a `managed` file is unverified unless it matches a file sent to the mod, or the mod is vouched for) and `chunk-qsd8sbe8.js:7088` (a file counts as unverified when `isUnverified` is set or the managed file test `$717883` holds).
-[^cond-vouch]: The program, `chunk-qsd8sbe8.js:7115` (`isVouched`) and `chunk-pz0demn3.js:564` (a handler is vouched for when it is not a user-origin one and its tier is `prepend` or `append`, or the engine answers for it).
-[^vouch-builtin]: The program, `chunk-43hq1cm6.js:2479` (an id is built in when it ends with `@builtin`).
-[^vouch-managed]: The program, `chunk-q0j6490d.js:755` (the setting text names the rule: managed settings declare the marketplace under `extraKnownMarketplaces` as a local directory, and it lists the plugin by a relative path).
-[^cond-cowork]: The program, `chunk-qsd8sbe8.js:7054` (`$717883`, the test for a managed file, which asks whether its folder holds a link or a file that the session's account could have changed) and `chunk-qsd8sbe8.js:7143` (the label text, `$7a5a6f`).
-[^same-host]: The program, `chunk-qsd8sbe8.js:2547` (the merged step of mods in a row, marked `isHop`), `chunk-qsd8sbe8.js:7114` (for such a step the label each file already has is kept; the other step checks managed files again), and `chunk-hg1yqkjk.js:216922` (`CLAUDE_CODE_HOOKS_SAME_THREAD` picks the `same-thread` host, and a build without it uses a `worker`).
-[^modified]: The program, `chunk-fsb1r1ev.js:355` (the ISO string, `toISOString`) and `chunk-fsb1r1ev.js:415` (the `modified` field).
-[^size-warning]: The program, `chunk-h2e446cb.js:4724` (the banner text `-char limit (`) and `chunk-fn9dv1zs.js:315` (the `/status` text `will impact performance`).
-[^v309]: The program, `chunk-hg1yqkjk.js:12172` (the note text `Only the start of this file is shown.`) and `chunk-hg1yqkjk.js:12175` (the cut at the last line break, `lastIndexOf`).
+[^cowork-run]: Cases `print.configmem.cowork-memory.*` on 2.1.329 (`guidelines`, `extra-guidelines`, `index-content`, `path-override`, `remote-path-override`), run in `-p`. The program, `chunk-bzyb60p0.js:106326` (an empty `CLAUDE_COWORK_MEMORY_INDEX_CONTENT` skips the index read).
+[^labels]: The program, `chunk-0w2wb7gk.js:7224` (the labels, `$bc21c6`) and `chunk-0w2wb7gk.js:7253` (the line `Contents of`).
+[^label-print]: The program, `chunk-0w2wb7gk.js:7228` (the labels) and `chunk-0w2wb7gk.js:7250` (the quoted path and the greater-than prefix of an unverified file; the label text is at `chunk-0w2wb7gk.js:7246`).
+[^cond-mod]: The program, `chunk-0w2wb7gk.js:7218` (a `managed` file is unverified unless it matches a file sent to the mod, or the mod is vouched for) and `chunk-0w2wb7gk.js:7191` (a file counts as unverified when `isUnverified` is set or the managed file test `$717883` holds).
+[^cond-vouch]: The program, `chunk-0w2wb7gk.js:7218` (`isVouched`) and `chunk-6x49srhn.js:566` (a handler is vouched for when it is not a user-origin one and its tier is `prepend` or `append`, or the engine answers for it).
+[^vouch-builtin]: The program, `chunk-vfyns8ja.js:2487` (an id is built in when it ends with `@builtin`).
+[^vouch-managed]: The program, `chunk-vcnr02by.js:759` (the setting text names the rule: managed settings declare the marketplace under `extraKnownMarketplaces` as a local directory, and it lists the plugin by a relative path).
+[^cond-cowork]: The program, `chunk-0w2wb7gk.js:7157` (`$abade3`, the test for a managed file, which asks whether its folder holds a link or a file that the session's account could have changed) and `chunk-0w2wb7gk.js:7246` (the label text, `$7a5a6f`).
+[^same-host]: The program, `chunk-0w2wb7gk.js:2573` (the merged step of mods in a row, marked `isHop`), `chunk-0w2wb7gk.js:7217` (for such a step the label each file already has is kept; the other step checks managed files again), and `chunk-bzyb60p0.js:219872` (`CLAUDE_CODE_HOOKS_SAME_THREAD` picks the `same-thread` host, and a build without it uses a `worker`).
+[^modified]: The program, `chunk-xkpbmcsq.js:355` (the ISO string, `toISOString`) and `chunk-xkpbmcsq.js:415` (the `modified` field).
+[^size-warning]: The program, `chunk-w3q7cmdt.js:4736` (the banner text `-char limit (`) and `chunk-m568ebwc.js:317` (the `/status` text `will impact performance`).
+[^v309]: The program, `chunk-bzyb60p0.js:12830` (the note text `Only the start of this file is shown.`) and `chunk-bzyb60p0.js:12833` (the cut at the last line break, `lastIndexOf`).
 [^nested-limit]: Cases `print.misc.nested-claude-md-over-limit.*` on 2.1.329 (`charsKept`), a 200,022-character `sub/CLAUDE.md` loaded by a Read under `sub/`.
-[^instr-files]: The program, `chunk-q7gb0brk.js:107` (the four values, and the default `claude-md-or-agents-md`), `chunk-enc93zxb.js:391` (the plugin reads `instructionFiles`) and `chunk-t39fw2cy.js:381` (the short name `agents-md` maps to `cc-plugin-agents-md`).
+[^instr-files]: The program, `chunk-9bypzm3p.js:107` (the four values, and the default `claude-md-or-agents-md`), `chunk-rbdpcbwj.js:392` (the plugin reads `instructionFiles`) and `chunk-xcgcdx61.js:381` (the short name `agents-md` maps to `cc-plugin-agents-md`).

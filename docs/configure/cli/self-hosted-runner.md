@@ -1,11 +1,11 @@
 ---
 title: Self-Hosted Runner
-description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.329, with the parser rules and each error.
+description: Every option of claude self-hosted-runner and its orchestrator, setup, doctor, and decode-token subcommands in 2.1.330, with the parser rules and each error.
 sidebar_position: 5
 ---
 
 `claude self-hosted-runner` runs Claude Code cloud sessions on a machine that you control. The root help text does not list the command.
-The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.329`, with the options that the official pages do not name, and the exact parser rules.
+The [official overview](https://code.claude.com/docs/en/self-hosted-environments) explains environments and runners. The [deploy guide](https://code.claude.com/docs/en/self-hosted-environments-deploy) and the [configuration guide](https://code.claude.com/docs/en/self-hosted-environments-configuration) explain most options. This page lists every option in `2.1.330`, with the options that the official pages do not name, and the exact parser rules.
 
 The variables are on [Remote and Cloud Session Variables](../env-vars/remote-and-cloud-sessions.md).[^runner-help]
 
@@ -71,6 +71,7 @@ The command has its own parser. It does not use the parser of the root `claude` 
 | `--repository-folder <owner>/<repo>=<folder>` | <Undocumented /> | Names the folder that sessions use for a repository, such as its pre-warmed checkout on a volume, in place of `<owner>/<repo>` under `--base-dir`. `'<owner>/*=<folder>/*'` (in quotes) covers each repository of the owner: the folder in `<folder>` that has its name. You can repeat the flag. Each folder must exist when the runner starts, under its real path. At `--capacity` 1 it may lie in the base folder, except in a runner folder that starts with a dot or an underscore, in a `.git`, in the owner's folder, or in the repository's own path. It may not be or hold the base folder. At `--capacity` above 1 a folder that lies in the base folder stops start-up; otherwise the flag does nothing and the runner logs a warning. When a `checkout` hook prepares the repository, the runner does not use the folder. It reads `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER` as a comma-separated list.[^repo-folder] | None |
 | `--diff-finds-nested-repository [bool]` | <Undocumented /> | Lets the Changes pane show a repository cloned in a subfolder of a session started with no repository. Needs `--capacity 1`, and works only while the tool sandbox is off. The runner tells the child about it with `--runner-declares` (see [All Flags](flags.md)). If `--exec-path` is a script, it must put nothing before `"$@"`. | `false` |
 | `--confine-repo-settings <mode>` | <Documented /> | Sets the guard for settings committed in the repository: `warn`, `enforce`, or `off`. | `warn` |
+| `--start-dir <owner>/<repo>=<folder>` | <Undocumented /> | Starts Claude in this folder of that repository, as in `acme/web=services/api`. Settings, hooks, and MCP servers load as they do without the flag, not from this folder. Repeat the flag to name more than one repository; each repository can appear once. The variable takes the same entries with commas between them, and the runner reads it only when no `--start-dir` is given. The folder is relative to the repository root; an absolute path, `..`, a link, a `.git` folder, or a folder in a nested repository is not used.[^start-dir] | None. `SELF_HOSTED_RUNNER_START_DIR` |
 | `--server-auto-mode-lists <mode>` | <Undocumented /> | Sets which auto mode classifier lists from the server a session may get: `all`, `no-allow`, or `none`. `no-allow` holds back the allow list and the exceptions to soft block rules. | `no-allow` |
 | `--host-config-snapshot <mode>` | <Undocumented /> | Sets where the startup copy of the host config folder is kept: `disk` (under `--base-dir`, checked at each session start) or `memory` (64 MiB at most). | `disk` |
 | `--health-port <port>` | <Documented /> | Sets the port of the `/healthz` listener. An integer from 0 to 65535; `0` turns it off. See [Kubernetes](https://code.claude.com/docs/en/self-hosted-environments-deploy#kubernetes). | `8080` |
@@ -127,6 +128,7 @@ Each row is an error of the parser.[^parser-errors] The runner writes each one t
 | `--git-host-rewrite expects bare hostnames (e.g. ext.example.com=int.example.com), not URLs. Got: <value>` | A side holds `://` or `/`.[^probe-git-host-rewrite-url] |
 | `duplicate --git-host-rewrite for '<host>'` | The same `<from>` host twice. |
 | `[runner:warn] --git-ssh-rewrite '<host>' will not match: --git-host-rewrite rewrites it to '<to>' first.` | A warning. The runner goes on. |
+| `--start-dir must be <owner>/<repo>=<folder>, once for each repository (entry <n> is not)` | The value has no `<owner>/<repo>=<folder>` form, names a repository with `/*`, or repeats a repository. `<n>` counts the entry. For the variable, the message names `SELF_HOSTED_RUNNER_START_DIR` in place of `--start-dir`.[^start-dir] |
 | `--confine-repo-settings requires one of enforce/warn/off (got: "<value>")` | A bad mode.[^probe-confine-bad] |
 | `--server-auto-mode-lists requires one of all/no-allow/none (got: "<value>")` | A bad mode.[^probe-lists-bad] |
 | `--host-config-snapshot requires one of disk/memory (got: "<value>")` | A bad mode.[^probe-snapshot-bad] |
@@ -160,6 +162,10 @@ These texts come from the runner while it prepares a repository folder or a sess
 | `[runner:warn] could not read <file> (it names no git server), so it isn't known which git server <repo> is held for ...` | The file that records the git server of a clone has text, but no server name in it.[^folder-no-server] |
 | `[runner:warn] <repo>: could not write <file> (the folder is a link or a file, or cannot be made), so another git server's repository of that name would use this clone too. ...` | The runner could not make the folder for the record of a clone.[^folder-link] |
 | `The session did not start: an earlier start on this runner has not finished moving <path> aside. Ask whoever runs this runner to check that disk and, once it answers, to restart the runner.` | An earlier start still moves the worktree path of the session aside.[^folder-moving] |
+
+### Start Folder Notice
+
+When the runner cannot use the start folder, the session starts where it would without one, and the runner adds this notice: `The start folder that this runner's operator set (<folder>) was not used: <because>. Claude started where it would without one. For the runner's operator: <hint>`.[^start-dir-notice] `<because>` is one of: it contains a control or invisible character; it is an absolute path; it contains `..`; it is, or lies in, git's own `.git` folder; it contains `:`; the repository has no folder at that path; it is, or passes through, a file or a symbolic link; it is, or lies in, another repository; it leads outside the repository; the runner could not check it; or the first repository of the session could not be set up. The notice leaves out the folder for an absolute path and for a control character. The hint for a nested repository says to choose a folder that is not in a submodule or another git repository. The default hint says to set `SELF_HOSTED_RUNNER_START_DIR` (`--start-dir`) to an existing folder that is not a link, relative to the repository root.
 
 ### Start-Up Failure After Registration
 
@@ -211,6 +217,15 @@ These orchestrator errors exit with code 2, then print `Run 'claude self-hosted-
 
 With no hook folder, the orchestrator prints `[runner:fatal] orchestrator requires --hooks-dir (or SELF_HOSTED_RUNNER_HOOKS_DIR) — no spawn-runner hook directory configured` on stdout and exits with code 1.[^orch-no-hooks] The code also refuses a `spawn-runner` hook that is missing, not a regular file, or not executable, and an environment secret without the `ccr:pool_id` claim.
 
+### Runner Metrics
+
+The runner answers `GET /metrics` on the `--health-port` listener in the Prometheus text format. Two gauges give the start-up time of a runner that a work order started.[^runner-metrics]
+
+| Metric | Status | What it counts | Notes |
+| --- | --- | --- | --- |
+| `claude_code_self_hosted_runner_order_to_registered_seconds` | <Undocumented /> | The seconds from the work order that Anthropic issued, before your `spawn-runner` hook ran, to the moment Anthropic accepted the registration of the runner. | Anthropic's clock sets it, unless a proxy rewrites the `Date` header of the reply. It has no value for a runner whose own credential is not a work order, or without a usable `Date` header. A runner that registers after the lease of the order (`--expected-spawn-seconds`) is refused, so a lease that is too short does not show here. |
+| `claude_code_self_hosted_runner_order_to_first_session_seconds` | <Undocumented /> | The seconds from the work order to the reply to the poll that gave the runner its first session, by the same clock. | It has no value before then, on a pre-warmed runner, or in the cases of the first metric. |
+
 ### Orchestrator Metrics
 
 The orchestrator answers `GET /metrics` in the Prometheus text format. It adds two metrics.[^orch-metrics]
@@ -254,51 +269,54 @@ The default of `--api-url` is `ANTHROPIC_BASE_URL`, else the built-in API URL.
 
 ## Sources
 
-[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.329`, and the option parser of the program: the parse loop at `chunk-3kp5jwr6.js:15619` (`--api-url`), its unknown-option branch at `chunk-3kp5jwr6.js:15996` (`unknown flag`), and the root help text from `chunk-3kp5jwr6.js:16568`, which runs to its `--help` line at `chunk-3kp5jwr6.js:17019`.
+[^runner-help]: The text of `claude self-hosted-runner --help` and of each subcommand help in `2.1.329`, and the option parser of the program: the parse loop at `chunk-q0y1fm2x.js:16022` (`--api-url`), its unknown-option branch at `chunk-q0y1fm2x.js:16402` (`unknown flag`), and the root help text from `chunk-q0y1fm2x.js:16982`, which runs to its `--help` line at `chunk-q0y1fm2x.js:17439`.
 [^cli321]: Probe group `cli321`.
-[^exit-codes]: The program, `chunk-3kp5jwr6.js:16181`.
-[^no-clone]: The program, `chunk-3kp5jwr6.js:15981` (the parser), `chunk-3kp5jwr6.js:17372` (the warning), and `chunk-3kp5jwr6.js:17380` (the git version check). The warning and the check both depend on the flag.
-[^gh]: The program, the parser `chunk-3kp5jwr6.js:15677`, the help text `chunk-3kp5jwr6.js:16708`, and the reasons for withholding `chunk-3kp5jwr6.js:1372`.
-[^nested-model]: The program, `chunk-3kp5jwr6.js:15705` (`--nested-model-access`), `chunk-3kp5jwr6.js:15705` (`--nested-model-call-budget`), `chunk-3kp5jwr6.js:16009` (the variables), `chunk-3kp5jwr6.js:16009` and `chunk-3kp5jwr6.js:17053` (the errors), `chunk-3kp5jwr6.js:16812` (the help text), and `chunk-3kp5jwr6.js:17279` (the start-up log).
-[^git-config-global]: The program, `chunk-3kp5jwr6.js:16692` (the reset, in the help text for `GIT_CONFIG_GLOBAL`) and `chunk-3kp5jwr6.js:17632` (the warning).
-[^trust]: The program, `chunk-aq3ms068.js:3506` and `chunk-pxy9yt8m.js:2105`.
-[^parser-errors]: The program, `chunk-3kp5jwr6.js:15996` (`unknown flag`) and `chunk-3kp5jwr6.js:17113` (`error: <message>`). Probe group `cli321`.
-[^orch]: The program, help text and orchestrator parser, `chunk-yg0azpwr.js:1707` and `chunk-yg0azpwr.js:934`.
+[^exit-codes]: The program, `chunk-q0y1fm2x.js:16592`.
+[^no-clone]: The program, `chunk-q0y1fm2x.js:16387` (the parser), `chunk-q0y1fm2x.js:17799` (the warning), and `chunk-q0y1fm2x.js:17807` (the git version check). The warning and the check both depend on the flag.
+[^gh]: The program, the parser `chunk-q0y1fm2x.js:16080`, the help text `chunk-q0y1fm2x.js:17122`, and the reasons for withholding `chunk-q0y1fm2x.js:1421`.
+[^nested-model]: The program, `chunk-q0y1fm2x.js:16108` (`--nested-model-access`), `chunk-q0y1fm2x.js:16108` (`--nested-model-call-budget`), `chunk-q0y1fm2x.js:16420` (the variables), `chunk-q0y1fm2x.js:16420` and `chunk-q0y1fm2x.js:17473` (the errors), `chunk-q0y1fm2x.js:17226` (the help text), and `chunk-q0y1fm2x.js:17706` (the start-up log).
+[^git-config-global]: The program, `chunk-q0y1fm2x.js:17106` (the reset, in the help text for `GIT_CONFIG_GLOBAL`) and `chunk-q0y1fm2x.js:18062` (the warning).
+[^trust]: The program, `chunk-865at33z.js:3537` and `chunk-2yx6c1y2.js:2693`.
+[^parser-errors]: The program, `chunk-q0y1fm2x.js:16402` (`unknown flag`) and `chunk-q0y1fm2x.js:17533` (`error: <message>`). Probe group `cli321`.
+[^orch]: The program, help text and orchestrator parser, `chunk-f8yq35dh.js:1715` and `chunk-f8yq35dh.js:942`.
 
-[^user-message]: The program, `chunk-yg0azpwr.js:1707` (the help text), `chunk-rgw7tzhp.js:2655` (the `user-message:` prefix), `chunk-rgw7tzhp.js:2850` (the stderr reader and its control-character and secret checks), `chunk-yg0azpwr.js:1661` (the timeout and signal check), and `chunk-yg0azpwr.js:1661` (the `user_message` field of the nack).
+[^user-message]: The program, `chunk-f8yq35dh.js:1715` (the help text), `chunk-8yfas77b.js:2758` (the `user-message:` prefix), `chunk-8yfas77b.js:2957` (the stderr reader and its control-character and secret checks), `chunk-f8yq35dh.js:1669` (the timeout and signal check), and `chunk-f8yq35dh.js:1669` (the `user_message` field of the nack).
 
-[^drain-reclone]: The program, `chunk-3kp5jwr6.js:16915` (the help text for `--drain-grace-sec`), `chunk-3kp5jwr6.js:8981` (the agent-proxy check that a different session used the folder, `throughStandaloneAgentProxy`), and `chunk-3kp5jwr6.js:13843` (the move aside and its log lines).
+[^drain-reclone]: The program, `chunk-q0y1fm2x.js:17335` (the help text for `--drain-grace-sec`), `chunk-q0y1fm2x.js:9199` (the agent-proxy check that a different session used the folder, `throughStandaloneAgentProxy`), and `chunk-q0y1fm2x.js:13843` (the move aside and its log lines).
 [^orch-timeout]: Probe case `runner-orchestrator-hook-timeout`, group `cli321`.
-[^hook-label]: The program, `chunk-yg0azpwr.js:1729` (the help text), `chunk-yg0azpwr.js:815` (the parser), `chunk-yg0azpwr.js:224` (the `CLAUDE_RUNNER_META_<LABEL>` variable), and `chunk-yg0azpwr.js:907` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^repo-folder]: The program, `chunk-3kp5jwr6.js:16863` (the help text), `chunk-3kp5jwr6.js:15711` (the parser), `chunk-3kp5jwr6.js:15496` (the comma-separated variable `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER`), `chunk-3kp5jwr6.js:3868` (the check at `--capacity` 1), `chunk-3kp5jwr6.js:4000` (the stop at `--capacity` above 1), `chunk-3kp5jwr6.js:17284` (the warning at `--capacity` above 1), and `chunk-3kp5jwr6.js:8713` (the `checkout` hook). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^repo-folder-errors]: The program, `chunk-3kp5jwr6.js:15487` (the shape check of `--repository-folder`) and `chunk-3kp5jwr6.js:3845` (the look at the folder). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^hook-label-errors]: The program, `chunk-yg0azpwr.js:224` (the words and ranges), `chunk-yg0azpwr.js:815` (the flag form), and `chunk-yg0azpwr.js:907` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hook-label]: The program, `chunk-f8yq35dh.js:1737` (the help text), `chunk-f8yq35dh.js:816` (the parser), `chunk-f8yq35dh.js:225` (the `CLAUDE_RUNNER_META_<LABEL>` variable), and `chunk-f8yq35dh.js:908` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^repo-folder]: The program, `chunk-q0y1fm2x.js:17277` (the help text), `chunk-q0y1fm2x.js:16114` (the parser), `chunk-q0y1fm2x.js:15898` (the comma-separated variable `SELF_HOSTED_RUNNER_REPOSITORY_FOLDER`), `chunk-q0y1fm2x.js:3954` (the check at `--capacity` 1), `chunk-q0y1fm2x.js:4086` (the stop at `--capacity` above 1), `chunk-q0y1fm2x.js:17711` (the warning at `--capacity` above 1), and `chunk-q0y1fm2x.js:8913` (the `checkout` hook). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^repo-folder-errors]: The program, `chunk-q0y1fm2x.js:15876` (the shape check of `--repository-folder`) and `chunk-q0y1fm2x.js:3931` (the look at the folder). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hook-label-errors]: The program, `chunk-f8yq35dh.js:225` (the words and ranges), `chunk-f8yq35dh.js:816` (the flag form), and `chunk-f8yq35dh.js:908` (the `--min-idle` check). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
 [^orch-min-idle]: Probe case `runner-orchestrator-min-idle`, group `cli321`.
 [^orch-scm]: Probe case `runner-orchestrator-scm-id-only`, group `cli321`.
 [^orch-no-hooks]: Probe case `runner-orchestrator-no-hooks`, group `cli321`.
-[^orch-metrics]: The program, `chunk-yg0azpwr.js:1140` (the reason metric `claude_code_self_hosted_orchestrator_session_queue_wait_by_reason_seconds`), `chunk-yg0azpwr.js:1162` and `chunk-yg0azpwr.js:1167` (the give-up metric `claude_code_self_hosted_orchestrator_sessions_given_up_total` and its `cause` label), and `chunk-yg0azpwr.js:1200` (the `/metrics` route). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^hold-network]: The program, `chunk-3kp5jwr6.js:16412` (the text `point --hold-idle-file at a local file`).
+[^start-dir]: The program, `chunk-q0y1fm2x.js:16132` (the `--start-dir` case), `chunk-q0y1fm2x.js:16414-16418` (the `SELF_HOSTED_RUNNER_START_DIR` fallback, comma-separated), `chunk-q0y1fm2x.js:17293-17297` (the help text), and `chunk-q0y1fm2x.js:15880-15890` (the text `must be <owner>/<repo>=<folder>, once for each repository`). The folder checks are in `chunk-q0y1fm2x.js:5745-5760`.
+[^start-dir-notice]: The program, `chunk-q0y1fm2x.js:5839` (the text `The start folder that this runner's operator set`), and `chunk-q0y1fm2x.js:5740-5752` (the reasons).
+[^runner-metrics]: The program, `chunk-8yfas77b.js:956` (the text `order_to_registered_seconds`), `chunk-8yfas77b.js:965` (the text `order_to_first_session_seconds`), and `chunk-8yfas77b.js:1192` (the `/metrics` route).
+[^orch-metrics]: The program, `chunk-f8yq35dh.js:1148` (the reason metric `claude_code_self_hosted_orchestrator_session_queue_wait_by_reason_seconds`), `chunk-f8yq35dh.js:1170` and `chunk-f8yq35dh.js:1175` (the give-up metric `claude_code_self_hosted_orchestrator_sessions_given_up_total` and its `cause` label), and `chunk-f8yq35dh.js:1208` (the `/metrics` route). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^hold-network]: The program, `chunk-q0y1fm2x.js:16823` (the text `point --hold-idle-file at a local file`).
 [^probe-git-host-rewrite-url]: Probe case `runner-git-host-rewrite-url`.
 [^probe-confine-bad]: Probe case `runner-confine-bad`.
 [^probe-lists-bad]: Probe case `runner-lists-bad`.
 [^probe-snapshot-bad]: Probe case `runner-snapshot-bad`.
 [^probe-drain-wait-bg-tasks]: Probe case `runner-drain-wait-bg-tasks`.
 [^probe-retire-at-ms]: Probe case `runner-retire-at-ms`.
-[^probe-sigkill]: Probe case `runner-sigkill`. The program, `chunk-3kp5jwr6.js:15803` (the text `--sigkill-timeout-sec was renamed to --session-stop-grace-sec`).
+[^probe-sigkill]: Probe case `runner-sigkill`. The program, `chunk-q0y1fm2x.js:16209` (the text `--sigkill-timeout-sec was renamed to --session-stop-grace-sec`).
 [^probe-pool-secret-file]: Probe case `runner-pool-secret-file`.
 [^probe-host-config-dir-flag]: Probe case `runner-host-config-dir-flag`.
 [^probe-empty-argument]: Probe case `runner-empty-argument`.
 [^probe-positional]: Probe case `runner-positional`.
-[^watchdog]: The program, the parser `chunk-3kp5jwr6.js:15761` (`--kill-session-after-min`) and `chunk-3kp5jwr6.js:15917` (`--startup-timeout-min`), the help text `chunk-3kp5jwr6.js:16965` (`--release-idle-session-min`) and `chunk-3kp5jwr6.js:17010` (the kill grace), and the constants `chunk-3kp5jwr6.js:15456` (10080 minutes, `$f3e49f_2`), `chunk-3kp5jwr6.js:16389` (180 seconds, 30 seconds, and 1440 minutes, in milliseconds, `$58a6be` and `$201309_10`), `chunk-3kp5jwr6.js:12758` (the 15 minutes of the kill grace, `$7e9743_2`).
-[^runner-retry]: The program, `chunk-3kp5jwr6.js:11804` (the session environment `CLAUDE_CODE_RETRY_WATCHDOG`), and `chunk-59xdgreq.js:691` with `chunk-92h2y9s9.js:37` (the test for `self_hosted`): in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`.
-[^error-prefix]: The program, `chunk-3kp5jwr6.js:17113` (the runner) and `chunk-yg0azpwr.js:1797` (the orchestrator, which names `claude self-hosted-runner orchestrator --help`).
-[^startup-fail]: The program, `chunk-3kp5jwr6.js:16077` (the codes and the deregistration reasons, `startup_git_proxy_setup_failed`), `chunk-3kp5jwr6.js:16104` (the report against each session, `reportSessionFailure`), `chunk-3kp5jwr6.js:16093` (`$f7a3c2`, 4000 ms) and `chunk-3kp5jwr6.js:16132` (the 4 s limit on the report), `chunk-3kp5jwr6.js:16150` (the failure path, `startup_fatal`), and `chunk-3kp5jwr6.js:1220` (a work order that names a session, `ccr:spawn_session_id`, used at `chunk-3kp5jwr6.js:17573`, `mayHoldSession`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
-[^base-dir-clones]: [`2.1.329` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.329). The program, `chunk-3kp5jwr6.js:4836` (`$b8a422`: the folder `_repos/clones/<host>/`, with each character other than `a-z0-9._-` in the host name replaced by `+`), `chunk-3kp5jwr6.js:4802` (the choice of the usual folder or this one), and `chunk-3kp5jwr6.js:14747` (the warning `its clone is in`, which names the clone and the usual folder).
-[^base-dir-address]: [`2.1.329` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.329). The program, `chunk-akf14v62.js:2031` (`$70c9cd`: the characters `:`, `*`, `?`, `[`, and `\`) and `chunk-akf14v62.js:2037` (`address-${a4}`: the first 16 hex digits of the SHA-256 of the joined segments, `chunk-akf14v62.js:2036`).
-[^base-dir-repos]: The program, `chunk-3kp5jwr6.js:8811` (`_repos`: "the runner keeps clones there").
-[^v328-gh]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-pm5mnvgy.js:40`.
-[^skip-proxy]: The program, `chunk-3kp5jwr6.js:16619` (the help text `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK=1 skips that check`) and `chunk-3kp5jwr6.js:4940` (the variable read).
-[^folder-base]: The program, `chunk-3kp5jwr6.js:4000` (the text "where no named folder may lie at --capacity above 1").
-[^folder-no-server]: The program, `chunk-3kp5jwr6.js:4898` (the text "it names no git server") and `chunk-3kp5jwr6.js:4808` (the warning that wraps it).
-[^folder-link]: The program, `chunk-3kp5jwr6.js:14768` (the text "the folder is a link or a file, or cannot be made") and `chunk-3kp5jwr6.js:14773` (the warning that wraps it).
-[^folder-moving]: The program, `chunk-akf14v62.js:2069` (the text "has not finished moving").
+[^watchdog]: The program, the parser `chunk-q0y1fm2x.js:16167` (`--kill-session-after-min`) and `chunk-q0y1fm2x.js:16323` (`--startup-timeout-min`), the help text `chunk-q0y1fm2x.js:17385` (`--release-idle-session-min`) and `chunk-q0y1fm2x.js:17430` (the kill grace), and the constants `chunk-q0y1fm2x.js:15842` (10080 minutes, `$f3e49f_2`), `chunk-q0y1fm2x.js:16800` (180 seconds, 30 seconds, and 1440 minutes, in milliseconds, `$58a6be` and `$201309_10`), `chunk-q0y1fm2x.js:13081` (the 15 minutes of the kill grace, `$7e9743_2`).
+[^runner-retry]: The program, `chunk-q0y1fm2x.js:12130` (the session environment `CLAUDE_CODE_RETRY_WATCHDOG`), and `chunk-r6r2wdsw.js:694` with `chunk-6e68m1dj.js:37` (the test for `self_hosted`): in a remote session whose `CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE` is `self_hosted`, the environment of a child process drops `CLAUDE_CODE_RETRY_WATCHDOG`.
+[^error-prefix]: The program, `chunk-q0y1fm2x.js:17533` (the runner) and `chunk-f8yq35dh.js:1805` (the orchestrator, which names `claude self-hosted-runner orchestrator --help`).
+[^startup-fail]: The program, `chunk-q0y1fm2x.js:16488` (the codes and the deregistration reasons, `startup_git_proxy_setup_failed`), `chunk-q0y1fm2x.js:16515` (the report against each session, `reportSessionFailure`), `chunk-q0y1fm2x.js:16504` (`$f7a3c2`, 4000 ms) and `chunk-q0y1fm2x.js:16543` (the 4 s limit on the report), `chunk-q0y1fm2x.js:16561` (the failure path, `startup_fatal`), and `chunk-q0y1fm2x.js:1260` (a work order that names a session, `ccr:spawn_session_id`, used at `chunk-q0y1fm2x.js:18003`, `mayHoldSession`). [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328).
+[^base-dir-clones]: [`2.1.329` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.329). The program, `chunk-q0y1fm2x.js:4922` (`$b8a422`: the folder `_repos/clones/<host>/`, with each character other than `a-z0-9._-` in the host name replaced by `+`), `chunk-q0y1fm2x.js:4888` (the choice of the usual folder or this one), and `chunk-q0y1fm2x.js:15105` (the warning `its clone is in`, which names the clone and the usual folder).
+[^base-dir-address]: [`2.1.329` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.329). The program, `chunk-hf9rvn87.js:2098` (`$70c9cd`: the characters `:`, `*`, `?`, `[`, and `\`) and `chunk-hf9rvn87.js:2104` (`address-${a4}`: the first 16 hex digits of the SHA-256 of the joined segments, `chunk-hf9rvn87.js:2103`).
+[^base-dir-repos]: The program, `chunk-q0y1fm2x.js:9011` (`_repos`: "the runner keeps clones there").
+[^v328-gh]: [`2.1.328` release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.328). The program, `chunk-wsjqx1vt.js:40`.
+[^skip-proxy]: The program, `chunk-q0y1fm2x.js:17033` (the help text `SELF_HOSTED_RUNNER_SKIP_AGENT_PROXY_CHECK=1 skips that check`) and `chunk-q0y1fm2x.js:5026` (the variable read).
+[^folder-base]: The program, `chunk-q0y1fm2x.js:4086` (the text "where no named folder may lie at --capacity above 1").
+[^folder-no-server]: The program, `chunk-q0y1fm2x.js:4984` (the text "it names no git server") and `chunk-q0y1fm2x.js:4894` (the warning that wraps it).
+[^folder-link]: The program, `chunk-q0y1fm2x.js:15126` (the text "the folder is a link or a file, or cannot be made") and `chunk-q0y1fm2x.js:15131` (the warning that wraps it).
+[^folder-moving]: The program, `chunk-hf9rvn87.js:2136` (the text "has not finished moving").

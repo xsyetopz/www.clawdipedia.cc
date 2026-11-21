@@ -121,13 +121,13 @@ Each row is a family of messages. The backticked text is the start that every me
 
 ## Sources
 
-[^undoc]: The program, for the rows marked <Undocumented />: `chunk-v1ke29af.js:72` (`inUseSweep`), `chunk-gvhwnc7g.js:451` (`CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`), and `chunk-hg1yqkjk.js:238765` (`a3.length !== 3`).
-[^cache-path]: The program, `chunk-hg1yqkjk.js:238765` (`a3.length !== 3`, the path must have three parts) and `chunk-hg1yqkjk.js:238772` (`isDirectory`, the path must be a directory).
-[^registry]: The program, `chunk-v1ke29af.js:72` (`inUseSweep`).
-[^bash-bin]: The program, `chunk-hg1yqkjk.js:248011` (the `bin/` folders that go on `PATH`). Probe case `print.plugindata.bash-bin`.
-[^watch]: The program, `chunk-6h88xj3m.js:510` for the default, `chunk-hg1yqkjk.js:221441` for the type files (`./types/index.d.ts`), `chunk-hg1yqkjk.js:221502` for the `tsconfig.json` (`tsconfig`), `chunk-hg1yqkjk.js:221166` for the plugins that have a `modulePath` and a `skills-dir` source (`chunk-t39fw2cy.js:4249`), and `chunk-hg1yqkjk.js:221944` for the print mode watch (`plugin_dir_watch_headless_skills`). Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
-[^zip]: The program, `chunk-gvhwnc7g.js:445` and `chunk-gvhwnc7g.js:451` (`CLAUDE_CODE_PLUGIN_BINARY_ASSETS`, `CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`), `chunk-tsby2qjm.js:648` (`CLAUDE_CODE_PLUGIN_ATTRIBUTION`), `chunk-c9fmfd5h.js:2245` (`CLAUDE_CODE_PLUGIN_NAME`, `CLAUDE_CODE_PLUGIN_ARCHIVE_URL`), and `chunk-emh2g06d.js:160` ("zip cache mode").
-[^not-installed]: The program, `chunk-mf7vnf0k.js:459`.
-[^lsp]: The program, `chunk-mf7vnf0k.js:427`.
-[^unsafe-paths]: The program, `chunk-hg1yqkjk.js:82358` and `chunk-hg1yqkjk.js:82358` (the path and link check), `chunk-hg1yqkjk.js:200254` (the MCPB source), `chunk-hg1yqkjk.js:200254` (the MCP source), and `chunk-q02wqt75.js:185` (the `"resolves outside the plugin's folder"` text of `validate` for a file that resolves outside the plugin folder).
-[^agents-327]: The program, `chunk-mjwpm8mh.js:8149` (the merge at load), `chunk-jgr0v596.js:475` (the merge at reload, `cliAgents`), and `chunk-jgr0v596.js:478` (the reload on resume, `cliAgents`).
+[^undoc]: The program, for the rows marked <Undocumented />: `chunk-fp3vnecp.js:72` (`inUseSweep`), `chunk-c203g5kd.js:455` (`CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`), and `chunk-bzyb60p0.js:241860` (`a3.length !== 3`).
+[^cache-path]: The program, `chunk-bzyb60p0.js:241860` (`a3.length !== 3`, the path must have three parts) and `chunk-bzyb60p0.js:241867` (`isDirectory`, the path must be a directory).
+[^registry]: The program, `chunk-fp3vnecp.js:72` (`inUseSweep`).
+[^bash-bin]: The program, `chunk-bzyb60p0.js:251371` (the `bin/` folders that go on `PATH`). Probe case `print.plugindata.bash-bin`.
+[^watch]: The program, `chunk-yg9g0473.js:508` for the default, `chunk-bzyb60p0.js:224429` for the type files (`./types/index.d.ts`), `chunk-bzyb60p0.js:224490` for the `tsconfig.json` (`tsconfig`), `chunk-bzyb60p0.js:224154` for the plugins that have a `modulePath` and a `skills-dir` source (`chunk-xcgcdx61.js:4273`), and `chunk-bzyb60p0.js:224932` for the print mode watch (`plugin_dir_watch_headless_skills`). Probe cases `print.cli319.plugin-dir-watch.unset`, `print.cli319.plugin-dir-watch.v1`, `pty.cli319.plugin-dir-watch.unset`, and `pty.cli319.plugin-dir-watch.v0`.
+[^zip]: The program, `chunk-c203g5kd.js:449` and `chunk-c203g5kd.js:455` (`CLAUDE_CODE_PLUGIN_BINARY_ASSETS`, `CLAUDE_CODE_PLUGIN_USE_ZIP_CACHE`), `chunk-5e3gtsn9.js:660` (`CLAUDE_CODE_PLUGIN_ATTRIBUTION`), `chunk-zddv3vvj.js:2246` (`CLAUDE_CODE_PLUGIN_NAME`, `CLAUDE_CODE_PLUGIN_ARCHIVE_URL`), and `chunk-ctrhdh7d.js:189` ("zip cache mode").
+[^not-installed]: The program, `chunk-mgntjepj.js:472`.
+[^lsp]: The program, `chunk-mgntjepj.js:440`.
+[^unsafe-paths]: The program, `chunk-bzyb60p0.js:83478` and `chunk-bzyb60p0.js:83478` (the path and link check), `chunk-bzyb60p0.js:202836` (the MCPB source), `chunk-bzyb60p0.js:202836` (the MCP source), and `chunk-p9da7c9y.js:185` (the `"resolves outside the plugin's folder"` text of `validate` for a file that resolves outside the plugin folder).
+[^agents-327]: The program, `chunk-0rtj0bmp.js:8590` (the merge at load), `chunk-cktd05v4.js:548` (the merge at reload, `cliAgents`), and `chunk-cktd05v4.js:551` (the reload on resume, `cliAgents`).

@@ -233,36 +233,36 @@ sequenceDiagram
 
 ## Sources
 
-[^checksum]: The program, `chunk-76t3g1yn.js:18523` (the header name), `chunk-76t3g1yn.js:13907` (hint headers on) `chunk-76t3g1yn.js:18565` (the conditions), `chunk-0vn9q90x.js:44` (the direct `api.anthropic.com` test that stops the header), and `chunk-cd3hqxcc.js:1762` (the host test).
-[^m365-origins]: The program, `chunk-53y43tg8.js:108`.
-[^max-tokens-retry]: The program, `chunk-hg1yqkjk.js:154443` (resend with the 32000 cap), `chunk-hg1yqkjk.js:154470` (the warning and the cap), `chunk-hg1yqkjk.js:167204` (`lowerAfter` call site), and `chunk-aq3ms068.js:24313` (unrecognized-model and `CLAUDE_CODE_MAX_OUTPUT_TOKENS` check).
-[^account-paths]: The program. The paths are strings in the program code, for example `chunk-aq3ms068.js:14683` (`/api/oauth/profile`), `chunk-nchg3ttk.js:1574` (`/api/oauth/usage`), `chunk-z7w0st2m.js:6` (`/api/claude_code/policy_limits`), `chunk-aq3ms068.js:51147` (`/api/event_logging/v2/batch`), `chunk-w03c3634.js:8422` (`/v1/code/triggers`), `chunk-abjbjs57.js:1347` (`/api/claude_cli_feedback`), `chunk-8k4znwp3.js:67` (`api_ultrareview_quota`) and `chunk-4340bwf3.js:32` (`/api/ws/speech_to_text/voice_stream`).
-[^usage-params]: The program, `chunk-nchg3ttk.js:1569` (the read kinds `plain`, `windows`, `cedar_ember`, `at_wall`, and `starry_waterfall`).
-[^grove]: The program, `chunk-jwmq761f.js:111`.
-[^skills-flag]: The program, `chunk-4g68nm9m.js:7914`. The flag is `tengu_skills_dashboard_enabled`.
-[^agent-proxy]: The program, read site `chunk-aq3ms068.js:44937`.
-[^cost-notes]: The program, `chunk-d24x4t47.js:10878` (the allowed parameters and the limits) and `chunk-d24x4t47.js:11505` (the route path).
-[^cost-run]: The program, read sites `chunk-d24x4t47.js:11505` (the route `/v1/organizations/analytics/cost`) and `chunk-d24x4t47.js:11543` (the handler reads `x-api-key`). Probe cases `print.api319.gateway.cost-route-admin`, `print.api319.gateway.cost-route-no-key`, and `print.api319.gateway.no-postgres` start the gateway with a Postgres container (none for the last). `GET /v1/organizations/analytics/cost?starting_at=…&ending_at=…&time_bucket_width=1d` and an admin read key in `x-api-key` answered 200 with `{"data":[],"has_more":false,"next_page":null,"data_refreshed_at":…}`. Without the key it answered 401 "missing or invalid admin credentials". Without a reachable Postgres the gateway exits with code 1 and a "could not connect to Postgres" message, and never listens, so the route never starts.
-[^auth-warm]: The program, `chunk-abjbjs57.js:2150`. The constants (3000 ms, `auth warm timed out`, 60000 ms) are at `chunk-abjbjs57.js:2088`, and the 120000 ms lifetime is at `chunk-76t3g1yn.js:16822`. An answer of HTTP 404 counts as a passed check.
-[^runner-runs]: The program, `chunk-rgw7tzhp.js:470` (register `chunk-rgw7tzhp.js:472`, poll `chunk-rgw7tzhp.js:560`, spawn-hints poll `chunk-rgw7tzhp.js:491`, spawn-hints nack `chunk-rgw7tzhp.js:540`, report `chunk-rgw7tzhp.js:641`, release `chunk-rgw7tzhp.js:667`, deregister `chunk-rgw7tzhp.js:690`, refresh `chunk-rgw7tzhp.js:707`), and the release probe cases `env319b.runner.*` and `env319b.orchestrator.*`.
+[^checksum]: The program, `chunk-gq1dr8pm.js:17135` (the header name), `chunk-gq1dr8pm.js:12513` (hint headers on) `chunk-gq1dr8pm.js:17177` (the conditions), `chunk-vyzg3yfa.js:44` (the direct `api.anthropic.com` test that stops the header), and `chunk-zhr7rpv7.js:1786` (the host test).
+[^m365-origins]: The program, `chunk-w1zyy3zs.js:108`.
+[^max-tokens-retry]: The program, `chunk-bzyb60p0.js:156693` (resend with the 32000 cap), `chunk-bzyb60p0.js:156725` (the warning and the cap), `chunk-bzyb60p0.js:169492` (`lowerAfter` call site), and `chunk-865at33z.js:24406` (unrecognized-model and `CLAUDE_CODE_MAX_OUTPUT_TOKENS` check).
+[^account-paths]: The program. The paths are strings in the program code, for example `chunk-865at33z.js:14751` (`/api/oauth/profile`), `chunk-cy0ck7w2.js:1573` (`/api/oauth/usage`), `chunk-4jzbgp2v.js:6` (`/api/claude_code/policy_limits`), `chunk-865at33z.js:51818` (`/api/event_logging/v2/batch`), `chunk-xfj2cwfv.js:8425` (`/v1/code/triggers`), `chunk-08bv0y93.js:1350` (`/api/claude_cli_feedback`), `chunk-6mhz7ytj.js:67` (`api_ultrareview_quota`) and `chunk-bwy57kck.js:32` (`/api/ws/speech_to_text/voice_stream`).
+[^usage-params]: The program, `chunk-cy0ck7w2.js:1568` (the read kinds `plain`, `windows`, `cedar_ember`, `at_wall`, and `starry_waterfall`).
+[^grove]: The program, `chunk-n7e3hgnx.js:111`.
+[^skills-flag]: The program, `chunk-e1cgntxd.js:8049`. The flag is `tengu_skills_dashboard_enabled`.
+[^agent-proxy]: The program, read site `chunk-865at33z.js:45416`.
+[^cost-notes]: The program, `chunk-xnzxknv5.js:10716` (the allowed parameters and the limits) and `chunk-xnzxknv5.js:11343` (the route path).
+[^cost-run]: The program, read sites `chunk-xnzxknv5.js:11343` (the route `/v1/organizations/analytics/cost`) and `chunk-xnzxknv5.js:11381` (the handler reads `x-api-key`). Probe cases `print.api319.gateway.cost-route-admin`, `print.api319.gateway.cost-route-no-key`, and `print.api319.gateway.no-postgres` start the gateway with a Postgres container (none for the last). `GET /v1/organizations/analytics/cost?starting_at=…&ending_at=…&time_bucket_width=1d` and an admin read key in `x-api-key` answered 200 with `{"data":[],"has_more":false,"next_page":null,"data_refreshed_at":…}`. Without the key it answered 401 "missing or invalid admin credentials". Without a reachable Postgres the gateway exits with code 1 and a "could not connect to Postgres" message, and never listens, so the route never starts.
+[^auth-warm]: The program, `chunk-08bv0y93.js:2153`. The constants (3000 ms, `auth warm timed out`, 60000 ms) are at `chunk-08bv0y93.js:2091`, and the 120000 ms lifetime is at `chunk-gq1dr8pm.js:15445`. An answer of HTTP 404 counts as a passed check.
+[^runner-runs]: The program, `chunk-8yfas77b.js:488` (register `chunk-8yfas77b.js:490`, poll `chunk-8yfas77b.js:578`, spawn-hints poll `chunk-8yfas77b.js:509`, spawn-hints nack `chunk-8yfas77b.js:558`, report `chunk-8yfas77b.js:660`, release `chunk-8yfas77b.js:686`, deregister `chunk-8yfas77b.js:709`, refresh `chunk-8yfas77b.js:726`), and the release probe cases `env319b.runner.*` and `env319b.orchestrator.*`.
 [^reg]: Probe case `env319b.runner.base` made this the first call. The run used the runner ID `runner-probe`.
 [^retire]: Probe case `env319b.runner.retire-at`.
 [^report-fail]: Probe cases `env319b.runner.child-exits-1` and `env319b.runner.child-exits-0`.
 [^spawn-poll]: Probe case `env319b.orchestrator.reason-set` used only this path.
 [^nack]: Probe case `env319b.orchestrator.hook-fails`.
 [^refresh]: Probe case `env319b.runner.token-ttl-8`.
-[^signin-paths]: The program. The paths are strings in the program code, for example `chunk-198awy9b.js:469` (`/api/claude_cli/bootstrap`), `chunk-prrpw8cm.js:1371` (`/api/claude_code/metrics`), `chunk-aq3ms068.js:14647` (`/api/claude_cli_profile`), `chunk-hsk8k6e9.js:443` (`/api/auth/trusted_devices`), `chunk-aq3ms068.js:14850` (`/api/oauth/validate`), `chunk-a8tz5msg.js:851` (`/api/oauth/file_upload`), `chunk-pqa8dyy7.js:645` (`/api/oauth/local_pairing`) and `chunk-5z9daa9a.js:822` (`/v1/oauth/hello`).
-[^org-pin]: The program, read sites `chunk-aq3ms068.js:14750` (the call) and `chunk-aq3ms068.js:29824` (the check). Run on `2.1.329` with a login, in a temporary `HOME`. Probe case `live.api319.org-pin`. The probe sorts the paths, so it does not show their order.
-[^file-upload]: The program, `chunk-gknbzh05.js:3186`.
-[^host-req]: The program, client `chunk-rpg0avfk.js:556`, caller `chunk-2kt0fcxt.js:1503`.
-[^host-result]: The program, `chunk-rpg0avfk.js:592`, `chunk-2kt0fcxt.js:1658` (the `refusal` of `unreadable`).
-[^consents]: The program, `chunk-vp60tg8z.js:1221` (the `PUT`), `chunk-vp60tg8z.js:1221` (the `POST`), and `chunk-vp60tg8z.js:1108` (the type and the entry points).
-[^checkup]: The program, read site `chunk-afvx9tp8.js:343` (the path is the constant at `chunk-afvx9tp8.js:176`). The gate is `tengu_quiet_almanac`.
-[^oauth-config]: The program, `chunk-3q5b9bqc.js:67` (the production config, `TOKEN_URL`) and `chunk-3q5b9bqc.js:146` (the `CLAUDE_CODE_CUSTOM_OAUTH_URL` check).
-[^dir-urls]: The program, `chunk-aq3ms068.js:45707`.
-[^billing]: The program, `chunk-hg1yqkjk.js:118376` (`"Credit balance is too low"` and the billing URL).
-[^provenance-paths]: The program, read sites `chunk-08j9em76.js:58` and `chunk-08j9em76.js:58`. In the run `print.api319.beta.provenance.fake-key` (first-party stub URL, one MCP server) the only request path was `/v1/messages?beta=true`. In the live runs `live.api319.provenance` and `live.api319.startup` (a token that the server refused (HTTP 401), nonessential traffic on) the program made no call to these paths or to `/v1/code`. The other calls were `/api/claude_cli/bootstrap`, `/api/claude_code/policy_limits`, `/api/claude_code/settings`, and `/api/directory/server-urls`.
-[^platform-plugin]: The program, `chunk-bgrrn57r.js:762` (the server) and `chunk-bgrrn57r.js:732` (the checks).
-[^attr-fields]: The program, `chunk-aq3ms068.js:46978` (`x-anthropic-billing-header`, `cc_version`, `cc_entrypoint`).
-[^ultrareview-path]: The program, `chunk-8k4znwp3.js:35-45` (the paths and the fallback) and `chunk-8k4znwp3.js:57` (the quota call), and `chunk-qkg57n4k.js:60` (the preflight call).
-[^hybrid-settings]: The program, `chunk-76049qf7.js:78` (the `claude_code/bootstrap` path) and `chunk-7vfh1k4y.js:1281` ("Remote settings: request not sent").
+[^signin-paths]: The program. The paths are strings in the program code, for example `chunk-9xz0nsgn.js:469` (`/api/claude_cli/bootstrap`), `chunk-ezcqffvw.js:1370` (`/api/claude_code/metrics`), `chunk-865at33z.js:14715` (`/api/claude_cli_profile`), `chunk-sg5zbskk.js:443` (`/api/auth/trusted_devices`), `chunk-865at33z.js:14922` (`/api/oauth/validate`), `chunk-577me9yq.js:852` (`/api/oauth/file_upload`), `chunk-tzhcnzkd.js:650` (`/api/oauth/local_pairing`) and `chunk-stg0yq3a.js:851` (`/v1/oauth/hello`).
+[^org-pin]: The program, read sites `chunk-865at33z.js:14818` (the call) and `chunk-865at33z.js:30005` (the check). Run on `2.1.329` with a login, in a temporary `HOME`. Probe case `live.api319.org-pin`. The probe sorts the paths, so it does not show their order.
+[^file-upload]: The program, `chunk-tjr3fy8z.js:3188`.
+[^host-req]: The program, client `chunk-2y6w0cr1.js:556`, caller `chunk-jy29ybqd.js:1539`.
+[^host-result]: The program, `chunk-2y6w0cr1.js:592`, `chunk-jy29ybqd.js:1694` (the `refusal` of `unreadable`).
+[^consents]: The program, `chunk-pxzmvybx.js:1221` (the `PUT`), `chunk-pxzmvybx.js:1221` (the `POST`), and `chunk-pxzmvybx.js:1108` (the type and the entry points).
+[^checkup]: The program, read site `chunk-1fanrzgd.js:344` (the path is the constant at `chunk-1fanrzgd.js:177`). The gate is `tengu_quiet_almanac`.
+[^oauth-config]: The program, `chunk-ephf358x.js:67` (the production config, `TOKEN_URL`) and `chunk-ephf358x.js:146` (the `CLAUDE_CODE_CUSTOM_OAUTH_URL` check).
+[^dir-urls]: The program, `chunk-865at33z.js:46186`.
+[^billing]: The program, `chunk-bzyb60p0.js:119585` (`"Credit balance is too low"` and the billing URL).
+[^provenance-paths]: The program, read sites `chunk-5qhr9bm2.js:58` and `chunk-5qhr9bm2.js:58`. In the run `print.api319.beta.provenance.fake-key` (first-party stub URL, one MCP server) the only request path was `/v1/messages?beta=true`. In the live runs `live.api319.provenance` and `live.api319.startup` (a token that the server refused (HTTP 401), nonessential traffic on) the program made no call to these paths or to `/v1/code`. The other calls were `/api/claude_cli/bootstrap`, `/api/claude_code/policy_limits`, `/api/claude_code/settings`, and `/api/directory/server-urls`.
+[^platform-plugin]: The program, `chunk-txxzbf6t.js:787` (the server) and `chunk-txxzbf6t.js:757` (the checks).
+[^attr-fields]: The program, `chunk-865at33z.js:47637` (`x-anthropic-billing-header`, `cc_version`, `cc_entrypoint`).
+[^ultrareview-path]: The program, `chunk-6mhz7ytj.js:35-45` (the paths and the fallback) and `chunk-6mhz7ytj.js:57` (the quota call), and `chunk-5agyr1mw.js:60` (the preflight call).
+[^hybrid-settings]: The program, `chunk-jcwhbkjz.js:79` (the `claude_code/bootstrap` path) and `chunk-w58msjm6.js:1289` ("Remote settings: request not sent").

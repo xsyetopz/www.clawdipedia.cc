@@ -224,8 +224,8 @@ The `chat:increaseEffort` and `chat:decreaseEffort` actions raise or lower the e
 
 ## Sources
 
-[^defaults]: The program, `chunk-ghw8dnvs.js:22` (the platform choices `alt+v`, `shift+tab`, and `meta+m`) and `chunk-ghw8dnvs.js:31` (the default list, which starts with the `Global` context). The contexts follow in that list up to line 395.
+[^defaults]: The program, `chunk-q4pszsad.js:22` (the platform choices `alt+v`, `shift+tab`, and `meta+m`) and `chunk-q4pszsad.js:31` (the default list, which starts with the `Global` context). The contexts follow in that list up to line 395.
 
-[^effort-keys]: The program, `chunk-ghw8dnvs.js:70` (the seven default keys of the two actions) and `chunk-zs9k1w9q.js:64950` (the handlers, which call one step function with `1` and `-1`).
-[^effort-gate]: The program, `chunk-hjrf343c.js:284` (the template drops `chat:increaseEffort` and `chat:decreaseEffort` unless a check returns true) and `chunk-z758pdbe.js:4150` (the same check for these two actions). The cleaned modules do not show the body of the check, so this page does not state what it tests.
-[^effort-max]: The program, `chunk-zs9k1w9q.js:64900` (the text "stops below max" and "/effort max to set it", shown after a lookup of `chat:increaseEffort`).
+[^effort-keys]: The program, `chunk-q4pszsad.js:71` (the seven default keys of the two actions) and `chunk-3pqaw3hv.js:66020` (the handlers, which call one step function with `1` and `-1`).
+[^effort-gate]: The program, `chunk-x5c92c3g.js:293` (the template drops `chat:increaseEffort` and `chat:decreaseEffort` unless a check returns true) and `chunk-424x9gf0.js:4154` (the same check for these two actions). The cleaned modules do not show the body of the check, so this page does not state what it tests.
+[^effort-max]: The program, `chunk-3pqaw3hv.js:65970` (the text "stops below max" and "/effort max to set it", shown after a lookup of `chat:increaseEffort`).

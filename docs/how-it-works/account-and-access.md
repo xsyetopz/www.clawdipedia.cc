@@ -180,40 +180,40 @@ Claude Code shows "Couldn't load your current spend limit, so it can't be change
 ## Sources
 
 [^scope]: Claude Code `2.1.329`. Each footnote below names the chunk and the place in it.
-[^plan-values]: The program, `chunk-aq3ms068.js:29920` (the `switch` on `subscriptionType`).
-[^plan-map]: The program, `chunk-aq3ms068.js:15293`.
-[^oauth-token]: The program, `chunk-aq3ms068.js:28424`.
-[^host-account]: The program, `chunk-aq3ms068.js:15380` (`CLAUDE_CODE_ACCOUNT_UUID`, `CLAUDE_CODE_USER_EMAIL`, and `CLAUDE_CODE_ORGANIZATION_UUID`).
-[^oauth-profile]: The program, `chunk-aq3ms068.js:14683` (`/api/oauth/profile`, with the timeout `1e4`).
-[^key-profile]: The program, `chunk-aq3ms068.js:14647` (`/api/claude_cli_profile`).
-[^probe-run]: The program, `chunk-aq3ms068.js:15087` (the `oauthAccount` writes, such as `hasExtraUsageEnabled`) and `chunk-aq3ms068.js:15320` (the plan type, `subscriptionTypeSource`).
-[^keychain]: The program, `chunk-f7vjj23d.js:299` (the `security find-generic-password` read).
-[^keychain-write]: The program, `chunk-f7vjj23d.js:277` (item name `Claude Code-write-check`), `chunk-f7vjj23d.js:451` (`probeWrite` runs `add-generic-password -U`), `chunk-aq3ms068.js:29370` (renewal stops when the check is too slow or fails), and `chunk-hg1yqkjk.js:118548` (shown text).
-[^request-id]: The program, `chunk-aq3ms068.js:14703`, `chunk-aq3ms068.js:15482`.
+[^plan-values]: The program, `chunk-865at33z.js:30101` (the `switch` on `subscriptionType`).
+[^plan-map]: The program, `chunk-865at33z.js:15363`.
+[^oauth-token]: The program, `chunk-865at33z.js:28603`.
+[^host-account]: The program, `chunk-865at33z.js:15450` (`CLAUDE_CODE_ACCOUNT_UUID`, `CLAUDE_CODE_USER_EMAIL`, and `CLAUDE_CODE_ORGANIZATION_UUID`).
+[^oauth-profile]: The program, `chunk-865at33z.js:14751` (`/api/oauth/profile`, with the timeout `1e4`).
+[^key-profile]: The program, `chunk-865at33z.js:14715` (`/api/claude_cli_profile`).
+[^probe-run]: The program, `chunk-865at33z.js:15157` (the `oauthAccount` writes, such as `hasExtraUsageEnabled`) and `chunk-865at33z.js:15390` (the plan type, `subscriptionTypeSource`).
+[^keychain]: The program, `chunk-zzrn5zap.js:299` (the `security find-generic-password` read).
+[^keychain-write]: The program, `chunk-zzrn5zap.js:277` (item name `Claude Code-write-check`), `chunk-zzrn5zap.js:451` (`probeWrite` runs `add-generic-password -U`), `chunk-865at33z.js:29551` (renewal stops when the check is too slow or fails), and `chunk-bzyb60p0.js:119765` (shown text).
+[^request-id]: The program, `chunk-865at33z.js:14771`, `chunk-865at33z.js:15552`.
 [^mod-type]: `schemas/claude-code.d.ts`.
-[^skip-profile]: The program, `chunk-aq3ms068.js:14920` (`86400000` ms) and `chunk-aq3ms068.js:15394` (`profileFetchedAt` and the fields that the record must have).
-[^scope-check]: The program, `chunk-aq3ms068.js:29698` (`$c2ce40`, the claude.ai login with the inference scope) and `chunk-aq3ms068.js:15414` (the request is skipped when this check or the `user:profile` scope check fails).
-[^grove]: The program, `chunk-jwmq761f.js:48` (the account settings read), `chunk-jwmq761f.js:210` (the Grove read), `chunk-jwmq761f.js:315` (the save), `chunk-jwmq761f.js:354` (the one hour test, `3600000` ms).
-[^grove-plans]: The program, `chunk-aq3ms068.js:30207` (`max` or `pro` only).
-[^picker]: The program, `chunk-aq3ms068.js:13468`.
-[^fable]: The program, `chunk-76t3g1yn.js:14389`, `chunk-76t3g1yn.js:14792`.
-[^mythos]: The program, `chunk-bpdncsrm.js:24` (the full ID list, `claude-mythos-5-1`), `chunk-bpdncsrm.js:44` (the alias list: `sonnet`, `opus`, `haiku`, `fable`). The model-name check is at `chunk-bpdncsrm.js:52` (`claude-mythos-preview`).
-[^mythos-picker]: The program, `chunk-aq3ms068.js:22286` (the `absent` result for a Mythos model that the account list lacks) and `chunk-76t3g1yn.js:15144` (the picker drops an `absent` model). The check runs only for the "firstParty" provider, at `chunk-aq3ms068.js:22260`.
-[^credits]: The program, `chunk-76t3g1yn.js:11141`, `chunk-76t3g1yn.js:14403`. The server config is `tengu_saffron_lattice`.
-[^disabled]: The program, `chunk-76t3g1yn.js:15628` (the three tests) and `chunk-76t3g1yn.js:15644` (`Fable (disabled)` and `pay_per_request`). The server flag is `tengu_saffron_picker_dim` (`chunk-76t3g1yn.js:11286`). The plan check (`$a1a81e`) is at `chunk-76t3g1yn.js:11046`, and the role check (`primary_owner`) is at `chunk-aq3ms068.js:29885`. The credits check (`org_level_disabled`) is at `chunk-76t3g1yn.js:11293`. The login scope check (`$c2ce40`) is at `chunk-aq3ms068.js:29698`.
-[^credits-only]: The program, `chunk-76t3g1yn.js:11278`. The server config is `tengu_saffron_credits_only_tiers`.
-[^v326]: The program, `chunk-9njhgp92.js:515` ("Signed in, but requests still use ANTHROPIC_API_KEY").
-[^api-key-note]: The program, `chunk-9njhgp92.js:514`.
-[^footer]: The program, `chunk-zs9k1w9q.js:55107`.
-[^unused-note]: The program, `chunk-aq3ms068.js:26920-26937` (the test with `ANTHROPIC_API_KEY`, and the text), `chunk-x69e1gmt.js:3998` (the not-logged-in message), and `chunk-z9j6gvtc.js:1801` (the login screen).
-[^status-row]: The program, `chunk-fn9dv1zs.js:615`.
-[^refusal]: The program, `chunk-aq3ms068.js:29893` (`turn on usage credits at`), `chunk-aq3ms068.js:17770` (`Fast mode requires usage credits`), and `chunk-hg1yqkjk.js:119503` (`Usage credits required for 1M context`).
-[^desktop]: The program, `chunk-aq3ms068.js:17429` (`$f8046e`, the main session check), `chunk-aq3ms068.js:29893` (`ask your admin to turn on usage credits`), `chunk-aq3ms068.js:29885` (`primary_owner`), `chunk-0v6g5ynk.js:103`, `chunk-0v6g5ynk.js:473` (the main session test, `childSession`).
-[^v311]: The program, `chunk-aq3ms068.js:29898` (the `Jco` text; non-team plans get the `claude.ai/settings/usage` link) and `chunk-aq3ms068.js:13565` (the link).
-[^windows]: The program, `chunk-nchg3ttk.js:1775` (`five_hour`, `seven_day_overage_included`, and the other window names, to line 1780).
-[^five-hour]: The program, `chunk-nchg3ttk.js:1775` (the `five_hour` name), `chunk-rnnb35c9.js:775`, and `chunk-ev45d3pa.js:2587`.
-[^menu]: The program, `chunk-hg1yqkjk.js:189232` (the `rate-limit-options` command). The "Ask your admin" row shows when `a67` is true (`chunk-xqaff7bw.js:1697`: a Team or Enterprise plan from `chunk-xqaff7bw.js:1570`, and `$15ab8f` false; `$15ab8f` is `$a1a81e` at `chunk-76t3g1yn.js:11046`, which needs the `primary_owner` role check at `chunk-aq3ms068.js:29885` for a plan other than `max` or `pro`). The rows are built at `chunk-xqaff7bw.js:1755-1759` (`usage_based` gives "usage", otherwise "usage credits"; "Add funds to continue with"; `a13` is `hasExtraUsageEnabled`) and `chunk-xqaff7bw.js:1789` ("Stop and wait for limit to reset"; the "Stop" label when `usage_based` or the rejection check at `chunk-nchg3ttk.js:2458` finds `credits_required`).
-[^spend]: The program, `chunk-xqaff7bw.js:1089` (the `unavailable` label) and `chunk-xqaff7bw.js:1109` (the empty `hint`) and `chunk-xqaff7bw.js:1171` (the message).
+[^skip-profile]: The program, `chunk-865at33z.js:14990` (`86400000` ms) and `chunk-865at33z.js:15464` (`profileFetchedAt` and the fields that the record must have).
+[^scope-check]: The program, `chunk-865at33z.js:29879` (`$e86070`, the claude.ai login with the inference scope) and `chunk-865at33z.js:15484` (the request is skipped when this check or the `user:profile` scope check fails).
+[^grove]: The program, `chunk-n7e3hgnx.js:48` (the account settings read), `chunk-n7e3hgnx.js:210` (the Grove read), `chunk-n7e3hgnx.js:315` (the save), `chunk-n7e3hgnx.js:354` (the one hour test, `3600000` ms).
+[^grove-plans]: The program, `chunk-865at33z.js:30388` (`max` or `pro` only).
+[^picker]: The program, `chunk-865at33z.js:13536`.
+[^fable]: The program, `chunk-gq1dr8pm.js:12995`, `chunk-gq1dr8pm.js:13398`.
+[^mythos]: The program, `chunk-zmb62hr5.js:24` (the full ID list, `claude-mythos-5-1`), `chunk-zmb62hr5.js:44` (the alias list: `sonnet`, `opus`, `haiku`, `fable`). The model-name check is at `chunk-zmb62hr5.js:52` (`claude-mythos-preview`).
+[^mythos-picker]: The program, `chunk-865at33z.js:22378` (the `absent` result for a Mythos model that the account list lacks) and `chunk-gq1dr8pm.js:13750` (the picker drops an `absent` model). The check runs only for the "firstParty" provider, at `chunk-865at33z.js:22352`.
+[^credits]: The program, `chunk-gq1dr8pm.js:10933`, `chunk-gq1dr8pm.js:13009`. The server config is `tengu_saffron_lattice`.
+[^disabled]: The program, `chunk-gq1dr8pm.js:14234` (the three tests) and `chunk-gq1dr8pm.js:14250` (`Fable (disabled)` and `pay_per_request`). The server flag is `tengu_saffron_picker_dim` (`chunk-gq1dr8pm.js:11078`). The plan check (`$0d2900`) is at `chunk-gq1dr8pm.js:10838`, and the role check (`primary_owner`) is at `chunk-865at33z.js:30066`. The credits check (`org_level_disabled`) is at `chunk-gq1dr8pm.js:11085`. The login scope check (`$e86070`) is at `chunk-865at33z.js:29879`.
+[^credits-only]: The program, `chunk-gq1dr8pm.js:11070`. The server config is `tengu_saffron_credits_only_tiers`.
+[^v326]: The program, `chunk-ww4qymfd.js:569` ("Signed in, but requests still use ANTHROPIC_API_KEY").
+[^api-key-note]: The program, `chunk-ww4qymfd.js:568`.
+[^footer]: The program, `chunk-3pqaw3hv.js:56180`.
+[^unused-note]: The program, `chunk-865at33z.js:27099-27116` (the test with `ANTHROPIC_API_KEY`, and the text), `chunk-zprqxvft.js:4000` (the not-logged-in message), and `chunk-bxvzmae8.js:1829` (the login screen).
+[^status-row]: The program, `chunk-m568ebwc.js:618`.
+[^refusal]: The program, `chunk-865at33z.js:30074` (`turn on usage credits at`), `chunk-865at33z.js:17844` (`Fast mode requires usage credits`), and `chunk-bzyb60p0.js:120723` (`Usage credits required for 1M context`).
+[^desktop]: The program, `chunk-865at33z.js:17503` (`$d10140`, the main session check), `chunk-865at33z.js:30074` (`ask your admin to turn on usage credits`), `chunk-865at33z.js:30066` (`primary_owner`), `chunk-3t7ve0wy.js:103`, `chunk-3t7ve0wy.js:477` (the main session test, `childSession`).
+[^v311]: The program, `chunk-865at33z.js:30079` (the `Jco` text; non-team plans get the `claude.ai/settings/usage` link) and `chunk-865at33z.js:13633` (the link).
+[^windows]: The program, `chunk-cy0ck7w2.js:1774` (`five_hour`, `seven_day_overage_included`, and the other window names, to line 1780).
+[^five-hour]: The program, `chunk-cy0ck7w2.js:1774` (the `five_hour` name), `chunk-nn42pywn.js:802`, and `chunk-6bnjn6js.js:2585`.
+[^menu]: The program, `chunk-bzyb60p0.js:191655` (the `rate-limit-options` command). The "Ask your admin" row shows when `a67` is true (`chunk-tgq2e2mb.js:1722`: a Team or Enterprise plan from `chunk-tgq2e2mb.js:1595`, and `$15ab8f` false; `$15ab8f` is `$a1a81e` at `chunk-gq1dr8pm.js:10838`, which needs the `primary_owner` role check at `chunk-865at33z.js:30066` for a plan other than `max` or `pro`). The rows are built at `chunk-tgq2e2mb.js:1780-1784` (`usage_based` gives "usage", otherwise "usage credits"; "Add funds to continue with"; `a13` is `hasExtraUsageEnabled`) and `chunk-tgq2e2mb.js:1814` ("Stop and wait for limit to reset"; the "Stop" label when `usage_based` or the rejection check at `chunk-cy0ck7w2.js:2454` finds `credits_required`).
+[^spend]: The program, `chunk-tgq2e2mb.js:1114` (the `unavailable` label) and `chunk-tgq2e2mb.js:1134` (the empty `hint`) and `chunk-tgq2e2mb.js:1196` (the message).
 [^control]: `schemas/claude-code-control-protocol.json`.
 [^mod-account]: `schemas/claude-code.d.ts`.
-[^finishing]: The program, `chunk-z9j6gvtc.js:637` and `chunk-z9j6gvtc.js:2137`.
+[^finishing]: The program, `chunk-bxvzmae8.js:645` and `chunk-bxvzmae8.js:2165`.

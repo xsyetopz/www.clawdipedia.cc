@@ -241,7 +241,7 @@ The picture that an `Image` displays. It is base64 bytes that the plugin holds (
 
 ## Sources
 
-[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`, `ButtonProps`. The program, `chunk-zs9k1w9q.js:33705` (`let { hotkey: c1 } = b1.props`: a later button of the same plugin takes the key, and a key that two plugins draw is dropped).
-[^iterm]: The program, `chunk-qgx0rrv2.js:183` (`/^iTerm2\s/` test and the 3.5.0 version check), `chunk-qgx0rrv2.js:195` ("yes only on an XTVERSION reply naming iTerm2 3.5 or later"), and `chunk-0b3aev3g.js:13949` (`probe: XTVERSION`).
-[^overflowx]: The program, `chunk-qsd8sbe8.js:3656` (the value set) and `chunk-qsd8sbe8.js:5158` (the rewrite).
+[^hotkey]: The Mod API type file, `schemas/claude-code.d.ts`, `ButtonProps`. The program, `chunk-3pqaw3hv.js:34502` (`let { hotkey: c1 } = b1.props`: a later button of the same plugin takes the key, and a key that two plugins draw is dropped).
+[^iterm]: The program, `chunk-ky5sghtd.js:181` (`/^iTerm2\s/` test and the 3.5.0 version check), `chunk-ky5sghtd.js:193` ("yes only on an XTVERSION reply naming iTerm2 3.5 or later"), and `chunk-8bkqeb5d.js:14183` (`probe: XTVERSION`).
+[^overflowx]: The program, `chunk-0w2wb7gk.js:3700` (the value set) and `chunk-0w2wb7gk.js:5261` (the rewrite).
 [^scope-site]: The Mod API type file, `schemas/claude-code.d.ts`, `BoxHoverProps` (`scope`: "in any site but a `Backdrop`").

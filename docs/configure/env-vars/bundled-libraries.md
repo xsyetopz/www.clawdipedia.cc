@@ -60,7 +60,6 @@ The table is sorted by name. The official [Environment Variables](https://code.c
 | `AZURE_TENANT_ID` | <Documented /> | Azure SDK | Gives the Azure tenant ID for the bundled Azure identity credentials. |
 | `AZURE_TOKEN_CREDENTIALS` | <Undocumented /> | Azure SDK | Picks which Azure credential chain `DefaultAzureCredential` uses. |
 | `AZURE_USERNAME` | <Undocumented /> | Azure SDK | Gives the username for the Azure username and password credential. |
-| `BUF_BIGINT_DISABLE` | <Undocumented /> | protobuf | Turns off native `BigInt` use in the bundled protobuf library, so it uses its fallback int64 code. |
 | `BUN_DISABLE_DYNAMIC_CHUNK_SIZE` | <Undocumented /> | Bun runtime | Turns off dynamic chunk size tuning for native readable streams in the Bun runtime. |
 | `BUN_FEATURE_FLAG_VERBOSE_WARNINGS` | <Undocumented /> | Bun runtime | Shows the Bun runtime warning for unsupported `async_hooks` use. |
 | `BUN_INSPECT_NOTIFY` | <Undocumented /> | Bun runtime | Tells the Bun inspector where to report that it listens. |
@@ -164,7 +163,7 @@ A scan of the strings in the program found the names.[^scan] The list can miss n
 
 ## Sources
 
-[^scan]: The program, for example `GRPC_NODE_VERBOSITY` at `chunk-fb37em01.js:183`, variable names.
+[^scan]: The program, for example `GRPC_NODE_VERBOSITY` at `chunk-t2eveqgh.js:183`, variable names.
 [^bun-options]: Probes page, run with a bad `BUN_OPTIONS` value.
-[^repl-module]: The program, `NODE_REPL_EXTERNAL_MODULE` at `chunk-y2f66fxn.js:4148`, `NODE_OPTIONS` at `chunk-y2f66fxn.js:4152`, `PYTHONSTARTUP` at `chunk-y2f66fxn.js:4154`, and `PERL5DB` at `chunk-y2f66fxn.js:4147`.
-[^teamcity]: The program, `chunk-2jhxnfds.js:2679-2680`.
+[^repl-module]: The program, `NODE_REPL_EXTERNAL_MODULE` at `chunk-20074bp9.js:4148`, `NODE_OPTIONS` at `chunk-20074bp9.js:4152`, `PYTHONSTARTUP` at `chunk-20074bp9.js:4154`, and `PERL5DB` at `chunk-20074bp9.js:4147`.
+[^teamcity]: The program, `chunk-3jjr3wje.js:1355-1356`.
