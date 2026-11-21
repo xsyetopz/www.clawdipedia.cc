@@ -93,7 +93,7 @@
 		"oxlint": "catalog:",
 		"oxlint-tsgolint": "catalog:",
 		"typescript": "catalog:",
-		"wrangler": "^4.165.0"
+		"wrangler": "^4.166.0"
 	},
 	"overrides": {
 		"@types/node": "26.6.6"

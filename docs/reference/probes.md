@@ -147,7 +147,7 @@ The cc-inspect `code` action `cli` ran `claude auto-mode` subcommands with a fak
 
 ### `autoMode.classifyAllShell`
 
-We ran `claude -p --permission-mode auto` against the stub with `CLAUDE_CODE_AUTO_MODE_SERVER=0`, the command `curl -s http://127.0.0.1:9/x`, and a user allow rule `Bash(curl -s http://127.0.0.1:9/x)`. The table shows whether the stub got requests that carried the classifier system prompt: `1` means the classifier ran (10 requests), `0` means it did not. Without the variable, the stub gives the [server-side check](../configure/permissions/auto-mode.md#the-server-side-check) no verdict, and the stub gets no classifier request. A managed folder needs `sudo`, so the user ran the managed cases on `2.1.329` (`managed.*.classify-*`): managed `true`, managed `false`, and managed unset, each in 7 settings combinations.
+We ran `claude -p --permission-mode auto` against the stub with `CLAUDE_CODE_AUTO_MODE_SERVER=0`, the command `curl -s http://127.0.0.1:9/x`, and a user allow rule `Bash(curl -s http://127.0.0.1:9/x)`. The table shows whether the stub got requests that carried the classifier system prompt: `1` means the classifier ran (10 requests), `0` means it did not. Without the variable, the stub gives the [server-side check](../configure/permissions/auto-mode.md#the-server-side-check) no verdict, and the stub gets no classifier request. A managed folder needs `sudo`, so the user ran the managed cases on `2.1.330` (`managed.*.classify-*`): managed `true`, managed `false`, and managed unset, each in 7 settings combinations.
 
 | Settings | Classifier Requests |
 | --- | --- |
@@ -269,7 +269,7 @@ The live `ultrareview` steps were removed by the owner's decision, so this site 
 
 ## Managed Folder Probe
 
-The user ran the 61 managed cases with `sudo` on `2.1.329`. On `2.1.330` only the 19 baseline cases ran again, and all 19 ended ok. The `sudo` variant runs were not repeated on `2.1.330`, so every result below that needs the managed folder comes from `2.1.329`. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`) on macOS. It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`.
+The user ran the 61 managed cases with `sudo` on `2.1.330`. Each result is the same as on `2.1.329`. The managed folder `/Library/Application Support/ClaudeCode` was made with `sudo` (owner `root:wheel`) on macOS. It held `CLAUDE.md`, a rule, a skill, an output style, `managed-settings.json`, a `managed-settings.d/` drop-in, and `managed-mcp.json` with one stdio server. Each run also had a user server and a project `.mcp.json` server. A baseline ran without the folder. Runs used `-p --output-format stream-json`, plus `claude mcp list` and `claude mcp get`.
 
 | What We Ran | Status | What We Saw |
 | --- | --- | --- |

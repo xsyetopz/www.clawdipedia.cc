@@ -14,10 +14,14 @@ Official pages: [Use the Mods API](https://code.claude.com/docs/en/plugins/mods/
 
 ```javascript
 on("vcs.isolate", async ($, e, next) => {
-  if (!(await $.fs.exists(`${e.from}/.acme`))) return next(e);
+  if (!(await $.fs.exists(`${e.from}/.acme`))) {
+    return next(e);
+  }
   const argv = ["acme", "copy", "--name", e.name, "--base", e.base];
   const made = await $.process.run(argv, { cwd: e.from });
-  if (made.exitCode !== 0) return { deny: made.stderr };
+  if (made.exitCode !== 0) {
+    return { deny: made.stderr };
+  }
   const [path, revision] = made.stdout.trim().split("\n");
   return { path, vcs: "acme", revision };
 });
